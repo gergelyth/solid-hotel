@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  gpa:
+    ports:
+      - 3000:3000
+    build:
+      context: gpa
+      dockerfile: Dockerfile
+    volumes:
+      - ./gpa:/home/node/gpa
+      - /home/node/gpa//node_modules
+      - /home/node/gpa/.next
