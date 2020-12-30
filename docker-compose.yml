@@ -11,3 +11,25 @@ services:
       - ./gpa:/home/node/gpa
       - /home/node/gpa//node_modules
       - /home/node/gpa/.next
+    depends_on:
+      - db
+  db:
+    image: postgres
+    env_file: .env
+    volumes:
+      - ./db/data/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file: .env
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    links:
+      - "db:pgsql-server"
+    depends_on:
+      - db
+volumes:
+  pgadmin-data:
