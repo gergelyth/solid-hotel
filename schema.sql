@@ -65,21 +65,12 @@ CREATE TABLE data_protection_profile (
 INHERITS (profile_information);
 
 ALTER TABLE guest 
-    ADD FOREIGN KEY (hotel_profile_id) 
-    REFERENCES hotel_profile (id);
-
-ALTER TABLE guest 
-    ADD FOREIGN KEY (data_protection_profile_id) 
-    REFERENCES data_protection_profile (id);
+    ADD FOREIGN KEY (hotel_profile_id) REFERENCES hotel_profile (id),
+    ADD FOREIGN KEY (data_protection_profile_id) REFERENCES data_protection_profile (id);
 
 ALTER TABLE reservation 
-    ADD FOREIGN KEY (owner_id) 
-    REFERENCES guest (id);
-
-ALTER TABLE reservation 
-    ADD FOREIGN KEY (room_definition_id) 
-    REFERENCES room_definition (id);
+    ADD FOREIGN KEY (owner_id) REFERENCES guest (id),
+    ADD FOREIGN KEY (room_definition_id) REFERENCES room_definition (id);
 
 ALTER TABLE profile_information 
-    ADD FOREIGN KEY (owner_id) 
-    REFERENCES guest (id);
+    ADD FOREIGN KEY (owner_id) REFERENCES guest (id);

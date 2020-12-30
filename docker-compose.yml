@@ -19,6 +19,7 @@ services:
     volumes:
       - ./db/data/postgres:/var/lib/postgresql/data
       - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
     ports:
       - 5432:5432
   pgadmin:
