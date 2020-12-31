@@ -1,7 +1,3 @@
-BEGIN;
-
-SET CONSTRAINTS ALL DEFERRED;
-
 INSERT INTO room_definition (name, description) 
 VALUES 
     ('5A', 'Queen-sized bed, ocean-view.'),
@@ -10,6 +6,20 @@ VALUES
     ('9R', 'Equipped with a shower, balcony overlooking the gardens. Room is air-conditioned.'),
     ('23A', NULL);
 
+WITH 
+hotel_profile_insert AS (
+    INSERT INTO hotel_profile (owner_id, first_name, last_name, email, phone_number, nationality, id_document, id_document_expiry)
+    VALUES
+        (3, 'Bob', 'Ford', 'bob@ford.com', '+40111222333', 'English', 'AA 784 GOE', '2027-10-17'),
+        (4, 'Mark', 'Williams', 'mark@williams.com', '+40222333444', 'Spanish', 'BB 939 OAL', '2028-03-11')
+),
+data_protection_profile_insert AS (
+    INSERT INTO data_protection_profile (owner_id, first_name, last_name, email, phone_number, nationality, id_document, id_document_expiry, profile_expiry)
+    VALUES
+        (3, 'Bob', 'Ford', 'bob@ford.com', '+40111222333', 'English', 'AA 784 GOE', '2027-10-17', CURRENT_DATE + interval '2 years'),
+        (5, 'John', 'Smith', 'john@smith.com', '+40123456789', 'English', 'ER 102 DJA', '2029-11-07', CURRENT_DATE + interval '4 years 11 months'),
+        (6, 'Jessica', 'Brown', 'jessica@brown.com', '+40333444555', 'Danish', 'CC 293 PAK', '2030-01-24', CURRENT_DATE + interval '4 years 11 months 15 days')
+)
 INSERT INTO guest (hotel_profile_id, data_protection_profile_id, encrypted_email, webid, status)
 VALUES
     (NULL, NULL, bytea('alice@jackson.com'), 'https://alice.example/profile#me', 'confirmed'),
@@ -38,16 +48,3 @@ VALUES
     (6, 1, 'past', LOCALTIMESTAMP - interval '15 days', LOCALTIMESTAMP - interval '11 days'),
     (3, 4, 'past', LOCALTIMESTAMP - interval '3 years 1 month', LOCALTIMESTAMP - interval '3 years 15 days'),
     (7, 2, 'past', LOCALTIMESTAMP - interval '5 years 1 month', LOCALTIMESTAMP - interval '5 years 23 days');
-
-INSERT INTO hotel_profile (owner_id, first_name, last_name, email, phone_number, nationality, id_document, id_document_expiry)
-VALUES
-    (3, 'Bob', 'Ford', 'bob@ford.com', '+40111222333', 'English', 'AA 784 GOE', '2027-10-17'),
-    (4, 'Mark', 'Williams', 'mark@williams.com', '+40222333444', 'Spanish', 'BB 939 OAL', '2028-03-11');
-
-INSERT INTO data_protection_profile (owner_id, first_name, last_name, email, phone_number, nationality, id_document, id_document_expiry, profile_expiry)
-VALUES
-    (3, 'Bob', 'Ford', 'bob@ford.com', '+40111222333', 'English', 'AA 784 GOE', '2027-10-17', CURRENT_DATE + interval '2 years'),
-    (5, 'John', 'Smith', 'john@smith.com', '+40123456789', 'English', 'ER 102 DJA', '2029-11-07', CURRENT_DATE + interval '4 years 11 months'),
-    (6, 'Jessica', 'Brown', 'jessica@brown.com', '+40333444555', 'Danish', 'CC 293 PAK', '2030-01-24', CURRENT_DATE + interval '4 years 11 months 15 days');
-
-COMMIT;
