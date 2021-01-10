@@ -15,7 +15,7 @@ export default function Home() {
 
         <p className={styles.description}>Click on the links to navigate</p>
 
-        <div className={styles.grid}>
+        <div className={`${styles.grid} ${styles.card}`}>
           <Link href="/reservations">
             <h3>List all reservations</h3>
           </Link>

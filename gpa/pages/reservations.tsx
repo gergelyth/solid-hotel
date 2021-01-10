@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { InferGetStaticPropsType, GetStaticProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { query } from "../util/db";
 
@@ -13,28 +13,29 @@ type Reservation = {
   dateTo: string;
 };
 
-// TODO: reservations shouldn't be fetched in getStaticProps, this is just a showcase
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   let reservations: Reservation[] = [];
   try {
     reservations = await query<Reservation[]>(
       "SELECT id,owner_id,room_definition_id,state FROM reservation"
     );
   } catch (e) {
-    //TODO show error here that no reservations are present!
+    return {
+      // TODO: show error message
+      notFound: true,
+    };
   }
 
   return {
     props: {
       reservations,
     },
-    revalidate: 1,
   };
 };
 
 function Reservations({
   reservations,
-}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
+}: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   return (
     <div className={styles.container}>
       <Head>
