@@ -1,10 +1,9 @@
 import { Session } from "@inrupt/solid-client-authn-browser";
 import Head from "next/head";
-import { useContext } from "react";
 import styles from "../styles/Home.module.css";
-import SolidSession from "../util/solid";
 
-async function SolidLogin(session: Session, oidcIssuer: string): Promise<void> {
+async function SolidLogin(oidcIssuer: string): Promise<void> {
+  const session = new Session();
   await session.login({
     // Specify the URL of the user's Solid Identity Provider; e.g., "https://inrupt.net"
     oidcIssuer: oidcIssuer,
@@ -15,8 +14,6 @@ async function SolidLogin(session: Session, oidcIssuer: string): Promise<void> {
 }
 
 function Login(): JSX.Element {
-  const session = useContext(SolidSession).session;
-
   return (
     <div className={styles.container}>
       <Head>
@@ -29,7 +26,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            SolidLogin(session, "https://inrupt.net");
+            await SolidLogin("https://inrupt.net");
           }}
         >
           Inrupt.net
@@ -38,7 +35,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            SolidLogin(session, "https://solidcommunity.net/");
+            SolidLogin("https://solidcommunity.net/");
           }}
         >
           SolidCommunity.net

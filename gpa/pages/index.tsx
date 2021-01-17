@@ -1,21 +1,14 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import SolidSession from "../util/solid";
-import { useContext } from "react";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import dynamic from "next/dynamic";
 
-async function CheckIfLoggedIn(session: Session): Promise<void> {
-  console.log("asdf");
-  await session.handleIncomingRedirect(window.location.href);
-}
+const DynamicLoginComponent = dynamic(
+  () => import("../components/login-component"),
+  { ssr: false }
+);
 
 export default function Home() {
-  const session = useContext(SolidSession).session;
-  if (window) {
-    CheckIfLoggedIn(session);
-  }
-
   return (
     <div className={styles.container}>
       <Head>
@@ -27,20 +20,8 @@ export default function Home() {
         <h1 className={styles.title}>Guest Portal Application</h1>
         <p className={styles.description}>Click on the links to navigate</p>
 
-        <div className={`${styles.grid} ${styles.card}`}>
-          <button
-            onClick={async () => {
-              await CheckIfLoggedIn(session);
-            }}
-          >
-            Check if logged in
-          </button>
-        </div>
-        <div className={`${styles.grid} ${styles.card}`}>
-          <Link href={session.info.isLoggedIn ? "/logout" : "/login"}>
-            <h3>{session.info.isLoggedIn ? "Logout" : "Login"}</h3>
-          </Link>
-        </div>
+        <DynamicLoginComponent />
+
         <div className={`${styles.grid} ${styles.card}`}>
           <Link href="/reservations">
             <h3>List all reservations</h3>
