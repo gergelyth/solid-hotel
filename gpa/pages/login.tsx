@@ -1,14 +1,11 @@
-import { Session } from "@inrupt/solid-client-authn-browser";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 
 async function SolidLogin(oidcIssuer: string): Promise<void> {
-  const session = new Session();
+  const session = getDefaultSession();
   await session.login({
-    // Specify the URL of the user's Solid Identity Provider; e.g., "https://inrupt.net"
     oidcIssuer: oidcIssuer,
-    // Specify the URL the Solid Identity Provider should redirect to after the user logs in,
-    // e.g., the current page for a single-page app.
     redirectUrl: window.location.origin,
   });
 }
@@ -26,7 +23,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            await SolidLogin("https://inrupt.net");
+            SolidLogin("https://inrupt.net");
           }}
         >
           Inrupt.net
