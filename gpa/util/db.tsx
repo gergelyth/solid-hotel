@@ -1,19 +1,6 @@
 import pgPromise from "pg-promise";
-import pg from "pg-promise/typescript/pg-subset";
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      db: pgPromise.IDatabase<pg.IClient>;
-    }
-  }
-}
-
-class DBConnection {
-  get(): pgPromise.IDatabase<pg.IClient> {
-    return global.db;
-  }
-}
+const globalAny: any = global;
 
 const user = process.env.POSTGRES_USER;
 const password = process.env.POSTGRES_PASSWORD;
@@ -26,15 +13,29 @@ const pgp = pgPromise({});
 //from: https://www.codeoftheprogrammer.com/2020/01/16/postgresql-from-nextjs-api-route/
 // TODO: find a more elegant solution to avoid issue
 
-if (global.db != null) {
-  global.db = pgp(`postgres://${user}:${password}@${host}:${port}/${database}`);
+// Use a symbol to store a global instance of a connection, and to access it from the singleton.
+const DB_KEY = Symbol.for("GPA.db");
+const globalSymbols = Object.getOwnPropertySymbols(global);
+const hasDb = globalSymbols.includes(DB_KEY);
+if (!hasDb) {
+  globalAny[DB_KEY] = pgp(
+    `postgres://${user}:${password}@${host}:${port}/${database}`
+  );
 }
 
 // Create and freeze the singleton object so that it has an instance property.
-const singleton: DBConnection = new DBConnection();
+interface IDbSingleton {
+  instance: pgPromise.IBaseProtocol<any>;
+}
+const singleton = {} as IDbSingleton;
+Object.defineProperty(singleton, "instance", {
+  get: function () {
+    return globalAny[DB_KEY];
+  },
+});
 Object.freeze(singleton);
 
-const db = singleton.get();
+const db = singleton.instance;
 
 export async function query<T>(
   q: string,

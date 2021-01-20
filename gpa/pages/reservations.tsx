@@ -20,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       "SELECT id,owner_id,room_definition_id,state FROM reservation"
     );
   } catch (e) {
+    console.log(e.message);
     return {
       // TODO: show error message
       notFound: true,

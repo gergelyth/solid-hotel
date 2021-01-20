@@ -8,6 +8,7 @@ const DynamicLoginComponent = dynamic(
   { ssr: false }
 );
 
+// TODO: login status doesn't survive refresh
 export default function Home() {
   return (
     <div className={styles.container}>
