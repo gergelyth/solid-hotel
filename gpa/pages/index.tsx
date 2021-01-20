@@ -2,6 +2,8 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { SetField } from "../util/solid";
+import { fieldToRdfMap } from "../vocabularies/rdf_person";
 
 const DynamicLoginComponent = dynamic(
   () => import("../components/login-component"),
@@ -20,6 +22,13 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Guest Portal Application</h1>
         <p className={styles.description}>Click on the links to navigate</p>
+        <button
+          onClick={async () => {
+            await SetField(fieldToRdfMap.firstName, "John");
+          }}
+        >
+          Add FirstName
+        </button>
 
         <DynamicLoginComponent />
 
