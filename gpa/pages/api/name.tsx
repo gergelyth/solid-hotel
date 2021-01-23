@@ -1,3 +1,5 @@
+//OBSOLETE - kept only as API reference
+
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { GetField } from "../../util/solid";
