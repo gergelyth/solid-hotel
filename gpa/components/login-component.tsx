@@ -1,9 +1,9 @@
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { CheckIfLoggedIn, GetField } from "../util/solid";
+import { CheckIfLoggedIn } from "../util/solid";
 import { GetSession } from "../util/solid";
 import { Component } from "react";
-import { fieldToRdfMap } from "../vocabularies/rdf_person";
+import { useUserName } from "../hooks/useSolidUser";
 
 function GetLoginComponent(): JSX.Element {
   return (
@@ -23,6 +23,15 @@ function GetLogoutComponent(): JSX.Element {
     window.location.reload();
   }
 
+  const { userName, isLoading, isError } = useUserName();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error occurred</div>;
+  }
+
   return (
     <div>
       <button
@@ -32,14 +41,7 @@ function GetLogoutComponent(): JSX.Element {
       >
         Logout
       </button>
-      <button
-        onClick={async () => {
-          const name = await GetField(fieldToRdfMap.firstName);
-          console.log(name);
-        }}
-      >
-        GetField
-      </button>
+      <div>Hello {userName}!</div>
     </div>
   );
 }

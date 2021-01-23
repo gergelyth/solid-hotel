@@ -10,6 +10,8 @@ import {
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 
+class NotFoundError extends Error {}
+
 export async function CheckIfLoggedIn(): Promise<boolean> {
   const session = getDefaultSession();
   await session.handleIncomingRedirect(window.location.href);
@@ -38,15 +40,19 @@ async function GetProfile(): Promise<Thing | null> {
   return profile;
 }
 
-export async function GetField(field: string): Promise<string | null> {
+export async function GetField(field: string): Promise<string> {
   const profile = await GetProfile();
 
   if (!profile) {
-    console.log("Profile null");
-    return null;
+    throw new NotFoundError("Profile not found.");
   }
 
-  return getStringNoLocale(profile, field);
+  const value = getStringNoLocale(profile, field);
+  if (!value) {
+    throw new NotFoundError("Field not found in the Solid Pod.");
+  }
+
+  return value;
 }
 
 export async function SetField(field: string, value: string): Promise<void> {
