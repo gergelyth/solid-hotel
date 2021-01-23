@@ -1,18 +1,26 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
+import dynamic from "next/dynamic";
 
-async function SolidLogin(oidcIssuer: string): Promise<void> {
-  const session = getDefaultSession();
+async function SolidLogin(session: Session, oidcIssuer: string): Promise<void> {
   await session.login({
     oidcIssuer: oidcIssuer,
-    redirectUrl: window.location.origin,
+    redirectUrl: window.location.href,
   });
 }
 
+const DynamicHandleRedirectComponent = dynamic(
+  () => import("../components/handle-redirect-component"),
+  { ssr: false }
+);
+
 function Login(): JSX.Element {
+  const session = getDefaultSession();
+
   return (
     <div className={styles.container}>
+      <DynamicHandleRedirectComponent />
       <Head>
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
@@ -23,7 +31,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            SolidLogin("https://inrupt.net");
+            SolidLogin(session, "https://inrupt.net");
           }}
         >
           Inrupt.net
@@ -32,7 +40,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            SolidLogin("https://solidcommunity.net/");
+            SolidLogin(session, "https://solidcommunity.net/");
           }}
         >
           SolidCommunity.net

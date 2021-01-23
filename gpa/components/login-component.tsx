@@ -1,9 +1,8 @@
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { CheckIfLoggedIn } from "../util/solid";
 import { GetSession } from "../util/solid";
-import { Component } from "react";
 import { useUserName } from "../hooks/useSolidUser";
+import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 
 function GetLoginComponent(): JSX.Element {
   return (
@@ -46,28 +45,14 @@ function GetLogoutComponent(): JSX.Element {
   );
 }
 
-// TODO: Put the logged in verification only to /login - if logged in, then redirect to index, if not, then select provider
-// just like the example
-class LoginButtonComponent extends Component<unknown, { isLoggedIn: boolean }> {
-  constructor(props: unknown) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-    };
-  }
+function LoginButtonComponent(): JSX.Element {
+  const session = getDefaultSession();
 
-  componentDidMount(): void {
-    const isLoggedInPromise = CheckIfLoggedIn();
-    isLoggedInPromise.then((b) => this.setState({ isLoggedIn: b }));
-  }
-
-  render(): JSX.Element {
-    return (
-      <div className={`${styles.grid} ${styles.card}`}>
-        {this.state.isLoggedIn ? GetLogoutComponent() : GetLoginComponent()}
-      </div>
-    );
-  }
+  return (
+    <div className={`${styles.grid} ${styles.card}`}>
+      {session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent()}
+    </div>
+  );
 }
 
 export default LoginButtonComponent;
