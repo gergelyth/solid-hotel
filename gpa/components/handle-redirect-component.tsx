@@ -1,14 +1,8 @@
-import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
 import Router from "next/router";
-
-async function CheckIfLoggedIn(session: Session): Promise<boolean> {
-  await session.handleIncomingRedirect(window.location.href);
-  return session.info.isLoggedIn;
-}
+import { CheckIfLoggedIn } from "../util/solid";
 
 export default function RedirectComponent(): JSX.Element {
-  const session = getDefaultSession();
-  CheckIfLoggedIn(session).then((isLoggedIn) => {
+  CheckIfLoggedIn().then((isLoggedIn) => {
     if (isLoggedIn) {
       Router.push("/");
     }

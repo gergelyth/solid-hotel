@@ -1,53 +1,91 @@
 import {
-  addStringNoLocale,
   getSolidDataset,
   getStringNoLocale,
   getThing,
   saveSolidDatasetAt,
+  setStringNoLocale,
   setThing,
+  SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { NotFoundError } from "./errors";
 
-class NotFoundError extends Error {}
+type SolidProfile = {
+  profileAddress: string;
+  profile: Thing | null;
+  dataSet: SolidDataset | null;
+};
 
 export async function CheckIfLoggedIn(): Promise<boolean> {
   const session = getDefaultSession();
   await session.handleIncomingRedirect(window.location.href);
-  const isLoggedIn = session.info.isLoggedIn;
-  return isLoggedIn;
+  return session.info.isLoggedIn;
 }
 
-export function GetSession(): Session {
+export async function SolidLogin(oidcIssuer: string): Promise<void> {
+  const session = getDefaultSession();
+  await session.login({
+    oidcIssuer: oidcIssuer,
+    redirectUrl: window.location.href,
+  });
+}
+
+export async function SolidLogout(): Promise<void> {
+  const session = GetSession();
+  if (session == null) {
+    return;
+  }
+  await session.logout();
+}
+
+function GetSession(): Session {
   return getDefaultSession();
 }
 
-async function GetProfile(): Promise<Thing | null> {
-  const session = GetSession();
+function GetPodOfDefaultSession(
+  session: Session = GetSession()
+): string | null {
+  const webId = session.info.webId;
+  if (!webId) {
+    return null;
+  }
+
+  return new URL(webId)?.hostname;
+}
+
+async function GetProfile(
+  session: Session = GetSession()
+): Promise<SolidProfile | null> {
   if (!session.info.webId) {
     console.log("WebID null");
     return null;
   }
 
-  const dataSet = await getSolidDataset(
-    "https://gergelyth.inrupt.net/profile/card",
-    { fetch: session.fetch }
-  );
+  const solidPodAddress = GetPodOfDefaultSession(session);
+  if (!solidPodAddress) {
+    return null;
+  }
+
+  const profileAddress = solidPodAddress + "/profile/card";
+  const dataSet = await getSolidDataset(profileAddress, {
+    fetch: session.fetch,
+  });
 
   const profile = getThing(dataSet, session.info.webId);
 
-  return profile;
+  return { profileAddress, profile, dataSet };
 }
 
 export async function GetField(field: string): Promise<string> {
-  const profile = await GetProfile();
+  const solidProfile = await GetProfile();
 
-  if (!profile) {
+  if (!solidProfile || !solidProfile.profile) {
     throw new NotFoundError("Profile not found.");
   }
 
-  const value = getStringNoLocale(profile, field);
+  const value = getStringNoLocale(solidProfile.profile, field);
   if (!value) {
     throw new NotFoundError("Field not found in the Solid Pod.");
   }
@@ -56,32 +94,17 @@ export async function GetField(field: string): Promise<string> {
 }
 
 export async function SetField(field: string, value: string): Promise<void> {
-  const session = GetSession();
-  if (!session.info.webId) {
-    console.log("WebID null");
-    return;
+  const session = getDefaultSession();
+  const solidProfile = await GetProfile();
+
+  if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
+    throw new NotFoundError("Profile not found.");
   }
 
-  const dataSet = await getSolidDataset(
-    "https://gergelyth.inrupt.net/profile/card",
-    { fetch: session.fetch }
-  );
+  const updatedProfile = setStringNoLocale(solidProfile.profile, field, value);
+  const updatedDataSet = setThing(solidProfile.dataSet, updatedProfile);
 
-  // session.info.webId = https://gergelyth.inrupt.net/profile/card#me
-  const profile = getThing(dataSet, session.info.webId);
-
-  if (!profile) {
-    console.log("Profile null");
-    return;
-  }
-
-  const updatedProfile = addStringNoLocale(profile, field, value);
-  const updatedDataSet = setThing(dataSet, updatedProfile);
-  const savedResource = await saveSolidDatasetAt(
-    "https://gergelyth.inrupt.net/profile/card",
-    updatedDataSet,
-    { fetch: session.fetch }
-  );
-
-  console.log(savedResource);
+  await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {
+    fetch: session.fetch,
+  });
 }

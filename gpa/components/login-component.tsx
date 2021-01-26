@@ -1,8 +1,8 @@
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { GetSession } from "../util/solid";
 import { useUserName } from "../hooks/useSolidUser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { SolidLogout } from "../util/solid";
 
 function GetLoginComponent(): JSX.Element {
   return (
@@ -13,12 +13,8 @@ function GetLoginComponent(): JSX.Element {
 }
 
 function GetLogoutComponent(): JSX.Element {
-  async function SolidLogout(): Promise<void> {
-    const session = GetSession();
-    if (session == null) {
-      return;
-    }
-    await session.logout();
+  async function Logout(): Promise<void> {
+    await SolidLogout();
     window.location.reload();
   }
 
@@ -35,7 +31,7 @@ function GetLogoutComponent(): JSX.Element {
     <div>
       <button
         onClick={async () => {
-          await SolidLogout();
+          await Logout();
         }}
       >
         Logout

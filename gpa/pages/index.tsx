@@ -27,7 +27,14 @@ export default function Home() {
             await SetField(fieldToRdfMap.firstName, "John");
           }}
         >
-          Add FirstName
+          Set first name to John
+        </button>
+        <button
+          onClick={async () => {
+            await SetField(fieldToRdfMap.firstName, "Stephen");
+          }}
+        >
+          Set first name to Stephen
         </button>
 
         <DynamicLoginComponent />

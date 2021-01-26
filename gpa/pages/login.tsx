@@ -1,14 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
 import dynamic from "next/dynamic";
-
-async function SolidLogin(session: Session, oidcIssuer: string): Promise<void> {
-  await session.login({
-    oidcIssuer: oidcIssuer,
-    redirectUrl: window.location.href,
-  });
-}
+import { SolidLogin } from "../util/solid";
 
 const DynamicHandleRedirectComponent = dynamic(
   () => import("../components/handle-redirect-component"),
@@ -16,8 +9,6 @@ const DynamicHandleRedirectComponent = dynamic(
 );
 
 function Login(): JSX.Element {
-  const session = getDefaultSession();
-
   return (
     <div className={styles.container}>
       <DynamicHandleRedirectComponent />
@@ -31,7 +22,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            SolidLogin(session, "https://inrupt.net");
+            SolidLogin("https://inrupt.net");
           }}
         >
           Inrupt.net
@@ -40,7 +31,7 @@ function Login(): JSX.Element {
       <div className={styles.grid}>
         <button
           onClick={async () => {
-            SolidLogin(session, "https://solidcommunity.net/");
+            SolidLogin("https://solidcommunity.net/");
           }}
         >
           SolidCommunity.net
