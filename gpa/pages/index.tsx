@@ -4,6 +4,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { SetField } from "../util/solid";
 import { fieldToRdfMap } from "../vocabularies/rdf_person";
+import PopulateHotelPod from "../test/setup/populateHotelPod";
 
 const DynamicLoginComponent = dynamic(
   () => import("../components/login-component"),
@@ -35,6 +36,10 @@ export default function Home() {
           }}
         >
           Set first name to Stephen
+        </button>
+
+        <button onClick={PopulateHotelPod}>
+          Populate hotel Pod (signed into HotelPod)
         </button>
 
         <DynamicLoginComponent />

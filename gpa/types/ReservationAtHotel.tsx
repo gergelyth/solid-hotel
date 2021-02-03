@@ -2,9 +2,9 @@ import { ReservationState } from "./ReservationState";
 
 export type ReservationAtHotel = {
   id: string;
-  ownerId: string;
-  roomId: string;
+  ownerId: number;
+  roomId: number;
   state: ReservationState;
-  dateFrom: string;
-  dateTo: string;
+  dateFrom: Date;
+  dateTo: Date;
 };

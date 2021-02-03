@@ -1,4 +1,6 @@
 import {
+  addDatetime,
+  addInteger,
   addStringNoLocale,
   createThing,
   getSolidDataset,
@@ -7,6 +9,7 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
+import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { fieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
 
@@ -33,13 +36,13 @@ async function GetReservationDataSet(
     fetch: session.fetch,
   });
 
+  // TODO: if not found, create
+
   return { dataSet, reservationsUrl };
 }
 
 export async function AddReservation(
-  id: string,
-  checkinTime: string,
-  reservationFor: string
+  reservation: ReservationAtHotel
 ): Promise<void> {
   // TODO: get Hotel session here
   const session = GetHotelSession();
@@ -51,17 +54,35 @@ export async function AddReservation(
     );
   }
 
-  let newReservation = createThing({ name: id });
-  newReservation = addStringNoLocale(
+  let newReservation = createThing({ name: reservation.id });
+  newReservation = addInteger(
     newReservation,
-    fieldToRdfMap.reservationFor,
-    reservationFor
+    // TODO: this should be an URL pointing to the ROOM definition
+    fieldToRdfMap.room,
+    reservation.roomId
+  );
+  newReservation = addInteger(
+    newReservation,
+    // TODO: should this be an URL pointing to the WebID?
+    fieldToRdfMap.owner,
+    reservation.ownerId
   );
   newReservation = addStringNoLocale(
+    newReservation,
+    fieldToRdfMap.state,
+    reservation.state.toString()
+  );
+  newReservation = addDatetime(
     newReservation,
     fieldToRdfMap.checkinTime,
-    checkinTime
+    reservation.dateFrom
   );
+  newReservation = addDatetime(
+    newReservation,
+    fieldToRdfMap.checkoutTime,
+    reservation.dateTo
+  );
+
   const updatedDataSet = setThing(reservations.dataSet, newReservation);
 
   await saveSolidDatasetAt(reservations.reservationsUrl, updatedDataSet, {
