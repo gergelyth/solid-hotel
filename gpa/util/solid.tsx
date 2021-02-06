@@ -7,6 +7,7 @@ import {
   setThing,
   SolidDataset,
   Thing,
+  WithResourceInfo,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
@@ -53,6 +54,21 @@ function GetPodOfDefaultSession(
   }
 
   return new URL(webId)?.hostname;
+}
+
+export async function GetDataSet(
+  url: string,
+  session: Session = GetSession()
+): Promise<SolidDataset & WithResourceInfo> {
+  const dataSet = await getSolidDataset(url, {
+    fetch: session.fetch,
+  });
+
+  if (!dataSet) {
+    throw new NotFoundError(`Dataset at ${url} not found.`);
+  }
+
+  return dataSet;
 }
 
 async function GetProfile(

@@ -25,8 +25,8 @@ const hotelPod = "https://solidhotel.inrupt.net/";
 const reservationAddress = "reservations/";
 const roomDefinitionAddress = "rooms/";
 
-const reservationsUrl = hotelPod + reservationAddress;
-const roomDefinitionsUrl = hotelPod + roomDefinitionAddress;
+export const reservationsUrl = hotelPod + reservationAddress;
+export const roomDefinitionsUrl = hotelPod + roomDefinitionAddress;
 
 function GetHotelSession(): Session {
   // TODO: temporarily, we should retrieve the hotel's session here
@@ -114,6 +114,7 @@ export async function AddRoom(room: RoomDefinition): Promise<void> {
   //   );
   // }
 
+  // TODO: make rooms folder public programatically
   let roomDataset = createSolidDataset();
 
   let newRoom = createThing({ name: "room" });

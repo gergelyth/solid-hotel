@@ -50,6 +50,11 @@ export default function Home() {
         <DynamicLoginComponent />
 
         <div className={`${styles.grid} ${styles.card}`}>
+          <Link href="/booking">
+            <h3>Book a room</h3>
+          </Link>
+        </div>
+        <div className={`${styles.grid} ${styles.card}`}>
           <Link href="/reservations">
             <h3>List all reservations</h3>
           </Link>
