@@ -3,8 +3,9 @@ import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { SetField } from "../util/solid";
-import { fieldToRdfMap } from "../vocabularies/rdf_person";
-import PopulateHotelPod from "../test/setup/populateHotelPod";
+import { personFieldToRdfMap } from "../vocabularies/rdf_person";
+import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
+import PopulateHotelPodWithRooms from "../test/setup/populateHotelPod/withRooms";
 
 const DynamicLoginComponent = dynamic(
   () => import("../components/login-component"),
@@ -25,21 +26,25 @@ export default function Home() {
         <p className={styles.description}>Click on the links to navigate</p>
         <button
           onClick={async () => {
-            await SetField(fieldToRdfMap.firstName, "John");
+            await SetField(personFieldToRdfMap.firstName, "John");
           }}
         >
           Set first name to John
         </button>
         <button
           onClick={async () => {
-            await SetField(fieldToRdfMap.firstName, "Stephen");
+            await SetField(personFieldToRdfMap.firstName, "Stephen");
           }}
         >
           Set first name to Stephen
         </button>
 
-        <button onClick={PopulateHotelPod}>
-          Populate hotel Pod (signed into HotelPod)
+        <button onClick={PopulateHotelPodWithReservations}>
+          Populate hotel Pod with reservations (signed into HotelPod)
+        </button>
+
+        <button onClick={PopulateHotelPodWithRooms}>
+          Populate hotel Pod with rooms (signed into HotelPod)
         </button>
 
         <DynamicLoginComponent />

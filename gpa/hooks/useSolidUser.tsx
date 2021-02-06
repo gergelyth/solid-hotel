@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { GetField } from "../util/solid";
-import { fieldToRdfMap } from "../vocabularies/rdf_person";
+import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 
 export function useUserName(): {
   userName: string | undefined;
@@ -17,7 +17,7 @@ export function useUserName(): {
   // if we specify key (first argument of useSWR) as an array, the ID for caching will be calculated for the combination of the elements
   // https://swr.vercel.app/docs/arguments
   const { data, error } = useSWR(
-    ["user_solid", fieldToRdfMap.firstName],
+    ["user_solid", personFieldToRdfMap.firstName],
     fetcher
   );
 

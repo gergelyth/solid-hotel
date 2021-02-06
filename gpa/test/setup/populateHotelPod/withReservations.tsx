@@ -1,6 +1,6 @@
-import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { ReservationState } from "../../types/ReservationState";
-import { AddReservation } from "../../util/solidhoteladmin";
+import { ReservationAtHotel } from "../../../types/ReservationAtHotel";
+import { ReservationState } from "../../../types/ReservationState";
+import { AddReservation } from "../../../util/solidhoteladmin";
 
 function GetCurrentDatePushedBy(
   yearOffset: number,
@@ -128,10 +128,10 @@ function CreateReservations(): ReservationAtHotel[] {
   return reservations;
 }
 
-export default function PopulateHotelPod(): void {
+export default function PopulateHotelPodWithReservations(): void {
   const reservations = CreateReservations();
   reservations.forEach((reservation: ReservationAtHotel) =>
     AddReservation(reservation)
   );
-  console.log("Hotel Pod populated.");
+  console.log("Hotel Pod populated with reservations.");
 }
