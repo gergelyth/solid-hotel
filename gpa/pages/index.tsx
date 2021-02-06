@@ -2,10 +2,10 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { SetField } from "../util/solid";
-import { personFieldToRdfMap } from "../vocabularies/rdf_person";
-import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
-import PopulateHotelPodWithRooms from "../test/setup/populateHotelPod/withRooms";
+// import { SetField } from "../util/solid";
+// import { personFieldToRdfMap } from "../vocabularies/rdf_person";
+// import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
+// import PopulateHotelPodWithRooms from "../test/setup/populateHotelPod/withRooms";
 
 const DynamicLoginComponent = dynamic(
   () => import("../components/login-component"),
@@ -24,7 +24,7 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Guest Portal Application</h1>
         <p className={styles.description}>Click on the links to navigate</p>
-        <button
+        {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.firstName, "John");
           }}
@@ -45,7 +45,7 @@ export default function Home() {
 
         <button onClick={PopulateHotelPodWithRooms}>
           Populate hotel Pod with rooms (signed into HotelPod)
-        </button>
+        </button> */}
 
         <DynamicLoginComponent />
 
