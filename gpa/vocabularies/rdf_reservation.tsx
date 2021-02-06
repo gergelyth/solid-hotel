@@ -4,9 +4,9 @@ export const fieldToRdfMap: Record<string, string> = {
   rdfType: SCHEMA_INRUPT_EXT.LodgingReservation,
   // TODO: find something for these
   owner: "schema:owner",
-  room: SCHEMA_INRUPT_EXT.reservationFor,
+  room: "schema:reservationFor",
   // TODO: find something for these
   state: "schema:state",
-  checkinTime: SCHEMA_INRUPT_EXT.checkinTime,
-  checkoutTime: SCHEMA_INRUPT_EXT.checkoutTime,
+  checkinTime: "schema:checkinTime",
+  checkoutTime: "schema:checkoutTime",
 };

@@ -133,4 +133,5 @@ export default function PopulateHotelPod(): void {
   reservations.forEach((reservation: ReservationAtHotel) =>
     AddReservation(reservation)
   );
+  console.log("Hotel Pod populated.");
 }

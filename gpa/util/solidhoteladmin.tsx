@@ -2,6 +2,7 @@ import {
   addDatetime,
   addInteger,
   addStringNoLocale,
+  createSolidDataset,
   createThing,
   getSolidDataset,
   saveSolidDatasetAt,
@@ -21,40 +22,44 @@ type ReservationsDataSet = {
 const hotelPod = "https://solidhotel.inrupt.net/";
 const reservationAddress = "reservations/";
 // const roomDefinitionAddress = "rooms/";
+const reservationsUrl = hotelPod + reservationAddress;
 
 function GetHotelSession(): Session {
   // TODO: temporarily, we should retrieve the hotel's session here
   return getDefaultSession();
 }
 
-async function GetReservationDataSet(
-  session: Session = GetHotelSession()
-): Promise<ReservationsDataSet> {
-  const reservationsUrl = hotelPod + reservationAddress;
+// async function GetReservationDataSet(
+//   session: Session = GetHotelSession()
+// ): Promise<ReservationsDataSet> {
+//   const reservationsUrl = hotelPod + reservationAddress;
 
-  const dataSet = await getSolidDataset(reservationsUrl, {
-    fetch: session.fetch,
-  });
+//   const dataSet = await getSolidDataset(reservationsUrl, {
+//     fetch: session.fetch,
+//   });
 
-  // TODO: if not found, create
+//   // TODO: if not found, create
+//   // saveDataSolidSet creates intermediary things if not found
 
-  return { dataSet, reservationsUrl };
-}
+//   return { dataSet, reservationsUrl };
+// }
 
 export async function AddReservation(
   reservation: ReservationAtHotel
 ): Promise<void> {
   // TODO: get Hotel session here
   const session = GetHotelSession();
-  const reservations = await GetReservationDataSet();
+  // const reservations = await GetReservationDataSet();
 
-  if (!reservations.dataSet) {
-    throw new NotFoundError(
-      `Reservations dataset not found at ${reservations.reservationsUrl}`
-    );
-  }
+  // if (!reservations.dataSet) {
+  //   throw new NotFoundError(
+  //     `Reservations dataset not found at ${reservations.reservationsUrl}`
+  //   );
+  // }
 
-  let newReservation = createThing({ name: reservation.id });
+  let reservationDataset = createSolidDataset();
+
+  let newReservation = createThing({ name: "reservation" });
   newReservation = addInteger(
     newReservation,
     // TODO: this should be an URL pointing to the ROOM definition
@@ -83,9 +88,13 @@ export async function AddReservation(
     reservation.dateTo
   );
 
-  const updatedDataSet = setThing(reservations.dataSet, newReservation);
+  reservationDataset = setThing(reservationDataset, newReservation);
 
-  await saveSolidDatasetAt(reservations.reservationsUrl, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await saveSolidDatasetAt(
+    reservationsUrl + reservation.id,
+    reservationDataset,
+    {
+      fetch: session.fetch,
+    }
+  );
 }
