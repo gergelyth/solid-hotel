@@ -5,7 +5,8 @@ import { Dispatch, SetStateAction, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { GetCurrentDatePushedBy } from "../test/setup/populateHotelPod/withReservations";
 import { ReservationState } from "../types/ReservationState";
-import { AddReservation } from "../util/solid";
+import { AddReservation, GetSession } from "../util/solid";
+import { AddReservationToHotelPod } from "../util/solidhoteladmin";
 
 enum BookingPage {
   ReservationProperties,
@@ -27,7 +28,9 @@ function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
     dateTo: checkoutDate,
   };
 
-  AddReservation(reservation);
+  const session = GetSession();
+  AddReservation(reservation, session);
+  AddReservationToHotelPod(reservation, session);
 }
 
 function ReservationPropertiesPage(
@@ -40,7 +43,7 @@ function ReservationPropertiesPage(
       <p>==============================================</p>
       <i>Add date picker and CSS for actual room select here.</i>
       <i>
-        For now it will select the first room and pick dates a few dates in the
+        For now it will select the first room and pick dates a few days in the
         future.
       </i>
       <button

@@ -46,11 +46,11 @@ function GetHotelSession(): Session {
 //   return { dataSet, reservationsUrl };
 // }
 
-export async function AddReservation(
-  reservation: ReservationAtHotel
-): Promise<void> {
+export async function AddReservationToHotelPod(
+  reservation: ReservationAtHotel,
   // TODO: get Hotel session here
-  const session = GetHotelSession();
+  session = GetHotelSession()
+): Promise<void> {
   // const reservations = await GetReservationDataSet();
 
   // if (!reservations.dataSet) {

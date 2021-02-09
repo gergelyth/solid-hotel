@@ -45,7 +45,7 @@ export async function SolidLogout(): Promise<void> {
   await session.logout();
 }
 
-function GetSession(): Session {
+export function GetSession(): Session {
   return getDefaultSession();
 }
 
@@ -128,10 +128,9 @@ export async function SetField(field: string, value: string): Promise<void> {
 }
 
 export async function AddReservation(
-  reservation: ReservationAtHotel
+  reservation: ReservationAtHotel,
+  session = GetSession()
 ): Promise<void> {
-  const session = GetSession();
-
   const reservationDataset = CreateReservationDataset(reservation);
 
   const reservationsUrl =
