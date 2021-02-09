@@ -11,13 +11,17 @@ import {
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { NotFoundError } from "./errors";
+import { CreateReservationDataset } from "./solidCommon";
 
 type SolidProfile = {
   profileAddress: string;
   profile: Thing | null;
   dataSet: SolidDataset | null;
 };
+
+const reservationAddress = "reservations/";
 
 export async function CheckIfLoggedIn(): Promise<boolean> {
   const session = getDefaultSession();
@@ -45,9 +49,7 @@ function GetSession(): Session {
   return getDefaultSession();
 }
 
-function GetPodOfDefaultSession(
-  session: Session = GetSession()
-): string | null {
+function GetPodOfSession(session: Session = GetSession()): string | null {
   const webId = session.info.webId;
   if (!webId) {
     return null;
@@ -79,7 +81,7 @@ async function GetProfile(
     return null;
   }
 
-  const solidPodAddress = GetPodOfDefaultSession(session);
+  const solidPodAddress = GetPodOfSession(session);
   if (!solidPodAddress) {
     return null;
   }
@@ -123,4 +125,23 @@ export async function SetField(field: string, value: string): Promise<void> {
   await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {
     fetch: session.fetch,
   });
+}
+
+export async function AddReservation(
+  reservation: ReservationAtHotel
+): Promise<void> {
+  const session = GetSession();
+
+  const reservationDataset = CreateReservationDataset(reservation);
+
+  const reservationsUrl =
+    "https://" + GetPodOfSession(session) + "/" + reservationAddress;
+
+  await saveSolidDatasetAt(
+    reservationsUrl + reservation.id,
+    reservationDataset,
+    {
+      fetch: session.fetch,
+    }
+  );
 }

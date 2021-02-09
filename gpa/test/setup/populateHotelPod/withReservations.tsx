@@ -2,7 +2,7 @@ import { ReservationAtHotel } from "../../../types/ReservationAtHotel";
 import { ReservationState } from "../../../types/ReservationState";
 import { AddReservation } from "../../../util/solidhoteladmin";
 
-function GetCurrentDatePushedBy(
+export function GetCurrentDatePushedBy(
   yearOffset: number,
   monthOffset: number,
   dayOffset: number
