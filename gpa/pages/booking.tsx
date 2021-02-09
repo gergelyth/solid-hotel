@@ -1,6 +1,10 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import RoomSelector from "../components/booking/room-selector";
 import styles from "../styles/Home.module.css";
+
+const DynamicRoomSelector = dynamic(
+  () => import("../components/booking/room-selector")
+);
 
 function Booking(): JSX.Element {
   return (
@@ -8,9 +12,8 @@ function Booking(): JSX.Element {
       <Head>
         <title>Book a room</title>
         <link rel="icon" href="/favicon.ico" />
-
-        <RoomSelector />
       </Head>
+      <DynamicRoomSelector />
     </div>
   );
 }

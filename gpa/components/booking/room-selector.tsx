@@ -12,56 +12,48 @@ import { GetDataSet } from "../../util/solid";
 import { roomDefinitionsUrl } from "../../util/solidhoteladmin";
 import { roomFieldToRdfMap } from "../../vocabularies/rdf_room";
 
-export function GetRoomUrls(): {
-  roomUrls: UrlString[] | undefined;
-  isLoading: boolean;
-  isError: boolean;
-} {
-  const fetcher = (_: string, url: string): Promise<UrlString[]> => {
-    return GetDataSet(url).then((dataset) =>
-      getContainedResourceUrlAll(dataset)
-    );
-  };
-
-  // here we have to care that this key in useSWR has to be unique across the whole application (to handle caching)
-  // so perhaps use more descriptive name, such as "solid-firstName" or whatever
-
-  // if we specify key (first argument of useSWR) as an array, the ID for caching will be calculated for the combination of the elements
-  // https://swr.vercel.app/docs/arguments
-  const { data, error } = useSWR(["room_list", roomDefinitionsUrl], fetcher);
-
-  return {
-    roomUrls: data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
-
 function ConvertToRoomDefinition(
   dataset: SolidDataset,
-  roomId: string
+  url: string
 ): RoomDefinition | null {
-  const roomThing = getThing(dataset, "room");
+  const roomId = url.split("/").pop();
+  if (!roomId) {
+    return null;
+  }
+  const roomThing = getThing(dataset, url + "#room");
   if (!roomThing) {
     return null;
   }
   // TODO: modify No Id and No Name
-  return {
+  const room = {
     id: roomId,
     name: getStringNoLocale(roomThing, roomFieldToRdfMap.name) ?? "No name",
     description:
       getStringNoLocale(roomThing, roomFieldToRdfMap.description) ?? undefined,
   };
+  return room;
 }
 
-function FetchRoom(url: UrlString): JSX.Element {
+function ProcessRoom(url: UrlString): Promise<RoomDefinition | null> {
+  return GetDataSet(url).then((dataset) => {
+    return ConvertToRoomDefinition(dataset, url);
+  });
+}
+
+function FetchRooms(): {
+  rooms: (RoomDefinition | null)[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+} {
   const fetcher = (
-    roomId: string,
+    _: string,
     url: string
-  ): Promise<RoomDefinition | null> => {
-    return GetDataSet(url).then((dataset) =>
-      ConvertToRoomDefinition(dataset, roomId)
-    );
+  ): Promise<(RoomDefinition | null)[]> => {
+    return GetDataSet(url).then((dataset) => {
+      const urls = getContainedResourceUrlAll(dataset);
+      const rooms = urls.map((roomUrl) => ProcessRoom(roomUrl));
+      return Promise.all(rooms);
+    });
   };
 
   // here we have to care that this key in useSWR has to be unique across the whole application (to handle caching)
@@ -69,41 +61,40 @@ function FetchRoom(url: UrlString): JSX.Element {
 
   // if we specify key (first argument of useSWR) as an array, the ID for caching will be calculated for the combination of the elements
   // https://swr.vercel.app/docs/arguments
-  const roomId = url.split("/").pop();
-  if (!roomId) {
-    return <li>Room no ID!</li>;
-  }
 
-  const { data, error } = useSWR([roomId, url], fetcher);
-  const isLoading = !error && !data;
+  const { data, error } = useSWR(["rooms", roomDefinitionsUrl], fetcher);
+  return {
+    rooms: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
 
-  if (isLoading) {
-    return <li>Loading...</li>;
-  }
-  if (error || !data) {
-    return <li>Fetching room {roomId} failed.</li>;
+function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
+  if (!room) {
+    return <li>empty</li>;
   }
   return (
-    <li key={data.id}>
-      <h3>Name: {data.name}</h3>
-      <p>{data.description ?? EmptyDescription()}</p>
+    <li key={room.id}>
+      <h3>Name: {room.name}</h3>
+      <p>{room.description ?? EmptyDescription()}</p>
     </li>
   );
 }
 
 function GetRooms(): JSX.Element {
-  const { roomUrls, isLoading, isError } = GetRoomUrls();
+  const { rooms, isLoading, isError } = FetchRooms();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  if (isError || !roomUrls) {
+  if (isError || !rooms) {
     return <div>Fetching the room list failed.</div>;
   }
 
   return (
     <div>
-      <ul>{roomUrls.map((roomUrl) => FetchRoom(roomUrl))}</ul>
+      <ul>{rooms.map((room) => CreateRoomElement(room))}</ul>
     </div>
   );
 }
