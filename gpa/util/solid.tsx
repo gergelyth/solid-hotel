@@ -37,6 +37,12 @@ export async function SolidLogin(oidcIssuer: string): Promise<void> {
   });
 }
 
+export function GetUserReservationsPodUrl(
+  session: Session = GetSession()
+): string {
+  return "https://" + GetPodOfSession(session) + "/" + reservationAddress;
+}
+
 export async function SolidLogout(): Promise<void> {
   const session = GetSession();
   if (session == null) {
@@ -133,8 +139,7 @@ export async function AddReservation(
 ): Promise<void> {
   const reservationDataset = CreateReservationDataset(reservation);
 
-  const reservationsUrl =
-    "https://" + GetPodOfSession(session) + "/" + reservationAddress;
+  const reservationsUrl = GetUserReservationsPodUrl(session);
 
   await saveSolidDatasetAt(
     reservationsUrl + reservation.id,
