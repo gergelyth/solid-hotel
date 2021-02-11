@@ -15,7 +15,8 @@ enum BookingPage {
 }
 
 const DynamicRoomSelector = dynamic(
-  () => import("../components/booking/room-selector")
+  () => import("../components/booking/room-selector"),
+  { ssr: false }
 );
 
 function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
@@ -30,6 +31,7 @@ function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
 
   const session = GetSession();
   AddReservation(reservation, session);
+  // TODO: POSTER permission not working - currently it's set to EDITOR
   AddReservationToHotelPod(reservation, session);
 }
 
