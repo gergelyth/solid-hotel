@@ -55,7 +55,8 @@ function GetPodOfSession(session: Session = GetSession()): string | null {
     return null;
   }
 
-  return new URL(webId)?.hostname;
+  const hostname = new URL(webId)?.hostname;
+  return "https://" + hostname;
 }
 
 export async function GetDataSet(
@@ -133,8 +134,7 @@ export async function AddReservation(
 ): Promise<void> {
   const reservationDataset = CreateReservationDataset(reservation);
 
-  const reservationsUrl =
-    "https://" + GetPodOfSession(session) + "/" + reservationAddress;
+  const reservationsUrl = GetPodOfSession(session) + "/" + reservationAddress;
 
   await saveSolidDatasetAt(
     reservationsUrl + reservation.id,
