@@ -29,8 +29,7 @@ function ConvertToReservation(
     ownerId:
       getInteger(reservationThing, reservationFieldToRdfMap.owner) ?? 9999999,
     roomId:
-      getInteger(reservationThing, reservationFieldToRdfMap.reservationFor) ??
-      9999999,
+      getInteger(reservationThing, reservationFieldToRdfMap.room) ?? 9999999,
     state: getInteger(reservationThing, reservationFieldToRdfMap.state) ?? 0,
     dateFrom:
       getDatetime(reservationThing, reservationFieldToRdfMap.checkinTime) ??
@@ -56,8 +55,8 @@ function CreateReservationElement(
       <h3>Owner: {reservation.ownerId}</h3>
       <div>Room: {reservation.roomId}</div>
       <div>State: {ReservationState[reservation.state]}</div>
-      <div>Check-in date: {reservation.dateFrom}</div>
-      <div>Check-out date: {reservation.dateTo}</div>
+      <div>Check-in date: {reservation.dateFrom.toDateString()}</div>
+      <div>Check-out date: {reservation.dateTo.toDateString()}</div>
     </li>
   );
 }
