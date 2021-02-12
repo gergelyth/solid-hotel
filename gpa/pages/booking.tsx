@@ -40,7 +40,7 @@ function ReservationPropertiesPage(
   setCurrentPage: Dispatch<SetStateAction<BookingPage>>
 ): JSX.Element {
   return (
-    <div>
+    <div className={`${styles.simpleContainer}`}>
       <DynamicRoomSelector />
       <p>==============================================</p>
       <i>Add date picker and CSS for actual room select here.</i>

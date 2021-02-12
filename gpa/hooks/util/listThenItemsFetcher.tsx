@@ -15,7 +15,7 @@ function ProcessItem<T>(
   });
 }
 
-function FetchItems<T>(
+export function FetchItems<T>(
   swrKey: string,
   listUrl: string,
   convertToType: (dataset: SolidDataset, url: string) => T | null
@@ -46,37 +46,4 @@ function FetchItems<T>(
     isLoading: !error && !data,
     isError: error,
   };
-}
-
-export function GetItems<T>(
-  swrKey: string,
-  listUrl: string,
-  createElement: (item: T | null) => JSX.Element,
-  convertToType: (dataset: SolidDataset, url: string) => T | null
-): JSX.Element {
-  const { items, isLoading, isError } = FetchItems(
-    swrKey,
-    listUrl,
-    convertToType
-  );
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !items) {
-    return <div>Fetching the list failed.</div>;
-  }
-
-  const isArrayNonEmpty =
-    items.length > 0 && items.some((item) => item !== null);
-
-  return (
-    <div>
-      {isArrayNonEmpty ? (
-        <ul>{items.map((item) => createElement(item))}</ul>
-      ) : (
-        <i>No items found</i>
-      )}
-    </div>
-  );
 }
