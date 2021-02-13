@@ -7,6 +7,13 @@
   align-items: center;
 }
 
+.simpleContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .main {
   padding: 5rem 0;
   flex: 1;
