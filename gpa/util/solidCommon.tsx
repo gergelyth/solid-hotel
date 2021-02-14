@@ -4,9 +4,7 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
-  // getSolidDataset,
   setThing,
-  // SolidDataset,
 } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
