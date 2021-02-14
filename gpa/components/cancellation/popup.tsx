@@ -1,14 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
 import styles from "../../styles/Home.module.css";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { AddCancellationRequest } from "../../util/solid";
+import { ReservationState } from "../../types/ReservationState";
+import { AddCancellationRequest, SetReservationState } from "../../util/solid";
 
 function ConfirmCancellation(
   reservationId: string,
   setPopupVisibility: Dispatch<SetStateAction<boolean>>
 ): void {
   AddCancellationRequest(reservationId);
-  // TODO: Set cancelled in pod
+  SetReservationState(reservationId, ReservationState.CANCELLED);
+  // TODO: cancel on the hotel side (which will be done in PMS)
   setPopupVisibility(false);
 }
 

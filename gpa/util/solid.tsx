@@ -15,7 +15,9 @@ import {
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { ReservationState } from "../types/ReservationState";
 import { cancellationFieldToRdfMap } from "../vocabularies/rdf_cancellation";
+import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
 import { CreateReservationDataset } from "./solidCommon";
 import { cancellationsUrl } from "./solidhoteladmin";
@@ -154,6 +156,31 @@ export async function AddReservation(
       fetch: session.fetch,
     }
   );
+}
+
+export async function SetReservationState(
+  reservationId: string,
+  newState: ReservationState,
+  session = GetSession()
+): Promise<void> {
+  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const dataset = await GetDataSet(datasetUrl, session);
+
+  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  if (!reservationThing) {
+    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
+  }
+
+  const updatedReservation = setStringNoLocale(
+    reservationThing,
+    reservationFieldToRdfMap.state,
+    newState.toString()
+  );
+  const updatedDataSet = setThing(dataset, updatedReservation);
+
+  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
+    fetch: session.fetch,
+  });
 }
 
 export function CreateCancellationDataset(reservationId: string): SolidDataset {
