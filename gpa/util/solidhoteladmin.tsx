@@ -22,9 +22,11 @@ import { CreateReservationDataset } from "./solidCommon";
 const hotelPod = "https://solidhotel.inrupt.net/";
 const reservationAddress = "reservations/";
 const roomDefinitionAddress = "rooms/";
+const cancellationAddress = "cancellations/";
 
 export const reservationsUrl = hotelPod + reservationAddress;
 export const roomDefinitionsUrl = hotelPod + roomDefinitionAddress;
+export const cancellationsUrl = hotelPod + cancellationAddress;
 
 function GetHotelSession(): Session {
   // TODO: temporarily, we should retrieve the hotel's session here

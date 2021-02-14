@@ -1,11 +1,18 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useState } from "react";
+import CancelReservationButton from "../../components/cancellation/cancellation";
 import { useUserReservations } from "../../hooks/useUserReservations";
 import styles from "../../styles/Home.module.css";
+import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 
 function GetReservationDetails(
-  reservationId: string | string[] | undefined
+  reservationId: string | undefined,
+  currentReservation: ReservationAtHotel | undefined,
+  setCurrentReservation: Dispatch<
+    SetStateAction<ReservationAtHotel | undefined>
+  >
 ): JSX.Element {
   const { items, isLoading, isError } = useUserReservations();
 
@@ -28,6 +35,10 @@ function GetReservationDetails(
     return <div>Reservation ID not found in reservation list.</div>;
   }
 
+  if (!currentReservation) {
+    setCurrentReservation(reservationDetail);
+  }
+
   return (
     <div className={styles.simpleContainer}>
       <h3>Hotel WebId here</h3>
@@ -40,8 +51,15 @@ function GetReservationDetails(
 }
 
 function ReservationDetail(): JSX.Element {
+  const [currentReservation, setCurrentReservation] = useState<
+    ReservationAtHotel | undefined
+  >();
+
   const router = useRouter();
-  const reservationId = router.query.id;
+  let reservationId = router.query.id;
+  if (Array.isArray(reservationId)) {
+    reservationId = reservationId[0];
+  }
 
   return (
     <div className={styles.container}>
@@ -50,7 +68,14 @@ function ReservationDetail(): JSX.Element {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h2>Reservation details</h2>
-      {GetReservationDetails(reservationId)}
+
+      {GetReservationDetails(
+        reservationId,
+        currentReservation,
+        setCurrentReservation
+      )}
+
+      <CancelReservationButton reservation={currentReservation} />
     </div>
   );
 }
