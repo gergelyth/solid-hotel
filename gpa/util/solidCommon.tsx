@@ -1,7 +1,6 @@
 import {
   addDatetime,
   addInteger,
-  addStringNoLocale,
   createSolidDataset,
   createThing,
   setThing,
@@ -28,10 +27,10 @@ export function CreateReservationDataset(
     reservationFieldToRdfMap.owner,
     reservation.ownerId
   );
-  newReservation = addStringNoLocale(
+  newReservation = addInteger(
     newReservation,
     reservationFieldToRdfMap.state,
-    reservation.state.toString()
+    reservation.state.valueOf()
   );
   newReservation = addDatetime(
     newReservation,
