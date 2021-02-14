@@ -73,7 +73,8 @@ function ExecuteCheckin(
 function MainPage(
   reservationId: string | undefined,
   currentPage: ReservationDetailPage,
-  setCurrentPage: Dispatch<SetStateAction<ReservationDetailPage>>
+  setCurrentPage: Dispatch<SetStateAction<ReservationDetailPage>>,
+  router: NextRouter
 ): JSX.Element {
   const [currentReservation, setCurrentReservation] = useState<
     ReservationAtHotel | undefined
@@ -90,7 +91,9 @@ function MainPage(
       <button
         onClick={() => {
           ExecuteCheckin(currentReservation);
-          setCurrentPage(currentPage + 1);
+          // TODO: solve this too many hooks called, so we don't have to use the success page
+          // setCurrentPage(currentPage + 1);
+          router.push("/reservations/success");
         }}
       >
         Check-in
@@ -120,7 +123,7 @@ function DisplayPage(
 ): JSX.Element {
   switch (currentPage) {
     case ReservationDetailPage.Main:
-      return MainPage(reservationId, currentPage, setCurrentPage);
+      return MainPage(reservationId, currentPage, setCurrentPage, router);
     case ReservationDetailPage.CheckinSuccess:
       return CheckinSuccessPage(router);
   }
