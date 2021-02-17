@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { GetCurrentDatePushedBy } from "../test/setup/populateHotelPod/withReservations";
@@ -37,7 +37,8 @@ function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
 
 function ReservationPropertiesPage(
   currentPage: BookingPage,
-  setCurrentPage: Dispatch<SetStateAction<BookingPage>>
+  setCurrentPage: Dispatch<SetStateAction<BookingPage>>,
+  router: NextRouter
 ): JSX.Element {
   return (
     <div className={`${styles.simpleContainer}`}>
@@ -55,7 +56,8 @@ function ReservationPropertiesPage(
             GetCurrentDatePushedBy(0, 0, 5),
             GetCurrentDatePushedBy(0, 0, 10)
           );
-          setCurrentPage(currentPage + 1);
+          // setCurrentPage(currentPage + 1);
+          router.push("/success");
         }}
       >
         Book room
@@ -77,11 +79,12 @@ function SuccessPage(): JSX.Element {
 
 function DisplayPage(
   currentPage: BookingPage,
-  setCurrentPage: Dispatch<SetStateAction<BookingPage>>
+  setCurrentPage: Dispatch<SetStateAction<BookingPage>>,
+  router: NextRouter
 ): JSX.Element {
   switch (currentPage) {
     case BookingPage.ReservationProperties:
-      return ReservationPropertiesPage(currentPage, setCurrentPage);
+      return ReservationPropertiesPage(currentPage, setCurrentPage, router);
     case BookingPage.Success:
       return SuccessPage();
   }
@@ -91,13 +94,14 @@ function Booking(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(
     BookingPage.ReservationProperties
   );
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
         <title>Book a room</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {DisplayPage(currentPage, setCurrentPage)}
+      {DisplayPage(currentPage, setCurrentPage, router)}
     </div>
   );
 }

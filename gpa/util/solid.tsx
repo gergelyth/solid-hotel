@@ -6,6 +6,7 @@ import {
   getStringNoLocale,
   getThing,
   saveSolidDatasetAt,
+  setInteger,
   setStringNoLocale,
   setThing,
   SolidDataset,
@@ -171,10 +172,10 @@ export async function SetReservationState(
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
   }
 
-  const updatedReservation = setStringNoLocale(
+  const updatedReservation = setInteger(
     reservationThing,
     reservationFieldToRdfMap.state,
-    newState.toString()
+    newState.valueOf()
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 
