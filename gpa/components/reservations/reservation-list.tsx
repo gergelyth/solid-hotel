@@ -3,6 +3,7 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 import { useUserReservations } from "../../hooks/useUserReservations";
 import Link from "next/link";
+import { NotEmptyItem } from "../../util/helpers";
 
 function CreateReservationElement(
   reservation: ReservationAtHotel | null
@@ -27,7 +28,9 @@ function CreateReservationElement(
   );
 }
 
-function ReservationElements(): JSX.Element {
+function ReservationElements(
+  reservationFilter: (reservation: ReservationAtHotel) => boolean
+): JSX.Element {
   const { items, isLoading, isError } = useUserReservations();
 
   if (isLoading) {
@@ -37,8 +40,10 @@ function ReservationElements(): JSX.Element {
     return <div>Fetching the reservations failed.</div>;
   }
 
-  const isArrayNonEmpty =
-    items.length > 0 && items.some((item) => item !== null);
+  const filteredReservations = items
+    .filter(NotEmptyItem)
+    .filter(reservationFilter);
+  const isArrayNonEmpty = filteredReservations.length > 0;
 
   return (
     <div>
@@ -51,14 +56,12 @@ function ReservationElements(): JSX.Element {
   );
 }
 
-function ReservationList(): JSX.Element {
-  return (
-    <div>
-      <h1 className={styles.title}>Your reservations (from user Pod)</h1>
-      {/* <h2>Reservation count: {reservations.length}</h2> */}
-      <ReservationElements />
-    </div>
-  );
+function ReservationList({
+  reservationFilter,
+}: {
+  reservationFilter: (reservation: ReservationAtHotel) => boolean;
+}): JSX.Element {
+  return ReservationElements(reservationFilter);
 }
 
 export default ReservationList;

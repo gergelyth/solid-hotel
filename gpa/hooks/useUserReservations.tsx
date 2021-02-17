@@ -48,6 +48,9 @@ export function useUserReservations(): {
   isError: boolean;
 } {
   const reservationsUrl = GetUserReservationsPodUrl();
+  if (!reservationsUrl) {
+    return { items: undefined, isLoading: false, isError: true };
+  }
 
   return FetchItems<ReservationAtHotel>(
     "reservations",

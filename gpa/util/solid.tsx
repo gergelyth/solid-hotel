@@ -47,8 +47,12 @@ export async function SolidLogin(oidcIssuer: string): Promise<void> {
 
 export function GetUserReservationsPodUrl(
   session: Session = GetSession()
-): string {
-  return GetPodOfSession(session) + "/" + reservationAddress;
+): string | null {
+  const podOfSession = GetPodOfSession(session);
+  if (!podOfSession) {
+    return null;
+  }
+  return podOfSession + "/" + reservationAddress;
 }
 
 export async function SolidLogout(): Promise<void> {
