@@ -57,7 +57,7 @@ function ReservationPropertiesPage(
             GetCurrentDatePushedBy(0, 0, 10)
           );
           // setCurrentPage(currentPage + 1);
-          router.push("/success");
+          router.push("/booking/success");
         }}
       >
         Book room
