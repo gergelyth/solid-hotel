@@ -2,12 +2,11 @@ import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
-import ReservationList, {
-  ReservationClickHandler,
-} from "../components/reservations/reservation-list";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
+import ActiveReservationList from "../components/checkout/active-reservation-list";
+import CheckoutButton from "../components/checkout/checkout-button";
 
-type ActiveReservationElement = {
+export type ActiveReservationElement = {
   reservation: ReservationAtHotel;
   reservationElement: HTMLElement;
 };
@@ -29,34 +28,11 @@ export function GetActiveReservations(
   return activeReservations;
 }
 
-function GetOnReservationClickFunction(
-  selected: ActiveReservationElement | undefined,
-  setSelected: Dispatch<SetStateAction<ActiveReservationElement | undefined>>
-): ReservationClickHandler {
-  function OnReservationClick(
-    event: React.MouseEvent<HTMLElement>,
-    reservation: ReservationAtHotel
-  ): void {
-    if (selected) {
-      selected.reservationElement.classList.remove(styles.selected_card);
-    }
-    event.currentTarget.classList.add(styles.selected_card);
-    setSelected({
-      reservation: reservation,
-      reservationElement: event.currentTarget,
-    });
-  }
-
-  return OnReservationClick;
-}
-
 function Checkout(): JSX.Element {
-  const [selected, setSelected] = useState<ActiveReservationElement>();
-
-  const onReservationClickFunction = GetOnReservationClickFunction(
-    selected,
-    setSelected
-  );
+  const [
+    selectedReservation,
+    setSelectedReservation,
+  ] = useState<ActiveReservationElement>();
 
   return (
     <div className={styles.container}>
@@ -66,13 +42,11 @@ function Checkout(): JSX.Element {
       </Head>
 
       <h1 className={styles.title}>Active reservations</h1>
-
-      <ReservationList
-        reservationFilter={(reservation: ReservationAtHotel) =>
-          reservation.state === ReservationState.ACTIVE
-        }
-        onClickAction={onReservationClickFunction}
+      <ActiveReservationList
+        selectedReservation={selectedReservation}
+        setSelectedReservation={setSelectedReservation}
       />
+      <CheckoutButton reservationId={selectedReservation?.reservation.id} />
     </div>
   );
 }
