@@ -23,7 +23,7 @@ import { NotFoundError } from "./errors";
 import { CreateReservationDataset } from "./solidCommon";
 import { cancellationsUrl } from "./solidhoteladmin";
 
-type SolidProfile = {
+export type SolidProfile = {
   profileAddress: string;
   profile: Thing | null;
   dataSet: SolidDataset | null;
@@ -92,7 +92,7 @@ export async function GetDataSet(
   return dataSet;
 }
 
-async function GetProfile(
+export async function GetProfile(
   session: Session = GetSession()
 ): Promise<SolidProfile | null> {
   if (!session.info.webId) {
