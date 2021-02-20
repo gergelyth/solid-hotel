@@ -1,5 +1,6 @@
 import { FOAF } from "@inrupt/vocab-common-rdf";
 
+// TODO: fields have to be the same as in ../../apiData.json
 export const personFieldToRdfMap: Record<string, string> = {
   // TODO: correct firstName from givenName in text
   firstName: FOAF.firstName,
