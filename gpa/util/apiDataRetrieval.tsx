@@ -1,14 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import apiData from "../api_data.json";
 
+export type DataProtectionInformation = {
+  dataProtectionYears: number;
+  dataProtectionFieldsMatch: boolean;
+  dataProtectionFields: string[];
+};
+
 type ApiData = {
   nationality: string;
   fields: string[];
-  dataProtectionInformation: {
-    dataProtectionYears: number;
-    dataProtectionFieldsMatch: boolean;
-    dataProtectionFields: string[];
-  };
+  dataProtectionInformation: DataProtectionInformation;
 };
 
 function GetData(

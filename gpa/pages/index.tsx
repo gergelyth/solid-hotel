@@ -51,12 +51,12 @@ export default function Home() {
         <p className={styles.description}>Click on the links to navigate</p>
         {/* <button
           onClick={async () => {
-            await SetField(personFieldToRdfMap.firstName, "John");
+            await SetField(personFieldToRdfMap.nationality, "Spanish");
           }}
         >
-          Set first name to John
-        </button>
-        <button
+          Set nationality
+        </button> */}
+        {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.firstName, "Stephen");
           }}
