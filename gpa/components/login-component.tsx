@@ -1,8 +1,8 @@
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { useUserName } from "../hooks/useSolidUser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { SolidLogout } from "../util/solid";
+import { useGuest } from "../hooks/useGuest";
 
 function GetLoginComponent(): JSX.Element {
   return (
@@ -18,12 +18,12 @@ function GetLogoutComponent(): JSX.Element {
     window.location.reload();
   }
 
-  const { userName, isLoading, isError } = useUserName();
+  const { guest, isLoading, isError } = useGuest();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  if (isError) {
+  if (isError || !guest) {
     return <div>Error occurred</div>;
   }
 
@@ -36,7 +36,7 @@ function GetLogoutComponent(): JSX.Element {
       >
         Logout
       </button>
-      <div>Hello {userName}!</div>
+      <div>Hello {guest.firstName}!</div>
     </div>
   );
 }

@@ -2,6 +2,9 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useUserReservations } from "../hooks/useUserReservations";
+import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { GetActiveReservations } from "./checkout";
 // import { SetField } from "../util/solid";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
@@ -12,8 +15,30 @@ const DynamicLoginComponent = dynamic(
   { ssr: false }
 );
 
+function CheckoutButton(
+  reservations: (ReservationAtHotel | null)[] | undefined,
+  isLoading: boolean,
+  isError: boolean
+): JSX.Element {
+  if (isLoading || isError || GetActiveReservations(reservations).length == 0) {
+    return (
+      <h3>
+        <i>No active reservations</i>
+      </h3>
+    );
+  } else {
+    return (
+      <Link href="/checkout">
+        <h3>Checkout</h3>
+      </Link>
+    );
+  }
+}
+
 // TODO: login status doesn't survive refresh
 export default function Home() {
+  const { items, isLoading, isError } = useUserReservations();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -26,12 +51,12 @@ export default function Home() {
         <p className={styles.description}>Click on the links to navigate</p>
         {/* <button
           onClick={async () => {
-            await SetField(personFieldToRdfMap.firstName, "John");
+            await SetField(personFieldToRdfMap.nationality, "Spanish");
           }}
         >
-          Set first name to John
-        </button>
-        <button
+          Set nationality
+        </button> */}
+        {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.firstName, "Stephen");
           }}
@@ -58,6 +83,9 @@ export default function Home() {
           <Link href="/reservations">
             <h3>List all reservations</h3>
           </Link>
+        </div>
+        <div className={`${styles.grid} ${styles.card}`}>
+          {CheckoutButton(items, isLoading, isError)}
         </div>
       </main>
 
