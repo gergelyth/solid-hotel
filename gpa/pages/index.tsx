@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
 import { useUserReservations } from "../hooks/useUserReservations";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { GetActiveReservations } from "./checkout";
@@ -9,11 +9,6 @@ import { GetActiveReservations } from "./checkout";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
 // import PopulateHotelPodWithRooms from "../test/setup/populateHotelPod/withRooms";
-
-const DynamicLoginComponent = dynamic(
-  () => import("../components/login-component"),
-  { ssr: false }
-);
 
 function CheckoutButton(
   reservations: (ReservationAtHotel | null)[] | undefined,

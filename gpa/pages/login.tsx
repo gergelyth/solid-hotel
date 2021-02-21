@@ -1,12 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import dynamic from "next/dynamic";
 import { SolidLogin } from "../util/solid";
-
-const DynamicHandleRedirectComponent = dynamic(
-  () => import("../components/handle-redirect-component"),
-  { ssr: false }
-);
+import { DynamicHandleRedirectComponent } from "../components/auth/dynamic-handle-redirect-component";
 
 function Login(): JSX.Element {
   return (

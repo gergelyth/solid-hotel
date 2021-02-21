@@ -1,8 +1,8 @@
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
-import { SolidLogout } from "../util/solid";
-import { useGuest } from "../hooks/useGuest";
+import { SolidLogout } from "../../util/solid";
+import { useGuest } from "../../hooks/useGuest";
 
 function GetLoginComponent(): JSX.Element {
   return (
