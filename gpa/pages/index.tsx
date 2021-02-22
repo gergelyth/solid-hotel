@@ -82,6 +82,11 @@ export default function Home() {
         <div className={`${styles.grid} ${styles.card}`}>
           {CheckoutButton(items, isLoading, isError)}
         </div>
+        <div className={`${styles.grid} ${styles.card}`}>
+          <Link href="/profile">
+            <h3>Profile editor</h3>
+          </Link>
+        </div>
       </main>
 
       <footer className={styles.footer}>

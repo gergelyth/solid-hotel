@@ -13,16 +13,16 @@ services:
       - /home/node/gpa/.next
     depends_on:
       - db
-  spe:
-    ports:
-      - 3001:3001
-    build:
-      context: spe
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./spe:/home/node/spe
-      - /home/node/spe//node_modules
-      - /home/node/spe/.next
+  # spe:
+  #   ports:
+  #     - 3001:3001
+  #   build:
+  #     context: spe
+  #     dockerfile: ./Dockerfile
+  #   volumes:
+  #     - ./spe:/home/node/spe
+  #     - /home/node/spe//node_modules
+  #     - /home/node/spe/.next
   db:
     image: postgres
     env_file: .env
