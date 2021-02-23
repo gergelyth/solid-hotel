@@ -1,34 +1,53 @@
 import { useGuest } from "../../hooks/useGuest";
 import styles from "../../styles/Home.module.css";
-import { Guest } from "../../types/Guest";
+import { Guest, IdDocumentType } from "../../types/Guest";
 import ProfileField from "./profile-field";
 
 type Field = {
   fieldName: string;
-  fieldValue: string;
+  fieldValue: string | null;
 };
 
-function GetFieldsRecursively(object: any): Field[] {
-  const fieldElements: Field[] = [];
-  for (const field in object) {
-    const fieldValue = object[field];
-    if (typeof fieldValue === "object") {
-      const recFields = GetFieldsRecursively(fieldValue);
-      fieldElements.push(recFields);
-    } else {
-      fieldElements.push({
-        fieldName: field,
-        fieldValue: fieldValue.toString(),
-      });
-    }
-  }
-  console.log(fieldElements);
-
-  return fieldElements.flat();
+// TODO: perhaps find something more general for this
+function GetFields(guest: Guest): Field[] {
+  return [
+    {
+      fieldName: "First name",
+      fieldValue: guest.firstName,
+    },
+    {
+      fieldName: "Last name",
+      fieldValue: guest.lastName,
+    },
+    {
+      fieldName: "Nationality",
+      fieldValue: guest.nationality,
+    },
+    {
+      fieldName: "Email",
+      fieldValue: guest.email,
+    },
+    {
+      fieldName: "Phone number",
+      fieldValue: guest.phoneNumber,
+    },
+    {
+      fieldName: "ID document type",
+      fieldValue: IdDocumentType[guest.idDocument.idDocumentType],
+    },
+    {
+      fieldName: "ID document number",
+      fieldValue: guest.idDocument.idDocumentNumber,
+    },
+    {
+      fieldName: "ID document expiry",
+      fieldValue: guest.idDocument.idDocumentExpiry.toDateString(),
+    },
+  ];
 }
 
 function CreateFieldElements(guest: Guest): JSX.Element {
-  const fieldElements = GetFieldsRecursively(guest);
+  const fieldElements = GetFields(guest);
   return (
     <div>
       <ul>

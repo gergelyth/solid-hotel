@@ -17,28 +17,29 @@ function ConvertToGuest(solidProfile: SolidProfile | null): Guest | undefined {
 
   const idDocument = {
     idDocumentType:
-      getInteger(profile, personFieldToRdfMap.idDocumentType) ?? 0,
+      getInteger(profile, personFieldToRdfMap["ID document type"]) ?? 0,
     idDocumentNumber:
-      getStringNoLocale(profile, personFieldToRdfMap.idDocumentNumber) ??
+      getStringNoLocale(profile, personFieldToRdfMap["ID document number"]) ??
       "<No ID document number>",
     idDocumentExpiry:
       // TODO: change default value here
-      getDatetime(profile, personFieldToRdfMap.idDocumentExpiry) ?? new Date(),
+      getDatetime(profile, personFieldToRdfMap["ID document expiry"]) ??
+      new Date(),
   };
 
   const guest = {
     webId: solidProfile.profileAddress,
     firstName:
-      getStringNoLocale(profile, personFieldToRdfMap.firstName) ??
+      getStringNoLocale(profile, personFieldToRdfMap["First name"]) ??
       "<No firstname>",
     lastName:
-      getStringNoLocale(profile, personFieldToRdfMap.lastName) ??
+      getStringNoLocale(profile, personFieldToRdfMap["Last name"]) ??
       "<No lastname>",
-    nationality: getStringNoLocale(profile, personFieldToRdfMap.nationality),
+    nationality: getStringNoLocale(profile, personFieldToRdfMap["Nationality"]),
     idDocument: idDocument,
-    email: getStringNoLocale(profile, personFieldToRdfMap.email),
+    email: getStringNoLocale(profile, personFieldToRdfMap["Email"]),
     phoneNumber:
-      getStringNoLocale(profile, personFieldToRdfMap.phoneNumber) ??
+      getStringNoLocale(profile, personFieldToRdfMap["Phone number"]) ??
       "<No phone number>",
   };
 
