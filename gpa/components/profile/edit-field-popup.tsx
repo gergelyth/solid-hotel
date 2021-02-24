@@ -6,11 +6,13 @@ import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 function EditFieldPopup({
   fieldName,
   fieldValue,
+  setFieldValueInParent,
   isPopupShowing,
   setPopupVisibility,
 }: {
   fieldName: string;
   fieldValue: string | null;
+  setFieldValueInParent: (newValue: string) => void;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element | null {
@@ -37,6 +39,7 @@ function EditFieldPopup({
           <button
             onClick={() => {
               SetField(personFieldToRdfMap[fieldName], currentFieldValue);
+              setFieldValueInParent(currentFieldValue);
               setPopupVisibility(false);
             }}
           >

@@ -8,6 +8,8 @@ import { Guest } from "../types/Guest";
 import { GetProfile, SolidProfile } from "../util/solid";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 
+const swrKey = "guest";
+
 function ConvertToGuest(solidProfile: SolidProfile | null): Guest | undefined {
   if (!solidProfile?.profile) {
     return undefined;
@@ -55,7 +57,7 @@ export function useGuest(): {
     return GetProfile().then((solidProfile) => ConvertToGuest(solidProfile));
   };
 
-  const { data, error } = useSWR("guest", fetcher);
+  const { data, error } = useSWR(swrKey, fetcher);
 
   return {
     guest: data,

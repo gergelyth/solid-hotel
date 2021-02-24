@@ -7,9 +7,11 @@ function DeleteField(fieldName: string, fieldValue: string | null): void {}
 function ProfileField({
   fieldName,
   fieldValue,
+  setFieldValue,
 }: {
   fieldName: string;
   fieldValue: string | null;
+  setFieldValue: (newValue: string) => void;
 }): JSX.Element {
   const [isPopupShowing, setPopupVisibility] = useState(false);
   return (
@@ -21,6 +23,7 @@ function ProfileField({
       <EditFieldPopup
         fieldName={fieldName}
         fieldValue={fieldValue}
+        setFieldValueInParent={setFieldValue}
         isPopupShowing={isPopupShowing}
         setPopupVisibility={setPopupVisibility}
       />
