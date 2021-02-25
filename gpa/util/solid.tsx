@@ -5,6 +5,7 @@ import {
   getSolidDataset,
   getStringNoLocale,
   getThing,
+  removeAll,
   saveSolidDatasetAt,
   setInteger,
   setStringNoLocale,
@@ -139,6 +140,22 @@ export async function SetField(field: string, value: string): Promise<void> {
   }
 
   const updatedProfile = setStringNoLocale(solidProfile.profile, field, value);
+  const updatedDataSet = setThing(solidProfile.dataSet, updatedProfile);
+
+  await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {
+    fetch: session.fetch,
+  });
+}
+
+export async function RemoveField(field: string): Promise<void> {
+  const session = getDefaultSession();
+  const solidProfile = await GetProfile();
+
+  if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
+    throw new NotFoundError("Profile not found.");
+  }
+
+  const updatedProfile = removeAll(solidProfile.profile, field);
   const updatedDataSet = setThing(solidProfile.dataSet, updatedProfile);
 
   await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {

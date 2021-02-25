@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import styles from "../../styles/Home.module.css";
 import EditFieldPopup from "./edit-field-popup";
-
-function DeleteField(fieldName: string, fieldValue: string | null): void {}
+import DeleteFieldPopup from "./delete-field-popup";
 
 function ProfileField({
   fieldName,
@@ -13,19 +12,26 @@ function ProfileField({
   fieldValue: string | null;
   setFieldValue: (newValue: string) => void;
 }): JSX.Element {
-  const [isPopupShowing, setPopupVisibility] = useState(false);
+  const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
+  const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
   return (
     <div className={styles.horizontalContainer}>
       <div>{fieldName}:</div>
       <div>{fieldValue}</div>
-      <button onClick={() => setPopupVisibility(true)}>Edit</button>
-      <button onClick={() => DeleteField(fieldName, fieldValue)}>Delete</button>
+      <button onClick={() => setEditPopupVisibility(true)}>Edit</button>
+      <button onClick={() => setDeletePopupVisibility(true)}>Delete</button>
       <EditFieldPopup
         fieldName={fieldName}
         fieldValue={fieldValue}
         setFieldValueInParent={setFieldValue}
-        isPopupShowing={isPopupShowing}
-        setPopupVisibility={setPopupVisibility}
+        isPopupShowing={isEditPopupShowing}
+        setPopupVisibility={setEditPopupVisibility}
+      />
+      <DeleteFieldPopup
+        fieldName={fieldName}
+        setFieldValueInParent={setFieldValue}
+        isPopupShowing={isDeletePopupShowing}
+        setPopupVisibility={setDeletePopupVisibility}
       />
     </div>
   );
