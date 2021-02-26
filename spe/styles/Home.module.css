@@ -14,13 +14,6 @@
   align-items: center;
 }
 
-.horizontalContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
 .main {
   padding: 5rem 0;
   flex: 1;
