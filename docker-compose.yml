@@ -23,6 +23,18 @@ services:
   #     - ./spe:/home/node/spe
   #     - /home/node/spe//node_modules
   #     - /home/node/spe/.next
+  pms:
+    ports:
+      - 3002:3002
+    build:
+      context: pms
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./pms:/home/node/pms
+      - /home/node/pms//node_modules
+      - /home/node/pms/.next
+    depends_on:
+      - db
   db:
     image: postgres
     env_file: .env
