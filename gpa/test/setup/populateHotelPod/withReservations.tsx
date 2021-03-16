@@ -1,5 +1,5 @@
-import { ReservationAtHotel } from "../../../types/ReservationAtHotel";
-import { ReservationState } from "../../../types/ReservationState";
+import { ReservationAtHotel } from "../../../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../../../common/types/ReservationState";
 import { AddReservationToHotelPod } from "../../../util/solidhoteladmin";
 
 export function GetCurrentDatePushedBy(

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import styles from "../../styles/Home.module.css";
-import { SetField } from "../../util/solid";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import styles from "../../../common/styles/Home.module.css";
+import { SetField } from "../../../common/util/solid";
+import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
 
 function EditFieldPopup({
   fieldName,

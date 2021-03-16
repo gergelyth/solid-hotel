@@ -5,7 +5,6 @@ import {
 } from "@inrupt/solid-client";
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { RoomDefinition } from "../types/RoomDefinition";
-import { roomDefinitionsUrl } from "../util/solidhoteladmin";
 import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
 
 function ConvertToRoomDefinition(
@@ -30,7 +29,9 @@ function ConvertToRoomDefinition(
   return room;
 }
 
-export function useRooms(): {
+export function useRooms(
+  roomDefinitionsUrl: string
+): {
   items: (RoomDefinition | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;

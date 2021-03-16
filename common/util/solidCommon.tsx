@@ -5,7 +5,7 @@ import {
   createThing,
   setThing,
 } from "@inrupt/solid-client";
-import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { SolidDataset } from "@inrupt/solid-client";
 

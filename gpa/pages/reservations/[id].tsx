@@ -3,10 +3,10 @@ import { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import CancelReservationButton from "../../components/cancellation/cancellation";
 import { useUserReservations } from "../../hooks/useUserReservations";
-import styles from "../../styles/Home.module.css";
-import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { ReservationState } from "../../types/ReservationState";
-import { SetReservationState } from "../../util/solid";
+import styles from "../../../common/styles/Home.module.css";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../../common/types/ReservationState";
+import { SetReservationState } from "../../../common/util/solid";
 
 enum ReservationDetailPage {
   Main,

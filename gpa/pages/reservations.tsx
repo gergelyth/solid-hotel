@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import ReservationList from "../components/reservations/reservation-list";
-import styles from "../styles/Home.module.css";
-import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import styles from "../../common/styles/Home.module.css";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 
 function Reservations(): JSX.Element {
   const router = useRouter();

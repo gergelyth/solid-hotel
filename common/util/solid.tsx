@@ -16,13 +16,12 @@ import {
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
-import { ReservationAtHotel } from "../types/ReservationAtHotel";
-import { ReservationState } from "../types/ReservationState";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../common/types/ReservationState";
 import { cancellationFieldToRdfMap } from "../vocabularies/rdf_cancellation";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
 import { CreateReservationDataset } from "./solidCommon";
-import { cancellationsUrl } from "./solidhoteladmin";
 
 export type SolidProfile = {
   profileAddress: string;
@@ -221,6 +220,7 @@ export function CreateCancellationDataset(reservationId: string): SolidDataset {
 
 export async function AddCancellationRequest(
   reservationId: string,
+  cancellationsUrl: string,
   session = GetSession()
 ): Promise<void> {
   const cancellationDataset = CreateCancellationDataset(reservationId);

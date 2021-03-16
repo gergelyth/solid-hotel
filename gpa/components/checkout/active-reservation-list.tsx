@@ -1,6 +1,6 @@
-import styles from "../../styles/Home.module.css";
-import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { ReservationState } from "../../types/ReservationState";
+import styles from "../../../common/styles/Home.module.css";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../../common/types/ReservationState";
 import ReservationList, {
   ReservationClickHandler,
 } from "../reservations/reservation-list";

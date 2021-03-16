@@ -1,7 +1,7 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { SolidLogin } from "../util/solid";
-import { DynamicHandleRedirectComponent } from "../components/auth/dynamic-handle-redirect-component";
+import styles from "../../common/styles/Home.module.css";
+import { SolidLogin } from "../../common/util/solid";
+import { DynamicHandleRedirectComponent } from "../../common/components/auth/dynamic-handle-redirect-component";
 
 function Login(): JSX.Element {
   return (

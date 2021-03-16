@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "../../styles/Home.module.css";
+import styles from "../../../common/styles/Home.module.css";
 import EditFieldPopup from "./edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
 

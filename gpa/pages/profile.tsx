@@ -1,4 +1,4 @@
-import styles from "../styles/Home.module.css";
+import styles from "../../common/styles/Home.module.css";
 import Head from "next/head";
 import ProfileMain from "../components/profile/profile-main";
 

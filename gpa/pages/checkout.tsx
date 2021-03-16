@@ -1,7 +1,7 @@
-import styles from "../styles/Home.module.css";
+import styles from "../../common/styles/Home.module.css";
 import Head from "next/head";
-import { ReservationAtHotel } from "../types/ReservationAtHotel";
-import { ReservationState } from "../types/ReservationState";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../common/types/ReservationState";
 import { useState } from "react";
 import ActiveReservationList from "../components/checkout/active-reservation-list";
 import CheckoutButton from "../components/checkout/checkout-button";

@@ -1,9 +1,9 @@
 import { NextRouter, useRouter } from "next/router";
-import { useDataProtectionInformation } from "../../hooks/useMockApi";
-import styles from "../../styles/Home.module.css";
-import { ReservationState } from "../../types/ReservationState";
-import { DataProtectionInformation } from "../../util/apiDataRetrieval";
-import { SetReservationState } from "../../util/solid";
+import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
+import styles from "../../../common/styles/Home.module.css";
+import { ReservationState } from "../../../common/types/ReservationState";
+import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
+import { SetReservationState } from "../../../common/util/solid";
 
 function Checkout(
   reservationId: string | undefined,

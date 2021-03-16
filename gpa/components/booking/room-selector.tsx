@@ -1,6 +1,7 @@
-import { useRooms } from "../../hooks/useRooms";
-import styles from "../../styles/Home.module.css";
-import { RoomDefinition } from "../../types/RoomDefinition";
+import { useRooms } from "../../../common/hooks/useRooms";
+import styles from "../../../common/styles/Home.module.css";
+import { RoomDefinition } from "../../../common/types/RoomDefinition";
+import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
 
 function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   if (!room) {
@@ -19,7 +20,7 @@ function EmptyDescription(): JSX.Element {
 }
 
 function RoomElements(): JSX.Element {
-  const { items, isLoading, isError } = useRooms();
+  const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
 
   if (isLoading) {
     return <div>Loading...</div>;

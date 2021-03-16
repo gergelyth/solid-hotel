@@ -2,10 +2,10 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
-import styles from "../styles/Home.module.css";
+import styles from "../../common/styles/Home.module.css";
 import { GetCurrentDatePushedBy } from "../test/setup/populateHotelPod/withReservations";
-import { ReservationState } from "../types/ReservationState";
-import { AddReservation, GetSession } from "../util/solid";
+import { ReservationState } from "../../common/types/ReservationState";
+import { AddReservation, GetSession } from "../../common/util/solid";
 import { AddReservationToHotelPod } from "../util/solidhoteladmin";
 
 enum BookingPage {

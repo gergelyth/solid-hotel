@@ -1,4 +1,4 @@
-import { RoomDefinition } from "../../../types/RoomDefinition";
+import { RoomDefinition } from "../../../../common/types/RoomDefinition";
 import { AddRoom } from "../../../util/solidhoteladmin";
 
 function CreateRooms(): RoomDefinition[] {

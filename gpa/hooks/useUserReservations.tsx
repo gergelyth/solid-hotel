@@ -1,13 +1,13 @@
-import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import {
   getDatetime,
   getInteger,
   getThing,
   SolidDataset,
 } from "@inrupt/solid-client";
-import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
-import { GetUserReservationsPodUrl } from "../util/solid";
-import { FetchItems } from "./util/listThenItemsFetcher";
+import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import { GetUserReservationsPodUrl } from "../../common/util/solid";
+import { FetchItems } from "../../common/hooks/util/listThenItemsFetcher";
 
 function ConvertToReservation(
   dataset: SolidDataset,
