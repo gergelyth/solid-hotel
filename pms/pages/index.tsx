@@ -1,7 +1,10 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
+import styles from "../../common/styles/Home.module.css";
+import { useRooms } from "../../common/hooks/useRooms";
+import { RoomDefinitionsUrl } from "../../common/consts/solidIdentifiers";
 
-export default function Home() {
+export default function Home(): JSX.Element {
+  const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
   return (
     <div className={styles.container}>
       <Head>

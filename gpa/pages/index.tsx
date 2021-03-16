@@ -31,7 +31,7 @@ function CheckoutButton(
 }
 
 // TODO: login status doesn't survive refresh
-export default function Home({ json }: { json: string }): JSX.Element {
+export default function Home(): JSX.Element {
   const { items, isLoading, isError } = useUserReservations();
 
   return (

@@ -1,17 +1,30 @@
 version: "3.8"
 
 services:
+  common:
+    build:
+      context: common
+      dockerfile: ./Dockerfile
+    # command: tail -f /dev/null
+    volumes:
+      # - ./common:/home/node/common
+      - common-files:/home/node/common
+      - node-modules:/home/node/node_modules
   gpa:
     ports:
       - 3000:3000
     build:
       context: gpa
       dockerfile: ./Dockerfile
+    # command: tail -f /dev/null
+    command: sh -c "npm run build && npm run dev"
     volumes:
       - ./gpa:/home/node/gpa
-      - /home/node/gpa//node_modules
+      - common-files:/home/node/common
+      - node-modules:/home/node/node_modules
       - /home/node/gpa/.next
     depends_on:
+      - common
       - db
   # spe:
   #   ports:
@@ -21,20 +34,26 @@ services:
   #     dockerfile: ./Dockerfile
   #   volumes:
   #     - ./spe:/home/node/spe
-  #     - /home/node/spe//node_modules
+  #     - /home/node//node_modules
   #     - /home/node/spe/.next
-  pms:
-    ports:
-      - 3002:3002
-    build:
-      context: pms
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./pms:/home/node/pms
-      - /home/node/pms//node_modules
-      - /home/node/pms/.next
-    depends_on:
-      - db
+  #   depends_on:
+  #     - common
+  # pms:
+  #   ports:
+  #     - 3002:3002
+  #   build:
+  #     context: pms
+  #     dockerfile: ./Dockerfile
+  #   # command: tail -f /dev/null
+  #   command: sh -c "npm run build && npm run dev"
+  #   volumes:
+  #     - ./pms:/home/node/pms
+  #     - common-files:/home/node/common
+  #     - node-modules:/home/node/node_modules
+  #     - /home/node/pms/.next
+  #   depends_on:
+  #     - common
+  #     - db
   db:
     image: postgres
     env_file: .env
@@ -57,3 +76,5 @@ services:
       - db
 volumes:
   pgadmin-data:
+  common-files:
+  node-modules:
