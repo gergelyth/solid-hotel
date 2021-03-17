@@ -13,13 +13,13 @@ WORKDIR /home/node/pms
 
 # Installing dependencies
 # COPY package*.json /home/node
-COPY --chown=node:node package*.json /home/node/pms/
+COPY --chown=node:node pms/package*.json /home/node/pms/
 # RUN npm install --prefix .. ./
 # RUN npm install 
 
 # Copying source files
 # COPY . /home/node
-COPY --chown=node:node . /home/node/pms
+COPY --chown=node:node ./pms /home/node/pms
 
 # Building app
 # RUN npm run build

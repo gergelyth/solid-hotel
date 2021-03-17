@@ -8,14 +8,14 @@ import {
   // SolidDataset,
 } from "@inrupt/solid-client";
 import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
-import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import { RoomDefinition } from "../../common/types/RoomDefinition";
-import { roomFieldToRdfMap } from "../../common/vocabularies/rdf_room";
-import { CreateReservationDataset } from "../../common/util/solidCommon";
+import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { RoomDefinition } from "../types/RoomDefinition";
+import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
+import { CreateReservationDataset } from "./solidCommon";
 import {
   ReservationsUrl,
   RoomDefinitionsUrl,
-} from "../../common/consts/solidIdentifiers";
+} from "../consts/solidIdentifiers";
 
 // import { NotFoundError } from "./errors";
 
@@ -68,7 +68,7 @@ export async function AddReservationToHotelPod(
   );
 }
 
-export async function AddRoom(room: RoomDefinition): Promise<void> {
+export async function CreateOrUpdateRoom(room: RoomDefinition): Promise<void> {
   // TODO: get Hotel session here
   const session = GetHotelSession();
   // const reservations = await GetReservationDataSet();

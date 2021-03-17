@@ -6,6 +6,9 @@ import {
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { RoomDefinition } from "../types/RoomDefinition";
 import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
+import { mutate } from "swr";
+
+const swrKey = "rooms";
 
 function ConvertToRoomDefinition(
   dataset: SolidDataset,
@@ -35,10 +38,15 @@ export function useRooms(
   items: (RoomDefinition | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;
+  isValidating: boolean;
 } {
   return FetchItems<RoomDefinition>(
-    "rooms",
+    swrKey,
     roomDefinitionsUrl,
     ConvertToRoomDefinition
   );
+}
+
+export function TriggerRefetch(): void {
+  mutate(swrKey);
 }

@@ -1,4 +1,4 @@
-export const HotelPod = "https://solidhotel.inrupt.net";
+export const HotelPod = "https://solidhotel.inrupt.net/";
 
 const ReservationAddress = "reservations/";
 const RoomDefinitionAddress = "rooms/";

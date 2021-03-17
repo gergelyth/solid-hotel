@@ -13,12 +13,12 @@ WORKDIR /home/node/gpa
 
 # Installing dependencies
 # COPY package*.json /home/node
-COPY --chown=node:node package*.json /home/node/gpa/
+COPY --chown=node:node gpa/package*.json /home/node/gpa/
 # RUN npm install
 
 # Copying source files
 # COPY . /home/node
-COPY --chown=node:node . /home/node/gpa
+COPY --chown=node:node ./gpa /home/node/gpa
 
 # Building app
 # RUN npm run build

@@ -23,6 +23,7 @@ export function FetchItems<T>(
   items: (T | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;
+  isValidating: boolean;
 } {
   const fetcher = (_: string, url: string): Promise<(T | null)[]> => {
     return GetDataSet(url).then((dataset) => {
@@ -40,10 +41,11 @@ export function FetchItems<T>(
   // if we specify key (first argument of useSWR) as an array, the ID for caching will be calculated for the combination of the elements
   // https://swr.vercel.app/docs/arguments
 
-  const { data, error } = useSWR([swrKey, listUrl], fetcher);
+  const { data, error, isValidating } = useSWR([swrKey, listUrl], fetcher);
   return {
     items: data,
     isLoading: !error && !data,
     isError: error,
+    isValidating: isValidating,
   };
 }

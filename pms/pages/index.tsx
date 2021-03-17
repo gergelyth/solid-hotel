@@ -1,10 +1,9 @@
 import Head from "next/head";
 import styles from "../../common/styles/Home.module.css";
-import { useRooms } from "../../common/hooks/useRooms";
-import { RoomDefinitionsUrl } from "../../common/consts/solidIdentifiers";
+import LoginButtonComponent from "../../common/components/auth/login-component";
+import Link from "next/link";
 
 export default function Home(): JSX.Element {
-  const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
   return (
     <div className={styles.container}>
       <Head>
@@ -14,6 +13,14 @@ export default function Home(): JSX.Element {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Property Management System</h1>
+        <div className={`${styles.grid} ${styles.card}`}>
+          <LoginButtonComponent />
+        </div>
+        <div className={`${styles.grid} ${styles.card}`}>
+          <Link href="/rooms">
+            <h3>Room management</h3>
+          </Link>
+        </div>
       </main>
 
       <footer className={styles.footer}>

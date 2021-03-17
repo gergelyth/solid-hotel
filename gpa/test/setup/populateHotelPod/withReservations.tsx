@@ -1,6 +1,6 @@
 import { ReservationAtHotel } from "../../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../../common/types/ReservationState";
-import { AddReservationToHotelPod } from "../../../util/solidhoteladmin";
+import { AddReservationToHotelPod } from "../../../../common/util/solidhoteladmin";
 
 export function GetCurrentDatePushedBy(
   yearOffset: number,

@@ -1,7 +1,10 @@
 import { useRooms } from "../../../common/hooks/useRooms";
-import styles from "../../../common/styles/Home.module.css";
-import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
+import { RoomDefinition } from "../../../common/types/RoomDefinition";
+
+function EmptyDescription(): JSX.Element {
+  return <i>No description</i>;
+}
 
 function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   if (!room) {
@@ -13,10 +16,6 @@ function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
       <p>{room.description ?? EmptyDescription()}</p>
     </li>
   );
-}
-
-function EmptyDescription(): JSX.Element {
-  return <i>No description</i>;
 }
 
 function RoomElements(): JSX.Element {
@@ -46,8 +45,6 @@ function RoomElements(): JSX.Element {
 function RoomSelector(): JSX.Element {
   return (
     <div>
-      <h1 className={styles.title}>Please select a room</h1>
-      {/* <h2>Reservation count: {reservations.length}</h2> */}
       <RoomElements />
     </div>
   );

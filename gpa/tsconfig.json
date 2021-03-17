@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "../common/util/db.tsx"  ],
+, "../common/util/db.tsx", "../common/util/solidhoteladmin.tsx"  ],
   "exclude": [
     "node_modules"
   ]
