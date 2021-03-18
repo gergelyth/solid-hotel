@@ -1,17 +1,20 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { TriggerRefetch } from "../../../common/hooks/useRooms";
+import { Revalidate } from "../../../common/hooks/useRooms";
 import styles from "../../../common/styles/Home.module.css";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { CreateOrUpdateRoom } from "../../../common/util/solidhoteladmin";
 
-function EditFieldPopup({
+function EditRoomPopup({
   room,
-  setRoom,
+  updateRoomLocally,
   isPopupShowing,
   setPopupVisibility,
 }: {
   room: RoomDefinition;
-  setRoom: (newRoomDefinition: RoomDefinition) => void;
+  updateRoomLocally: (
+    newRoomDefinition: RoomDefinition,
+    isDelete: boolean
+  ) => void;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element | null {
@@ -52,9 +55,9 @@ function EditFieldPopup({
                     ? undefined
                     : currentRoomDescription,
               };
+              updateRoomLocally(newRoom, false);
               CreateOrUpdateRoom(newRoom);
-              TriggerRefetch();
-              setRoom(newRoom);
+              Revalidate();
               setPopupVisibility(false);
             }}
           >
@@ -66,4 +69,4 @@ function EditFieldPopup({
   );
 }
 
-export default EditFieldPopup;
+export default EditRoomPopup;

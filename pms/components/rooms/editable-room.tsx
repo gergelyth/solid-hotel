@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styles from "../../../common/styles/Home.module.css";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
-import EditFieldPopup from "./edit-room-popup";
+import DeleteRoomPopup from "./delete-room-popup";
+import EditRoomPopup from "./edit-room-popup";
 
 function EmptyDescription(): JSX.Element {
   return <i>No description</i>;
@@ -9,13 +10,16 @@ function EmptyDescription(): JSX.Element {
 
 function EditableRoomElement({
   room,
-  setRoom,
+  updateRoomLocally,
 }: {
   room: RoomDefinition;
-  setRoom: (newRoomDefinition: RoomDefinition) => void;
+  updateRoomLocally: (
+    newRoomDefinition: RoomDefinition,
+    isDelete: boolean
+  ) => void;
 }): JSX.Element {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
-  // const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
+  const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
   return (
     <div className={styles.horizontalContainer}>
       <div className={styles.simpleContainer}>
@@ -23,19 +27,19 @@ function EditableRoomElement({
         <p>{room.description ?? EmptyDescription()}</p>
       </div>
       <button onClick={() => setEditPopupVisibility(true)}>Edit</button>
-      {/* <button onClick={() => setDeletePopupVisibility(true)}>Delete</button> */}
-      <EditFieldPopup
+      <button onClick={() => setDeletePopupVisibility(true)}>Delete</button>
+      <EditRoomPopup
         room={room}
-        setRoom={setRoom}
+        updateRoomLocally={updateRoomLocally}
         isPopupShowing={isEditPopupShowing}
         setPopupVisibility={setEditPopupVisibility}
       />
-      {/* <DeleteFieldPopup
-        fieldName={fieldName}
-        setFieldValueInParent={setFieldValue}
+      <DeleteRoomPopup
+        room={room}
+        updateRoomLocally={updateRoomLocally}
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
-      /> */}
+      />
     </div>
   );
 }

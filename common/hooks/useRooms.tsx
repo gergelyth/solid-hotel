@@ -47,6 +47,10 @@ export function useRooms(
   );
 }
 
-export function TriggerRefetch(): void {
+export function Revalidate(): void {
   mutate(swrKey);
+}
+
+export function TriggerRefetch(newRoomList: (RoomDefinition | null)[]): void {
+  mutate(swrKey, newRoomList, false);
 }

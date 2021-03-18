@@ -2,6 +2,7 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
+  deleteSolidDataset,
   // getSolidDataset,
   saveSolidDatasetAt,
   setThing,
@@ -95,6 +96,15 @@ export async function CreateOrUpdateRoom(room: RoomDefinition): Promise<void> {
   roomDataset = setThing(roomDataset, newRoom);
 
   await saveSolidDatasetAt(RoomDefinitionsUrl + room.id, roomDataset, {
+    fetch: session.fetch,
+  });
+}
+
+export async function DeleteRoom(room: RoomDefinition): Promise<void> {
+  // TODO: get Hotel session here
+  const session = GetHotelSession();
+
+  await deleteSolidDataset(RoomDefinitionsUrl + room.id, {
     fetch: session.fetch,
   });
 }
