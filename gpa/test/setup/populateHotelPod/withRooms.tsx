@@ -1,5 +1,5 @@
-import { RoomDefinition } from "../../../types/RoomDefinition";
-import { AddRoom } from "../../../util/solidhoteladmin";
+import { RoomDefinition } from "../../../../common/types/RoomDefinition";
+import { CreateOrUpdateRoom } from "../../../../common/util/solidhoteladmin";
 
 function CreateRooms(): RoomDefinition[] {
   let id = 0;
@@ -38,6 +38,6 @@ function CreateRooms(): RoomDefinition[] {
 
 export default function PopulateHotelPodWithRooms(): void {
   const rooms = CreateRooms();
-  rooms.forEach((room: RoomDefinition) => AddRoom(room));
+  rooms.forEach((room: RoomDefinition) => CreateOrUpdateRoom(room));
   console.log("Hotel Pod populated with rooms.");
 }

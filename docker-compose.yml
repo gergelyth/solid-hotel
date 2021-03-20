@@ -1,18 +1,33 @@
 version: "3.8"
 
 services:
+  common:
+    build:
+      context: common
+      dockerfile: ./Dockerfile
+    # command: tail -f /dev/null
+    volumes:
+      # - ./common:/home/node/common
+      - common-files:/home/node/common
+      - node-modules:/home/node/node_modules
   gpa:
     ports:
       - 3000:3000
     build:
-      context: gpa
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: gpa/Dockerfile
+    # command: tail -f /dev/null
+    command: sh -c "npm run build && npm run dev"
     volumes:
       - ./gpa:/home/node/gpa
-      - /home/node/gpa//node_modules
+      # TODO change context to gpa and adjust accordingly and this when we don't need hot reload for common
+      # - common-files:/home/node/common
+      - ./common:/home/node/common
+      - node-modules:/home/node/node_modules
       - /home/node/gpa/.next
     depends_on:
-      - db
+      - common
+      # - db
   # spe:
   #   ports:
   #     - 3001:3001
@@ -21,27 +36,49 @@ services:
   #     dockerfile: ./Dockerfile
   #   volumes:
   #     - ./spe:/home/node/spe
-  #     - /home/node/spe//node_modules
+  #     - /home/node//node_modules
   #     - /home/node/spe/.next
-  db:
-    image: postgres
-    env_file: .env
-    volumes:
-      - ./db/data/postgres:/var/lib/postgresql/data
-      - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
-      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+  #   depends_on:
+  #     - common
+  pms:
     ports:
-      - 5432:5432
-  pgadmin:
-    image: dpage/pgadmin4
-    env_file: .env
-    ports:
-      - "8080:80"
+      - 3002:3002
+    build:
+      context: .
+      dockerfile: pms/Dockerfile
+    # command: tail -f /dev/null
+    command: sh -c "npm run build && npm run dev"
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    links:
-      - "db:pgsql-server"
+      - ./pms:/home/node/pms
+      # TODO change context to gpa and adjust accordingly and this when we don't need hot reload for common
+      # - common-files:/home/node/common
+      - ./common:/home/node/common
+      - node-modules:/home/node/node_modules
+      - /home/node/pms/.next
     depends_on:
-      - db
+      - common
+      # - db
+  # db:
+  #   image: postgres
+  #   env_file: .env
+  #   volumes:
+  #     - ./db/data/postgres:/var/lib/postgresql/data
+  #     - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+  #     - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+  #   ports:
+  #     - 5432:5432
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   env_file: .env
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #   links:
+  #     - "db:pgsql-server"
+  #   depends_on:
+  #     - db
 volumes:
-  pgadmin-data:
+  # pgadmin-data:
+  common-files:
+  node-modules:

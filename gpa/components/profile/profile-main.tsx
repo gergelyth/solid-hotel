@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { useGuest } from "../../hooks/useGuest";
-import styles from "../../styles/Home.module.css";
-import { Guest, IdDocumentType } from "../../types/Guest";
+import { useGuest } from "../../../common/hooks/useGuest";
+import styles from "../../../common/styles/Home.module.css";
+import { Guest, IdDocumentType } from "../../../common/types/Guest";
 import ProfileField from "./profile-field";
 
 type Field = {

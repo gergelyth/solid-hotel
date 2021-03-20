@@ -1,14 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
-import styles from "../../styles/Home.module.css";
-import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { ReservationState } from "../../types/ReservationState";
-import { AddCancellationRequest, SetReservationState } from "../../util/solid";
+import styles from "../../../common/styles/Home.module.css";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../../common/types/ReservationState";
+import {
+  AddCancellationRequest,
+  SetReservationState,
+} from "../../../common/util/solid";
+import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
 
 function ConfirmCancellation(
   reservationId: string,
   setPopupVisibility: Dispatch<SetStateAction<boolean>>
 ): void {
-  AddCancellationRequest(reservationId);
+  AddCancellationRequest(reservationId, CancellationsUrl);
   SetReservationState(reservationId, ReservationState.CANCELLED);
   // TODO: cancel on the hotel side (which will be done in PMS)
   setPopupVisibility(false);

@@ -1,6 +1,6 @@
 // TODO: Temporary solution to hook mismatch in reservation/[id]
 
-import styles from "../../styles/Home.module.css";
+import styles from "../../../common/styles/Home.module.css";
 import { NextRouter, useRouter } from "next/router";
 
 function ReturnToReservations(router: NextRouter): void {

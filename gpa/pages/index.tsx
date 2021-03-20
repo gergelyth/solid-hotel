@@ -1,10 +1,10 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
+import styles from "../../common/styles/Home.module.css";
 import Link from "next/link";
-import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
 import { useUserReservations } from "../hooks/useUserReservations";
-import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "./checkout";
+import LoginButtonComponent from "../../common/components/auth/login-component";
 // import { SetField } from "../util/solid";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
@@ -31,7 +31,7 @@ function CheckoutButton(
 }
 
 // TODO: login status doesn't survive refresh
-export default function Home() {
+export default function Home(): JSX.Element {
   const { items, isLoading, isError } = useUserReservations();
 
   return (
@@ -67,7 +67,9 @@ export default function Home() {
           Populate hotel Pod with rooms (signed into HotelPod)
         </button> */}
 
-        <DynamicLoginComponent />
+        <div className={`${styles.grid} ${styles.card}`}>
+          <LoginButtonComponent />
+        </div>
 
         <div className={`${styles.grid} ${styles.card}`}>
           <Link href="/booking">

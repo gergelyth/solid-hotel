@@ -1,23 +1,18 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
-import styles from "../styles/Home.module.css";
+import styles from "../../common/styles/Home.module.css";
 import { GetCurrentDatePushedBy } from "../test/setup/populateHotelPod/withReservations";
-import { ReservationState } from "../types/ReservationState";
-import { AddReservation, GetSession } from "../util/solid";
-import { AddReservationToHotelPod } from "../util/solidhoteladmin";
+import { ReservationState } from "../../common/types/ReservationState";
+import { AddReservation, GetSession } from "../../common/util/solid";
+import { AddReservationToHotelPod } from "../../common/util/solidhoteladmin";
+import RoomSelector from "../components/booking/room-selector";
 
 enum BookingPage {
   ReservationProperties,
   //SPE page
   Success,
 }
-
-const DynamicRoomSelector = dynamic(
-  () => import("../components/booking/room-selector"),
-  { ssr: false }
-);
 
 function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
   const reservation = {
@@ -42,7 +37,8 @@ function ReservationPropertiesPage(
 ): JSX.Element {
   return (
     <div className={`${styles.simpleContainer}`}>
-      <DynamicRoomSelector />
+      <h1 className={styles.title}>Please select a room</h1>
+      <RoomSelector />
       <p>==============================================</p>
       <i>Add date picker and CSS for actual room select here.</i>
       <i>

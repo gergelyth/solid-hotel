@@ -1,4 +1,3 @@
-import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { SolidLogout } from "../../util/solid";
@@ -44,11 +43,7 @@ function GetLogoutComponent(): JSX.Element {
 function LoginButtonComponent(): JSX.Element {
   const session = getDefaultSession();
 
-  return (
-    <div className={`${styles.grid} ${styles.card}`}>
-      {session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent()}
-    </div>
-  );
+  return session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent();
 }
 
 export default LoginButtonComponent;

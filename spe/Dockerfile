@@ -4,6 +4,8 @@ USER node
 
 ENV PORT 3001
 
+RUN mkdir -p /home/node/node_modules
+
 # Create app directory
 RUN mkdir -p /home/node/spe
 WORKDIR /home/node/spe

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import styles from "../../styles/Home.module.css";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import styles from "../../../common/styles/Home.module.css";
 import CancelReservationPopup from "./popup";
 
 function CancelReservationButton({

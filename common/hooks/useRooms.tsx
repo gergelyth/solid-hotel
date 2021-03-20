@@ -5,8 +5,10 @@ import {
 } from "@inrupt/solid-client";
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { RoomDefinition } from "../types/RoomDefinition";
-import { roomDefinitionsUrl } from "../util/solidhoteladmin";
 import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
+import { mutate } from "swr";
+
+const swrKey = "rooms";
 
 function ConvertToRoomDefinition(
   dataset: SolidDataset,
@@ -30,14 +32,25 @@ function ConvertToRoomDefinition(
   return room;
 }
 
-export function useRooms(): {
+export function useRooms(
+  roomDefinitionsUrl: string
+): {
   items: (RoomDefinition | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;
+  isValidating: boolean;
 } {
   return FetchItems<RoomDefinition>(
-    "rooms",
+    swrKey,
     roomDefinitionsUrl,
     ConvertToRoomDefinition
   );
+}
+
+export function Revalidate(): void {
+  mutate(swrKey);
+}
+
+export function TriggerRefetch(newRoomList: (RoomDefinition | null)[]): void {
+  mutate(swrKey, newRoomList, false);
 }
