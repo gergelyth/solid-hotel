@@ -2,11 +2,14 @@ import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import CancelReservationButton from "../../components/cancellation/cancellation";
-import { useUserReservations } from "../../hooks/useUserReservations";
+import { useReservations } from "../../../common/hooks/useReservations";
 import styles from "../../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
-import { SetReservationState } from "../../../common/util/solid";
+import {
+  GetUserReservationsPodUrl,
+  SetReservationState,
+} from "../../../common/util/solid";
 
 enum ReservationDetailPage {
   Main,
@@ -21,7 +24,9 @@ function GetReservationDetails(
     SetStateAction<ReservationAtHotel | undefined>
   >
 ): JSX.Element {
-  const { items, isLoading, isError } = useUserReservations();
+  const { items, isLoading, isError } = useReservations(
+    GetUserReservationsPodUrl()
+  );
 
   if (!reservationId) {
     return <div>Wrong query parameter: {reservationId}. Cannot parse.</div>;

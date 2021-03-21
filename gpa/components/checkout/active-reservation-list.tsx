@@ -1,11 +1,12 @@
 import styles from "../../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
-import ReservationList, {
-  ReservationClickHandler,
-} from "../reservations/reservation-list";
 import { Dispatch, SetStateAction } from "react";
 import { ActiveReservationElement } from "../../pages/checkout";
+import CreateReservationElement from "../reservations/reservation-element";
+import { GetUserReservationsPodUrl } from "../../../common/util/solid";
+import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
+import ReservationList from "../../../common/components/reservations/reservation-list";
 
 type SelectedReservationState = {
   selectedReservation: ActiveReservationElement | undefined;
@@ -40,16 +41,21 @@ function GetOnReservationClickFunction({
 function ActiveReservationList(
   selectedReservationState: SelectedReservationState
 ): JSX.Element {
+  const userReservationsUrl = GetUserReservationsPodUrl();
+
   const onReservationClickFunction = GetOnReservationClickFunction(
     selectedReservationState
   );
 
   return (
     <ReservationList
+      reservationsUrl={userReservationsUrl}
       reservationFilter={(reservation: ReservationAtHotel) =>
         reservation.state === ReservationState.ACTIVE
       }
-      onClickAction={onReservationClickFunction}
+      createReservationElement={(reservation: ReservationAtHotel | null) =>
+        CreateReservationElement(reservation, onReservationClickFunction)
+      }
     />
   );
 }
