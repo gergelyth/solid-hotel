@@ -5,7 +5,7 @@ import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 // TODO https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/theme.js
-import theme from "../components/theme";
+import theme from "../../common/styles/theme";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {

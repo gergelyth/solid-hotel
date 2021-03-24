@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
-import styles from "../../../common/styles/Home.module.css";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
 import {
@@ -7,6 +6,16 @@ import {
   SetReservationState,
 } from "../../../common/util/solid";
 import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
+import {
+  Button,
+  Container,
+  Checkbox,
+  FormControlLabel,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function ConfirmCancellation(
   reservationId: string,
@@ -27,14 +36,17 @@ function CancelReservationPopup({
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element | null {
-  if (!isPopupShowing) {
-    return null;
-  }
+  const [isChecked, setChecked] = useState(false);
 
   return (
-    <div className={`${styles.simpleContainer} ${styles.popup}`}>
-      <div className={`${styles.simpleContainer} ${styles.popup_inner}`}>
-        <div>You intent to cancel the following reservation:</div>
+    <Dialog
+      onClose={() => setPopupVisibility(false)}
+      aria-labelledby="popup-title"
+      open={isPopupShowing}
+    >
+      <DialogTitle id="popup-title">Cancel reservation</DialogTitle>
+      <Container maxWidth="sm">
+        <div>You intend to cancel the following reservation:</div>
         <div>{reservation.ownerId}</div>
         <div>{reservation.roomId}</div>
         <div>
@@ -45,18 +57,39 @@ function CancelReservationPopup({
         <div>
           Please confirm that you are sure about executing this cancellation:
         </div>
-        <i>Checkbox here</i>
-        <div>I confirm the cancellation</div>
-        <button onClick={() => setPopupVisibility(false)}>Back</button>
-        <button
-          onClick={() =>
-            ConfirmCancellation(reservation.id, setPopupVisibility)
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isChecked}
+              onChange={(e, newValue) => setChecked(newValue)}
+              name="confirmation"
+            />
           }
-        >
-          Confirm
-        </button>
-      </div>
-    </div>
+          label="I confirm the cancellation"
+        />
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setPopupVisibility(false)}
+          >
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={"button"}
+            startIcon={<DeleteIcon />}
+            disabled={!isChecked}
+            onClick={() =>
+              ConfirmCancellation(reservation.id, setPopupVisibility)
+            }
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Container>
+    </Dialog>
   );
 }
 

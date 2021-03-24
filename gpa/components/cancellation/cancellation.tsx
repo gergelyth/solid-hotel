@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import styles from "../../../common/styles/Home.module.css";
 import CancelReservationPopup from "./popup";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
 
 function CancelReservationButton({
   reservation,
@@ -15,16 +16,20 @@ function CancelReservationButton({
   }
 
   return (
-    <div className={styles.simpleContainer}>
-      <button onClick={() => setPopupVisibility(true)}>
+    <Container maxWidth="sm">
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => setPopupVisibility(true)}
+      >
         Cancel reservation
-      </button>
+      </Button>
       <CancelReservationPopup
         reservation={reservation}
         isPopupShowing={isPopupShowing}
         setPopupVisibility={setPopupVisibility}
       />
-    </div>
+    </Container>
   );
 }
 
