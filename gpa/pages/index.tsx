@@ -1,10 +1,11 @@
 import Head from "next/head";
 import styles from "../../common/styles/Home.module.css";
 import Link from "next/link";
-import { useUserReservations } from "../hooks/useUserReservations";
+import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "./checkout";
 import LoginButtonComponent from "../../common/components/auth/login-component";
+import { GetUserReservationsPodUrl } from "../../common/util/solid";
 // import { SetField } from "../util/solid";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
@@ -32,7 +33,9 @@ function CheckoutButton(
 
 // TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
-  const { items, isLoading, isError } = useUserReservations();
+  const { items, isLoading, isError } = useReservations(
+    GetUserReservationsPodUrl()
+  );
 
   return (
     <div className={styles.container}>

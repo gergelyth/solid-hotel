@@ -35,6 +35,7 @@ function DeleteRoomPopup({
         <div>
           Please confirm that you are sure about executing this deletion.
         </div>
+        <div>{/* TODO: checkbox to confirm here */}</div>
         <div className={`${styles.horizontalContainer}`}>
           <button onClick={() => setPopupVisibility(false)}>Cancel</button>
           <button

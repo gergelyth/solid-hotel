@@ -21,6 +21,11 @@ export default function Home(): JSX.Element {
             <h3>Room management</h3>
           </Link>
         </div>
+        <div className={`${styles.grid} ${styles.card}`}>
+          <Link href="/reservations">
+            <h3>Reservations</h3>
+          </Link>
+        </div>
       </main>
 
       <footer className={styles.footer}>

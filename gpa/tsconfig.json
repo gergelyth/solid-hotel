@@ -21,9 +21,10 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "../common/util/db.tsx", "../common/util/solidhoteladmin.tsx"  ],
+    "**/*.tsx",
+],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "../node_modules"
   ]
 }

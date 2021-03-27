@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import styles from "../../../common/styles/Home.module.css";
+import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import CancelReservationPopup from "./popup";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
 
 function CancelReservationButton({
   reservation,
+  confirmCancellation,
 }: {
   reservation: ReservationAtHotel | undefined;
+  confirmCancellation: (reservationId: string) => void;
 }): JSX.Element | null {
   const [isPopupShowing, setPopupVisibility] = useState(false);
 
@@ -15,16 +18,21 @@ function CancelReservationButton({
   }
 
   return (
-    <div className={styles.simpleContainer}>
-      <button onClick={() => setPopupVisibility(true)}>
+    <Container maxWidth="sm">
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => setPopupVisibility(true)}
+      >
         Cancel reservation
-      </button>
+      </Button>
       <CancelReservationPopup
         reservation={reservation}
         isPopupShowing={isPopupShowing}
         setPopupVisibility={setPopupVisibility}
+        confirmCancellation={confirmCancellation}
       />
-    </div>
+    </Container>
   );
 }
 
