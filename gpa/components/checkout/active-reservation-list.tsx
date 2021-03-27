@@ -3,7 +3,7 @@ import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { Dispatch, SetStateAction } from "react";
 import { ActiveReservationElement } from "../../pages/checkout";
-import CreateReservationElement from "../reservations/reservation-element";
+import ReservationElement from "../../../common/components/reservations/reservation-element";
 import { GetUserReservationsPodUrl } from "../../../common/util/solid";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
 import ReservationList from "../../../common/components/reservations/reservation-list";
@@ -53,9 +53,12 @@ function ActiveReservationList(
       reservationFilter={(reservation: ReservationAtHotel) =>
         reservation.state === ReservationState.ACTIVE
       }
-      createReservationElement={(reservation: ReservationAtHotel | null) =>
-        CreateReservationElement(reservation, onReservationClickFunction)
-      }
+      reservationElement={(item: ReservationAtHotel) => (
+        <ReservationElement
+          reservation={item}
+          onClickAction={onReservationClickFunction}
+        />
+      )}
     />
   );
 }
