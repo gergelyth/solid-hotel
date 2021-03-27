@@ -1,7 +1,15 @@
 import { useState } from "react";
 import styles from "../../../common/styles/Home.module.css";
-import EditFieldPopup from "./edit-field-popup";
+import EditFieldPopup from "../../../common/components/profile/edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
+import { SetField } from "../../../common/util/solid";
+import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
+
+function OnEditConfirmation(fieldName: string, newValue: string): void {
+  SetField(personFieldToRdfMap[fieldName], newValue);
+  // setFieldValueInParent(newValue);
+  //TODO refetch as in room refresh here
+}
 
 function ProfileField({
   fieldName,
@@ -23,7 +31,7 @@ function ProfileField({
       <EditFieldPopup
         fieldName={fieldName}
         fieldValue={fieldValue}
-        setFieldValueInParent={setFieldValue}
+        onConfirmation={OnEditConfirmation}
         isPopupShowing={isEditPopupShowing}
         setPopupVisibility={setEditPopupVisibility}
       />
