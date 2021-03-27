@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import ReservationElement from "../../common/components/reservations/reservation-element";
 import ReservationList from "../../common/components/reservations/reservation-list";
 import styles from "../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetUserReservationsPodUrl } from "../../common/util/solid";
-import CreateReservationElement from "../components/reservations/reservation-element";
 
 function Reservations(): JSX.Element {
   const userReservationsUrl = GetUserReservationsPodUrl();
@@ -30,9 +30,12 @@ function Reservations(): JSX.Element {
       <ReservationList
         reservationsUrl={userReservationsUrl}
         reservationFilter={() => true}
-        createReservationElement={(reservation: ReservationAtHotel | null) =>
-          CreateReservationElement(reservation, OnReservationClick)
-        }
+        reservationElement={(item: ReservationAtHotel) => (
+          <ReservationElement
+            reservation={item}
+            onClickAction={OnReservationClick}
+          />
+        )}
       />
     </div>
   );

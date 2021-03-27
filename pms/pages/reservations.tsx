@@ -30,7 +30,7 @@ function Reservations(): JSX.Element {
       <ReservationList
         reservationsUrl={ReservationsUrl}
         reservationFilter={() => true}
-        createReservationElement={(reservation: ReservationAtHotel | null) =>
+        reservationElement={(reservation: ReservationAtHotel) =>
           CreateReservationElement(reservation, OnReservationClick)
         }
       />

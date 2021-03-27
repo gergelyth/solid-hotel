@@ -1,11 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../../common/types/ReservationState";
-import {
-  AddCancellationRequest,
-  SetReservationState,
-} from "../../../common/util/solid";
-import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
+import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import {
   Button,
   Container,
@@ -17,24 +11,16 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-function ConfirmCancellation(
-  reservationId: string,
-  setPopupVisibility: Dispatch<SetStateAction<boolean>>
-): void {
-  AddCancellationRequest(reservationId, CancellationsUrl);
-  SetReservationState(reservationId, ReservationState.CANCELLED);
-  // TODO: cancel on the hotel side (which will be done in PMS)
-  setPopupVisibility(false);
-}
-
 function CancelReservationPopup({
   reservation,
   isPopupShowing,
   setPopupVisibility,
+  confirmCancellation,
 }: {
   reservation: ReservationAtHotel;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
+  confirmCancellation: (reservationId: string) => void;
 }): JSX.Element | null {
   const [isChecked, setChecked] = useState(false);
 
@@ -81,9 +67,10 @@ function CancelReservationPopup({
             className={"button"}
             startIcon={<DeleteIcon />}
             disabled={!isChecked}
-            onClick={() =>
-              ConfirmCancellation(reservation.id, setPopupVisibility)
-            }
+            onClick={() => {
+              confirmCancellation(reservation.id);
+              setPopupVisibility(false);
+            }}
           >
             Cancel
           </Button>

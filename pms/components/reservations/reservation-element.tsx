@@ -1,30 +1,40 @@
-import styles from "../../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../../common/types/ReservationState";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
+import ReservationElement from "../../../common/components/reservations/reservation-element";
+import { Grid } from "@material-ui/core";
+import CancelReservationButton from "../../../common/components/cancellation/cancellation";
+import { AddCancellationRequest } from "../../../common/util/solid";
+import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
+import OfflineCheckinButton from "../checkin/offline-checkin";
+
+function ConfirmCancellation(reservationId: string): void {
+  AddCancellationRequest(reservationId, CancellationsUrl);
+  // SetReservationState(reservationId, ReservationState.CANCELLED);
+  // TODO: cancel on the hotel side (which will be done in PMS)
+}
 
 function CreateReservationElement(
-  reservation: ReservationAtHotel | null,
+  reservation: ReservationAtHotel,
   onClickAction: ReservationClickHandler
 ): JSX.Element {
-  if (!reservation) {
-    return <li>empty</li>;
-  }
   return (
-    <li key={reservation.id}>
-      <button
-        className={`${styles.grid} ${styles.card} ${styles.simpleContainer}`}
-        onClick={(event: React.MouseEvent<HTMLElement>) =>
-          onClickAction(event, reservation)
-        }
-      >
-        <h3>Owner: {reservation.ownerId}</h3>
-        <div>Room: {reservation.roomId}</div>
-        <div>State: {ReservationState[reservation.state]}</div>
-        <div>Check-in date: {reservation.dateFrom.toDateString()}</div>
-        <div>Check-out date: {reservation.dateTo.toDateString()}</div>
-      </button>
-    </li>
+    <Grid container spacing={3} justify="center" alignItems="center">
+      <Grid item>
+        <ReservationElement
+          reservation={reservation}
+          onClickAction={onClickAction}
+        />
+      </Grid>
+      <Grid item>
+        <OfflineCheckinButton />
+      </Grid>
+      <Grid item>
+        <CancelReservationButton
+          reservation={reservation}
+          confirmCancellation={ConfirmCancellation}
+        />
+      </Grid>
+    </Grid>
   );
 }
 

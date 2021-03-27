@@ -2,10 +2,20 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { useReservations } from "../../hooks/useReservations";
 import { NotEmptyItem } from "../../util/helpers";
 
+function CreateReservationElement(
+  reservation: ReservationAtHotel | null,
+  reservationElement: (item: ReservationAtHotel) => JSX.Element
+): JSX.Element {
+  if (!reservation) {
+    return <li>empty</li>;
+  }
+  return <li key={reservation.id}>{reservationElement(reservation)}</li>;
+}
+
 function ReservationElements(
   reservationsUrl: string | null,
   reservationFilter: (reservation: ReservationAtHotel) => boolean,
-  createReservationElement: (item: ReservationAtHotel | null) => JSX.Element
+  reservationElement: (item: ReservationAtHotel) => JSX.Element
 ): JSX.Element {
   const { items, isLoading, isError } = useReservations(reservationsUrl);
 
@@ -24,7 +34,11 @@ function ReservationElements(
   return (
     <div>
       {isArrayNonEmpty ? (
-        <ul>{items.map((item) => createReservationElement(item))}</ul>
+        <ul>
+          {items.map((item) =>
+            CreateReservationElement(item, reservationElement)
+          )}
+        </ul>
       ) : (
         <i>No reservations found</i>
       )}
@@ -35,16 +49,16 @@ function ReservationElements(
 function ReservationList({
   reservationsUrl,
   reservationFilter,
-  createReservationElement,
+  reservationElement,
 }: {
   reservationsUrl: string | null;
   reservationFilter: (reservation: ReservationAtHotel) => boolean;
-  createReservationElement: (item: ReservationAtHotel | null) => JSX.Element;
+  reservationElement: (item: ReservationAtHotel) => JSX.Element;
 }): JSX.Element {
   return ReservationElements(
     reservationsUrl,
     reservationFilter,
-    createReservationElement
+    reservationElement
   );
 }
 

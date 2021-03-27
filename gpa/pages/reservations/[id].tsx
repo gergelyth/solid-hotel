@@ -1,12 +1,14 @@
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
-import CancelReservationButton from "../../components/cancellation/cancellation";
+import CancelReservationButton from "../../../common/components/cancellation/cancellation";
+import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
 import { useReservations } from "../../../common/hooks/useReservations";
 import styles from "../../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
 import {
+  AddCancellationRequest,
   GetUserReservationsPodUrl,
   SetReservationState,
 } from "../../../common/util/solid";
@@ -75,6 +77,12 @@ function ExecuteCheckin(
   SetReservationState(currentReservation.id, ReservationState.ACTIVE);
 }
 
+function ConfirmCancellation(reservationId: string): void {
+  AddCancellationRequest(reservationId, CancellationsUrl);
+  SetReservationState(reservationId, ReservationState.CANCELLED);
+  // TODO: cancel on the hotel side (which will be done in PMS)
+}
+
 function MainPage(
   reservationId: string | undefined,
   currentPage: ReservationDetailPage,
@@ -92,7 +100,10 @@ function MainPage(
         setCurrentReservation
       )}
 
-      <CancelReservationButton reservation={currentReservation} />
+      <CancelReservationButton
+        reservation={currentReservation}
+        confirmCancellation={ConfirmCancellation}
+      />
       <button
         onClick={() => {
           ExecuteCheckin(currentReservation);
