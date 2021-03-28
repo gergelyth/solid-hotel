@@ -1,5 +1,7 @@
 import Head from "next/head";
 import styles from "../../common/styles/Home.module.css";
+import ProfileMain from "../profile/profile-main";
+import LoginButtonComponent from "../../common/components/auth/login-component";
 
 export default function Home() {
   return (
@@ -11,6 +13,10 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Solid Profile Editor</h1>
+        <div className={`${styles.grid} ${styles.card}`}>
+          <LoginButtonComponent />
+        </div>
+        <ProfileMain />
       </main>
 
       <footer className={styles.footer}>
