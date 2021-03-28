@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
-import styles from "../../../common/styles/Home.module.css";
-import { RemoveField } from "../../../common/util/solid";
-import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
+import styles from "../../common/styles/Home.module.css";
+import { RemoveField } from "../../common/util/solid";
+import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
 
 function DeleteFieldPopup({
   fieldName,

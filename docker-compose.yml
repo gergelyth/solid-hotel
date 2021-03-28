@@ -10,53 +10,57 @@ services:
       # - ./common:/home/node/common
       - common-files:/home/node/common
       - node-modules:/home/node/node_modules
-  gpa:
-    ports:
-      - 3000:3000
-    build:
-      context: .
-      dockerfile: gpa/Dockerfile
-    # command: tail -f /dev/null
-    command: sh -c "npm run build && npm run dev"
-    volumes:
-      - ./gpa:/home/node/gpa
-      # TODO change context to gpa and adjust accordingly and this when we don't need hot reload for common
-      # - common-files:/home/node/common
-      - ./common:/home/node/common
-      - node-modules:/home/node/node_modules
-      - /home/node/gpa/.next
-    depends_on:
-      - common
-      # - db
-  # spe:
+  # gpa:
   #   ports:
-  #     - 3001:3001
+  #     - 3000:3000
   #   build:
-  #     context: spe
-  #     dockerfile: ./Dockerfile
+  #     context: .
+  #     dockerfile: gpa/Dockerfile
+  #   # command: tail -f /dev/null
+  #   command: sh -c "npm run build && npm run dev"
   #   volumes:
-  #     - ./spe:/home/node/spe
-  #     - /home/node//node_modules
-  #     - /home/node/spe/.next
+  #     - ./gpa:/home/node/gpa
+  #     # TODO change context to gpa and adjust accordingly and this when we don't need hot reload for common
+  #     # - common-files:/home/node/common
+  #     - ./common:/home/node/common
+  #     - node-modules:/home/node/node_modules
+  #     - /home/node/gpa/.next
   #   depends_on:
   #     - common
-  pms:
+      # - db
+  spe:
     ports:
-      - 3002:3002
+      - 3001:3001
     build:
       context: .
-      dockerfile: pms/Dockerfile
-    # command: tail -f /dev/null
+      dockerfile: spe/Dockerfile
     command: sh -c "npm run build && npm run dev"
     volumes:
-      - ./pms:/home/node/pms
+      - ./spe:/home/node/spe
       # TODO change context to gpa and adjust accordingly and this when we don't need hot reload for common
       # - common-files:/home/node/common
       - ./common:/home/node/common
       - node-modules:/home/node/node_modules
-      - /home/node/pms/.next
+      - /home/node/spe/.next
     depends_on:
       - common
+  # pms:
+  #   ports:
+  #     - 3002:3002
+  #   build:
+  #     context: .
+  #     dockerfile: pms/Dockerfile
+  #   # command: tail -f /dev/null
+  #   command: sh -c "npm run build && npm run dev"
+  #   volumes:
+  #     - ./pms:/home/node/pms
+  #     # TODO change context to gpa and adjust accordingly and this when we don't need hot reload for common
+  #     # - common-files:/home/node/common
+  #     - ./common:/home/node/common
+  #     - node-modules:/home/node/node_modules
+  #     - /home/node/pms/.next
+  #   depends_on:
+  #     - common
       # - db
   # db:
   #   image: postgres

@@ -1,6 +1,6 @@
 import styles from "../../common/styles/Home.module.css";
 import Head from "next/head";
-import ProfileMain from "../components/profile/profile-main";
+// import ProfileMain from "../components/profile/profile-main";
 
 function Profile(): JSX.Element {
   return (
@@ -10,7 +10,7 @@ function Profile(): JSX.Element {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ProfileMain />
+      {/* <ProfileMain /> */}
     </div>
   );
 }
