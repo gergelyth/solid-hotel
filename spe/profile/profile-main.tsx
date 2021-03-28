@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction, useState } from "react";
 import { useGuest } from "../../common/hooks/useGuest";
-import styles from "../../common/styles/Home.module.css";
 import { Guest, IdDocumentType } from "../../common/types/Guest";
 import ProfileField from "./profile-field";
+import { Grid, Typography, Container, Box } from "@material-ui/core";
 
 type Field = {
   fieldName: string;
@@ -11,17 +10,13 @@ type Field = {
 };
 
 // TODO: perhaps find something more general for this - probably with Object.entries(guest)
-function GetFields(
-  guest: Guest,
-  setGuest: Dispatch<SetStateAction<Guest>>
-): Field[] {
+function GetFields(guest: Guest): Field[] {
   return [
     {
       fieldName: "First name",
       fieldValue: guest.firstName,
       setFieldValue: (newValue) => {
         guest.firstName = newValue;
-        setGuest(guest);
       },
     },
     {
@@ -29,7 +24,6 @@ function GetFields(
       fieldValue: guest.lastName,
       setFieldValue: (newValue) => {
         guest.lastName = newValue;
-        setGuest(guest);
       },
     },
     {
@@ -37,7 +31,6 @@ function GetFields(
       fieldValue: guest.nationality,
       setFieldValue: (newValue) => {
         guest.nationality = newValue;
-        setGuest(guest);
       },
     },
     {
@@ -45,7 +38,6 @@ function GetFields(
       fieldValue: guest.email,
       setFieldValue: (newValue) => {
         guest.email = newValue;
-        setGuest(guest);
       },
     },
     {
@@ -53,7 +45,6 @@ function GetFields(
       fieldValue: guest.phoneNumber,
       setFieldValue: (newValue) => {
         guest.phoneNumber = newValue;
-        setGuest(guest);
       },
     },
     {
@@ -62,7 +53,6 @@ function GetFields(
       setFieldValue: (newValue) => {
         guest.idDocument.idDocumentType =
           IdDocumentType[newValue as keyof typeof IdDocumentType];
-        setGuest(guest);
       },
     },
     {
@@ -70,7 +60,6 @@ function GetFields(
       fieldValue: guest.idDocument?.idDocumentNumber,
       setFieldValue: (newValue) => {
         guest.idDocument.idDocumentNumber = newValue;
-        setGuest(guest);
       },
     },
     {
@@ -78,55 +67,51 @@ function GetFields(
       fieldValue: guest.idDocument?.idDocumentExpiry.toDateString(),
       setFieldValue: (newValue) => {
         guest.idDocument.idDocumentExpiry = new Date(newValue);
-        setGuest(guest);
       },
     },
   ];
 }
 
-function CreateFieldElements(
-  guest: Guest,
-  setGuest: Dispatch<SetStateAction<Guest>>
-): JSX.Element {
-  const fieldElements = GetFields(guest, setGuest);
+function CreateFieldElements(guest: Guest): JSX.Element {
+  const fieldElements = GetFields(guest);
   return (
-    <div>
-      <ul>
-        {fieldElements.map((item) => {
-          return <li key={item.fieldName}>{ProfileField(item)}</li>;
-        })}
-      </ul>
-    </div>
+    <Grid
+      container
+      spacing={2}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      {fieldElements.map((item) => {
+        return ProfileField(item);
+      })}
+    </Grid>
   );
 }
 
 function ProfileMain(): JSX.Element {
   const { guest, isLoading, isError } = useGuest();
-  const [guestState, setGuestState] = useState({} as Guest);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Typography>Loading...</Typography>;
   }
   if (isError || !guest) {
     return (
-      <div className={styles.simpleContainer}>
-        <div>Error retrieving guest data.</div>
-        <div>{isError}</div>
-      </div>
+      <Container maxWidth="sm">
+        <Typography>Error retrieving guest data.</Typography>
+        <Box>{isError}</Box>
+      </Container>
     );
   }
 
-  if (Object.keys(guestState).length === 0) {
-    setGuestState(guest);
-  }
-
   return (
-    <div className={styles.simpleContainer}>
+    <Box>
       <h2>
-        {guestState?.firstName} {guestState?.lastName}
+        {guest.firstName} {guest.lastName}
       </h2>
-      {CreateFieldElements(guestState, setGuestState)}
-    </div>
+      {/* <div>{guest["firstName"]}</div> */}
+      {CreateFieldElements(guest)}
+    </Box>
   );
 }
 

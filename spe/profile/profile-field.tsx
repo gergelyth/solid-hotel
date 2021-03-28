@@ -1,9 +1,10 @@
 import { useState } from "react";
-import styles from "../../common/styles/Home.module.css";
 import EditFieldPopup from "../../common/components/profile/edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
-import { SetField } from "../../common/util/solid";
+import { RemoveField, SetField } from "../../common/util/solid";
 import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
+import { Grid, Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function OnEditConfirmation(fieldName: string, newValue: string): void {
   SetField(personFieldToRdfMap[fieldName], newValue);
@@ -11,23 +12,49 @@ function OnEditConfirmation(fieldName: string, newValue: string): void {
   //TODO refetch as in room refresh here
 }
 
+function OnDeleteConfirmation(fieldName: string): void {
+  RemoveField(personFieldToRdfMap[fieldName]);
+  //TODO refetch as in room refresh here
+  // setFieldValueInParent("<Field was deleted>");
+}
+
 function ProfileField({
   fieldName,
   fieldValue,
-  setFieldValue,
 }: {
   fieldName: string;
   fieldValue: string | null;
-  setFieldValue: (newValue: string) => void;
 }): JSX.Element {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
   const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
+
   return (
-    <div className={styles.horizontalContainer}>
-      <div>{fieldName}:</div>
-      <div>{fieldValue}</div>
-      <button onClick={() => setEditPopupVisibility(true)}>Edit</button>
-      <button onClick={() => setDeletePopupVisibility(true)}>Delete</button>
+    <Grid container item spacing={2} justify="center" alignItems="center">
+      <Grid item xs={4}>
+        {fieldName}:
+      </Grid>
+      <Grid item xs={4}>
+        {fieldValue}
+      </Grid>
+      <Grid item xs={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setEditPopupVisibility(true)}
+        >
+          Edit
+        </Button>
+      </Grid>
+      <Grid item xs={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<DeleteIcon />}
+          onClick={() => setDeletePopupVisibility(true)}
+        >
+          Delete
+        </Button>
+      </Grid>
       <EditFieldPopup
         fieldName={fieldName}
         fieldValue={fieldValue}
@@ -37,11 +64,11 @@ function ProfileField({
       />
       <DeleteFieldPopup
         fieldName={fieldName}
-        setFieldValueInParent={setFieldValue}
+        onConfirmation={OnDeleteConfirmation}
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
       />
-    </div>
+    </Grid>
   );
 }
 
