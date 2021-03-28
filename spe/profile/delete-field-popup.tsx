@@ -1,16 +1,22 @@
+import {
+  Typography,
+  Dialog,
+  DialogTitle,
+  Container,
+  DialogActions,
+  Button,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { Dispatch, SetStateAction } from "react";
-import styles from "../../common/styles/Home.module.css";
-import { RemoveField } from "../../common/util/solid";
-import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
 
 function DeleteFieldPopup({
   fieldName,
-  setFieldValueInParent,
+  onConfirmation,
   isPopupShowing,
   setPopupVisibility,
 }: {
   fieldName: string;
-  setFieldValueInParent: (newValue: string) => void;
+  onConfirmation: (fieldName: string) => void;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element | null {
@@ -18,26 +24,41 @@ function DeleteFieldPopup({
     return null;
   }
 
-  // TODO: display fieldValue in inputfield
   return (
-    <div className={`${styles.simpleContainer} ${styles.popup}`}>
-      <div className={`${styles.simpleContainer} ${styles.popup_inner}`}>
-        <div>Delete the following field?</div>
-        <strong>{fieldName}</strong>
-        <div className={`${styles.horizontalContainer}`}>
-          <button onClick={() => setPopupVisibility(false)}>Cancel</button>
-          <button
+    <Dialog
+      onClose={() => setPopupVisibility(false)}
+      aria-labelledby="popup-title"
+      open={isPopupShowing}
+    >
+      <DialogTitle id="popup-title">Delete field</DialogTitle>
+      <Container maxWidth="sm">
+        <Typography>Delete the following field?</Typography>
+        <Typography>
+          <strong>{fieldName}</strong>
+        </Typography>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setPopupVisibility(false)}
+          >
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={"button"}
+            startIcon={<DeleteIcon />}
             onClick={() => {
-              RemoveField(personFieldToRdfMap[fieldName]);
-              setFieldValueInParent("<Field was deleted>");
+              onConfirmation(fieldName);
               setPopupVisibility(false);
             }}
           >
             Delete
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogActions>
+      </Container>
+    </Dialog>
   );
 }
 
