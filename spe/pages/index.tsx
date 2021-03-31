@@ -1,7 +1,9 @@
 import Head from "next/head";
 import styles from "../../common/styles/Home.module.css";
-import ProfileMain from "../profile/profile-main";
+import Link from "next/link";
 import LoginButtonComponent from "../../common/components/auth/login-component";
+import { Button } from "@material-ui/core";
+import subscribe from "../profile/tracker";
 
 export default function Home() {
   return (
@@ -16,7 +18,19 @@ export default function Home() {
         <div className={`${styles.grid} ${styles.card}`}>
           <LoginButtonComponent />
         </div>
-        <ProfileMain />
+        <div className={`${styles.grid} ${styles.card}`}>
+          <Link href="/profile">
+            <h3>Profile</h3>
+          </Link>
+        </div>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => subscribe("https://gergelyth.inrupt.net/profile/card")}
+        >
+          Subscribe
+        </Button>
       </main>
 
       <footer className={styles.footer}>
