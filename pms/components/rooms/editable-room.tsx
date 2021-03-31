@@ -8,6 +8,7 @@ function EmptyDescription(): JSX.Element {
   return <i>No description</i>;
 }
 
+//TODO same logic as EditableField
 function EditableRoomElement({
   room,
   updateRoomLocally,

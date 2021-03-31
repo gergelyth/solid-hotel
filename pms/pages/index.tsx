@@ -1,43 +1,50 @@
-import Head from "next/head";
-import styles from "../../common/styles/Home.module.css";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import LoginButtonComponent from "../../common/components/auth/login-component";
 import Link from "next/link";
 
 export default function Home(): JSX.Element {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Property Management System</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Container maxWidth="sm">
+      <main>
+        <Grid
+          container
+          spacing={3}
+          justify="center"
+          alignItems="center"
+          direction="column"
+        >
+          <Grid item>
+            <h1>
+              <Typography>Property Management System</Typography>
+            </h1>
+          </Grid>
+          <Grid item>
+            <Typography>Click on the links to navigate</Typography>
+          </Grid>
+          <Grid item>
+            <LoginButtonComponent />
+          </Grid>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Property Management System</h1>
-        <div className={`${styles.grid} ${styles.card}`}>
-          <LoginButtonComponent />
-        </div>
-        <div className={`${styles.grid} ${styles.card}`}>
-          <Link href="/rooms">
-            <h3>Room management</h3>
-          </Link>
-        </div>
-        <div className={`${styles.grid} ${styles.card}`}>
-          <Link href="/reservations">
-            <h3>Reservations</h3>
-          </Link>
-        </div>
+          <Grid item>
+            <Link href="/rooms">
+              <Button variant="contained" color="primary">
+                Room management
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link href="/reservations">
+              <Button variant="contained" color="primary">
+                Reservations
+              </Button>
+            </Link>
+          </Grid>
+        </Grid>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
+      <footer>
+        <Typography>MIT License</Typography>
       </footer>
-    </div>
+    </Container>
   );
 }
