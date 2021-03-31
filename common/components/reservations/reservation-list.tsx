@@ -1,15 +1,25 @@
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { useReservations } from "../../hooks/useReservations";
 import { NotEmptyItem } from "../../util/helpers";
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 
 function CreateReservationElement(
   reservation: ReservationAtHotel | null,
   reservationElement: (item: ReservationAtHotel) => JSX.Element
 ): JSX.Element {
   if (!reservation) {
-    return <li>empty</li>;
+    return (
+      <Grid item>
+        <Typography>Empty reservation.</Typography>
+      </Grid>
+    );
   }
-  return <li key={reservation.id}>{reservationElement(reservation)}</li>;
+  return <Grid item>{reservationElement(reservation)}</Grid>;
 }
 
 function ReservationElements(
@@ -20,10 +30,15 @@ function ReservationElements(
   const { items, isLoading, isError } = useReservations(reservationsUrl);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
   if (isError || !items) {
-    return <div>Fetching the reservations failed.</div>;
+    return (
+      <Container maxWidth="sm">
+        <Typography>An error occurred.</Typography>
+        <Typography>{isError}</Typography>
+      </Container>
+    );
   }
 
   const filteredReservations = items
@@ -31,18 +46,18 @@ function ReservationElements(
     .filter(reservationFilter);
   const isArrayNonEmpty = filteredReservations.length > 0;
 
-  return (
-    <div>
-      {isArrayNonEmpty ? (
-        <ul>
-          {items.map((item) =>
-            CreateReservationElement(item, reservationElement)
-          )}
-        </ul>
-      ) : (
-        <i>No reservations found</i>
-      )}
-    </div>
+  return isArrayNonEmpty ? (
+    <Grid
+      container
+      spacing={4}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      {items.map((item) => CreateReservationElement(item, reservationElement))}
+    </Grid>
+  ) : (
+    <Typography>No reservations found.</Typography>
   );
 }
 

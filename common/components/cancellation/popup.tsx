@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -32,17 +33,17 @@ function CancelReservationPopup({
     >
       <DialogTitle id="popup-title">Cancel reservation</DialogTitle>
       <Container maxWidth="sm">
-        <div>You intend to cancel the following reservation:</div>
-        <div>{reservation.ownerId}</div>
-        <div>{reservation.roomId}</div>
-        <div>
+        <Typography>You intend to cancel the following reservation:</Typography>
+        <Typography>{reservation.ownerId}</Typography>
+        <Typography>{reservation.roomId}</Typography>
+        <Typography>
           {reservation.dateFrom.toDateString()} -
           {reservation.dateTo.toDateString()}
-        </div>
-        <div>The reservation will be irrevocably lost.</div>
-        <div>
+        </Typography>
+        <Typography>The reservation will be irrevocably lost.</Typography>
+        <Typography>
           Please confirm that you are sure about executing this cancellation:
-        </div>
+        </Typography>
         <FormControlLabel
           control={
             <Checkbox

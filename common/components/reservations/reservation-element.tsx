@@ -1,7 +1,7 @@
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
-import { Button, Container } from "@material-ui/core";
+import { Button, Container, Typography } from "@material-ui/core";
 
 function ReservationElement({
   reservation,
@@ -17,12 +17,16 @@ function ReservationElement({
         onClickAction(event, reservation)
       }
     >
-      <Container>
-        <h3>Owner: {reservation.ownerId}</h3>
-        <div>Room: {reservation.roomId}</div>
-        <div>State: {ReservationState[reservation.state]}</div>
-        <div>Check-in date: {reservation.dateFrom.toDateString()}</div>
-        <div>Check-out date: {reservation.dateTo.toDateString()}</div>
+      <Container maxWidth="sm">
+        <Typography>Owner: {reservation.ownerId}</Typography>
+        <Typography>Room: {reservation.roomId}</Typography>
+        <Typography>State: {ReservationState[reservation.state]}</Typography>
+        <Typography>
+          Check-in date: {reservation.dateFrom.toDateString()}
+        </Typography>
+        <Typography>
+          Check-out date: {reservation.dateTo.toDateString()}
+        </Typography>
       </Container>
     </Button>
   );
