@@ -1,5 +1,3 @@
-import Head from "next/head";
-import styles from "../../common/styles/Home.module.css";
 import ProfileMain from "../profile/profile-main";
 
 //TODO - to use compare in SWR pass in an extension of the default dequal method to config options compare
@@ -7,15 +5,7 @@ import ProfileMain from "../profile/profile-main";
 // the issue is how to find out what changed
 
 function Profile(): JSX.Element {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Profile</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <ProfileMain />
-    </div>
-  );
+  return <ProfileMain />;
 }
 
 export default Profile;
