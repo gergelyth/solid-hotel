@@ -1,4 +1,3 @@
-import styles from "../../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { Dispatch, SetStateAction } from "react";
@@ -7,6 +6,7 @@ import ReservationElement from "../../../common/components/reservations/reservat
 import { GetUserReservationsPodUrl } from "../../../common/util/solid";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
 import ReservationList from "../../../common/components/reservations/reservation-list";
+import styles from "../../../common/styles/styles";
 
 type SelectedReservationState = {
   selectedReservation: ActiveReservationElement | undefined;
@@ -23,12 +23,14 @@ function GetOnReservationClickFunction({
     event: React.MouseEvent<HTMLElement>,
     reservation: ReservationAtHotel
   ): void {
+    const additionalStyle = styles();
+
     if (selectedReservation) {
       selectedReservation.reservationElement.classList.remove(
-        styles.selected_card
+        additionalStyle.selectedGridItem
       );
     }
-    event.currentTarget.classList.add(styles.selected_card);
+    event.currentTarget.classList.add(additionalStyle.selectedGridItem);
     setSelectedReservation({
       reservation: reservation,
       reservationElement: event.currentTarget,

@@ -1,6 +1,6 @@
+import { Button } from "@material-ui/core";
 import { NextRouter, useRouter } from "next/router";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
-import styles from "../../../common/styles/Home.module.css";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 import { SetReservationState } from "../../../common/util/solid";
@@ -34,16 +34,16 @@ function CheckoutButton({
   const dataProtectionInformation = useDataProtectionInformation();
 
   return (
-    <div className={styles.simpleContainer}>
-      <button
-        disabled={!reservationId}
-        onClick={() =>
-          Checkout(reservationId, dataProtectionInformation.data, router)
-        }
-      >
-        Checkout
-      </button>
-    </div>
+    <Button
+      variant="contained"
+      color="primary"
+      disabled={!reservationId}
+      onClick={() =>
+        Checkout(reservationId, dataProtectionInformation.data, router)
+      }
+    >
+      Checkout
+    </Button>
   );
 }
 

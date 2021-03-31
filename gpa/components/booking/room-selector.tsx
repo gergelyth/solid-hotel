@@ -1,6 +1,12 @@
 import { useRooms } from "../../../common/hooks/useRooms";
 import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 
 function EmptyDescription(): JSX.Element {
   return <i>No description</i>;
@@ -8,37 +14,62 @@ function EmptyDescription(): JSX.Element {
 
 function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   if (!room) {
-    return <li>empty</li>;
+    return (
+      <Grid item>
+        <Typography>Empty room.</Typography>
+      </Grid>
+    );
   }
+
   return (
-    <li key={room.id}>
-      <h3>Name: {room.name}</h3>
-      <p>{room.description ?? EmptyDescription()}</p>
-    </li>
+    <Grid
+      container
+      spacing={1}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <Typography>Name: {room.name}</Typography>
+      </Grid>
+      <Grid item>
+        <Typography>{room.description ?? EmptyDescription()}</Typography>
+      </Grid>
+    </Grid>
   );
 }
 
+//TODO this is the same logic as reservation-list in common
 function RoomElements(): JSX.Element {
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
   if (isError || !items) {
-    return <div>Fetching the rooms failed.</div>;
+    return (
+      <Container maxWidth="sm">
+        <Typography>An error occurred.</Typography>
+        <Typography>{isError}</Typography>
+      </Container>
+    );
   }
 
   const isArrayNonEmpty =
     items.length > 0 && items.some((item) => item !== null);
 
-  return (
-    <div>
-      {isArrayNonEmpty ? (
-        <ul>{items.map((item) => CreateRoomElement(item))}</ul>
-      ) : (
-        <i>No rooms found</i>
-      )}
-    </div>
+  return isArrayNonEmpty ? (
+    <Grid
+      container
+      spacing={4}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      {items.map((item) => CreateRoomElement(item))}
+    </Grid>
+  ) : (
+    <Typography>No rooms found.</Typography>
   );
 }
 
