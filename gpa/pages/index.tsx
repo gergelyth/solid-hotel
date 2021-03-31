@@ -1,11 +1,16 @@
-import Head from "next/head";
-import styles from "../../common/styles/Home.module.css";
 import Link from "next/link";
 import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "./checkout";
 import LoginButtonComponent from "../../common/components/auth/login-component";
 import { GetUserReservationsPodUrl } from "../../common/util/solid";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 // import { SetField } from "../util/solid";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
@@ -16,16 +21,29 @@ function CheckoutButton(
   isLoading: boolean,
   isError: boolean
 ): JSX.Element {
-  if (isLoading || isError || GetActiveReservations(reservations).length == 0) {
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (isError) {
+    <Container maxWidth="sm">
+      <Typography>An error occurred.</Typography>
+      <Typography>{isError}</Typography>
+    </Container>;
+  }
+
+  if (GetActiveReservations(reservations).length == 0) {
     return (
-      <h3>
-        <i>No active reservations</i>
-      </h3>
+      <i>
+        <Typography>No active reservations</Typography>
+      </i>
     );
   } else {
     return (
       <Link href="/checkout">
-        <h3>Checkout</h3>
+        <Button variant="contained" color="primary">
+          Checkout
+        </Button>
       </Link>
     );
   }
@@ -38,23 +56,31 @@ export default function Home(): JSX.Element {
   );
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Guest Portal Application</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>Guest Portal Application</h1>
-        <p className={styles.description}>Click on the links to navigate</p>
-        {/* <button
+    <Container maxWidth="sm">
+      <main>
+        <Grid
+          container
+          spacing={3}
+          justify="center"
+          alignItems="center"
+          direction="column"
+        >
+          <Grid item>
+            <h1>
+              <Typography>Guest Portal Application</Typography>
+            </h1>
+          </Grid>
+          <Grid item>
+            <Typography>Click on the links to navigate</Typography>
+          </Grid>
+          {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.nationality, "Spanish");
           }}
         >
           Set nationality
         </button> */}
-        {/* <button
+          {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.firstName, "Stephen");
           }}
@@ -70,40 +96,38 @@ export default function Home(): JSX.Element {
           Populate hotel Pod with rooms (signed into HotelPod)
         </button> */}
 
-        <div className={`${styles.grid} ${styles.card}`}>
-          <LoginButtonComponent />
-        </div>
+          <Grid item>
+            <LoginButtonComponent />
+          </Grid>
 
-        <div className={`${styles.grid} ${styles.card}`}>
-          <Link href="/booking">
-            <h3>Book a room</h3>
-          </Link>
-        </div>
-        <div className={`${styles.grid} ${styles.card}`}>
-          <Link href="/reservations">
-            <h3>List all reservations</h3>
-          </Link>
-        </div>
-        <div className={`${styles.grid} ${styles.card}`}>
-          {CheckoutButton(items, isLoading, isError)}
-        </div>
-        <div className={`${styles.grid} ${styles.card}`}>
-          <Link href="/profile">
-            <h3>Profile editor</h3>
-          </Link>
-        </div>
+          <Grid item>
+            <Link href="/booking">
+              <Button variant="contained" color="primary">
+                Book a room
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link href="/reservations">
+              <Button variant="contained" color="primary">
+                List reservations
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item>{CheckoutButton(items, isLoading, isError)}</Grid>
+          <Grid item>
+            <Link href="/profile">
+              <Button variant="contained" color="primary">
+                Profile editor
+              </Button>
+            </Link>
+          </Grid>
+        </Grid>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
+      <footer>
+        <Typography>MIT License</Typography>
       </footer>
-    </div>
+    </Container>
   );
 }

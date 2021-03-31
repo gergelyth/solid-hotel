@@ -18,7 +18,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <React.Fragment>
       <Head>
-        <title>My page</title>
+        <title>Guest Portal Application</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

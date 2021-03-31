@@ -1,10 +1,9 @@
-import styles from "../../common/styles/Home.module.css";
-import Head from "next/head";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { useState } from "react";
 import ActiveReservationList from "../components/checkout/active-reservation-list";
 import CheckoutButton from "../components/checkout/checkout-button";
+import { Grid, Typography } from "@material-ui/core";
 
 export type ActiveReservationElement = {
   reservation: ReservationAtHotel;
@@ -35,19 +34,26 @@ function Checkout(): JSX.Element {
   ] = useState<ActiveReservationElement>();
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Checkout</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <h1 className={styles.title}>Active reservations</h1>
-      <ActiveReservationList
-        selectedReservation={selectedReservation}
-        setSelectedReservation={setSelectedReservation}
-      />
-      <CheckoutButton reservationId={selectedReservation?.reservation.id} />
-    </div>
+    <Grid
+      container
+      spacing={2}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <Typography>Active reservations</Typography>
+      </Grid>
+      <Grid item>
+        <ActiveReservationList
+          selectedReservation={selectedReservation}
+          setSelectedReservation={setSelectedReservation}
+        />
+      </Grid>
+      <Grid item>
+        <CheckoutButton reservationId={selectedReservation?.reservation.id} />
+      </Grid>
+    </Grid>
   );
 }
 

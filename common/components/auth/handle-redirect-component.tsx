@@ -7,5 +7,5 @@ export default function RedirectComponent(): JSX.Element {
       Router.push("/");
     }
   });
-  return <div></div>;
+  return <div />;
 }
