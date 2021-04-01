@@ -12,9 +12,9 @@ const styles = makeStyles(() =>
     },
     main: {
       padding: "5rem 0",
-      flex: "1",
       display: "flex",
       flexDirection: "column",
+      flexGrow: 1,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -23,7 +23,6 @@ const styles = makeStyles(() =>
       borderTop: "5px solid #eaeaea",
       borderBottom: "5px solid #eaeaea",
       display: "flex",
-      alignSelf: "bottom",
     },
   })
 );

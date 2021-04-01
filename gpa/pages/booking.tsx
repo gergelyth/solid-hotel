@@ -37,7 +37,7 @@ function ReservationPropertiesPage(
   return (
     <Grid
       container
-      spacing={2}
+      spacing={5}
       justify="center"
       alignItems="center"
       direction="column"
