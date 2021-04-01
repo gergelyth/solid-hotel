@@ -5,12 +5,24 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { AddReservation, GetSession } from "../../common/util/solid";
 import { AddReservationToHotelPod } from "../../common/util/solidhoteladmin";
 import RoomSelector from "../components/booking/room-selector";
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Grid,
+  Stepper,
+  Step,
+  StepLabel,
+  Typography,
+} from "@material-ui/core";
 
 enum BookingPage {
   ReservationProperties,
   //SPE page
   Success,
+}
+
+function GetStepLabels(): string[] {
+  return ["Select room and date", "Input required information", "Success"];
 }
 
 function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
@@ -29,11 +41,17 @@ function BookRoom(roomId: string, checkinDate: Date, checkoutDate: Date): void {
   AddReservationToHotelPod(reservation, session);
 }
 
-function ReservationPropertiesPage(
-  currentPage: BookingPage,
-  setCurrentPage: Dispatch<SetStateAction<BookingPage>>,
-  router: NextRouter
-): JSX.Element {
+function ReservationPropertiesPage({
+  currentPage,
+  setCurrentPage,
+}: {
+  currentPage: BookingPage;
+  setCurrentPage: Dispatch<SetStateAction<BookingPage>>;
+}): JSX.Element | null {
+  if (currentPage !== BookingPage.ReservationProperties) {
+    return null;
+  }
+
   return (
     <Grid
       container
@@ -76,8 +94,7 @@ function ReservationPropertiesPage(
               GetCurrentDatePushedBy(0, 0, 5),
               GetCurrentDatePushedBy(0, 0, 10)
             );
-            // setCurrentPage(currentPage + 1);
-            router.push("/booking/success");
+            setCurrentPage(currentPage + 1);
           }}
         >
           Book room
@@ -87,9 +104,19 @@ function ReservationPropertiesPage(
   );
 }
 
-function SuccessPage(router: NextRouter): JSX.Element {
+function SuccessPage({
+  currentPage,
+  router,
+}: {
+  currentPage: BookingPage;
+  router: NextRouter;
+}): JSX.Element | null {
+  if (currentPage !== BookingPage.Success) {
+    return null;
+  }
+
   return (
-    <Container maxWidth="sm">
+    <Box>
       <h2>
         <Typography>Reservation successful!</Typography>
       </h2>
@@ -100,30 +127,36 @@ function SuccessPage(router: NextRouter): JSX.Element {
       >
         Return to index page
       </Button>
-    </Container>
+    </Box>
   );
-}
-
-function DisplayPage(
-  currentPage: BookingPage,
-  setCurrentPage: Dispatch<SetStateAction<BookingPage>>,
-  router: NextRouter
-): JSX.Element {
-  switch (currentPage) {
-    case BookingPage.ReservationProperties:
-      return ReservationPropertiesPage(currentPage, setCurrentPage, router);
-    case BookingPage.Success:
-      return SuccessPage(router);
-  }
 }
 
 function Booking(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(
     BookingPage.ReservationProperties
   );
-
   const router = useRouter();
-  return DisplayPage(currentPage, setCurrentPage, router);
+
+  const steps = GetStepLabels();
+
+  return (
+    <Box>
+      <ReservationPropertiesPage
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+
+      <SuccessPage currentPage={currentPage} router={router} />
+
+      <Stepper activeStep={currentPage} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+    </Box>
+  );
 }
 
 export default Booking;

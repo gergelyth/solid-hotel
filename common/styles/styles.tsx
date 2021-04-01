@@ -11,7 +11,7 @@ const styles = makeStyles(() =>
       background: grey[500],
     },
     main: {
-      padding: "5rem 0",
+      padding: "1rem 0",
       display: "flex",
       flexDirection: "column",
       flexGrow: 1,

@@ -4,14 +4,12 @@ import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "./checkout";
 import { GetUserReservationsPodUrl } from "../../common/util/solid";
 import {
-  Box,
   Button,
   CircularProgress,
   Container,
   Grid,
   Typography,
 } from "@material-ui/core";
-import styles from "../../common/styles/styles";
 // import { SetField } from "../util/solid";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
@@ -52,33 +50,30 @@ function CheckoutButton(
 
 // TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
-  const additionalStyles = styles();
-
   const { items, isLoading, isError } = useReservations(
     GetUserReservationsPodUrl()
   );
 
   return (
-    <Box className={additionalStyles.main}>
-      <Grid
-        container
-        spacing={5}
-        justify="center"
-        alignItems="center"
-        direction="column"
-      >
-        <Grid item>
-          <Typography variant="h4">Guest Portal Application</Typography>
-        </Grid>
+    <Grid
+      container
+      spacing={5}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <Typography variant="h4">Guest Portal Application</Typography>
+      </Grid>
 
-        {/* <button
+      {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.nationality, "Spanish");
           }}
         >
           Set nationality
         </button> */}
-        {/* <button
+      {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.firstName, "Stephen");
           }}
@@ -94,29 +89,28 @@ export default function Home(): JSX.Element {
           Populate hotel Pod with rooms (signed into HotelPod)
         </button> */}
 
-        <Grid item>
-          <Link href="/booking">
-            <Button variant="contained" color="primary" size="large">
-              Book a room
-            </Button>
-          </Link>
-        </Grid>
-        <Grid item>
-          <Link href="/reservations">
-            <Button variant="contained" color="primary" size="large">
-              List reservations
-            </Button>
-          </Link>
-        </Grid>
-        <Grid item>{CheckoutButton(items, isLoading, isError)}</Grid>
-        <Grid item>
-          <Link href="/profile">
-            <Button variant="contained" color="primary" size="large">
-              Profile editor
-            </Button>
-          </Link>
-        </Grid>
+      <Grid item>
+        <Link href="/booking">
+          <Button variant="contained" color="primary" size="large">
+            Book a room
+          </Button>
+        </Link>
       </Grid>
-    </Box>
+      <Grid item>
+        <Link href="/reservations">
+          <Button variant="contained" color="primary" size="large">
+            List reservations
+          </Button>
+        </Link>
+      </Grid>
+      <Grid item>{CheckoutButton(items, isLoading, isError)}</Grid>
+      <Grid item>
+        <Link href="/profile">
+          <Button variant="contained" color="primary" size="large">
+            Profile editor
+          </Button>
+        </Link>
+      </Grid>
+    </Grid>
   );
 }

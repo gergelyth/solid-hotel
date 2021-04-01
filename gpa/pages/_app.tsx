@@ -6,9 +6,10 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 // TODO https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/theme.js
 import theme from "../../common/styles/theme";
-import { Container } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import NavigationBar from "../components/navbar";
 import Footer from "../components/footer";
+import styles from "../../common/styles/styles";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -17,6 +18,8 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       jssStyles.parentElement?.removeChild(jssStyles);
     }
   }, []);
+
+  const additionalStyles = styles();
 
   return (
     <React.Fragment>
@@ -31,7 +34,9 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         <CssBaseline />
         <Container maxWidth="sm">
           <NavigationBar />
-          <Component {...pageProps} />
+          <Box className={additionalStyles.main}>
+            <Component {...pageProps} />
+          </Box>
           <Footer />
         </Container>
       </ThemeProvider>
