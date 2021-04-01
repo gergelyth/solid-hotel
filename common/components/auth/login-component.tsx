@@ -23,6 +23,7 @@ function GetLoginComponent(): JSX.Element {
 function GetLogoutComponent(): JSX.Element {
   async function Logout(): Promise<void> {
     await SolidLogout();
+    //TODO for some reason it can't build because it can't find window - may just be intermittent
     window.location.reload();
   }
 
@@ -41,7 +42,10 @@ function GetLogoutComponent(): JSX.Element {
   }
 
   return (
-    <Container>
+    <Box display="flex" flexDirection="row" alignItems="center">
+      <Box m={1} p={1}>
+        <Typography variant="subtitle1">Hello {guest.firstName}!</Typography>
+      </Box>
       <Button
         variant="contained"
         color="primary"
@@ -51,15 +55,18 @@ function GetLogoutComponent(): JSX.Element {
       >
         Logout
       </Button>
-      <Box>Hello {guest.firstName}!</Box>
-    </Container>
+    </Box>
   );
 }
 
 function LoginButtonComponent(): JSX.Element {
   const session = getDefaultSession();
 
-  return session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent();
+  return session.info.isLoggedIn ? (
+    <GetLogoutComponent />
+  ) : (
+    <GetLoginComponent />
+  );
 }
 
 export default LoginButtonComponent;

@@ -2,15 +2,17 @@ import Link from "next/link";
 import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "./checkout";
-import LoginButtonComponent from "../../common/components/auth/login-component";
 import { GetUserReservationsPodUrl } from "../../common/util/solid";
 import {
+  Box,
   Button,
   CircularProgress,
   Container,
   Grid,
   Typography,
 } from "@material-ui/core";
+import NavigationBar from "../components/navbar";
+import styles from "../../common/styles/styles";
 // import { SetField } from "../util/solid";
 // import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 // import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
@@ -51,28 +53,27 @@ function CheckoutButton(
 
 // TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
+  const additionalStyles = styles();
+
   const { items, isLoading, isError } = useReservations(
     GetUserReservationsPodUrl()
   );
 
   return (
     <Container maxWidth="sm">
-      <main>
+      <NavigationBar />
+      <Box className={additionalStyles.main}>
         <Grid
           container
-          spacing={3}
+          spacing={5}
           justify="center"
           alignItems="center"
           direction="column"
         >
           <Grid item>
-            <h1>
-              <Typography>Guest Portal Application</Typography>
-            </h1>
+            <Typography variant="h4">Guest Portal Application</Typography>
           </Grid>
-          <Grid item>
-            <Typography>Click on the links to navigate</Typography>
-          </Grid>
+
           {/* <button
           onClick={async () => {
             await SetField(personFieldToRdfMap.nationality, "Spanish");
@@ -97,10 +98,6 @@ export default function Home(): JSX.Element {
         </button> */}
 
           <Grid item>
-            <LoginButtonComponent />
-          </Grid>
-
-          <Grid item>
             <Link href="/booking">
               <Button variant="contained" color="primary">
                 Book a room
@@ -123,11 +120,16 @@ export default function Home(): JSX.Element {
             </Link>
           </Grid>
         </Grid>
-      </main>
+      </Box>
 
-      <footer>
-        <Typography>MIT License</Typography>
-      </footer>
+      <Box className={additionalStyles.footer}>
+        <Box flexGrow={1}>
+          <Typography variant="subtitle2">License: MIT</Typography>
+        </Box>
+        <Box>
+          <Typography variant="subtitle2">2020 - 2021</Typography>
+        </Box>
+      </Box>
     </Container>
   );
 }
