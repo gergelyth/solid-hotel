@@ -3,8 +3,14 @@ import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import EditableRoomElement from "./editable-room";
 import { useState } from "react";
-import styles from "../../../common/styles/Home.module.css";
 import EditRoomPopup from "./edit-room-popup";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 
 function CreateRoomElement(
   room: RoomDefinition | null,
@@ -52,25 +58,54 @@ function RoomElements(): JSX.Element {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
   if (isError || !items) {
-    return <div>Fetching the rooms failed.</div>;
+    return (
+      <Container maxWidth="sm">
+        <Typography>An error occurred.</Typography>
+        <Typography>{isError}</Typography>
+      </Container>
+    );
   }
 
   const isArrayNonEmpty =
     items.length > 0 && items.some((item) => item !== null);
 
   return (
-    <div className={styles.simpleContainer}>
+    <Grid
+      container
+      spacing={2}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
       {isArrayNonEmpty ? (
-        <ul>{items.map((item) => CreateRoomElement(item, UpdateList))}</ul>
+        <Grid
+          container
+          spacing={4}
+          justify="center"
+          alignItems="center"
+          direction="column"
+        >
+          {items.map((item) => CreateRoomElement(item, UpdateList))}
+        </Grid>
       ) : (
-        <i>No rooms found</i>
+        <Grid item>
+          <Typography>No rooms found.</Typography>
+        </Grid>
       )}
-      <button onClick={() => setCreatePopupVisibility(true)}>
-        Create room
-      </button>
+
+      <Grid item>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setCreatePopupVisibility(true)}
+        >
+          Create room
+        </Button>
+      </Grid>
+
       {/* TODO  create room gets created with UNDEFINED id*/}
       <EditRoomPopup
         room={{} as RoomDefinition}
@@ -78,7 +113,7 @@ function RoomElements(): JSX.Element {
         isPopupShowing={isCreatePopupShowing}
         setPopupVisibility={setCreatePopupVisibility}
       />
-    </div>
+    </Grid>
   );
 }
 

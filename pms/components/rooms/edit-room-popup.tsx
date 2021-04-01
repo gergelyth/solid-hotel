@@ -26,6 +26,7 @@ function EditRoomPopup({
     return null;
   }
 
+  //TODO same form as edit field popup just with diferent content
   return (
     <div className={`${styles.simpleContainer} ${styles.popup}`}>
       <div className={`${styles.simpleContainer} ${styles.popup_inner}`}>

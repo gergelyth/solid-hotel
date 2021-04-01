@@ -1,20 +1,26 @@
-import Head from "next/head";
-import styles from "../../common/styles/Home.module.css";
 import RoomList from "../components/rooms/room-list";
+import { Grid, Typography } from "@material-ui/core";
 
-function Reservations(): JSX.Element {
+function RoomManagement(): JSX.Element {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Room management</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Grid
+      container
+      spacing={3}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <h1>
+          <Typography>Room management</Typography>
+        </h1>
+      </Grid>
 
-      <h1 className={styles.title}>Room management</h1>
-
-      <RoomList />
-    </div>
+      <Grid item>
+        <RoomList />
+      </Grid>
+    </Grid>
   );
 }
 
-export default Reservations;
+export default RoomManagement;

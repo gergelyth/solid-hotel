@@ -1,10 +1,9 @@
-import Head from "next/head";
 import { useRouter } from "next/router";
 import ReservationList from "../../common/components/reservations/reservation-list";
 import { ReservationsUrl } from "../../common/consts/solidIdentifiers";
-import styles from "../../common/styles/Home.module.css";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import CreateReservationElement from "../components/reservations/reservation-element";
+import { Grid, Typography } from "@material-ui/core";
 
 function Reservations(): JSX.Element {
   const router = useRouter();
@@ -18,23 +17,30 @@ function Reservations(): JSX.Element {
   }
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Reservations</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <h1 className={styles.title}>Reservations</h1>
+    <Grid
+      container
+      spacing={3}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <h1>
+          <Typography>Reservations</Typography>
+        </h1>
+      </Grid>
       {/* <h2>Reservation count: {reservations.length}</h2> */}
 
-      <ReservationList
-        reservationsUrl={ReservationsUrl}
-        reservationFilter={() => true}
-        reservationElement={(reservation: ReservationAtHotel) =>
-          CreateReservationElement(reservation, OnReservationClick)
-        }
-      />
-    </div>
+      <Grid item>
+        <ReservationList
+          reservationsUrl={ReservationsUrl}
+          reservationFilter={() => true}
+          reservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
+      </Grid>
+    </Grid>
   );
 }
 

@@ -1,7 +1,8 @@
-import ProfileMain from "../components/profile/profile-main";
+// import ProfileMain from "../components/profile/profile-main";
 
 function Profile(): JSX.Element {
-  return <ProfileMain />;
+  // return <ProfileMain />;
+  return <div />;
 }
 
 export default Profile;
