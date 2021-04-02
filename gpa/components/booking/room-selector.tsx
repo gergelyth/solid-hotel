@@ -6,7 +6,13 @@ import {
   Container,
   Grid,
   Typography,
+  Box,
+  FormControl,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
 } from "@material-ui/core";
+import { Dispatch, SetStateAction } from "react";
 
 function EmptyDescription(): JSX.Element {
   return <i>No description</i>;
@@ -14,33 +20,36 @@ function EmptyDescription(): JSX.Element {
 
 function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   if (!room) {
+    //TODO really shouldn't be nulls here
     return (
       <Grid item>
-        <Typography>Empty room.</Typography>
+        <Typography variant="caption">Empty room.</Typography>
       </Grid>
     );
   }
 
   return (
-    <Grid
-      container
-      spacing={1}
-      justify="center"
-      alignItems="center"
-      direction="column"
-    >
+    <Grid container direction="column">
       <Grid item>
-        <Typography>Name: {room.name}</Typography>
+        <Typography variant="h6">{room.name}</Typography>
       </Grid>
       <Grid item>
-        <Typography>{room.description ?? EmptyDescription()}</Typography>
+        <Typography variant="caption">
+          {room.description ?? EmptyDescription()}
+        </Typography>
       </Grid>
     </Grid>
   );
 }
 
 //TODO this is the same logic as reservation-list in common
-function RoomElements(): JSX.Element {
+function RoomElements({
+  selectedRoomId,
+  setSelectedRoomId,
+}: {
+  selectedRoomId: string | undefined;
+  setSelectedRoomId: Dispatch<SetStateAction<string | undefined>>;
+}): JSX.Element {
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
 
   if (isLoading) {
@@ -59,24 +68,45 @@ function RoomElements(): JSX.Element {
     items.length > 0 && items.some((item) => item !== null);
 
   return isArrayNonEmpty ? (
-    <Grid
-      container
-      spacing={4}
-      justify="center"
-      alignItems="center"
-      direction="column"
-    >
-      {items.map((item) => CreateRoomElement(item))}
-    </Grid>
+    <Box px={2}>
+      <FormControl>
+        <RadioGroup
+          value={selectedRoomId}
+          onChange={(e, newValue) => setSelectedRoomId(newValue)}
+        >
+          <Grid container spacing={2} direction="column">
+            {items.map((item) => (
+              <Grid item key={item?.id}>
+                <FormControlLabel
+                  disabled={!item}
+                  value={item?.id}
+                  control={<Radio />}
+                  label={CreateRoomElement(item)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </RadioGroup>
+      </FormControl>
+    </Box>
   ) : (
-    <Typography>No rooms found.</Typography>
+    <Typography variant="h6">No rooms found.</Typography>
   );
 }
 
-function RoomSelector(): JSX.Element {
+function RoomSelector({
+  selectedRoomId,
+  setSelectedRoomId,
+}: {
+  selectedRoomId: string | undefined;
+  setSelectedRoomId: Dispatch<SetStateAction<string | undefined>>;
+}): JSX.Element {
   return (
     <div>
-      <RoomElements />
+      <RoomElements
+        selectedRoomId={selectedRoomId}
+        setSelectedRoomId={setSelectedRoomId}
+      />
     </div>
   );
 }
