@@ -1,1 +1,1 @@
-export const HotelLocation = "France";
+export const HotelLocation = "Australia";

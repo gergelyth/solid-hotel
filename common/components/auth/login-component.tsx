@@ -27,24 +27,25 @@ function GetLogoutComponent(): JSX.Element {
     window.location.reload();
   }
 
-  const { guest, isLoading, isError } = useGuest();
+  //TODO
+  // const { guest, isLoading, isError } = useGuest();
 
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-  if (isError || !guest) {
-    return (
-      <Container>
-        <Typography>An error occured.</Typography>;
-        <Typography>{isError}</Typography>;
-      </Container>
-    );
-  }
+  // if (isLoading) {
+  //   return <CircularProgress />;
+  // }
+  // if (isError || !guest) {
+  //   return (
+  //     <Container>
+  //       <Typography>An error occured.</Typography>;
+  //       <Typography>{isError}</Typography>;
+  //     </Container>
+  //   );
+  // }
 
   return (
     <Box display="flex" flexDirection="row" alignItems="center">
       <Box m={1} p={1}>
-        <Typography variant="subtitle1">Hello {guest.firstName}!</Typography>
+        {/* TODO <Typography variant="subtitle1">Hello {guest.firstName}!</Typography> */}
       </Box>
       <Button
         variant="contained"
@@ -62,11 +63,7 @@ function GetLogoutComponent(): JSX.Element {
 function LoginButtonComponent(): JSX.Element {
   const session = getDefaultSession();
 
-  return session.info.isLoggedIn ? (
-    <GetLogoutComponent />
-  ) : (
-    <GetLoginComponent />
-  );
+  return session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent();
 }
 
 export default LoginButtonComponent;

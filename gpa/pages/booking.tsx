@@ -1,12 +1,12 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { Box, Stepper, Step, StepLabel } from "@material-ui/core";
 import ReservationPropertiesPage from "../components/booking/reservation-properties-subpage";
 import BookingSuccessPage from "../components/booking/success-subpage";
+import RequiredFields from "../components/booking/fields-subpage";
 
 export enum BookingPage {
   ReservationProperties,
-  //SPE page
+  RequiredFields,
   Success,
 }
 
@@ -18,7 +18,6 @@ function Booking(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(
     BookingPage.ReservationProperties
   );
-  const router = useRouter();
 
   const [confirmReservation, setConfirmReservation] = useState<
     () => () => void
@@ -34,7 +33,13 @@ function Booking(): JSX.Element {
         setConfirmReservation={setConfirmReservation}
       />
 
-      <BookingSuccessPage currentPage={currentPage} router={router} />
+      <RequiredFields
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        confirmReservation={confirmReservation}
+      />
+
+      <BookingSuccessPage currentPage={currentPage} />
 
       <Stepper activeStep={currentPage} alternativeLabel>
         {GetStepLabels().map((label) => (

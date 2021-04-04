@@ -2,13 +2,16 @@ version: "3.8"
 
 services:
   common:
+    ports:
+      - 3003:3003
     build:
       context: common
       dockerfile: ./Dockerfile
+    command: sh -c "npm run build && npm run dev"
     # command: tail -f /dev/null
     volumes:
-      # - ./common:/home/node/common
-      - common-files:/home/node/common
+      - ./common:/home/node/common
+      # - common-files:/home/node/common
       - node-modules:/home/node/node_modules
   gpa:
     ports:
@@ -61,5 +64,5 @@ services:
   #   depends_on:
   #     - common
 volumes:
-  common-files:
+  # common-files:
   node-modules:

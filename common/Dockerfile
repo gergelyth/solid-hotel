@@ -2,6 +2,8 @@ FROM node
 
 USER node
 
+ENV PORT 3003
+
 RUN mkdir -p /home/node/node_modules
 
 # Create app directory
@@ -17,3 +19,5 @@ RUN npm install --prefix .. ./
 # Copying source files
 # COPY . /home/node
 COPY --chown=node:node . /home/node/common
+
+EXPOSE 3003

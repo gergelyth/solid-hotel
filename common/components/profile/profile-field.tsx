@@ -1,10 +1,11 @@
 import { useState } from "react";
-import EditFieldPopup from "../../common/components/profile/edit-field-popup";
+import EditFieldPopup from "./edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
-import { RemoveField, SetField } from "../../common/util/solid";
-import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
+import { RemoveField, SetField } from "../../util/solid";
+import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Grid, Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { Field } from "../../types/Field";
 
 function OnEditConfirmation(fieldName: string, newValue: string): void {
   SetField(personFieldToRdfMap[fieldName], newValue);
@@ -18,23 +19,17 @@ function OnDeleteConfirmation(fieldName: string): void {
   // setFieldValueInParent("<Field was deleted>");
 }
 
-function ProfileField({
-  fieldName,
-  fieldValue,
-}: {
-  fieldName: string;
-  fieldValue: string | null;
-}): JSX.Element {
+function ProfileField({ field }: { field: Field }): JSX.Element {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
   const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
 
   return (
     <Grid container item spacing={2} justify="center" alignItems="center">
       <Grid item xs={4}>
-        {fieldName}:
+        {field.fieldPrettyName}:
       </Grid>
       <Grid item xs={4}>
-        {fieldValue}
+        {field.fieldValue}
       </Grid>
       <Grid item xs={2}>
         <Button
@@ -56,14 +51,13 @@ function ProfileField({
         </Button>
       </Grid>
       <EditFieldPopup
-        fieldName={fieldName}
-        fieldValue={fieldValue}
+        field={field}
         onConfirmation={OnEditConfirmation}
         isPopupShowing={isEditPopupShowing}
         setPopupVisibility={setEditPopupVisibility}
       />
       <DeleteFieldPopup
-        fieldName={fieldName}
+        fieldName={field.fieldShortName}
         onConfirmation={OnDeleteConfirmation}
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}

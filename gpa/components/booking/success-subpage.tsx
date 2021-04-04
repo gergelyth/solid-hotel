@@ -1,14 +1,14 @@
-import { NextRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Box, Button, Typography } from "@material-ui/core";
 import { BookingPage } from "../../pages/booking";
 
 function BookingSuccessPage({
   currentPage,
-  router,
 }: {
   currentPage: BookingPage;
-  router: NextRouter;
 }): JSX.Element | null {
+  const router = useRouter();
+
   if (currentPage !== BookingPage.Success) {
     return null;
   }

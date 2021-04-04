@@ -4,24 +4,25 @@ import {
   DialogTitle,
   DialogActions,
   Container,
-  TextField,
   Button,
 } from "@material-ui/core";
+import { GetFieldInputElementBasedOnType } from "./input-type-elements";
+import { Field } from "../../types/Field";
 
 function EditFieldPopup({
-  fieldName,
-  fieldValue,
+  field,
   onConfirmation,
   isPopupShowing,
   setPopupVisibility,
 }: {
-  fieldName: string;
-  fieldValue: string | null;
+  field: Field;
   onConfirmation: (fieldName: string, newValue: string) => void;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element | null {
-  const [currentFieldValue, setFieldValue] = useState(fieldValue ?? "");
+  const [currentFieldValue, setFieldValue] = useState(
+    field.fieldValue ?? undefined
+  );
   if (!isPopupShowing) {
     return null;
   }
@@ -33,17 +34,14 @@ function EditFieldPopup({
       open={isPopupShowing}
     >
       <DialogTitle id="popup-title">
-        Edit field: <strong>{fieldName}</strong>
+        Edit field: <strong>{field.fieldPrettyName}</strong>
       </DialogTitle>
       <Container maxWidth="sm">
-        <TextField
-          required
-          id="editInput"
-          label={fieldName}
-          variant="outlined"
-          value={currentFieldValue}
-          onChange={(e) => setFieldValue(e.target.value)}
-        />
+        {GetFieldInputElementBasedOnType(
+          field,
+          currentFieldValue,
+          setFieldValue
+        )}
         <DialogActions>
           <Button
             variant="contained"
@@ -56,8 +54,14 @@ function EditFieldPopup({
             variant="contained"
             color="primary"
             className={"button"}
+            disabled={!currentFieldValue}
             onClick={() => {
-              onConfirmation(fieldName, currentFieldValue);
+              if (!currentFieldValue) {
+                throw new Error(
+                  "Button should be disabled, as current field value is undefined!"
+                );
+              }
+              onConfirmation(field.fieldShortName, currentFieldValue);
               setPopupVisibility(false);
             }}
           >
