@@ -9,7 +9,10 @@ import {
 } from "@material-ui/core";
 import { Field } from "../../types/Field";
 
-function CreateFieldElements(guestFields: Field[]): JSX.Element {
+function CreateFieldElements(
+  guestFields: Field[],
+  rdfFields: string[] | undefined
+): JSX.Element {
   return (
     <Grid
       container
@@ -19,7 +22,14 @@ function CreateFieldElements(guestFields: Field[]): JSX.Element {
       direction="column"
     >
       {guestFields.map((item) => {
-        return <ProfileField key={item.fieldShortName} field={item} />;
+        return (
+          <ProfileField
+            key={item.fieldShortName}
+            field={item}
+            guestFields={guestFields}
+            rdfFields={rdfFields}
+          />
+        );
       })}
     </Grid>
   );
@@ -48,7 +58,7 @@ function ProfileMain({
     <Box>
       <h2>{/* {guest.firstName} {guest.lastName} */}</h2>
       {/* <div>{guest["firstName"]}</div> */}
-      {CreateFieldElements(guestFields)}
+      {CreateFieldElements(guestFields, rdfFields)}
     </Box>
   );
 }

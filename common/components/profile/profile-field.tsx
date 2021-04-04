@@ -6,20 +6,46 @@ import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Grid, Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Field } from "../../types/Field";
+import { RevalidateGuest, TriggerRefetchGuest } from "../../hooks/useGuest";
 
-function OnEditConfirmation(fieldName: string, newValue: string): void {
+function OnEditConfirmation(
+  fieldName: string,
+  newValue: string,
+  fields: Field[],
+  rdfFields: string[] | undefined
+): void {
+  fields.forEach((field) => {
+    if (field.fieldShortName === fieldName) {
+      field.fieldValue = newValue;
+    }
+  });
+  TriggerRefetchGuest(rdfFields, fields);
   SetField(personFieldToRdfMap[fieldName], newValue);
-  // setFieldValueInParent(newValue);
-  //TODO refetch as in room refresh here
+  RevalidateGuest(rdfFields);
 }
 
-function OnDeleteConfirmation(fieldName: string): void {
+function OnDeleteConfirmation(
+  fieldName: string,
+  fields: Field[],
+  rdfFields: string[] | undefined
+): void {
+  fields.forEach((field, index) => {
+    if (field?.fieldShortName === fieldName) fields.splice(index, 1);
+  });
+  TriggerRefetchGuest(rdfFields, fields);
   RemoveField(personFieldToRdfMap[fieldName]);
-  //TODO refetch as in room refresh here
-  // setFieldValueInParent("<Field was deleted>");
+  RevalidateGuest(rdfFields);
 }
 
-function ProfileField({ field }: { field: Field }): JSX.Element {
+function ProfileField({
+  field,
+  guestFields,
+  rdfFields,
+}: {
+  field: Field;
+  guestFields: Field[];
+  rdfFields: string[] | undefined;
+}): JSX.Element {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
   const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
 
@@ -52,13 +78,17 @@ function ProfileField({ field }: { field: Field }): JSX.Element {
       </Grid>
       <EditFieldPopup
         field={field}
-        onConfirmation={OnEditConfirmation}
+        onConfirmation={(fieldName, newValue) =>
+          OnEditConfirmation(fieldName, newValue, guestFields, rdfFields)
+        }
         isPopupShowing={isEditPopupShowing}
         setPopupVisibility={setEditPopupVisibility}
       />
       <DeleteFieldPopup
         fieldName={field.fieldShortName}
-        onConfirmation={OnDeleteConfirmation}
+        onConfirmation={(fieldName) =>
+          OnDeleteConfirmation(fieldName, guestFields, rdfFields)
+        }
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
       />

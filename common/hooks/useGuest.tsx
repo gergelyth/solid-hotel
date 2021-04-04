@@ -1,10 +1,13 @@
 import { getLiteral } from "@inrupt/solid-client";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
 import { GetProfile, SolidProfile } from "../util/solid";
 
-const swrKey = "guest";
+function CreateSwrKey(rdfNames: string[] | undefined): string[] | null {
+  const swrKey = "guest";
+  return rdfNames ? [swrKey, rdfNames.join()] : null;
+}
 
 function GetFieldValues(
   solidProfile: SolidProfile | null,
@@ -46,14 +49,22 @@ export function useGuest(
     );
   };
 
-  const { data, error } = useSWR(
-    () => (rdfNames ? [swrKey, rdfNames.join()] : null),
-    fetcher
-  );
+  const { data, error } = useSWR(() => CreateSwrKey(rdfNames), fetcher);
 
   return {
     guestFields: data,
     isLoading: !error && !data,
     isError: error,
   };
+}
+
+export function RevalidateGuest(rdfNames: string[] | undefined): void {
+  mutate(CreateSwrKey(rdfNames));
+}
+
+export function TriggerRefetchGuest(
+  rdfNames: string[] | undefined,
+  newFieldList: Field[]
+): void {
+  mutate(CreateSwrKey(rdfNames), newFieldList, false);
 }

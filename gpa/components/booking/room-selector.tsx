@@ -47,8 +47,8 @@ function RoomElements({
   selectedRoomId,
   setSelectedRoomId,
 }: {
-  selectedRoomId: string | undefined;
-  setSelectedRoomId: Dispatch<SetStateAction<string | undefined>>;
+  selectedRoomId: string;
+  setSelectedRoomId: Dispatch<SetStateAction<string>>;
 }): JSX.Element {
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
 
@@ -98,8 +98,8 @@ function RoomSelector({
   selectedRoomId,
   setSelectedRoomId,
 }: {
-  selectedRoomId: string | undefined;
-  setSelectedRoomId: Dispatch<SetStateAction<string | undefined>>;
+  selectedRoomId: string;
+  setSelectedRoomId: Dispatch<SetStateAction<string>>;
 }): JSX.Element {
   return (
     <div>

@@ -42,7 +42,7 @@ function ReservationPropertiesPage({
   setCurrentPage: Dispatch<SetStateAction<BookingPage>>;
   setConfirmReservation: Dispatch<SetStateAction<() => () => void>>;
 }): JSX.Element | null {
-  const [selectedRoomId, setSelectedRoomId] = useState<string>();
+  const [selectedRoomId, setSelectedRoomId] = useState<string>("");
   const [checkinDate, setCheckinDate] = useState<Date>();
   const [checkoutDate, setCheckoutDate] = useState<Date>();
 
@@ -82,6 +82,7 @@ function ReservationPropertiesPage({
         <Button
           disabled={
             !selectedRoomId ||
+            selectedRoomId.length === 0 ||
             !checkinDate ||
             !checkoutDate ||
             checkoutDate < checkinDate
