@@ -46,7 +46,10 @@ export function useGuest(
     );
   };
 
-  const { data, error } = useSWR(() => (rdfNames ? swrKey : null), fetcher);
+  const { data, error } = useSWR(
+    () => (rdfNames ? [swrKey, rdfNames.join()] : null),
+    fetcher
+  );
 
   return {
     guestFields: data,
