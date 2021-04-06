@@ -1,6 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import { useState } from "react";
 import EditFieldPopup from "../../../common/components/profile/edit-field-popup";
+import { FieldNameToFieldMap } from "../../../common/util/fields";
 
 function OnConfirmation(fieldName: string, fieldValue: string): void {
   console.log();
@@ -22,8 +23,7 @@ function OfflineCheckinButton(): JSX.Element {
         Check-in
       </Button>
       <EditFieldPopup
-        fieldName="Nationality"
-        fieldValue=""
+        field={FieldNameToFieldMap["nationality"]}
         onConfirmation={OnConfirmation}
         isPopupShowing={isNationalityPopupShowing}
         setPopupVisibility={setNationalityPopupVisibility}

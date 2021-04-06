@@ -18,9 +18,7 @@ export default function Home(): JSX.Element {
               <Typography>Property Management System</Typography>
             </h1>
           </Grid>
-          <Grid item>
-            <Typography>Click on the links to navigate</Typography>
-          </Grid>
+
           <Grid item>
             <LoginButtonComponent />
           </Grid>
