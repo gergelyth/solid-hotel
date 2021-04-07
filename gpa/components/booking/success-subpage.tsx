@@ -15,9 +15,8 @@ function BookingSuccessPage({
 
   return (
     <Box>
-      <h2>
-        <Typography>Reservation successful!</Typography>
-      </h2>
+      <Typography variant="h5">Reservation successful!</Typography>
+
       <Button
         variant="contained"
         color="primary"

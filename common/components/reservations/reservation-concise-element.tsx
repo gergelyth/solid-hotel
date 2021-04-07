@@ -40,7 +40,7 @@ function ReservationConciseElement({
               </Box>
             </Grid>
             <Grid item>
-              <Typography variant="body2">Hotel details here</Typography>
+              <Typography variant="body2">Hotel name, country</Typography>
               <Typography variant="body2">{nightsStr}</Typography>
               <Typography variant="body2">
                 {format(reservation.dateFrom, "MMMM do, yyyy")} -{" "}
