@@ -2,6 +2,7 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { useReservations } from "../../hooks/useReservations";
 import { NotEmptyItem } from "../../util/helpers";
 import {
+  Box,
   CircularProgress,
   Container,
   Grid,
@@ -47,17 +48,13 @@ function ReservationElements(
   const isArrayNonEmpty = filteredReservations.length > 0;
 
   return isArrayNonEmpty ? (
-    <Grid
-      container
-      spacing={4}
-      justify="center"
-      alignItems="center"
-      direction="column"
-    >
+    <Grid container spacing={1} justify="center" direction="column">
       {items.map((item) => CreateReservationElement(item, reservationElement))}
     </Grid>
   ) : (
-    <Typography>No reservations found.</Typography>
+    <Box fontStyle="italic" textAlign="center">
+      <Typography>No reservations found.</Typography>
+    </Box>
   );
 }
 

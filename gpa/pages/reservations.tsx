@@ -1,46 +1,57 @@
-import { useRouter } from "next/router";
-import ReservationElement from "../../common/components/reservations/reservation-element";
-import ReservationList from "../../common/components/reservations/reservation-list";
-import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetUserReservationsPodUrl } from "../../common/util/solid";
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
+import { ReservationState } from "../../common/types/ReservationState";
+import ReservationStatusList from "../components/reservations/reservation-status-list";
 
 function Reservations(): JSX.Element {
   const userReservationsUrl = GetUserReservationsPodUrl();
-  const router = useRouter();
-
-  function OnReservationClick(
-    event: React.MouseEvent<HTMLElement>,
-    reservation: ReservationAtHotel
-  ): void {
-    router.push(`/reservations/${encodeURIComponent(reservation.id)}`);
-  }
 
   return (
     <Grid
       container
-      spacing={3}
+      spacing={1}
       justify="center"
-      alignItems="center"
+      alignItems="stretch"
       direction="column"
     >
       <Grid item>
-        <h1>
-          <Typography>Your reservations (from user Pod)</Typography>
-        </h1>
+        <Typography variant="h4">
+          <Box textAlign="center">Your reservations</Box>
+        </Typography>
       </Grid>
-      {/* <h2>Reservation count: {reservations.length}</h2> */}
+      <Grid item>
+        <Typography variant="caption">
+          <Box fontStyle="italic" textAlign="center">
+            This is a list of all reservations made across various hotels.
+          </Box>
+          <Box fontStyle="italic" textAlign="center">
+            Actionable reservations are highlighted.
+          </Box>
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography variant="caption"></Typography>
+      </Grid>
 
       <Grid item>
-        <ReservationList
-          reservationsUrl={userReservationsUrl}
-          reservationFilter={() => true}
-          reservationElement={(item: ReservationAtHotel) => (
-            <ReservationElement
-              reservation={item}
-              onClickAction={OnReservationClick}
-            />
-          )}
+        <ReservationStatusList
+          userReservationsUrl={userReservationsUrl}
+          reservationState={ReservationState.ACTIVE}
+          reservationsTitle="Active reservations"
+        />
+      </Grid>
+      <Grid item>
+        <ReservationStatusList
+          userReservationsUrl={userReservationsUrl}
+          reservationState={ReservationState.CONFIRMED}
+          reservationsTitle="Confirmed upcoming reservations"
+        />
+      </Grid>
+      <Grid item>
+        <ReservationStatusList
+          userReservationsUrl={userReservationsUrl}
+          reservationState={ReservationState.PAST || ReservationState.CANCELLED}
+          reservationsTitle="Past and cancelled reservations"
         />
       </Grid>
     </Grid>
