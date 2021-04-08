@@ -13,6 +13,7 @@ function CancelReservationButton({
 }): JSX.Element | null {
   const [isPopupShowing, setPopupVisibility] = useState(false);
 
+  //TODO delete this and disable the button isntead
   if (!reservation) {
     return null;
   }

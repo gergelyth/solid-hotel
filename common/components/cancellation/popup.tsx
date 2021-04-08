@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import {
   Button,
-  Container,
+  Grid,
   Checkbox,
   FormControlLabel,
   Dialog,
@@ -32,7 +32,14 @@ function CancelReservationPopup({
       open={isPopupShowing}
     >
       <DialogTitle id="popup-title">Cancel reservation</DialogTitle>
-      <Container maxWidth="sm">
+      <Grid
+        container
+        spacing={2}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        {/* TODO need grid items everywhere! */}
         <Typography>You intend to cancel the following reservation:</Typography>
         <Typography>{reservation.ownerId}</Typography>
         <Typography>{reservation.roomId}</Typography>
@@ -76,7 +83,7 @@ function CancelReservationPopup({
             Cancel
           </Button>
         </DialogActions>
-      </Container>
+      </Grid>
     </Dialog>
   );
 }

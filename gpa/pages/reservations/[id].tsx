@@ -2,6 +2,8 @@ import { Box } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ReservationDetailsPage from "../../components/checkin/reservation-detail-subpage";
+import CheckinSuccessPage from "../../components/checkin/success-subpage";
+import RequiredFieldsAtCheckin from "../../components/checkin/fields-subpage";
 
 export enum CheckinPage {
   ReservationDetail,
@@ -11,6 +13,13 @@ export enum CheckinPage {
 
 function ReservationDetail(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(CheckinPage.ReservationDetail);
+
+  const [executeCheckin, setExecuteCheckin] = useState<() => () => void>(
+    () => () => {
+      throw new Error("Execute check-in function is null.");
+    }
+  );
+
   const router = useRouter();
 
   let reservationId = router.query.id;
@@ -22,9 +31,18 @@ function ReservationDetail(): JSX.Element {
     <Box>
       <ReservationDetailsPage
         reservationId={reservationId}
+        setExecuteCheckin={setExecuteCheckin}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
+
+      <RequiredFieldsAtCheckin
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        executeCheckin={executeCheckin}
+      />
+
+      <CheckinSuccessPage currentPage={currentPage} />
     </Box>
   );
 }

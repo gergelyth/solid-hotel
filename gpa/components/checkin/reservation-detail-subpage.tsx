@@ -32,10 +32,12 @@ function ConfirmCancellation(reservationId: string): void {
 
 function ReservationDetailsPage({
   reservationId,
+  setExecuteCheckin,
   currentPage,
   setCurrentPage,
 }: {
   reservationId: string | undefined;
+  setExecuteCheckin: Dispatch<SetStateAction<() => () => void>>;
   currentPage: CheckinPage;
   setCurrentPage: Dispatch<SetStateAction<CheckinPage>>;
 }): JSX.Element | null {
@@ -68,8 +70,6 @@ function ReservationDetailsPage({
         />
       </Grid>
 
-      {/* TODO disable these buttons if reservation details is unsuccessful! */}
-
       <Grid item>
         <CancelReservationButton
           reservation={currentReservation}
@@ -81,8 +81,11 @@ function ReservationDetailsPage({
         <Button
           variant="contained"
           color="primary"
+          disabled={!currentReservation}
           onClick={() => {
-            ExecuteCheckin(currentReservation);
+            setExecuteCheckin(() => () => {
+              ExecuteCheckin(currentReservation);
+            });
             setCurrentPage(currentPage + 1);
           }}
         >
