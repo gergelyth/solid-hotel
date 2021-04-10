@@ -1,98 +1,111 @@
-import { HotelWebId } from "../../consts/solidIdentifiers";
+import { HotelWebId, RoomDefinitionsUrl } from "../../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 import { AddReservationToHotelPod } from "../../util/solidhoteladmin";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
+import { CreateRooms } from "./withRooms";
 
 function CreateReservations(): ReservationAtHotel[] {
+  //TODO populate the hotel profiles and data protection information according to data.sql
+  //TODO adjust these according to the fake data created in data.sql
+  //TODO ownerIDs were adjusted = id 3 was extracted to shared, id 7 renamed to 3
+  const owner1 = "https://owner1.fakeprovider.net/profile/card#me";
+  const owner2 = "https://owner1.fakeprovider.net/profile/card#me";
+  const owner3 = "https://owner1.fakeprovider.net/profile/card#me";
+  const owner4 = "https://owner1.fakeprovider.net/profile/card#me";
+  const owner5 = "https://owner1.fakeprovider.net/profile/card#me";
+  const owner6 = "https://owner1.fakeprovider.net/profile/card#me";
+
+  const rooms = CreateRooms();
+
   let id = 200;
   const reservations: ReservationAtHotel[] = [
     {
       id: `reservation${id++}`,
-      ownerId: 1,
+      owner: owner1,
       hotel: HotelWebId,
-      roomId: 2,
+      room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 1, 0),
       dateTo: GetCurrentDatePushedBy(0, 1, 2),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 5,
+      owner: owner5,
       hotel: HotelWebId,
-      roomId: 2,
+      room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 2, 22),
       dateTo: GetCurrentDatePushedBy(0, 2, 25),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 2,
+      owner: owner2,
       hotel: HotelWebId,
-      roomId: 3,
+      room: RoomDefinitionsUrl + rooms[2].id,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 1, 12),
       dateTo: GetCurrentDatePushedBy(0, 1, 17),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 4,
+      owner: owner4,
       hotel: HotelWebId,
-      roomId: 5,
+      room: RoomDefinitionsUrl + rooms[4].id,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 5, 0),
       dateTo: GetCurrentDatePushedBy(0, 5, 7),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 1,
+      owner: owner1,
       hotel: HotelWebId,
-      roomId: 1,
+      room: RoomDefinitionsUrl + rooms[0].id,
       state: ReservationState.CANCELLED,
       dateFrom: GetCurrentDatePushedBy(0, 2, 5),
       dateTo: GetCurrentDatePushedBy(0, 2, 15),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 7,
+      owner: owner3,
       hotel: HotelWebId,
-      roomId: 2,
+      room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.CANCELLED,
       dateFrom: GetCurrentDatePushedBy(0, -3, -5),
       dateTo: GetCurrentDatePushedBy(0, -3, -2),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 4,
+      owner: owner4,
       hotel: HotelWebId,
-      roomId: 4,
+      room: RoomDefinitionsUrl + rooms[3].id,
       state: ReservationState.ACTIVE,
       dateFrom: GetCurrentDatePushedBy(0, 0, -6),
       dateTo: GetCurrentDatePushedBy(0, 0, 4),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 5,
+      owner: owner5,
       hotel: HotelWebId,
-      roomId: 3,
+      room: RoomDefinitionsUrl + rooms[2].id,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(0, -1, -5),
       dateTo: GetCurrentDatePushedBy(0, -1, -2),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 6,
+      owner: owner6,
       hotel: HotelWebId,
-      roomId: 1,
+      room: RoomDefinitionsUrl + rooms[0].id,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(0, 0, -15),
       dateTo: GetCurrentDatePushedBy(0, 0, -11),
     },
     {
       id: `reservation${id++}`,
-      ownerId: 7,
+      owner: owner3,
       hotel: HotelWebId,
-      roomId: 2,
+      room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(-5, -1, 0),
       dateTo: GetCurrentDatePushedBy(-5, 0, -23),

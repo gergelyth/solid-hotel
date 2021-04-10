@@ -13,7 +13,7 @@ function Reservations(): JSX.Element {
     reservation: ReservationAtHotel
   ): void {
     //todo does this work?
-    router.push(`/profile/${encodeURIComponent(reservation.ownerId)}`);
+    // router.push(`/profile/${encodeURIComponent(reservation.owner)}`);
   }
 
   return (

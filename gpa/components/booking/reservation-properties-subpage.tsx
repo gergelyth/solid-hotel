@@ -6,7 +6,10 @@ import RoomSelector from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";
 import DateSelector from "./date-selector";
 import { BookingPage } from "../../pages/booking";
-import { HotelWebId } from "../../../common/consts/solidIdentifiers";
+import {
+  HotelWebId,
+  RoomDefinitionsUrl,
+} from "../../../common/consts/solidIdentifiers";
 
 function BookRoom(
   roomIdString: string | undefined,
@@ -16,20 +19,26 @@ function BookRoom(
   if (!roomIdString || !checkinDate || !checkoutDate) {
     return;
   }
-  //TODO fix this ID nonsense
-  const roomId = +roomIdString.replace("room", "");
+
+  const room = RoomDefinitionsUrl + roomIdString;
+  const session = GetSession();
+
+  const webId = session.info.webId;
+  if (!webId) {
+    return;
+  }
+
   const reservation = {
     //TODO fix this here as well
-    id: `reservation${roomId}`,
-    ownerId: 10,
+    id: "reservation5",
+    owner: webId,
     hotel: HotelWebId,
-    roomId: roomId,
+    room: room,
     state: ReservationState.CONFIRMED,
     dateFrom: checkinDate,
     dateTo: checkoutDate,
   };
 
-  const session = GetSession();
   AddReservation(reservation, session);
   // TODO: POSTER permission not working - currently it's set to EDITOR
   AddReservationToHotelPod(reservation, session);

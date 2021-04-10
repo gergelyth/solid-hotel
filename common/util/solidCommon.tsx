@@ -16,22 +16,20 @@ export function CreateReservationDataset(
   let reservationDataset = createSolidDataset();
 
   let newReservation = createThing({ name: "reservation" });
-  newReservation = addInteger(
+  newReservation = addStringNoLocale(
     newReservation,
-    // TODO: this should be an URL pointing to the ROOM definition
     reservationFieldToRdfMap.room,
-    reservation.roomId
+    reservation.room
   );
   newReservation = addStringNoLocale(
     newReservation,
     reservationFieldToRdfMap.hotel,
     reservation.hotel
   );
-  newReservation = addInteger(
+  newReservation = addStringNoLocale(
     newReservation,
-    // TODO: should this be an URL pointing to the WebID?
     reservationFieldToRdfMap.owner,
-    reservation.ownerId
+    reservation.owner
   );
   newReservation = addInteger(
     newReservation,

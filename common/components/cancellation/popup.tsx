@@ -41,8 +41,8 @@ function CancelReservationPopup({
       >
         {/* TODO need grid items everywhere! */}
         <Typography>You intend to cancel the following reservation:</Typography>
-        <Typography>{reservation.ownerId}</Typography>
-        <Typography>{reservation.roomId}</Typography>
+        <Typography>{reservation.owner}</Typography>
+        <Typography>{reservation.room}</Typography>
         <Typography>
           {reservation.dateFrom.toDateString()} -
           {reservation.dateTo.toDateString()}

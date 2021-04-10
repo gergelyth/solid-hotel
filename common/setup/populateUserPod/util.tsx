@@ -1,4 +1,4 @@
-import { deleteSolidDataset } from "@inrupt/solid-client";
+import { RecursiveDelete } from "../shared";
 import { GetSession, GetUserReservationsPodUrl } from "../../util/solid";
 
 export async function DeleteAllUserReservations(): Promise<void> {
@@ -9,7 +9,5 @@ export async function DeleteAllUserReservations(): Promise<void> {
     return;
   }
 
-  await deleteSolidDataset(reservationsUrl, {
-    fetch: session.fetch,
-  });
+  RecursiveDelete(reservationsUrl, session);
 }

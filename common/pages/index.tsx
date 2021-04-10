@@ -24,7 +24,9 @@ export default function Home(): JSX.Element {
       direction="column"
     >
       <Grid item>
-        <Typography variant="h4">Setup screen</Typography>
+        <Typography variant="h4">
+          Setup screen (open in incognito for now)
+        </Typography>
       </Grid>
 
       <Grid item>

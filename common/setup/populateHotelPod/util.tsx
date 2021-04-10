@@ -1,34 +1,22 @@
-import { deleteSolidDataset } from "@inrupt/solid-client";
 import {
   CancellationsUrl,
   ReservationsUrl,
   RoomDefinitionsUrl,
 } from "../../consts/solidIdentifiers";
 import { GetHotelSession } from "../../util/solidhoteladmin";
+import { RecursiveDelete } from "../shared";
 
 export async function DeleteAllHotelCancellations(): Promise<void> {
   // TODO: get Hotel session here
-  const session = GetHotelSession();
-
-  await deleteSolidDataset(CancellationsUrl, {
-    fetch: session.fetch,
-  });
+  RecursiveDelete(CancellationsUrl, GetHotelSession());
 }
 
 export async function DeleteAllHotelReservations(): Promise<void> {
   // TODO: get Hotel session here
-  const session = GetHotelSession();
-
-  await deleteSolidDataset(ReservationsUrl, {
-    fetch: session.fetch,
-  });
+  RecursiveDelete(ReservationsUrl, GetHotelSession());
 }
 
 export async function DeleteAllHotelRooms(): Promise<void> {
   // TODO: get Hotel session here
-  const session = GetHotelSession();
-
-  await deleteSolidDataset(RoomDefinitionsUrl, {
-    fetch: session.fetch,
-  });
+  RecursiveDelete(RoomDefinitionsUrl, GetHotelSession());
 }

@@ -18,8 +18,8 @@ function ReservationElement({
       }
     >
       <Container maxWidth="sm">
-        <Typography>Owner: {reservation.ownerId}</Typography>
-        <Typography>Room: {reservation.roomId}</Typography>
+        <Typography>Owner: {reservation.owner}</Typography>
+        <Typography>Room: {reservation.room}</Typography>
         <Typography>State: {ReservationState[reservation.state]}</Typography>
         <Typography>
           Check-in date: {reservation.dateFrom.toDateString()}

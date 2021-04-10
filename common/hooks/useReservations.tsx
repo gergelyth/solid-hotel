@@ -24,13 +24,15 @@ function ConvertToReservation(
   // TODO: modify No Id and No Name
   const reservation = {
     id: reservationId,
-    ownerId:
-      getInteger(reservationThing, reservationFieldToRdfMap.owner) ?? 9999999,
+    owner:
+      getStringNoLocale(reservationThing, reservationFieldToRdfMap.owner) ??
+      "<No owner ID>",
     hotel:
       getStringNoLocale(reservationThing, reservationFieldToRdfMap.hotel) ??
       "<No hotel WebId>",
-    roomId:
-      getInteger(reservationThing, reservationFieldToRdfMap.room) ?? 9999999,
+    room:
+      getStringNoLocale(reservationThing, reservationFieldToRdfMap.room) ??
+      "<No room ID>",
     state: getInteger(reservationThing, reservationFieldToRdfMap.state) ?? 0,
     dateFrom:
       getDatetime(reservationThing, reservationFieldToRdfMap.checkinTime) ??
