@@ -1,6 +1,7 @@
 import {
   addDatetime,
   addInteger,
+  addStringNoLocale,
   createSolidDataset,
   createThing,
   setThing,
@@ -20,6 +21,11 @@ export function CreateReservationDataset(
     // TODO: this should be an URL pointing to the ROOM definition
     reservationFieldToRdfMap.room,
     reservation.roomId
+  );
+  newReservation = addStringNoLocale(
+    newReservation,
+    reservationFieldToRdfMap.hotel,
+    reservation.hotel
   );
   newReservation = addInteger(
     newReservation,

@@ -2,6 +2,7 @@ import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import {
   getDatetime,
   getInteger,
+  getStringNoLocale,
   getThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -25,6 +26,9 @@ function ConvertToReservation(
     id: reservationId,
     ownerId:
       getInteger(reservationThing, reservationFieldToRdfMap.owner) ?? 9999999,
+    hotel:
+      getStringNoLocale(reservationThing, reservationFieldToRdfMap.hotel) ??
+      "<No hotel WebId>",
     roomId:
       getInteger(reservationThing, reservationFieldToRdfMap.room) ?? 9999999,
     state: getInteger(reservationThing, reservationFieldToRdfMap.state) ?? 0,

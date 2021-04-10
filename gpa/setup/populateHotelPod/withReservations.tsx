@@ -1,6 +1,7 @@
-import { ReservationAtHotel } from "../../../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../../../common/types/ReservationState";
-import { AddReservationToHotelPod } from "../../../../common/util/solidhoteladmin";
+import { HotelWebId } from "../../../common/consts/solidIdentifiers";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../../common/types/ReservationState";
+import { AddReservationToHotelPod } from "../../../common/util/solidhoteladmin";
 
 export function GetCurrentDatePushedBy(
   yearOffset: number,
@@ -22,6 +23,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 1,
+      hotel: HotelWebId,
       roomId: 2,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 1, 0),
@@ -30,6 +32,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 5,
+      hotel: HotelWebId,
       roomId: 2,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 2, 22),
@@ -38,6 +41,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 2,
+      hotel: HotelWebId,
       roomId: 3,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 1, 12),
@@ -46,6 +50,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 4,
+      hotel: HotelWebId,
       roomId: 5,
       state: ReservationState.CONFIRMED,
       dateFrom: GetCurrentDatePushedBy(0, 5, 0),
@@ -54,6 +59,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 1,
+      hotel: HotelWebId,
       roomId: 1,
       state: ReservationState.CANCELLED,
       dateFrom: GetCurrentDatePushedBy(0, 2, 5),
@@ -62,6 +68,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 3,
+      hotel: HotelWebId,
       roomId: 4,
       state: ReservationState.CANCELLED,
       dateFrom: GetCurrentDatePushedBy(0, 0, -3),
@@ -70,6 +77,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 7,
+      hotel: HotelWebId,
       roomId: 2,
       state: ReservationState.CANCELLED,
       dateFrom: GetCurrentDatePushedBy(0, -3, -5),
@@ -78,6 +86,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 3,
+      hotel: HotelWebId,
       roomId: 1,
       state: ReservationState.ACTIVE,
       dateFrom: GetCurrentDatePushedBy(0, 0, -2),
@@ -86,6 +95,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 4,
+      hotel: HotelWebId,
       roomId: 4,
       state: ReservationState.ACTIVE,
       dateFrom: GetCurrentDatePushedBy(0, 0, -6),
@@ -94,6 +104,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 5,
+      hotel: HotelWebId,
       roomId: 3,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(0, -1, -5),
@@ -102,6 +113,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 6,
+      hotel: HotelWebId,
       roomId: 1,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(0, 0, -15),
@@ -110,6 +122,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 3,
+      hotel: HotelWebId,
       roomId: 4,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(-3, -1, 0),
@@ -118,6 +131,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: `reservation${id++}`,
       ownerId: 7,
+      hotel: HotelWebId,
       roomId: 2,
       state: ReservationState.PAST,
       dateFrom: GetCurrentDatePushedBy(-5, -1, 0),

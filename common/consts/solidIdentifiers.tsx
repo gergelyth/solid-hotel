@@ -1,4 +1,5 @@
 export const HotelPod = "https://solidhotel.inrupt.net/";
+export const HotelWebId = "https://solidhotel.inrupt.net/profile/card#me";
 
 const ReservationAddress = "reservations/";
 const RoomDefinitionAddress = "rooms/";

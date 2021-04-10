@@ -14,9 +14,11 @@ import { RoomDefinition } from "../types/RoomDefinition";
 import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
 import { CreateReservationDataset } from "./solidCommon";
 import {
+  HotelWebId,
   ReservationsUrl,
   RoomDefinitionsUrl,
 } from "../consts/solidIdentifiers";
+import { GetProfileOf, SetFieldInSolidProfile } from "./solid";
 
 // import { NotFoundError } from "./errors";
 
@@ -28,6 +30,16 @@ import {
 function GetHotelSession(): Session {
   // TODO: temporarily, we should retrieve the hotel's session here
   return getDefaultSession();
+}
+
+export async function SetHotelProfileField(
+  field: string,
+  value: string
+): Promise<void> {
+  const session = GetHotelSession();
+  const hotelProfile = await GetProfileOf(HotelWebId, session);
+
+  SetFieldInSolidProfile(hotelProfile, field, value, session);
 }
 
 // async function GetReservationDataSet(

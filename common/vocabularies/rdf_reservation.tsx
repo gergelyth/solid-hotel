@@ -4,6 +4,7 @@ export const reservationFieldToRdfMap: Record<string, string> = {
   rdfType: SCHEMA_INRUPT_EXT.LodgingReservation,
   // TODO: find something for these
   owner: "schema:owner",
+  hotel: "schema:reservationAt",
   room: "schema:reservationFor",
   // TODO: find something for these
   state: "schema:state",

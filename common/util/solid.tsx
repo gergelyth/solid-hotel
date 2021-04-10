@@ -26,6 +26,7 @@ import { CreateReservationDataset } from "./solidCommon";
 export type SolidProfile = {
   profileAddress: string;
   profile: Thing | null;
+  //TODO we probably don't need these
   dataSet: SolidDataset | null;
 };
 
@@ -100,17 +101,23 @@ export async function GetProfile(
     return null;
   }
 
-  const solidPodAddress = GetPodOfSession(session);
-  if (!solidPodAddress) {
+  return GetProfileOf(session.info.webId, session);
+}
+
+export async function GetProfileOf(
+  webId: string | undefined,
+  session: Session = GetSession()
+): Promise<SolidProfile | null> {
+  if (!webId) {
     return null;
   }
 
-  const profileAddress = solidPodAddress + "/profile/card";
+  const profileAddress = webId.split("#")[0];
   const dataSet = await getSolidDataset(profileAddress, {
     fetch: session.fetch,
   });
 
-  const profile = getThing(dataSet, session.info.webId);
+  const profile = getThing(dataSet, webId);
 
   return { profileAddress, profile, dataSet };
 }
@@ -134,6 +141,15 @@ export async function SetField(field: string, value: string): Promise<void> {
   const session = getDefaultSession();
   const solidProfile = await GetProfile();
 
+  return SetFieldInSolidProfile(solidProfile, field, value, session);
+}
+
+export async function SetFieldInSolidProfile(
+  solidProfile: SolidProfile | null,
+  field: string,
+  value: string,
+  session: Session
+): Promise<void> {
   if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
     throw new NotFoundError("Profile not found.");
   }

@@ -6,6 +6,7 @@ import RoomSelector from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";
 import DateSelector from "./date-selector";
 import { BookingPage } from "../../pages/booking";
+import { HotelWebId } from "../../../common/consts/solidIdentifiers";
 
 function BookRoom(
   roomIdString: string | undefined,
@@ -21,6 +22,7 @@ function BookRoom(
     //TODO fix this here as well
     id: `reservation${roomId}`,
     ownerId: 10,
+    hotel: HotelWebId,
     roomId: roomId,
     state: ReservationState.CONFIRMED,
     dateFrom: checkinDate,
