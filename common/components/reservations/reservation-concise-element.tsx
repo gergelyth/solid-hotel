@@ -8,8 +8,9 @@ import {
   CardActionArea,
   Typography,
 } from "@material-ui/core";
-import { format, eachDayOfInterval } from "date-fns";
 import HotelIcon from "@material-ui/icons/Hotel";
+import { GetHotelInformation } from "./hotel-details";
+import { GetNightCount, GetStayInterval } from "./stay-details";
 
 function ReservationConciseElement({
   reservation,
@@ -18,12 +19,7 @@ function ReservationConciseElement({
   reservation: ReservationAtHotel;
   onClickAction: ReservationClickHandler;
 }): JSX.Element {
-  const intervalDays = eachDayOfInterval({
-    start: reservation.dateFrom,
-    end: reservation.dateTo,
-  });
-  const nightCount = intervalDays.length - 1;
-  const nightsStr = `${nightCount} nights`;
+  const hotelDetails = GetHotelInformation(reservation.hotel);
 
   return (
     <Card
@@ -40,11 +36,12 @@ function ReservationConciseElement({
               </Box>
             </Grid>
             <Grid item>
-              <Typography variant="body2">Hotel name, country</Typography>
-              <Typography variant="body2">{nightsStr}</Typography>
+              <Typography variant="body2">{hotelDetails}</Typography>
               <Typography variant="body2">
-                {format(reservation.dateFrom, "MMMM do, yyyy")} -{" "}
-                {format(reservation.dateTo, "MMMM do, yyyy")}
+                {GetNightCount(reservation)}
+              </Typography>
+              <Typography variant="body2">
+                {GetStayInterval(reservation)}
               </Typography>
             </Grid>
           </Grid>

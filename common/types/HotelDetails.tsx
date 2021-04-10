@@ -3,4 +3,5 @@ export type HotelDetails = {
   name: string;
   //TODO this should be NamedNode? because we will use the RDf names for countries
   location: string;
+  address: string;
 };

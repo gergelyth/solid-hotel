@@ -49,7 +49,9 @@ function ReservationElements(
 
   return isArrayNonEmpty ? (
     <Grid container spacing={1} justify="center" direction="column">
-      {items.map((item) => CreateReservationElement(item, reservationElement))}
+      {filteredReservations.map((item) =>
+        CreateReservationElement(item, reservationElement)
+      )}
     </Grid>
   ) : (
     <Box fontStyle="italic" textAlign="center">

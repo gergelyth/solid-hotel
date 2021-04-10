@@ -6,7 +6,8 @@ import {
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { RoomDefinition } from "../types/RoomDefinition";
 import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
+import { GetDataSet } from "../util/solid";
 
 const swrKey = "rooms";
 
@@ -25,7 +26,8 @@ function ConvertToRoomDefinition(
   // TODO: modify No Id and No Name
   const room = {
     id: roomId,
-    name: getStringNoLocale(roomThing, roomFieldToRdfMap.name) ?? "No name",
+    name:
+      getStringNoLocale(roomThing, roomFieldToRdfMap.name) ?? "<No room name>",
     description:
       getStringNoLocale(roomThing, roomFieldToRdfMap.description) ?? undefined,
   };
@@ -45,6 +47,34 @@ export function useRooms(
     roomDefinitionsUrl,
     ConvertToRoomDefinition
   );
+}
+
+export function useSpecificRoom(
+  roomUrl: string | undefined
+): {
+  room: RoomDefinition | null | undefined;
+  isLoading: boolean;
+  isError: boolean;
+} {
+  const fetcher = (): Promise<RoomDefinition | null | undefined> => {
+    if (!roomUrl) {
+      return Promise.resolve(undefined);
+    }
+    return GetDataSet(roomUrl).then((roomDataset) =>
+      ConvertToRoomDefinition(roomDataset, roomUrl)
+    );
+  };
+
+  const { data, error } = useSWR(
+    () => (roomUrl ? swrKey + roomUrl : null),
+    fetcher
+  );
+
+  return {
+    room: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
 }
 
 export function Revalidate(): void {

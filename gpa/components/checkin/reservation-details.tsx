@@ -13,6 +13,12 @@ import {
 import HotelIcon from "@material-ui/icons/Hotel";
 import RoomIcon from "@material-ui/icons/Room";
 import DateRangeIcon from "@material-ui/icons/DateRange";
+import HotelDetails from "../../../common/components/reservations/hotel-details";
+import RoomDetails from "../../../common/components/reservations/room-details";
+import {
+  GetNightCount,
+  GetStayInterval,
+} from "../../../common/components/reservations/stay-details";
 
 function ReservationDetails({
   reservationId,
@@ -81,8 +87,7 @@ function ReservationDetails({
           </Box>
         </Grid>
         <Grid item xs={10}>
-          <Typography variant="body2">Hotel name, country</Typography>
-          <Typography variant="body2">Street address</Typography>
+          <HotelDetails hotelWebId={reservationDetail.hotel} />
         </Grid>
       </Grid>
 
@@ -94,9 +99,8 @@ function ReservationDetails({
         component={PaperComponent}
       >
         <Grid item xs={10}>
-          <Typography variant="body2">Room name</Typography>
           {/* TODO force paper to stretch to max width always */}
-          <Typography variant="body2">no desc</Typography>
+          <RoomDetails roomUrl={reservationDetail.room} />
         </Grid>
         <Grid item xs={2}>
           <Box fontSize={40}>
@@ -118,8 +122,12 @@ function ReservationDetails({
           </Box>
         </Grid>
         <Grid item xs={10}>
-          <Typography variant="body2">Night count</Typography>
-          <Typography variant="body2">Dates</Typography>
+          <Typography variant="body2">
+            {GetNightCount(reservationDetail)}
+          </Typography>
+          <Typography variant="body2">
+            {GetStayInterval(reservationDetail)}
+          </Typography>
         </Grid>
       </Grid>
     </Box>

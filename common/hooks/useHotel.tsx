@@ -4,6 +4,8 @@ import { HotelDetails } from "../types/HotelDetails";
 import { GetProfileOf } from "../util/solid";
 import { hotelFieldToRdfMap } from "../vocabularies/rdf_hotel";
 
+const swrKey = "hotel";
+
 function ConvertToHotelDetails(
   hotelProfile: Thing | null | undefined,
   hotelWebId: string | undefined
@@ -20,6 +22,9 @@ function ConvertToHotelDetails(
     location:
       getStringNoLocale(hotelProfile, hotelFieldToRdfMap.location) ??
       "<No hotel location>",
+    address:
+      getStringNoLocale(hotelProfile, hotelFieldToRdfMap.address) ??
+      "<No hotel address>",
   };
 
   return hotel;
@@ -38,7 +43,10 @@ export function useHotel(
     );
   };
 
-  const { data, error } = useSWR(() => hotelWebId ?? null, fetcher);
+  const { data, error } = useSWR(
+    () => (hotelWebId ? swrKey + hotelWebId : null),
+    fetcher
+  );
 
   return {
     hotelDetails: data,
