@@ -1,24 +1,11 @@
-import { HotelWebId } from "../../../common/consts/solidIdentifiers";
-import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../../common/types/ReservationState";
-import { AddReservationToHotelPod } from "../../../common/util/solidhoteladmin";
-
-export function GetCurrentDatePushedBy(
-  yearOffset: number,
-  monthOffset: number,
-  dayOffset: number
-): Date {
-  const date = new Date();
-  const year = date.getFullYear() + yearOffset;
-  const month = date.getMonth() + monthOffset;
-  const day = date.getDate() + dayOffset;
-
-  date.setFullYear(year, month, day);
-  return date;
-}
+import { HotelWebId } from "../../consts/solidIdentifiers";
+import { ReservationAtHotel } from "../../types/ReservationAtHotel";
+import { ReservationState } from "../../types/ReservationState";
+import { AddReservationToHotelPod } from "../../util/solidhoteladmin";
+import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 
 function CreateReservations(): ReservationAtHotel[] {
-  let id = 0;
+  let id = 200;
   const reservations: ReservationAtHotel[] = [
     {
       id: `reservation${id++}`,
@@ -67,30 +54,12 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
-      ownerId: 3,
-      hotel: HotelWebId,
-      roomId: 4,
-      state: ReservationState.CANCELLED,
-      dateFrom: GetCurrentDatePushedBy(0, 0, -3),
-      dateTo: GetCurrentDatePushedBy(0, 0, 3),
-    },
-    {
-      id: `reservation${id++}`,
       ownerId: 7,
       hotel: HotelWebId,
       roomId: 2,
       state: ReservationState.CANCELLED,
       dateFrom: GetCurrentDatePushedBy(0, -3, -5),
       dateTo: GetCurrentDatePushedBy(0, -3, -2),
-    },
-    {
-      id: `reservation${id++}`,
-      ownerId: 3,
-      hotel: HotelWebId,
-      roomId: 1,
-      state: ReservationState.ACTIVE,
-      dateFrom: GetCurrentDatePushedBy(0, 0, -2),
-      dateTo: GetCurrentDatePushedBy(0, 0, 3),
     },
     {
       id: `reservation${id++}`,
@@ -121,15 +90,6 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
-      ownerId: 3,
-      hotel: HotelWebId,
-      roomId: 4,
-      state: ReservationState.PAST,
-      dateFrom: GetCurrentDatePushedBy(-3, -1, 0),
-      dateTo: GetCurrentDatePushedBy(-3, 0, -15),
-    },
-    {
-      id: `reservation${id++}`,
       ownerId: 7,
       hotel: HotelWebId,
       roomId: 2,
@@ -142,8 +102,12 @@ function CreateReservations(): ReservationAtHotel[] {
   return reservations;
 }
 
-export default function PopulateHotelPodWithReservations(): void {
-  const reservations = CreateReservations();
+export default function PopulateHotelPodWithReservations(
+  userWebId: string
+): void {
+  const reservations = CreateReservations().concat(
+    GetSharedReservations(userWebId)
+  );
   reservations.forEach((reservation: ReservationAtHotel) =>
     AddReservationToHotelPod(reservation)
   );

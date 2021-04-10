@@ -27,7 +27,7 @@ import { GetProfileOf, SetFieldInSolidProfile } from "./solid";
 //   dataSet: SolidDataset | null;
 // };
 
-function GetHotelSession(): Session {
+export function GetHotelSession(): Session {
   // TODO: temporarily, we should retrieve the hotel's session here
   return getDefaultSession();
 }
