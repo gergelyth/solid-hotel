@@ -61,9 +61,6 @@ function RequiredFieldsAtCheckin({
         <Typography variant="h4">Check-in</Typography>
       </Grid>
       <Grid item>
-        <Typography>Hotel name, location</Typography>
-      </Grid>
-      <Grid item>
         <Typography variant="subtitle2">
           <Box mx={3} textAlign="center">
             By clicking Proceed, you agree to the points set out in our{" "}

@@ -98,14 +98,13 @@ function ReservationDetails({
         direction="row"
         component={PaperComponent}
       >
-        <Grid item xs={10}>
-          {/* TODO force paper to stretch to max width always */}
-          <RoomDetails roomUrl={reservationDetail.room} />
-        </Grid>
         <Grid item xs={2}>
           <Box fontSize={40}>
             <HotelIcon fontSize="inherit" />
           </Box>
+        </Grid>
+        <Grid item xs={10}>
+          <RoomDetails roomUrl={reservationDetail.room} />
         </Grid>
       </Grid>
 
