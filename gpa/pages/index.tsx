@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import { GetActiveReservations } from "./checkout";
+import { GetActiveReservations } from "../components/checkout/reservationselect-subpage";
 import { GetUserReservationsPodUrl } from "../../common/util/solid";
 import {
   Button,
@@ -10,10 +10,6 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-// import { SetField } from "../util/solid";
-// import { personFieldToRdfMap } from "../vocabularies/rdf_person";
-// import PopulateHotelPodWithReservations from "../test/setup/populateHotelPod/withReservations";
-// import PopulateHotelPodWithRooms from "../test/setup/populateHotelPod/withRooms";
 
 function CheckoutButton(
   reservations: (ReservationAtHotel | null)[] | undefined,
@@ -24,11 +20,13 @@ function CheckoutButton(
     return <CircularProgress />;
   }
 
-  if (isError) {
-    <Container maxWidth="sm">
-      <Typography>An error occurred.</Typography>
-      <Typography>{isError}</Typography>
-    </Container>;
+  if (isError || !reservations) {
+    return (
+      <Container maxWidth="sm">
+        <Typography>An error occurred.</Typography>
+        <Typography>{isError}</Typography>
+      </Container>
+    );
   }
 
   if (GetActiveReservations(reservations).length == 0) {
@@ -65,29 +63,6 @@ export default function Home(): JSX.Element {
       <Grid item>
         <Typography variant="h4">Guest Portal Application</Typography>
       </Grid>
-
-      {/* <button
-          onClick={async () => {
-            await SetField(personFieldToRdfMap.nationality, "Spanish");
-          }}
-        >
-          Set nationality
-        </button> */}
-      {/* <button
-          onClick={async () => {
-            await SetField(personFieldToRdfMap.firstName, "Stephen");
-          }}
-        >
-          Set first name to Stephen
-        </button>
-
-        <button onClick={PopulateHotelPodWithReservations}>
-          Populate hotel Pod with reservations (signed into HotelPod)
-        </button>
-
-        <button onClick={PopulateHotelPodWithRooms}>
-          Populate hotel Pod with rooms (signed into HotelPod)
-        </button> */}
 
       <Grid item>
         <Link href="/booking">

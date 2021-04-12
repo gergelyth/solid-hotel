@@ -1,16 +1,14 @@
 import { Button } from "@material-ui/core";
-import { NextRouter, useRouter } from "next/router";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 import { SetReservationState } from "../../../common/util/solid";
 
 function Checkout(
-  reservationId: string | undefined,
-  dataProtectionInformation: DataProtectionInformation | undefined,
-  router: NextRouter
+  reservationId: string,
+  dataProtectionInformation: DataProtectionInformation | undefined
 ): void {
-  if (!reservationId) {
+  if (reservationId === "") {
     return;
   }
 
@@ -19,28 +17,28 @@ function Checkout(
   console.log(dataProtectionInformation?.dataProtectionFieldsMatch);
   console.log(dataProtectionInformation?.dataProtectionFields);
 
-  SetReservationState(reservationId, ReservationState.PAST);
+  // SetReservationState(reservationId, ReservationState.PAST);
   // TODO: set past state on the hotel side
-
-  router.push("/checkout/success");
 }
 
 function CheckoutButton({
   reservationId,
+  onClickFunction,
 }: {
-  reservationId: string | undefined;
+  reservationId: string;
+  onClickFunction: () => void;
 }): JSX.Element {
-  const router = useRouter();
   const dataProtectionInformation = useDataProtectionInformation();
 
   return (
     <Button
       variant="contained"
       color="primary"
-      disabled={!reservationId}
-      onClick={() =>
-        Checkout(reservationId, dataProtectionInformation.data, router)
-      }
+      disabled={reservationId === ""}
+      onClick={() => {
+        Checkout(reservationId, dataProtectionInformation.data);
+        onClickFunction();
+      }}
     >
       Checkout
     </Button>
