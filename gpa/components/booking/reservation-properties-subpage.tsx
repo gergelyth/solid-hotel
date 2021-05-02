@@ -1,7 +1,10 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { ReservationState } from "../../../common/types/ReservationState";
-import { AddReservation, GetSession } from "../../../common/util/solid";
-import { AddReservationToHotelPod } from "../../../common/util/solidhoteladmin";
+import {
+  AddReservation,
+  GetReservationInboxUrl,
+  GetSession,
+} from "../../../common/util/solid";
 import RoomSelector from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";
 import DateSelector from "./date-selector";
@@ -10,6 +13,7 @@ import {
   HotelWebId,
   RoomDefinitionsUrl,
 } from "../../../common/consts/solidIdentifiers";
+import { SubmitBookingRequest } from "../../util/hotelpodcommunications";
 
 function BookRoom(
   roomIdString: string | undefined,
@@ -31,17 +35,18 @@ function BookRoom(
   const reservation = {
     //TODO fix this here as well
     id: "reservation5",
+    inbox: GetReservationInboxUrl(session),
     owner: webId,
     hotel: HotelWebId,
     room: room,
-    state: ReservationState.CONFIRMED,
+    state: ReservationState.WAITING_FOR_CONFIRMATION,
     dateFrom: checkinDate,
     dateTo: checkoutDate,
   };
 
   AddReservation(reservation, session);
-  // TODO: POSTER permission not working - currently it's set to EDITOR
-  AddReservationToHotelPod(reservation, session);
+  SubmitBookingRequest(reservation, session);
+  //TODO subscribe to inbox - possibly wait for solid-client implementation
 }
 
 function ReservationPropertiesPage({

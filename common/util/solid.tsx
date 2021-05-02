@@ -31,6 +31,7 @@ export type SolidProfile = {
 };
 
 const reservationAddress = "reservations/";
+const reservationInbox = "reservations/inbox";
 
 export async function CheckIfLoggedIn(): Promise<boolean> {
   const session = getDefaultSession();
@@ -176,6 +177,40 @@ export async function RemoveField(field: string): Promise<void> {
   await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {
     fetch: session.fetch,
   });
+}
+
+export function GetReservationInboxUrl(
+  session: Session = getDefaultSession()
+): string | null {
+  const podOfSession = GetPodOfSession(session);
+  if (!podOfSession) {
+    return null;
+  }
+  const inboxUrl = podOfSession + "/" + reservationInbox;
+  CreateInboxIfNecessary(inboxUrl, session);
+  return inboxUrl;
+}
+
+export function GetReservationInboxFromWebId(webId: string): string {
+  return webId.replace("profile/card#me", reservationInbox);
+}
+
+async function CreateInboxIfNecessary(
+  inboxUrl: string,
+  session: Session = getDefaultSession()
+): Promise<void> {
+  const dataSet = await getSolidDataset(inboxUrl, {
+    fetch: session.fetch,
+  });
+
+  if (dataSet) {
+    return;
+  }
+
+  await saveSolidDatasetAt(inboxUrl, createSolidDataset(), {
+    fetch: session.fetch,
+  });
+  //TODO we have to set the Submitter permission here!
 }
 
 export async function AddReservation(

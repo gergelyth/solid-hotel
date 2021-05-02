@@ -12,6 +12,7 @@ import {
 } from "../setup/populateHotelPod/util";
 import { DeleteAllUserReservations } from "../setup/populateUserPod/util";
 import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
+import { GetSession } from "../util/solid";
 
 // TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
@@ -24,16 +25,29 @@ export default function Home(): JSX.Element {
       direction="column"
     >
       <Grid item>
-        <Typography variant="h4">
-          Setup screen (open in incognito for now)
+        <Typography variant="h4">Setup screen</Typography>
+      </Grid>
+
+      <Grid item>
+        <DynamicLoginComponent />
+      </Grid>
+      <Grid item>
+        <Typography variant="body1">
+          Logged in as: {GetSession()?.info.webId ?? "NOT LOGGED IN"}
         </Typography>
       </Grid>
 
       <Grid item>
-        <Typography variant="h6">
-          Hotel Pod setup (TODO currently needs a manual hotel login - redo this
-          to use the secrets)
+        <Typography variant="h6">Test accounts:</Typography>
+        <Typography variant="subtitle1">{HotelWebId}</Typography>
+        {/* TODO: change this! */}
+        <Typography variant="subtitle1">
+          https://gergelyth.inrupt.net/profile/card#me
         </Typography>
+      </Grid>
+
+      <Grid item>
+        <Typography variant="h6">Hotel Pod setup</Typography>
       </Grid>
 
       <Grid item>
@@ -93,17 +107,14 @@ export default function Home(): JSX.Element {
             >
               Add reservations
             </Button>
+            {/* TODO make rooms public programatically */}
             <Button onClick={PopulateHotelPodWithRooms}>Add rooms</Button>
           </ButtonGroup>
         </Grid>
       </Grid>
 
       <Grid item>
-        <Typography variant="h6">Guest Pod setup - log in to work</Typography>
-      </Grid>
-
-      <Grid item>
-        <DynamicLoginComponent />
+        <Typography variant="h6">Guest Pod setup</Typography>
       </Grid>
 
       <Grid container spacing={3} alignItems="center" justify="center">

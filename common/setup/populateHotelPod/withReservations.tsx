@@ -22,6 +22,7 @@ function CreateReservations(): ReservationAtHotel[] {
   const reservations: ReservationAtHotel[] = [
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner1,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,
@@ -31,6 +32,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner5,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,
@@ -40,6 +42,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner2,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[2].id,
@@ -49,6 +52,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner4,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[4].id,
@@ -58,6 +62,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner1,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[0].id,
@@ -67,6 +72,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner3,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,
@@ -76,6 +82,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner4,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[3].id,
@@ -85,6 +92,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner5,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[2].id,
@@ -94,6 +102,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner6,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[0].id,
@@ -103,6 +112,7 @@ function CreateReservations(): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: null,
       owner: owner3,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,

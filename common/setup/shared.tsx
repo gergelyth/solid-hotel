@@ -7,6 +7,7 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
+import { GetReservationInboxFromWebId } from "../util/solid";
 import { CreateRooms } from "./populateHotelPod/withRooms";
 
 export async function RecursiveDelete(
@@ -40,10 +41,12 @@ export function GetCurrentDatePushedBy(
 export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
   const rooms = CreateRooms();
 
+  const reservationInboxUrl = GetReservationInboxFromWebId(userWebId);
   let id = 400;
   const sharedReservations: ReservationAtHotel[] = [
     {
       id: `reservation${id++}`,
+      inbox: reservationInboxUrl,
       owner: userWebId,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[3].id,
@@ -53,6 +56,7 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: reservationInboxUrl,
       owner: userWebId,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[0].id,
@@ -62,6 +66,7 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
     },
     {
       id: `reservation${id++}`,
+      inbox: reservationInboxUrl,
       owner: userWebId,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[3].id,
