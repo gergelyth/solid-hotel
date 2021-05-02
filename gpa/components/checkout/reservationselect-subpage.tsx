@@ -93,6 +93,7 @@ function ReservationSelectForCheckout({
       <Grid item>
         <CheckoutButton
           reservationId={selectedReservationId}
+          reservations={filteredReservations}
           onClickFunction={() => setCurrentPage(currentPage + 1)}
         />
       </Grid>

@@ -43,10 +43,14 @@ function Reservations(): JSX.Element {
       <Grid item>
         <ReservationStatusList
           userReservationsUrl={userReservationsUrl}
-          reservationState={
-            ReservationState.CONFIRMED ||
-            ReservationState.WAITING_FOR_CONFIRMATION
-          }
+          reservationState={ReservationState.REQUESTED}
+          reservationsTitle="Requested reservations"
+        />
+      </Grid>
+      <Grid item>
+        <ReservationStatusList
+          userReservationsUrl={userReservationsUrl}
+          reservationState={ReservationState.CONFIRMED}
           reservationsTitle="Confirmed upcoming reservations"
         />
       </Grid>

@@ -72,6 +72,7 @@ export default function Home(): JSX.Element {
                 await DeleteAllHotelCancellations();
               }}
             >
+              {/* TODO clear inbox here instead of this */}
               Clear cancellations
             </Button>
             <Button

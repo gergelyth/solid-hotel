@@ -1,5 +1,5 @@
 export enum ReservationState {
-  WAITING_FOR_CONFIRMATION,
+  REQUESTED,
   CONFIRMED,
   ACTIVE,
   PAST,

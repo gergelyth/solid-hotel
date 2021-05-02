@@ -24,6 +24,7 @@ function ConvertToReservation(
   // TODO: modify No Id and No Name
   const reservation = {
     id: reservationId,
+    inbox: getStringNoLocale(reservationThing, reservationFieldToRdfMap.inbox),
     owner:
       getStringNoLocale(reservationThing, reservationFieldToRdfMap.owner) ??
       "<No owner ID>",

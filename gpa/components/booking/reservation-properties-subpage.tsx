@@ -39,7 +39,7 @@ function BookRoom(
     owner: webId,
     hotel: HotelWebId,
     room: room,
-    state: ReservationState.WAITING_FOR_CONFIRMATION,
+    state: ReservationState.REQUESTED,
     dateFrom: checkinDate,
     dateTo: checkoutDate,
   };
@@ -47,6 +47,7 @@ function BookRoom(
   AddReservation(reservation, session);
   SubmitBookingRequest(reservation, session);
   //TODO subscribe to inbox - possibly wait for solid-client implementation
+  //TODO hotel adds the complete reservation to the inbox (until then we show the previous state) and we just overwrite the existing one in the user pod
 }
 
 function ReservationPropertiesPage({

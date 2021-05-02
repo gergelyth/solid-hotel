@@ -1,42 +1,40 @@
 import { Button } from "@material-ui/core";
-import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
-import { ReservationState } from "../../../common/types/ReservationState";
-import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
-import { SetReservationState } from "../../../common/util/solid";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { SubmitCheckoutRequest } from "../../util/hotelpodcommunications";
 
 function Checkout(
   reservationId: string,
-  dataProtectionInformation: DataProtectionInformation | undefined
+  reservations: ReservationAtHotel[]
 ): void {
   if (reservationId === "") {
     return;
   }
 
-  // TODO: set data protection information
-  console.log(dataProtectionInformation?.dataProtectionYears);
-  console.log(dataProtectionInformation?.dataProtectionFieldsMatch);
-  console.log(dataProtectionInformation?.dataProtectionFields);
+  const reservation = reservations.find((x) => x.id === reservationId);
+  if (!reservation) {
+    //TODO error handling
+    return;
+  }
 
-  // SetReservationState(reservationId, ReservationState.PAST);
-  // TODO: set past state on the hotel side
+  SubmitCheckoutRequest(reservation);
 }
 
 function CheckoutButton({
   reservationId,
+  reservations,
   onClickFunction,
 }: {
   reservationId: string;
+  reservations: ReservationAtHotel[];
   onClickFunction: () => void;
 }): JSX.Element {
-  const dataProtectionInformation = useDataProtectionInformation();
-
   return (
     <Button
       variant="contained"
       color="primary"
       disabled={reservationId === ""}
       onClick={() => {
-        Checkout(reservationId, dataProtectionInformation.data);
+        Checkout(reservationId, reservations);
         onClickFunction();
       }}
     >

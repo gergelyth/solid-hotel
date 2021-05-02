@@ -9,7 +9,7 @@ function CancelReservationButton({
   confirmCancellation,
 }: {
   reservation: ReservationAtHotel | undefined;
-  confirmCancellation: (reservationId: string) => void;
+  confirmCancellation: (reservation: ReservationAtHotel) => void;
 }): JSX.Element | null {
   const [isPopupShowing, setPopupVisibility] = useState(false);
 

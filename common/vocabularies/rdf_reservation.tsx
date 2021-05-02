@@ -3,6 +3,8 @@
 export const reservationFieldToRdfMap: Record<string, string> = {
   // rdfType: SCHEMA_INRUPT_EXT.LodgingReservation,
   rdfType: "schema:lodgingReservation",
+  id: "schema:reservationId",
+  inbox: "ldp:inbox",
   // TODO: find something for these
   owner: "schema:owner",
   hotel: "schema:reservationAt",

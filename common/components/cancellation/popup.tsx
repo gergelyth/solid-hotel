@@ -25,7 +25,7 @@ function CancelReservationPopup({
   reservation: ReservationAtHotel;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
-  confirmCancellation: (reservationId: string) => void;
+  confirmCancellation: (reservation: ReservationAtHotel) => void;
 }): JSX.Element | null {
   const [isChecked, setChecked] = useState(false);
 
@@ -108,7 +108,7 @@ function CancelReservationPopup({
                 startIcon={<DeleteIcon />}
                 disabled={!isChecked}
                 onClick={() => {
-                  confirmCancellation(reservation.id);
+                  confirmCancellation(reservation);
                   setPopupVisibility(false);
                 }}
               >

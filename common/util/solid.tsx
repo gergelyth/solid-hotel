@@ -268,19 +268,3 @@ export function CreateCancellationDataset(reservationId: string): SolidDataset {
   cancellationDataset = setThing(cancellationDataset, cancellation);
   return cancellationDataset;
 }
-
-export async function AddCancellationRequest(
-  reservationId: string,
-  cancellationsUrl: string,
-  session = GetSession()
-): Promise<void> {
-  const cancellationDataset = CreateCancellationDataset(reservationId);
-
-  await saveSolidDatasetAt(
-    cancellationsUrl + reservationId,
-    cancellationDataset,
-    {
-      fetch: session.fetch,
-    }
-  );
-}

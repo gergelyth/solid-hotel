@@ -1,15 +1,13 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import CancelReservationButton from "../../../common/components/cancellation/cancellation";
-import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../../common/types/ReservationState";
-import {
-  AddCancellationRequest,
-  SetReservationState,
-} from "../../../common/util/solid";
 import { Grid, Button } from "@material-ui/core";
 import { CheckinPage } from "../../pages/reservations/[id]";
 import ReservationDetails from "./reservation-details";
+import {
+  SubmitCancellationRequest,
+  SubmitCheckinRequest,
+} from "../../util/hotelpodcommunications";
 
 function ExecuteCheckin(
   currentReservation: ReservationAtHotel | undefined
@@ -21,13 +19,11 @@ function ExecuteCheckin(
   }
 
   // TODO: do checks here if check-in is possible
-  SetReservationState(currentReservation.id, ReservationState.ACTIVE);
+  SubmitCheckinRequest(currentReservation);
 }
 
-function ConfirmCancellation(reservationId: string): void {
-  AddCancellationRequest(reservationId, CancellationsUrl);
-  SetReservationState(reservationId, ReservationState.CANCELLED);
-  // TODO: cancel on the hotel side (which will be done in PMS)
+function ConfirmCancellation(reservation: ReservationAtHotel): void {
+  SubmitCancellationRequest(reservation);
 }
 
 function ReservationDetailsPage({
