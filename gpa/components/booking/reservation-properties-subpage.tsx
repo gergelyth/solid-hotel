@@ -14,6 +14,7 @@ import {
   RoomDefinitionsUrl,
 } from "../../../common/consts/solidIdentifiers";
 import { SubmitBookingRequest } from "../../util/hotelpodcommunications";
+import { Subscribe } from "../../../common/util/tracker";
 
 function BookRoom(
   roomIdString: string | undefined,
@@ -32,10 +33,11 @@ function BookRoom(
     return;
   }
 
+  const reservationInbox = GetReservationInboxUrl(session);
   const reservation = {
     //TODO fix this here as well
     id: "reservation5",
-    inbox: GetReservationInboxUrl(session),
+    inbox: reservationInbox,
     owner: webId,
     hotel: HotelWebId,
     room: room,
@@ -47,6 +49,7 @@ function BookRoom(
   AddReservation(reservation, session);
   SubmitBookingRequest(reservation, session);
   //TODO subscribe to inbox - possibly wait for solid-client implementation
+  Subscribe(reservationInbox);
   //TODO hotel adds the complete reservation to the inbox (until then we show the previous state) and we just overwrite the existing one in the user pod
 }
 

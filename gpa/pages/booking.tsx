@@ -1,17 +1,46 @@
+import { useRouter } from "next/router";
+import VerifyingComponent, {
+  VerifyingPage,
+} from "../../common/components/verifying-page";
 import { useState } from "react";
 import { Box, Stepper, Step, StepLabel } from "@material-ui/core";
 import ReservationPropertiesPage from "../components/booking/reservation-properties-subpage";
-import BookingSuccessPage from "../components/booking/success-subpage";
 import RequiredFields from "../components/booking/fields-subpage";
 
 export enum BookingPage {
   ReservationProperties,
   RequiredFields,
-  Success,
+  Finish,
+}
+
+function FinishPage({
+  successText,
+  currentPage,
+}: {
+  successText: string;
+  currentPage: BookingPage;
+}): JSX.Element | null {
+  const router = useRouter();
+  const [currentFinishPage, setCurrentFinishPage] = useState(
+    VerifyingPage.Waiting
+  );
+
+  if (currentPage !== BookingPage.Finish) {
+    return null;
+  }
+
+  return (
+    <VerifyingComponent
+      successText={successText}
+      router={router}
+      currentPage={currentFinishPage}
+      setCurrentPage={setCurrentFinishPage}
+    />
+  );
 }
 
 function GetStepLabels(): string[] {
-  return ["Select room and date", "Input required information", "Success"];
+  return ["Select room and date", "Input required information", "Verifying"];
 }
 
 function Booking(): JSX.Element {
@@ -39,7 +68,10 @@ function Booking(): JSX.Element {
         confirmReservation={confirmReservation}
       />
 
-      <BookingSuccessPage currentPage={currentPage} />
+      <FinishPage
+        successText={"Reservation successful!"}
+        currentPage={currentPage}
+      />
 
       <Stepper activeStep={currentPage} alternativeLabel>
         {GetStepLabels().map((label) => (

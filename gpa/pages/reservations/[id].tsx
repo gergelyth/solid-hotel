@@ -1,14 +1,42 @@
+import VerifyingComponent, {
+  VerifyingPage,
+} from "../../../common/components/verifying-page";
 import { Box } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ReservationDetailsPage from "../../components/checkin/reservation-detail-subpage";
-import CheckinSuccessPage from "../../components/checkin/success-subpage";
 import RequiredFieldsAtCheckin from "../../components/checkin/fields-subpage";
 
 export enum CheckinPage {
   ReservationDetail,
   RequiredFields,
-  Success,
+  Finish,
+}
+
+function FinishPage({
+  successText,
+  currentPage,
+}: {
+  successText: string;
+  currentPage: CheckinPage;
+}): JSX.Element | null {
+  const router = useRouter();
+  const [currentFinishPage, setCurrentFinishPage] = useState(
+    VerifyingPage.Waiting
+  );
+
+  if (currentPage !== CheckinPage.Finish) {
+    return null;
+  }
+
+  return (
+    <VerifyingComponent
+      successText={successText}
+      router={router}
+      currentPage={currentFinishPage}
+      setCurrentPage={setCurrentFinishPage}
+    />
+  );
 }
 
 function ReservationDetail(): JSX.Element {
@@ -42,7 +70,10 @@ function ReservationDetail(): JSX.Element {
         executeCheckin={executeCheckin}
       />
 
-      <CheckinSuccessPage currentPage={currentPage} />
+      <FinishPage
+        successText={"Check-in successful!"}
+        currentPage={currentPage}
+      />
     </Box>
   );
 }
