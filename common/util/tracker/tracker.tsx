@@ -1,4 +1,5 @@
-import { GetSession } from "./solid";
+import { Subscriber, WebSocketResource } from "../../types/WebSocketResource";
+import { GetSession } from "../solid";
 
 //TODO maybe turn of ALL revalidations for certain useSWR keys, e.g. guest
 // manually call refetch when we get a notifications that there is a change
@@ -6,15 +7,16 @@ import { GetSession } from "./solid";
 
 //or get rid of SWR completely and fetch using the Solid functions - if we turn off revalidation we lose its purpose either way
 
-const webSockets: { [host: string]: WebSocket } = {};
+const webSockets: { [host: string]: WebSocketResource } = {};
 
+//TODO what happens to these subscribers if I close the app and come back to it? we need to persist this
 export async function Subscribe(
   url: string,
-  onMessage: (datasetUrl: string) => void
+  subscriber: Subscriber
 ): Promise<void> {
   // Create a new subscription to the resource if none existed
   //   url = url.replace(/#.*/, "");
-  await trackResource(url, onMessage);
+  await trackResource(url, subscriber);
 }
 
 export async function UnSubscribe(url: string): Promise<void> {
@@ -24,28 +26,25 @@ export async function UnSubscribe(url: string): Promise<void> {
 /** Tracks updates to the given resource */
 async function trackResource(
   url: string,
-  onMessage: (datasetUrl: string) => void
+  subscriber: Subscriber
 ): Promise<void> {
   // Obtain a WebSocket for the given host
   const { host } = new URL(url);
   if (!(host in webSockets)) {
-    webSockets[host] = await createWebSocket(url, { host });
+    webSockets[host] = await createWebSocket(url);
   }
 
-  const webSocket = webSockets[host];
-  //TODO we need resources, otherwise we would overwrite the onMessage with every new subscribe
-  webSocket.onmessage = (data) => processMessage(data, onMessage);
+  const webSocketResource = webSockets[host];
+  webSocketResource.subscribers.add(subscriber);
 
   // Track subscribed resources to resubscribe later if needed
-  //TODO we need wrapper for WebSocket to track the resources
-  // webSocket.resources.add(url);
   // Subscribe to updates on the resource
-  while (webSocket.readyState !== WebSocket.OPEN) {
+  while (webSocketResource.webSocket.readyState !== WebSocket.OPEN) {
     console.log("closed");
     await WaitFor(100);
   }
 
-  webSocket.send(`sub ${url}`);
+  webSocketResource.webSocket.send(`sub ${url}`);
 }
 
 function WaitFor(ms: number): Promise<void> {
@@ -54,28 +53,21 @@ function WaitFor(ms: number): Promise<void> {
 
 /** Creates a WebSocket for the given URL. */
 async function createWebSocket(
-  resourceUrl: string,
-  options: { host: string }
-): Promise<WebSocket> {
+  resourceUrl: string
+): Promise<WebSocketResource> {
   const webSocketUrl = await getWebSocketUrl(resourceUrl);
   const webSocket = new WebSocket(webSocketUrl);
 
-  Object.assign(
-    webSocket,
-    {
-      resources: new Set(),
-      ready: new Promise<void>((resolve) => {
-        webSocket.onopen = () => {
-          //   webSocket.reconnectionAttempts = 0;
-          //   webSocket.reconnectionDelay = 1000;
-          resolve();
-        };
-      }),
-    },
-    options
-  );
+  const webSocketResource: WebSocketResource = {
+    webSocket: webSocket,
+    subscribers: new Set(),
+  };
 
-  return webSocket;
+  //TODO this probably wont work
+  webSocket.onmessage = (data) =>
+    processMessage(data, webSocketResource.subscribers);
+
+  return webSocketResource;
 }
 
 /** Retrieves the WebSocket URL for the given resource. */
@@ -90,7 +82,7 @@ async function getWebSocketUrl(resourceUrl: string): Promise<string> {
 /** Processes an update message from the WebSocket */
 function processMessage(
   { data }: { data: string },
-  onMessage: (datasetUrl: string) => void
+  subscribers: Set<Subscriber>
 ): void {
   console.log("Message received");
   console.log(data);
@@ -105,5 +97,9 @@ function processMessage(
   // Notify the subscribers
   console.log("Calling method");
   console.log(data);
-  onMessage(data);
+  subscribers.forEach((subscriber) => {
+    subscriber.onReceive(data);
+  });
+
+  //TODO create notification
 }
