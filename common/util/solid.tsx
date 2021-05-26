@@ -230,9 +230,10 @@ export async function AddReservation(
   );
 }
 
-export async function SetReservationState(
+export async function SetReservationStateAndInbox(
   reservationId: string,
   newState: ReservationState,
+  inboxUrl: string,
   session = GetSession()
 ): Promise<void> {
   const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
@@ -243,10 +244,15 @@ export async function SetReservationState(
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
   }
 
-  const updatedReservation = setInteger(
+  let updatedReservation = setInteger(
     reservationThing,
     reservationFieldToRdfMap.state,
     newState.valueOf()
+  );
+  updatedReservation = setStringNoLocale(
+    reservationThing,
+    reservationFieldToRdfMap.inbox,
+    inboxUrl
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 

@@ -4,6 +4,7 @@ import {
   AddReservation,
   GetReservationInboxUrl,
   GetSession,
+  SetReservationState,
 } from "../../../common/util/solid";
 import RoomSelector from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";
@@ -14,7 +15,8 @@ import {
   RoomDefinitionsUrl,
 } from "../../../common/consts/solidIdentifiers";
 import { SubmitBookingRequest } from "../../util/hotelpodcommunications";
-import { Subscribe } from "../../../common/util/tracker";
+import { Subscribe } from "../../../common/util/tracker/tracker";
+import { Subscriber } from "../../../common/types/WebSocketResource";
 
 function BookRoom(
   roomIdString: string | undefined,
@@ -34,9 +36,14 @@ function BookRoom(
   }
 
   const reservationInbox = GetReservationInboxUrl(session);
+  if (!reservationInbox) {
+    return;
+  }
+
+  const reservationId = "reservation5";
   const reservation = {
     //TODO fix this here as well
-    id: "reservation5",
+    id: reservationId,
     inbox: reservationInbox,
     owner: webId,
     hotel: HotelWebId,
@@ -49,7 +56,14 @@ function BookRoom(
   AddReservation(reservation, session);
   SubmitBookingRequest(reservation, session);
   //TODO subscribe to inbox - possibly wait for solid-client implementation
-  Subscribe(reservationInbox);
+  const subscriber: Subscriber = {
+    onReceive: () => {
+      //TODO check if denied or accepted
+      SetReservationState(reservationId, ReservationState.CONFIRMED, session);
+    },
+    onClick: () => undefined,
+  };
+  Subscribe(reservationInbox, subscriber);
   //TODO hotel adds the complete reservation to the inbox (until then we show the previous state) and we just overwrite the existing one in the user pod
 }
 
