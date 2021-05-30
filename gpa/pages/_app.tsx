@@ -8,7 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../../common/styles/theme";
 import { Box, Container } from "@material-ui/core";
 import NavigationBar from "../components/navbar";
-import Footer from "../components/footer";
+import Footer from "../../common/components/footer";
 import styles from "../../common/styles/styles";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
-import styles from "../../common/styles/styles";
+import styles from "../styles/styles";
 
 function Footer(): JSX.Element {
   const additionalStyles = styles();

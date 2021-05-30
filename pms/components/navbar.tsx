@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar, Toolbar, Box } from "@material-ui/core";
 import styles from "../../common/styles/styles";
 import { DynamicLoginComponent } from "../../common/components/auth/dynamic-login-component";
-import { GPAInboxList } from "../consts/inboxList";
+import { PMSInboxList } from "../consts/inboxList";
 import { GetPodOfSession } from "../../common/util/solid";
 import { GetNotificationElements } from "../../common/components/notification-elements";
 
@@ -10,7 +10,7 @@ function NavigationBar(): JSX.Element {
   const podAddress = GetPodOfSession();
   const notificationElements = GetNotificationElements(
     podAddress,
-    GPAInboxList
+    PMSInboxList
   );
 
   const additionalStyles = styles();

@@ -8,7 +8,7 @@ import {
   CardContent,
   CircularProgress,
 } from "@material-ui/core";
-import { Notification } from "../../common/types/Notification";
+import { Notification } from "../types/Notification";
 
 function NotificationItem({
   notification,
