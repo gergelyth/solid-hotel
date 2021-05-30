@@ -85,6 +85,7 @@ function BuildNotificationBasedOnType(
           router.push(`/reservations/${encodeURIComponent(reservationId)}`);
         };
         onReceive = () => {
+          //TODO we should set the page in VerifyingComponent in different workflows so they don't wait - but how
           SetReservationStateAndInbox(reservationId, newState, replyInbox);
           isProcessed = true;
           SetIsProcessedForNotification(url, dataset, notificationThing);
