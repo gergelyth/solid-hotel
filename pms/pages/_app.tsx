@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="sm">
+        <Container>
           <NavigationBar />
           <Box className={additionalStyles.main}>
             <Component {...pageProps} />
