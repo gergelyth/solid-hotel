@@ -12,6 +12,7 @@ import { ReservationState } from "../types/ReservationState";
 import { Notification } from "../types/Notification";
 import { SetReservationStateAndInbox } from "../util/solid";
 import { useRouter } from "next/router";
+import { SetIsProcessedForNotification } from "../util/notifications";
 
 const swrKey = "notifications";
 
@@ -21,12 +22,13 @@ enum NotificationType {
 
 function BuildNotificationBasedOnType(
   url: string,
+  dataset: SolidDataset,
   notificationThing: Thing,
   notificationType: NotificationType
 ): Notification {
   const router = useRouter();
 
-  const isProcessed = getBoolean(
+  let isProcessed = getBoolean(
     notificationThing,
     notificationToRdfMap.isProcessed
   );
@@ -84,6 +86,9 @@ function BuildNotificationBasedOnType(
         };
         onReceive = () => {
           SetReservationStateAndInbox(reservationId, newState, replyInbox);
+          isProcessed = true;
+          SetIsProcessedForNotification(url, dataset, notificationThing);
+          //TODO do we need revalidate here? like in edit-room-popup
         };
       }
       break;
@@ -112,7 +117,12 @@ function ConvertToNotification(
   const notificationType: NotificationType =
     getInteger(notificationThing, notificationToRdfMap.state) ?? 0;
 
-  return BuildNotificationBasedOnType(url, notificationThing, notificationType);
+  return BuildNotificationBasedOnType(
+    url,
+    dataset,
+    notificationThing,
+    notificationType
+  );
 }
 
 function RetrieveNotifications(

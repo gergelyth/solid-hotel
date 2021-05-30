@@ -6,6 +6,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  CircularProgress,
 } from "@material-ui/core";
 import { Notification } from "../../common/types/Notification";
 
@@ -13,9 +14,13 @@ function NotificationItem({
   notification,
   key,
 }: {
-  notification: Notification;
+  notification: Notification | null;
   key: number;
-}): JSX.Element {
+}): JSX.Element | null {
+  if (!notification) {
+    return null;
+  }
+
   return (
     <Card
       onClick={(event: React.MouseEvent<HTMLElement>) =>
@@ -42,13 +47,27 @@ function NotificationItem({
 }
 
 function NotificationList({
-  notifications,
+  notificationRetrieval,
 }: {
-  notifications: Notification[];
+  notificationRetrieval:
+    | {
+        items: (Notification | null)[];
+        isLoading: boolean;
+        isError: boolean;
+      }
+    | undefined;
 }): JSX.Element {
+  if (!notificationRetrieval || notificationRetrieval.isError) {
+    return <Typography>Error retrieving notifications</Typography>;
+  }
+
+  if (notificationRetrieval.isLoading || !notificationRetrieval.items) {
+    return <CircularProgress />;
+  }
+
   return (
     <List>
-      {notifications.map((notification, index) => (
+      {notificationRetrieval.items.map((notification, index) => (
         <NotificationItem notification={notification} key={index} />
       ))}
     </List>

@@ -69,7 +69,9 @@ export function GetSession(): Session {
   return getDefaultSession();
 }
 
-function GetPodOfSession(session: Session = GetSession()): string | null {
+export function GetPodOfSession(
+  session: Session = GetSession()
+): string | null {
   const webId = session.info.webId;
   if (!webId) {
     return null;
