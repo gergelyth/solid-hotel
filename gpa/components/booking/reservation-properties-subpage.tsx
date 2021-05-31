@@ -58,7 +58,7 @@ function BookRoom(
   const subscriber: Subscriber = {
     onReceive: () => {
       //TODO check if denied or accepted
-      SetReservationState(reservationId, ReservationState.CONFIRMED, session);
+      // SetReservationState(reservationId, ReservationState.CONFIRMED, session);
     },
     onClick: () => undefined,
   };
