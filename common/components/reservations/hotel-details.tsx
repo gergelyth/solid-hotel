@@ -14,6 +14,15 @@ export function GetHotelInformation(hotelWebId: string): string {
   return `${hotelDetails.name}, ${hotelDetails.location}`;
 }
 
+export function HotelDetailsOneLiner({
+  hotelWebId,
+}: {
+  hotelWebId: string;
+}): JSX.Element {
+  const hotelDetails = GetHotelInformation(hotelWebId);
+  return <Typography variant="body2">{hotelDetails}</Typography>;
+}
+
 function HotelDetails({ hotelWebId }: { hotelWebId: string }): JSX.Element {
   const { hotelDetails, isLoading, isError } = useHotel(hotelWebId);
 

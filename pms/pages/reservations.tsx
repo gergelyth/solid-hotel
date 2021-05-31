@@ -25,9 +25,9 @@ function Reservations(): JSX.Element {
       direction="column"
     >
       <Grid item>
-        <h1>
-          <Typography>Reservations</Typography>
-        </h1>
+        <Grid item>
+          <Typography variant="h4">Reservations</Typography>
+        </Grid>
       </Grid>
       {/* <h2>Reservation count: {reservations.length}</h2> */}
 

@@ -4,6 +4,7 @@ import ReservationList from "../../../common/components/reservations/reservation
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { ReservationState } from "../../../common/types/ReservationState";
+import { HotelDetailsOneLiner } from "../../../common/components/reservations/hotel-details";
 
 function ReservationStatusList({
   userReservationsUrl,
@@ -42,6 +43,7 @@ function ReservationStatusList({
             reservationElement={(item: ReservationAtHotel) => (
               <ReservationConciseElement
                 reservation={item}
+                titleElement={<HotelDetailsOneLiner hotelWebId={item.hotel} />}
                 onClickAction={OnReservationClick}
               />
             )}

@@ -16,17 +16,23 @@ function CreateReservationElement(
   onClickAction: ReservationClickHandler
 ): JSX.Element {
   return (
-    <Grid container spacing={3} justify="center" alignItems="center">
-      <Grid item>
+    <Grid
+      container
+      spacing={2}
+      justify="center"
+      alignItems="center"
+      direction="row"
+    >
+      <Grid item xs={8}>
         <ConciseHotelReservationElement
           reservation={reservation}
           onClickAction={onClickAction}
         />
       </Grid>
-      <Grid item>
+      <Grid item xs={2}>
         <OfflineCheckinButton />
       </Grid>
-      <Grid item>
+      <Grid item xs={2}>
         <CancelReservationButton
           reservation={reservation}
           confirmCancellation={ConfirmCancellation}

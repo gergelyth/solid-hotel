@@ -9,18 +9,17 @@ import {
   Typography,
 } from "@material-ui/core";
 import HotelIcon from "@material-ui/icons/Hotel";
-import { GetHotelInformation } from "./hotel-details";
 import { GetNightCount, GetStayInterval } from "./stay-details";
 
 function ReservationConciseElement({
   reservation,
+  titleElement,
   onClickAction,
 }: {
   reservation: ReservationAtHotel;
+  titleElement: JSX.Element;
   onClickAction: ReservationClickHandler;
 }): JSX.Element {
-  const hotelDetails = GetHotelInformation(reservation.hotel);
-
   return (
     <Card
       onClick={(event: React.MouseEvent<HTMLElement>) =>
@@ -36,7 +35,7 @@ function ReservationConciseElement({
               </Box>
             </Grid>
             <Grid item>
-              <Typography variant="body2">{hotelDetails}</Typography>
+              {titleElement}
               <Typography variant="body2">
                 {GetNightCount(reservation)}
               </Typography>

@@ -1,12 +1,7 @@
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
-import { Grid } from "@material-ui/core";
-import { Box, Typography } from "@material-ui/core";
-import HotelIcon from "@material-ui/icons/Hotel";
-import {
-  GetNightCount,
-  GetStayInterval,
-} from "../../../common/components/reservations/stay-details";
+import ReservationConciseElement from "../../../common/components/reservations/reservation-concise-element";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { useSpecificRoom } from "../../../common/hooks/useRooms";
 
 function ConciseHotelReservationElement({
@@ -29,26 +24,22 @@ function ConciseHotelReservationElement({
   }
 
   return (
-    <Box
-      onClick={(event: React.MouseEvent<HTMLElement>) =>
-        onClickAction(event, reservation)
+    <ReservationConciseElement
+      reservation={reservation}
+      titleElement={
+        <Grid container direction="row" spacing={1}>
+          <Grid item>
+            <Typography variant="body2">
+              <Box fontWeight="fontWeightBold">Room:</Box>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2">{roomName}</Typography>
+          </Grid>
+        </Grid>
       }
-    >
-      <Grid container spacing={4} alignItems="center" direction="row">
-        <Grid item>
-          <Box fontSize={40}>
-            <HotelIcon fontSize="inherit" />
-          </Box>
-        </Grid>
-        <Grid item>
-          <Typography variant="body2">Room: {roomName}</Typography>
-          <Typography variant="body2">{GetNightCount(reservation)}</Typography>
-          <Typography variant="body2">
-            {GetStayInterval(reservation)}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Box>
+      onClickAction={onClickAction}
+    />
   );
 }
 

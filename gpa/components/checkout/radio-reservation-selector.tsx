@@ -9,6 +9,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { HotelDetailsOneLiner } from "../../../common/components/reservations/hotel-details";
 
 function ReservationRadioSelector({
   selectedReservationId,
@@ -36,6 +37,9 @@ function ReservationRadioSelector({
                   label={
                     <ReservationConciseElement
                       reservation={item}
+                      titleElement={
+                        <HotelDetailsOneLiner hotelWebId={item.hotel} />
+                      }
                       onClickAction={() => setSelectedReservationId(item?.id)}
                     />
                   }
