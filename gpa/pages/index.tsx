@@ -80,6 +80,13 @@ export default function Home(): JSX.Element {
       </Grid>
       <Grid item>{CheckoutButton(items, isLoading, isError)}</Grid>
       <Grid item>
+        <Link href="/privacy">
+          <Button variant="contained" color="primary" size="large">
+            Privacy dashboard
+          </Button>
+        </Link>
+      </Grid>
+      <Grid item>
         <Link href="/profile">
           <Button variant="contained" color="primary" size="large">
             Profile editor

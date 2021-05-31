@@ -5,6 +5,7 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
+import _ from "lodash";
 import { usePrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { NotEmptyItem } from "../../common/util/helpers";
@@ -69,9 +70,9 @@ function HotelPrivacy({
       <Grid item>
         <Box px={2}>
           <Grid container spacing={1} justify="center" direction="column">
-            {groupByField.forEach(([field, tokens]) => {
-              tokens.forEach((token: PrivacyToken) => {
-                return <PrivacyField field={field} token={token} />;
+            {Object.entries(groupByField).map(([field, tokens]) => {
+              return tokens.map((token) => {
+                return <PrivacyField key={field} field={field} token={token} />;
               });
             })}
           </Grid>
@@ -109,8 +110,14 @@ function PrivacyDashboard(): JSX.Element {
       alignItems="stretch"
       direction="column"
     >
-      {groupByHotel.forEach(([hotelName, tokens]) => {
-        return <HotelPrivacy hotelName={hotelName} privacyTokens={tokens} />;
+      {Object.entries(groupByHotel).map(([hotelName, tokens]) => {
+        return (
+          <HotelPrivacy
+            key={hotelName}
+            hotelName={hotelName}
+            privacyTokens={tokens}
+          />
+        );
       })}
     </Grid>
   );
