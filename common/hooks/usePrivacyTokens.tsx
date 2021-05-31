@@ -37,16 +37,12 @@ function ConvertToPrivacyToken(
   return token;
 }
 
-export function usePrivacyToken(
-  privacyTokenUrl: string
+export function usePrivacyTokens(
+  privacyInbox: string
 ): {
   items: (PrivacyToken | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;
 } {
-  return FetchItems<PrivacyToken>(
-    swrKey,
-    privacyTokenUrl,
-    ConvertToPrivacyToken
-  );
+  return FetchItems<PrivacyToken>(swrKey, privacyInbox, ConvertToPrivacyToken);
 }
