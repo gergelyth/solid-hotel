@@ -10,20 +10,17 @@ import { notificationToRdfMap } from "../vocabularies/rdf_notification";
 import { Notification } from "../types/Notification";
 import { useRouter } from "next/router";
 import { SetIsProcessedForNotification } from "../util/notifications";
-import { ParseReservationStateChange } from "../notifications/ReservationStateChange";
+import { NotificationParser } from "../types/NotificationParser";
+import { NotificationType } from "../types/NotificationsType";
 
 const swrKey = "notifications";
-
-enum NotificationType {
-  ReservationStateChange,
-}
 
 function BuildNotificationBasedOnType(
   url: string,
   dataset: SolidDataset,
   notificationThing: Thing,
-  notificationType: NotificationType,
-  payloadThing: Thing | null
+  payloadThing: Thing | null,
+  parser: NotificationParser
 ): Notification {
   const router = useRouter();
 
@@ -35,23 +32,9 @@ function BuildNotificationBasedOnType(
     throw new Error("IsProcessed field is null in notification");
   }
 
-  let text: string;
-  let onClick: (event: React.MouseEvent<EventTarget>) => void;
-  let onReceive: () => void;
-  switch (notificationType) {
-    case NotificationType.ReservationStateChange:
-      ({ text, onClick, onReceive } = ParseReservationStateChange(
-        router,
-        url,
-        payloadThing
-      ));
-      break;
+  const { text, onClick, onReceive } = parser(router, url, payloadThing);
 
-    default:
-      throw new Error("Notification type unrecognized");
-  }
-
-  onReceive = () => {
+  const expandedOnReceive = (): void => {
     onReceive();
     isProcessed = true;
     SetIsProcessedForNotification(url, dataset, notificationThing);
@@ -63,20 +46,28 @@ function BuildNotificationBasedOnType(
     isProcessed: isProcessed,
     text: text,
     onClick: onClick,
-    onReceive: onReceive,
+    onReceive: expandedOnReceive,
   };
 }
 
 function ConvertToNotification(
   dataset: SolidDataset,
-  url: string
+  url: string,
+  parsers: Record<NotificationType, NotificationParser>
 ): Notification | null {
   const notificationThing = getThing(dataset, url + "#notification");
   if (!notificationThing) {
     return null;
   }
+  //TODO default value
   const notificationType: NotificationType =
     getInteger(notificationThing, notificationToRdfMap.state) ?? 0;
+  const parser = parsers[notificationType];
+  if (!parser) {
+    throw new Error(
+      "No parser found for NotificationType: " + notificationType.toString()
+    );
+  }
 
   const payloadThing = getThing(dataset, url + "#payload");
 
@@ -84,24 +75,28 @@ function ConvertToNotification(
     url,
     dataset,
     notificationThing,
-    notificationType,
-    payloadThing
+    payloadThing,
+    parser
   );
 }
 
 function RetrieveNotifications(
-  inboxAddress: string
+  inboxAddress: string,
+  parsers: Record<NotificationType, NotificationParser>
 ): {
   items: (Notification | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;
   isValidating: boolean;
 } {
-  return FetchItems<Notification>(swrKey, inboxAddress, ConvertToNotification);
+  return FetchItems<Notification>(swrKey, inboxAddress, (dataset, url) =>
+    ConvertToNotification(dataset, url, parsers)
+  );
 }
 
 export function useNotifications(
-  inboxList: string[]
+  inboxList: string[],
+  parsers: Record<NotificationType, NotificationParser>
 ): {
   items: (Notification | null)[];
   isLoading: boolean;
@@ -112,7 +107,10 @@ export function useNotifications(
   let isAnyError = false;
 
   inboxList.forEach((inboxAddress: string) => {
-    const { items, isLoading, isError } = RetrieveNotifications(inboxAddress);
+    const { items, isLoading, isError } = RetrieveNotifications(
+      inboxAddress,
+      parsers
+    );
     if (items) {
       notifications.concat(items);
     }
