@@ -35,6 +35,7 @@ function PrivacyField({
       <Grid item xs={2}>
         {token.expiry}
       </Grid>
+      {/* //TODO add request to remove button */}
     </Grid>
   );
 }
