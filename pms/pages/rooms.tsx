@@ -5,15 +5,13 @@ function RoomManagement(): JSX.Element {
   return (
     <Grid
       container
-      spacing={3}
+      spacing={5}
       justify="center"
       alignItems="center"
       direction="column"
     >
       <Grid item>
-        <h1>
-          <Typography>Room management</Typography>
-        </h1>
+        <Typography variant="h4">Room management</Typography>
       </Grid>
 
       <Grid item>

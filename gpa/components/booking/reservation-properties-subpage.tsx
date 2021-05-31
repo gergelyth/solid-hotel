@@ -4,7 +4,6 @@ import {
   AddReservation,
   GetReservationInboxUrl,
   GetSession,
-  SetReservationState,
 } from "../../../common/util/solid";
 import RoomSelector from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";

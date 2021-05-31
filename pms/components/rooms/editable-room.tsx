@@ -1,19 +1,19 @@
 import { useState } from "react";
-import styles from "../../../common/styles/Home.module.css";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
+import { Grid, Box, Typography, Button } from "@material-ui/core";
+import HotelIcon from "@material-ui/icons/Hotel";
+import DeleteIcon from "@material-ui/icons/Delete";
 import DeleteRoomPopup from "./delete-room-popup";
 import EditRoomPopup from "./edit-room-popup";
-
-function EmptyDescription(): JSX.Element {
-  return <i>No description</i>;
-}
 
 //TODO same logic as EditableField
 function EditableRoomElement({
   room,
+  key,
   updateRoomLocally,
 }: {
   room: RoomDefinition;
+  key: string;
   updateRoomLocally: (
     newRoomDefinition: RoomDefinition,
     isDelete: boolean
@@ -22,13 +22,54 @@ function EditableRoomElement({
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
   const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
   return (
-    <div className={styles.horizontalContainer}>
-      <div className={styles.simpleContainer}>
-        <h3>Name: {room.name}</h3>
-        <p>{room.description ?? EmptyDescription()}</p>
-      </div>
-      <button onClick={() => setEditPopupVisibility(true)}>Edit</button>
-      <button onClick={() => setDeletePopupVisibility(true)}>Delete</button>
+    <Grid
+      container
+      item
+      key={key}
+      spacing={2}
+      justify="center"
+      alignItems="center"
+    >
+      <Grid item xs={1}>
+        <Box fontSize={40}>
+          <HotelIcon fontSize="inherit" />
+        </Box>
+      </Grid>
+      <Grid item xs={7}>
+        <Grid container direction="row" spacing={1}>
+          <Grid item>
+            <Typography variant="body2">
+              <Box fontWeight="fontWeightBold">Room:</Box>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2">{room.name}</Typography>
+          </Grid>
+        </Grid>
+        <Typography variant="body2">
+          <Box fontWeight="fontWeightBold">Description:</Box>
+          {room.description ?? "<Empty description>"}
+        </Typography>
+      </Grid>
+      <Grid item xs={1}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setEditPopupVisibility(true)}
+        >
+          Edit
+        </Button>
+      </Grid>
+      <Grid item xs={1}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<DeleteIcon />}
+          onClick={() => setDeletePopupVisibility(true)}
+        >
+          Delete
+        </Button>
+      </Grid>
       <EditRoomPopup
         room={room}
         updateRoomLocally={updateRoomLocally}
@@ -41,7 +82,7 @@ function EditableRoomElement({
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
       />
-    </div>
+    </Grid>
   );
 }
 

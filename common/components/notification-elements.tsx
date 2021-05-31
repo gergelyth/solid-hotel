@@ -28,7 +28,7 @@ function GetBadgeContent(
     return <CircularProgress />;
   }
 
-  return <Typography>notificationRetrieval.items.length</Typography>;
+  return <Typography>{notificationRetrieval.items.length}</Typography>;
 }
 
 export function GetNotificationElements(

@@ -17,12 +17,14 @@ function CreateRoomElement(
   updateList: (newRoom: RoomDefinition, isDelete: boolean) => void
 ): JSX.Element {
   if (!room) {
-    return <li>empty</li>;
+    return <Typography>Room element empty</Typography>;
   }
   return (
-    <li key={room.id}>
-      <EditableRoomElement room={room} updateRoomLocally={updateList} />
-    </li>
+    <EditableRoomElement
+      room={room}
+      key={room.id}
+      updateRoomLocally={updateList}
+    />
   );
 }
 
@@ -75,26 +77,26 @@ function RoomElements(): JSX.Element {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={5}
       justify="center"
       alignItems="center"
       direction="column"
     >
-      {isArrayNonEmpty ? (
-        <Grid
-          container
-          spacing={4}
-          justify="center"
-          alignItems="center"
-          direction="column"
-        >
-          {items.map((item) => CreateRoomElement(item, UpdateList))}
-        </Grid>
-      ) : (
-        <Grid item>
+      <Grid item>
+        {isArrayNonEmpty ? (
+          <Grid
+            container
+            spacing={2}
+            justify="center"
+            alignItems="center"
+            direction="column"
+          >
+            {items.map((item) => CreateRoomElement(item, UpdateList))}
+          </Grid>
+        ) : (
           <Typography>No rooms found.</Typography>
-        </Grid>
-      )}
+        )}
+      </Grid>
 
       <Grid item>
         <Button
@@ -118,11 +120,7 @@ function RoomElements(): JSX.Element {
 }
 
 function RoomList(): JSX.Element {
-  return (
-    <div>
-      <RoomElements />
-    </div>
-  );
+  return <RoomElements />;
 }
 
 export default RoomList;

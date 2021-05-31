@@ -1,8 +1,14 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Revalidate } from "../../../common/hooks/useRooms";
-import styles from "../../../common/styles/Home.module.css";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { CreateOrUpdateRoom } from "../../../common/util/solidhoteladmin";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
+  TextField,
+} from "@material-ui/core";
 
 function EditRoomPopup({
   room,
@@ -28,45 +34,63 @@ function EditRoomPopup({
 
   //TODO same form as edit field popup just with diferent content
   return (
-    <div className={`${styles.simpleContainer} ${styles.popup}`}>
-      <div className={`${styles.simpleContainer} ${styles.popup_inner}`}>
-        <strong>Name:</strong>
-        <textarea
-          value={currentRoomName}
-          onChange={(event) => {
-            setRoomName(event.target.value);
+    <Dialog
+      onClose={() => setPopupVisibility(false)}
+      aria-labelledby="popup-title"
+      open={isPopupShowing}
+    >
+      <DialogTitle id="popup-title">Edit room</DialogTitle>
+      <TextField
+        required
+        id="nameInput"
+        label="Name"
+        variant="outlined"
+        value={currentRoomName}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setRoomName(e.target.value)
+        }
+      />
+
+      <TextField
+        id="descriptionInput"
+        label="Description"
+        variant="outlined"
+        value={currentRoomDescription}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setRoomDescription(e.target.value)
+        }
+      />
+      <DialogActions>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setPopupVisibility(false)}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          className={"button"}
+          onClick={() => {
+            const newRoom = {
+              id: room.id,
+              name: currentRoomName,
+              description:
+                currentRoomDescription === ""
+                  ? undefined
+                  : currentRoomDescription,
+            };
+            updateRoomLocally(newRoom, false);
+            CreateOrUpdateRoom(newRoom);
+            Revalidate();
+            setPopupVisibility(false);
           }}
-        />
-        <strong>Description:</strong>
-        <textarea
-          value={currentRoomDescription}
-          onChange={(event) => {
-            setRoomDescription(event.target.value);
-          }}
-        />
-        <div className={`${styles.horizontalContainer}`}>
-          <button onClick={() => setPopupVisibility(false)}>Cancel</button>
-          <button
-            onClick={() => {
-              const newRoom = {
-                id: room.id,
-                name: currentRoomName,
-                description:
-                  currentRoomDescription === ""
-                    ? undefined
-                    : currentRoomDescription,
-              };
-              updateRoomLocally(newRoom, false);
-              CreateOrUpdateRoom(newRoom);
-              Revalidate();
-              setPopupVisibility(false);
-            }}
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-    </div>
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
