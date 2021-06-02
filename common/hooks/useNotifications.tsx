@@ -19,7 +19,6 @@ function BuildNotificationBasedOnType(
   url: string,
   dataset: SolidDataset,
   notificationThing: Thing,
-  payloadThing: Thing | null,
   parser: NotificationParser
 ): Notification {
   const router = useRouter();
@@ -32,7 +31,7 @@ function BuildNotificationBasedOnType(
     throw new Error("IsProcessed field is null in notification");
   }
 
-  const { text, onClick, onReceive } = parser(router, url, payloadThing);
+  const { text, onClick, onReceive } = parser(router, url, dataset);
 
   const expandedOnReceive = (): void => {
     onReceive();
@@ -55,10 +54,11 @@ function ConvertToNotification(
   url: string,
   parsers: Record<NotificationType, NotificationParser>
 ): Notification | null {
-  const notificationThing = getThing(dataset, url + "#notification");
+  const notificationThing = getThing(dataset, "#notification");
   if (!notificationThing) {
     return null;
   }
+
   //TODO default value
   const notificationType: NotificationType =
     getInteger(notificationThing, notificationToRdfMap.state) ?? 0;
@@ -69,15 +69,7 @@ function ConvertToNotification(
     );
   }
 
-  const payloadThing = getThing(dataset, url + "#payload");
-
-  return BuildNotificationBasedOnType(
-    url,
-    dataset,
-    notificationThing,
-    payloadThing,
-    parser
-  );
+  return BuildNotificationBasedOnType(url, dataset, notificationThing, parser);
 }
 
 function RetrieveNotifications(

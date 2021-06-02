@@ -1,23 +1,38 @@
-import { getInteger, getStringNoLocale, Thing } from "@inrupt/solid-client";
+import {
+  addInteger,
+  addStringNoLocale,
+  createSolidDataset,
+  createThing,
+  getInteger,
+  getStringNoLocale,
+  getThing,
+  setThing,
+  SolidDataset,
+} from "@inrupt/solid-client";
 import { ReservationState } from "../types/ReservationState";
 import { SetReservationStateAndInbox } from "../util/solid";
 import { NextRouter } from "next/router";
 import { reservationStateChangeToRdfMap } from "../vocabularies/notification_payloads/rdf_reservationStateChange";
+import { AddNotificationThingToDataset } from "../util/solidCommon";
+import { NotificationType } from "../types/NotificationsType";
 
-export function ParseReservationStateChange(
+export function DeserializeReservationStateChange(
   router: NextRouter,
   url: string,
-  payloadThing: Thing | null
+  dataset: SolidDataset
 ): {
   text: string;
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  if (!payloadThing) {
-    throw new Error("Payload cannot be null");
+  //TODO perhaps we should define a general serializer/deserializer
+  const stateChangeThing = getThing(dataset, "#change");
+  if (!stateChangeThing) {
+    throw new Error("State change thing cannot be null");
   }
+
   const newStateValue = getInteger(
-    payloadThing,
+    stateChangeThing,
     reservationStateChangeToRdfMap.newState
   );
   if (!newStateValue) {
@@ -28,7 +43,7 @@ export function ParseReservationStateChange(
   const newState: ReservationState = newStateValue;
 
   const replyInbox = getStringNoLocale(
-    payloadThing,
+    stateChangeThing,
     reservationStateChangeToRdfMap.replyInbox
   );
   if (!replyInbox) {
@@ -53,13 +68,41 @@ export function ParseReservationStateChange(
 
   const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
         Click to view reservation.`;
-  const onClick = () => {
+  const onClick = (): void => {
     router.push(`/reservations/${encodeURIComponent(reservationId)}`);
   };
-  const onReceive = () => {
+  const onReceive = (): void => {
     //TODO we should set the page in VerifyingComponent in different workflows so they don't wait - but how
     SetReservationStateAndInbox(reservationId, newState, replyInbox);
   };
 
   return { text, onClick, onReceive };
+}
+
+export function SerializeReservationStateChange(
+  replyInbox: string,
+  newState: ReservationState
+): SolidDataset {
+  let requestDataset = createSolidDataset();
+
+  let request = createThing({ name: "reservationStateChange" });
+  request = addStringNoLocale(
+    request,
+    reservationStateChangeToRdfMap.replyInbox,
+    replyInbox
+  );
+  request = addInteger(
+    request,
+    reservationStateChangeToRdfMap.state,
+    newState.valueOf()
+  );
+
+  requestDataset = setThing(requestDataset, request);
+
+  AddNotificationThingToDataset(
+    requestDataset,
+    NotificationType.ReservationStateChange
+  );
+
+  return requestDataset;
 }

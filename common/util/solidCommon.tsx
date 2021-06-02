@@ -1,4 +1,5 @@
 import {
+  addBoolean,
   addDatetime,
   addInteger,
   addStringNoLocale,
@@ -9,7 +10,8 @@ import {
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { SolidDataset } from "@inrupt/solid-client";
-import { ReservationRequest } from "../types/ReservationRequest";
+import { notificationToRdfMap } from "../vocabularies/rdf_notification";
+import { NotificationType } from "../types/NotificationsType";
 
 export function CreateReservationDataset(
   reservation: ReservationAtHotel
@@ -59,28 +61,21 @@ export function CreateReservationDataset(
   return reservationDataset;
 }
 
-export function CreateReservationRequestDataset(
-  reservationRequest: ReservationRequest
+export function AddNotificationThingToDataset(
+  dataset: SolidDataset,
+  notificationType: NotificationType
 ): SolidDataset {
-  let requestDataset = createSolidDataset();
-
-  let request = createThing({ name: "reservationRequest" });
-  request = addStringNoLocale(
-    request,
-    reservationFieldToRdfMap.id,
-    reservationRequest.reservationId
+  let notification = createThing({ name: "notification" });
+  notification = addBoolean(
+    notification,
+    notificationToRdfMap.isProcessed,
+    false
   );
-  request = addStringNoLocale(
-    request,
-    reservationFieldToRdfMap.inbox,
-    reservationRequest.ownerInboxUrl ?? ""
-  );
-  request = addInteger(
-    request,
-    reservationFieldToRdfMap.state,
-    reservationRequest.requestedState.valueOf()
+  notification = addInteger(
+    notification,
+    notificationToRdfMap.notificationType,
+    notificationType.valueOf()
   );
 
-  requestDataset = setThing(requestDataset, request);
-  return requestDataset;
+  return setThing(dataset, notification);
 }
