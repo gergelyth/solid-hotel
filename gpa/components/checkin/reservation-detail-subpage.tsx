@@ -7,7 +7,7 @@ import ReservationDetails from "./reservation-details";
 import {
   SubmitCancellationRequest,
   SubmitCheckinRequest,
-} from "../../util/hotelpodcommunications";
+} from "../../util/outgoingCommunications";
 
 function ExecuteCheckin(
   currentReservation: ReservationAtHotel | undefined

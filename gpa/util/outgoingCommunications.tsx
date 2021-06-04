@@ -1,31 +1,23 @@
 import { saveSolidDatasetInContainer } from "@inrupt/solid-client";
 import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import {
-  AddNotificationThingToDataset,
-  CreateReservationDataset,
-  CreateReservationRequestDataset,
-} from "../../common/util/solidCommon";
 import { BookingInboxUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationState } from "../../common/types/ReservationState";
-import { NotificationType } from "../../common/types/NotificationsType";
+import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
+import { SerializeBookingRequest } from "../../common/notifications/BookingRequest";
 
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
 ): Promise<void> {
-  const reservationDataset = CreateReservationDataset(reservation);
-  const notificationDataset = AddNotificationThingToDataset(
-    reservationDataset,
-    NotificationType.BookingRequest
-  );
+  const notificationDataset = SerializeBookingRequest(reservation);
 
   await saveSolidDatasetInContainer(BookingInboxUrl, notificationDataset, {
     fetch: session.fetch,
   });
 }
 
-async function SubmitReservationRequest(
+async function SubmitReservationStateChangeRequest(
   hotelInboxUrl: string | null,
   reservation: ReservationAtHotel,
   requestedState: ReservationState,
@@ -37,15 +29,14 @@ async function SubmitReservationRequest(
       "Hotel inbox null when trying to submit hotel request change"
     );
   }
-  const request = {
-    reservationId: reservation.id,
-    ownerInboxUrl: reservation.inbox,
-    requestedState: requestedState,
-  };
-  const requestDataset = CreateReservationRequestDataset(request);
-  const notificationDataset = AddNotificationThingToDataset(
-    requestDataset,
-    NotificationType.ReservationStateChange
+
+  if (!reservation.inbox) {
+    throw new Error("Reservation inbox null");
+  }
+
+  const notificationDataset = SerializeReservationStateChange(
+    reservation.inbox,
+    requestedState
   );
 
   await saveSolidDatasetInContainer(hotelInboxUrl, notificationDataset, {
@@ -57,7 +48,7 @@ export async function SubmitCheckinRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
 ): Promise<void> {
-  await SubmitReservationRequest(
+  await SubmitReservationStateChangeRequest(
     reservation.inbox,
     reservation,
     ReservationState.ACTIVE,
@@ -69,7 +60,7 @@ export async function SubmitCancellationRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
 ): Promise<void> {
-  await SubmitReservationRequest(
+  await SubmitReservationStateChangeRequest(
     reservation.inbox,
     reservation,
     ReservationState.CANCELLED,
@@ -81,7 +72,7 @@ export async function SubmitCheckoutRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
 ): Promise<void> {
-  await SubmitReservationRequest(
+  await SubmitReservationStateChangeRequest(
     reservation.inbox,
     reservation,
     ReservationState.PAST,

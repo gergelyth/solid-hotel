@@ -10,20 +10,17 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { ReservationState } from "../types/ReservationState";
-import { SetReservationStateAndInbox } from "../util/solid";
-import { NextRouter } from "next/router";
 import { reservationStateChangeToRdfMap } from "../vocabularies/notification_payloads/rdf_reservationStateChange";
 import { AddNotificationThingToDataset } from "../util/solidCommon";
 import { NotificationType } from "../types/NotificationsType";
 
 export function DeserializeReservationStateChange(
-  router: NextRouter,
   url: string,
   dataset: SolidDataset
 ): {
-  text: string;
-  onClick: (event: React.MouseEvent<EventTarget>) => void;
-  onReceive: () => void;
+  reservationId: string;
+  newState: ReservationState;
+  replyInbox: string;
 } {
   //TODO perhaps we should define a general serializer/deserializer
   const stateChangeThing = getThing(dataset, "#change");
@@ -66,17 +63,7 @@ export function DeserializeReservationStateChange(
     throw new Error("Reservation ID empty. Wrong inbox URL parsing logic.");
   }
 
-  const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
-        Click to view reservation.`;
-  const onClick = (): void => {
-    router.push(`/reservations/${encodeURIComponent(reservationId)}`);
-  };
-  const onReceive = (): void => {
-    //TODO we should set the page in VerifyingComponent in different workflows so they don't wait - but how
-    SetReservationStateAndInbox(reservationId, newState, replyInbox);
-  };
-
-  return { text, onClick, onReceive };
+  return { reservationId, newState, replyInbox };
 }
 
 export function SerializeReservationStateChange(

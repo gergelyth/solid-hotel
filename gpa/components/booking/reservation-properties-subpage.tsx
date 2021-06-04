@@ -13,7 +13,7 @@ import {
   HotelWebId,
   RoomDefinitionsUrl,
 } from "../../../common/consts/solidIdentifiers";
-import { SubmitBookingRequest } from "../../util/hotelpodcommunications";
+import { SubmitBookingRequest } from "../../util/outgoingCommunications";
 import { Subscribe } from "../../../common/util/tracker/tracker";
 import { Subscriber } from "../../../common/types/WebSocketResource";
 

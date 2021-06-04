@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { SubmitCheckoutRequest } from "../../util/hotelpodcommunications";
+import { SubmitCheckoutRequest } from "../../util/outgoingCommunications";
 
 function Checkout(
   reservationId: string,
