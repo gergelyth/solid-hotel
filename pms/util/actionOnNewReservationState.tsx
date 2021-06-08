@@ -4,7 +4,10 @@ import {
   SetReservationOwnerToHotelProfile,
   SetReservationStateAndInbox,
 } from "../../common/util/solid";
-import { ConfirmReservationStateRequest } from "./outgoingCommunications";
+import {
+  ConfirmReservationStateRequest,
+  ReportFailureToGuest,
+} from "./outgoingCommunications";
 import { useGuest } from "../../common/hooks/useGuest";
 import {
   useDataProtectionInformation,
@@ -33,7 +36,11 @@ export function DoOnStateChange(
       try {
         OnCheckIn(reservationId);
       } catch (error) {
-        //TODO report failure to guest
+        ReportFailureToGuest(
+          error.message,
+          ReservationState.CONFIRMED,
+          guestInboxUrl
+        );
         return;
       }
 
@@ -43,7 +50,11 @@ export function DoOnStateChange(
       try {
         OnCheckOut(reservationId);
       } catch (error) {
-        //TODO report failure to guest
+        ReportFailureToGuest(
+          error.message,
+          ReservationState.ACTIVE,
+          guestInboxUrl
+        );
         return;
       }
       break;
@@ -52,7 +63,6 @@ export function DoOnStateChange(
       throw new Error(
         `Reservation state change ${newState.toString()} doesn't make sense on hotel side`
       );
-      break;
   }
 
   SetReservationStateAndInbox(reservationId, newState, guestInboxUrl);

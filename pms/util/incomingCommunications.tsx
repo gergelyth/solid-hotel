@@ -1,5 +1,4 @@
 import { SolidDataset } from "@inrupt/solid-client";
-import { SetReservationStateAndInbox } from "../../common/util/solid";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
@@ -10,7 +9,7 @@ import { ConfirmReservationStateRequest } from "./outgoingCommunications";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
-  url: string,
+  hotelInboxUrl: string,
   dataset: SolidDataset
 ): {
   text: string;
@@ -21,7 +20,7 @@ export function ReceiveReservationStateChange(
     reservationId,
     newState,
     replyInbox,
-  } = DeserializeReservationStateChange(url, dataset);
+  } = DeserializeReservationStateChange(hotelInboxUrl, dataset);
   const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
         Click to view reservation.`;
   const onClick = (): void => {
@@ -29,7 +28,7 @@ export function ReceiveReservationStateChange(
   };
   const onReceive = (): void => {
     //TODO we'll probably need the full reservation here and we get the dataset in the previous command - so unify that
-    DoOnStateChange(reservationId, newState, replyInbox, url);
+    DoOnStateChange(reservationId, newState, replyInbox, hotelInboxUrl);
   };
 
   return { text, onClick, onReceive };
@@ -37,7 +36,7 @@ export function ReceiveReservationStateChange(
 
 export function ReceiveBookingRequest(
   router: NextRouter,
-  url: string,
+  hotelInboxUrl: string,
   dataset: SolidDataset
 ): {
   text: string;

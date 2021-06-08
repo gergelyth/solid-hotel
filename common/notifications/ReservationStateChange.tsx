@@ -13,6 +13,7 @@ import { ReservationState } from "../types/ReservationState";
 import { reservationStateChangeToRdfMap } from "../vocabularies/notification_payloads/rdf_reservationStateChange";
 import { AddNotificationThingToDataset } from "../util/solidCommon";
 import { NotificationType } from "../types/NotificationsType";
+import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 
 export function DeserializeReservationStateChange(
   url: string,
@@ -49,20 +50,7 @@ export function DeserializeReservationStateChange(
     );
   }
 
-  //TODO this is not very robust
-  //structure:
-  //userpod.inrupt.net/reservations/49938104/reservation
-  //userpod.inrupt.net/reservations/49938104/inbox
-  const urlParts = url.split("/");
-  if (!urlParts.pop()) {
-    //pop one more (now the inbox part for sure) if there was a trailing slash
-    urlParts.pop();
-  }
-  const reservationId = urlParts.pop();
-  if (!reservationId) {
-    throw new Error("Reservation ID empty. Wrong inbox URL parsing logic.");
-  }
-
+  const reservationId = GetReservationIdFromInboxUrl(url);
   return { reservationId, newState, replyInbox };
 }
 
