@@ -4,7 +4,9 @@ export const HotelWebId = "https://solidhotel.inrupt.net/profile/card#me";
 const ReservationAddress = "reservations/";
 const RoomDefinitionAddress = "rooms/";
 const BookingInbox = "bookingrequests";
+const HotelProfileAddress = "hotelprofiles/";
 
 export const ReservationsUrl = HotelPod + ReservationAddress;
 export const RoomDefinitionsUrl = HotelPod + RoomDefinitionAddress;
 export const BookingInboxUrl = HotelPod + BookingInbox;
+export const HotelProfilesUrl = HotelPod + HotelProfileAddress;

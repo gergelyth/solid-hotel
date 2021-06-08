@@ -2,7 +2,7 @@ import { getLiteral } from "@inrupt/solid-client";
 import useSWR, { mutate } from "swr";
 import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
-import { GetProfile, SolidProfile } from "../util/solid";
+import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid";
 
 function CreateSwrKey(rdfNames: string[] | undefined): string[] | null {
   const swrKey = "guest";
@@ -37,14 +37,16 @@ function GetFieldValues(
 }
 
 export function useGuest(
-  rdfNames: string[] | undefined
+  rdfNames: string[] | undefined,
+  webId: string | undefined = undefined
 ): {
   guestFields: Field[] | undefined;
   isLoading: boolean;
   isError: boolean;
 } {
   const fetcher = (): Promise<Field[] | undefined> => {
-    return GetProfile().then((solidProfile) =>
+    const profile = webId ? GetProfileOf(webId) : GetProfile();
+    return profile.then((solidProfile) =>
       GetFieldValues(solidProfile, rdfNames)
     );
   };

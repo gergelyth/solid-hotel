@@ -23,7 +23,7 @@ export function DeserializeReservationStateChange(
   replyInbox: string;
 } {
   //TODO perhaps we should define a general serializer/deserializer
-  const stateChangeThing = getThing(dataset, "#change");
+  const stateChangeThing = getThing(dataset, "#reservationStateChange");
   if (!stateChangeThing) {
     throw new Error("State change thing cannot be null");
   }

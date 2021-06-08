@@ -241,6 +241,7 @@ export async function SetReservationStateAndInbox(
   const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
   const dataset = await GetDataSet(datasetUrl, session);
 
+  //TODO this is not working now with the new inbox structure
   const reservationThing = getThing(dataset, datasetUrl + "#reservation");
   if (!reservationThing) {
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
@@ -261,6 +262,55 @@ export async function SetReservationStateAndInbox(
   await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
     fetch: session.fetch,
   });
+}
+
+export async function SetReservationOwnerToHotelProfile(
+  reservationId: string,
+  hotelProfileUrl: string,
+  session = GetSession()
+): Promise<void> {
+  //TODO duplication getting this dataset
+  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const dataset = await GetDataSet(datasetUrl, session);
+
+  //TODO this is not working now with the new inbox structure
+  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  if (!reservationThing) {
+    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
+  }
+
+  const updatedReservation = setStringNoLocale(
+    reservationThing,
+    reservationFieldToRdfMap.owner,
+    hotelProfileUrl
+  );
+  const updatedDataSet = setThing(dataset, updatedReservation);
+
+  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
+    fetch: session.fetch,
+  });
+}
+
+export async function GetWebIdFromReservation(
+  reservationId: string,
+  session = GetSession()
+): Promise<string | null> {
+  //TODO duplication getting this dataset
+  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const dataset = await GetDataSet(datasetUrl, session);
+
+  //TODO this is not working now with the new inbox structure
+  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  if (!reservationThing) {
+    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
+  }
+
+  const ownerWebId = getStringNoLocale(
+    reservationThing,
+    reservationFieldToRdfMap.owner
+  );
+
+  return ownerWebId;
 }
 
 export function CreateCancellationDataset(reservationId: string): SolidDataset {

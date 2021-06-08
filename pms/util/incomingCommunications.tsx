@@ -5,7 +5,8 @@ import { DeserializeReservationStateChange } from "../../common/notifications/Re
 import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { ReservationState } from "../../common/types/ReservationState";
 import { AddReservationToHotelPod } from "../../common/util/solidhoteladmin";
-import { ConfirmBookingRequest } from "./outgoingCommunications";
+import { DoOnStateChange } from "./actionOnNewReservationState";
+import { ConfirmReservationStateRequest } from "./outgoingCommunications";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -27,8 +28,8 @@ export function ReceiveReservationStateChange(
     router.push(`/reservations/${encodeURIComponent(reservationId)}`);
   };
   const onReceive = (): void => {
-    SetReservationStateAndInbox(reservationId, newState, replyInbox);
-    //TODO process depending on the new state
+    //TODO we'll probably need the full reservation here and we get the dataset in the previous command - so unify that
+    DoOnStateChange(reservationId, newState, replyInbox, url);
   };
 
   return { text, onClick, onReceive };
@@ -55,8 +56,12 @@ export function ReceiveBookingRequest(
     reservation.state = ReservationState.CONFIRMED;
     AddReservationToHotelPod(reservation);
     //TODO probably the AddReservationToHotelPod should return the url for that and then we can define the inbox
-    const inboxUrl = CreateInboxForReservation(reservation);
-    ConfirmBookingRequest(inboxUrl);
+    const hotelInboxUrl = CreateInboxForReservation(reservation);
+    ConfirmReservationStateRequest(
+      ReservationState.CONFIRMED,
+      reservation.inbox,
+      hotelInboxUrl
+    );
   };
 
   return { text, onClick, onReceive };

@@ -3,13 +3,7 @@ import { ReservationClickHandler } from "../../../common/types/ReservationClickH
 import ConciseHotelReservationElement from "./concise-hotel-reservation";
 import { Grid } from "@material-ui/core";
 import CancelReservationButton from "../../../common/components/cancellation/cancellation";
-import { CancellationsUrl } from "../../../common/consts/solidIdentifiers";
 import OfflineCheckinButton from "../checkin/offline-checkin";
-
-function ConfirmCancellation(reservation: ReservationAtHotel): void {
-  // SetReservationState(reservationId, ReservationState.CANCELLED);
-  // TODO: cancel on the hotel side (which will be done in PMS)
-}
 
 function CreateReservationElement(
   reservation: ReservationAtHotel,
