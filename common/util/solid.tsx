@@ -266,7 +266,7 @@ export async function SetReservationStateAndInbox(
 
 export async function SetReservationOwnerToHotelProfile(
   reservationId: string,
-  hotelProfileUrl: string,
+  hotelProfileWebId: string,
   session = GetSession()
 ): Promise<void> {
   //TODO duplication getting this dataset
@@ -282,7 +282,7 @@ export async function SetReservationOwnerToHotelProfile(
   const updatedReservation = setStringNoLocale(
     reservationThing,
     reservationFieldToRdfMap.owner,
-    hotelProfileUrl
+    hotelProfileWebId
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 

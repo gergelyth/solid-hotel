@@ -63,6 +63,7 @@ export function RetrieveAllNotifications(
   isLoading: boolean;
   isError: boolean;
 } {
+  //TODO put this logic in static render so it's not calculated everytime, just on startup
   const urlPaths: string[] = [];
   const resourceCache: { [url: string]: string[] } = {};
   inboxRegexList.forEach((inboxRegex) => {
