@@ -11,7 +11,9 @@ import { Field } from "../../types/Field";
 
 function CreateFieldElements(
   guestFields: Field[],
-  rdfFields: string[] | undefined
+  rdfFields: string[] | undefined,
+  editable: boolean,
+  deletable: boolean
 ): JSX.Element {
   return (
     <Grid
@@ -28,6 +30,8 @@ function CreateFieldElements(
             field={item}
             guestFields={guestFields}
             rdfFields={rdfFields}
+            editable={editable}
+            deletable={deletable}
           />
         );
       })}
@@ -37,10 +41,16 @@ function CreateFieldElements(
 
 function ProfileMain({
   rdfFields,
+  webId,
+  editable = true,
+  deletable = true,
 }: {
   rdfFields: string[] | undefined;
+  webId?: string;
+  editable?: boolean;
+  deletable?: boolean;
 }): JSX.Element {
-  const { guestFields, isLoading, isError } = useGuest(rdfFields);
+  const { guestFields, isLoading, isError } = useGuest(rdfFields, webId);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -58,7 +68,7 @@ function ProfileMain({
     <Box>
       <h2>{/* {guest.firstName} {guest.lastName} */}</h2>
       {/* <div>{guest["firstName"]}</div> */}
-      {CreateFieldElements(guestFields, rdfFields)}
+      {CreateFieldElements(guestFields, rdfFields, editable, deletable)}
     </Box>
   );
 }

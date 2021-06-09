@@ -21,6 +21,7 @@ export function ReceiveReservationStateChange(
     newState,
     replyInbox,
   } = DeserializeReservationStateChange(hotelInboxUrl, dataset);
+  //TODO check if onReceive gets no Error, and adjust this text accordingly
   const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
         Click to view reservation.`;
   const onClick = (): void => {

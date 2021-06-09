@@ -3,7 +3,7 @@ import EditFieldPopup from "./edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
 import { RemoveField, SetField } from "../../util/solid";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button, Box } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Field } from "../../types/Field";
 import { RevalidateGuest, TriggerRefetchGuest } from "../../hooks/useGuest";
@@ -37,26 +37,25 @@ function OnDeleteConfirmation(
   RevalidateGuest(rdfFields);
 }
 
-function ProfileField({
+function EditElements({
   field,
   guestFields,
   rdfFields,
+  editable,
 }: {
   field: Field;
   guestFields: Field[];
   rdfFields: string[] | undefined;
-}): JSX.Element {
+  editable: boolean;
+}): JSX.Element | null {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
-  const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
+
+  if (!editable) {
+    return null;
+  }
 
   return (
-    <Grid container item spacing={2} justify="center" alignItems="center">
-      <Grid item xs={4}>
-        {field.fieldPrettyName}:
-      </Grid>
-      <Grid item xs={4}>
-        {field.fieldValue}
-      </Grid>
+    <Box>
       <Grid item xs={2}>
         <Button
           variant="contained"
@@ -64,16 +63,6 @@ function ProfileField({
           onClick={() => setEditPopupVisibility(true)}
         >
           Edit
-        </Button>
-      </Grid>
-      <Grid item xs={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<DeleteIcon />}
-          onClick={() => setDeletePopupVisibility(true)}
-        >
-          Delete
         </Button>
       </Grid>
       <EditFieldPopup
@@ -84,6 +73,39 @@ function ProfileField({
         isPopupShowing={isEditPopupShowing}
         setPopupVisibility={setEditPopupVisibility}
       />
+    </Box>
+  );
+}
+
+function DeleteElements({
+  field,
+  guestFields,
+  rdfFields,
+  deletable,
+}: {
+  field: Field;
+  guestFields: Field[];
+  rdfFields: string[] | undefined;
+  deletable: boolean;
+}): JSX.Element | null {
+  const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
+
+  if (!deletable) {
+    return null;
+  }
+
+  return (
+    <Box>
+      <Grid item xs={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<DeleteIcon />}
+          onClick={() => setDeletePopupVisibility(true)}
+        >
+          Delete
+        </Button>
+      </Grid>
       <DeleteFieldPopup
         fieldName={field.fieldShortName}
         onConfirmation={(fieldName) =>
@@ -91,6 +113,43 @@ function ProfileField({
         }
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
+      />
+    </Box>
+  );
+}
+
+function ProfileField({
+  field,
+  guestFields,
+  rdfFields,
+  editable,
+  deletable,
+}: {
+  field: Field;
+  guestFields: Field[];
+  rdfFields: string[] | undefined;
+  editable: boolean;
+  deletable: boolean;
+}): JSX.Element {
+  return (
+    <Grid container item spacing={2} justify="center" alignItems="center">
+      <Grid item xs={4}>
+        {field.fieldPrettyName}:
+      </Grid>
+      <Grid item xs={4}>
+        {field.fieldValue}
+      </Grid>
+      <EditElements
+        field={field}
+        guestFields={guestFields}
+        rdfFields={rdfFields}
+        editable={editable}
+      />
+      <DeleteElements
+        field={field}
+        guestFields={guestFields}
+        rdfFields={rdfFields}
+        deletable={deletable}
       />
     </Grid>
   );

@@ -51,6 +51,7 @@ export function useGuest(
     );
   };
 
+  //TODO now that we have webId, we absolutely need to include it in the SWR key
   const { data, error } = useSWR(() => CreateSwrKey(rdfNames), fetcher);
 
   return {

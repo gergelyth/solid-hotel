@@ -14,6 +14,13 @@ import { useGuest } from "../../common/hooks/useGuest";
 
 const HotelProfileThingName = "hotelProfile";
 
+export function ConstructWebIdFromProfileId(
+  baseUrl: string,
+  profileId: string
+): string {
+  return `${baseUrl}${profileId}#${HotelProfileThingName}`;
+}
+
 export async function CreateHotelProfile(
   fields: Field[],
   containerUrl: string
