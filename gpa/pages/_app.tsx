@@ -10,6 +10,7 @@ import { Box, Container } from "@material-ui/core";
 import NavigationBar from "../components/navbar";
 import Footer from "../../common/components/footer";
 import styles from "../../common/styles/styles";
+import { SnackbarProvider } from "notistack";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -32,13 +33,15 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="sm">
-          <NavigationBar />
-          <Box className={additionalStyles.main}>
-            <Component {...pageProps} />
-          </Box>
-          <Footer />
-        </Container>
+        <SnackbarProvider maxSnack={3}>
+          <Container maxWidth="sm">
+            <NavigationBar />
+            <Box className={additionalStyles.main}>
+              <Component {...pageProps} />
+            </Box>
+            <Footer />
+          </Container>
+        </SnackbarProvider>
       </ThemeProvider>
     </React.Fragment>
   );
