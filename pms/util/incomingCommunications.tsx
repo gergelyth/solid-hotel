@@ -17,11 +17,8 @@ export function ReceiveReservationStateChange(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const {
-    reservationId,
-    newState,
-    replyInbox,
-  } = DeserializeReservationStateChange(hotelInboxUrl, dataset);
+  const { reservationId, newState, replyInbox } =
+    DeserializeReservationStateChange(hotelInboxUrl, dataset);
   //TODO check if onReceive gets no Error, and adjust this text accordingly
   const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
         Click to view reservation.`;
@@ -64,6 +61,26 @@ export function ReceiveBookingRequest(
       hotelInboxUrl
     );
   };
+
+  return { text, onClick, onReceive };
+}
+
+export function ReceiveProfileModification(
+  router: NextRouter,
+  hotelInboxUrl: string,
+  dataset: SolidDataset
+): {
+  text: string;
+  onClick: (event: React.MouseEvent<EventTarget>) => void;
+  onReceive: () => void;
+} {
+  const text = `A guest changed a field in their Solid Pod and is trying to propagate the change to the hotel's side.
+  Click here to review.`;
+  const onClick = (): void => {
+    //TODO use POST request with the notification URL for safety reasons - in the approval page, we can parse the change object
+    router.push(`/approval/`);
+  };
+  const onReceive = (): void => undefined;
 
   return { text, onClick, onReceive };
 }

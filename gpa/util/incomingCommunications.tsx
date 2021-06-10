@@ -13,11 +13,8 @@ export function ReceiveReservationStateChange(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const {
-    reservationId,
-    newState,
-    replyInbox,
-  } = DeserializeReservationStateChange(url, dataset);
+  const { reservationId, newState, replyInbox } =
+    DeserializeReservationStateChange(url, dataset);
   const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
         Click to view reservation.`;
   const onClick = (): void => {
