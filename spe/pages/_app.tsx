@@ -6,6 +6,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 // TODO https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/theme.js
 import theme from "../../common/styles/theme";
+import GlobalSnackbar from "../../common/components/snackbar";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -26,6 +27,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <GlobalSnackbar />
         <Component {...pageProps} />
       </ThemeProvider>
     </React.Fragment>

@@ -11,6 +11,7 @@ import styles from "../../common/styles/styles";
 import Footer from "../../common/components/footer";
 import NavigationBar from "../components/navbar";
 import { SnackbarProvider } from "notistack";
+import GlobalSnackbar from "../../common/components/snackbar";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -35,6 +36,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         <CssBaseline />
         <SnackbarProvider maxSnack={3}>
           <Container>
+            <GlobalSnackbar />
             <NavigationBar />
             <Box className={additionalStyles.main}>
               <Component {...pageProps} />

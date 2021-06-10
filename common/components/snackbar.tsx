@@ -1,8 +1,8 @@
-import { VariantType, useSnackbar } from "notistack";
+import { Box } from "@material-ui/core";
+import { useSnackbar, ProviderContext, VariantType } from "notistack";
 
 function ShowSnackbar(variant: VariantType, message: string): void {
-  const { enqueueSnackbar } = useSnackbar();
-  enqueueSnackbar(message, { variant });
+  snackbarContext.enqueueSnackbar(message, { variant });
 }
 
 export function ShowSuccessSnackbar(message: string): void {
@@ -20,3 +20,12 @@ export function ShowErrorSnackbar(message: string): void {
 export function ShowInfoSnackbar(message: string): void {
   ShowSnackbar("info", message);
 }
+
+let snackbarContext: ProviderContext;
+
+function GlobalSnackbar(): JSX.Element {
+  snackbarContext = useSnackbar();
+  return <Box />;
+}
+
+export default GlobalSnackbar;
