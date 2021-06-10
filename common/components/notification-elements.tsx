@@ -10,6 +10,7 @@ import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
 import { Notification } from "../types/Notification";
 import NotificationList from "./notification-list";
 import { RetrieveAllNotifications } from "../util/notifications";
+import { ParserList } from "../types/ParserList";
 
 function GetBadgeContent(
   notificationRetrieval:
@@ -33,13 +34,15 @@ function GetBadgeContent(
 
 export function GetNotificationElements(
   podAddress: string | null,
-  inboxRegexList: string[]
+  inboxRegexList: string[],
+  parsers: ParserList
 ): { panel: JSX.Element; icon: JSX.Element } {
   let notificationRetrieval;
   if (podAddress) {
     notificationRetrieval = RetrieveAllNotifications(
       podAddress,
-      inboxRegexList
+      inboxRegexList,
+      parsers
     );
   }
 

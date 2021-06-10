@@ -326,3 +326,10 @@ export function CreateCancellationDataset(reservationId: string): SolidDataset {
   cancellationDataset = setThing(cancellationDataset, cancellation);
   return cancellationDataset;
 }
+
+export function CreateInboxForReservation(
+  reservation: ReservationAtHotel
+): string {
+  //TODO - we have to set the publish permission
+  return "";
+}

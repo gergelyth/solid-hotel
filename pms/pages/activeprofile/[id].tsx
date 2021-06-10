@@ -1,5 +1,5 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { HotelProfilesUrl } from "../../../common/consts/solidIdentifiers";
 import { ConstructWebIdFromProfileId } from "../../util/hotelProfileHandler";
@@ -22,13 +22,12 @@ function ActiveHotelProfileDetail(): JSX.Element {
     profileId = profileId[0];
   }
 
-  if (!profileId) {
-    throw new Error("Profile ID null");
-  }
-
-  const guestWebId = ConstructWebIdFromProfileId(HotelProfilesUrl, profileId);
-
   const requiredFields = useRequiredFields();
+
+  if (!profileId) {
+    return <Typography variant="body1">Profile ID null</Typography>;
+  }
+  const guestWebId = ConstructWebIdFromProfileId(HotelProfilesUrl, profileId);
 
   return (
     <Grid

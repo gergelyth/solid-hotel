@@ -3,7 +3,7 @@ import { NextRouter } from "next/router";
 
 export type NotificationParser = (
   router: NextRouter,
-  url: string,
+  hotelInboxUrl: string,
   dataset: SolidDataset
 ) => {
   text: string;

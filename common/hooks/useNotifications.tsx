@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { SetIsProcessedForNotification } from "../util/notifications";
 import { NotificationParser } from "../types/NotificationParser";
 import { NotificationType } from "../types/NotificationsType";
+import { ParserList } from "../types/ParserList";
 
 const swrKey = "notifications";
 
@@ -52,7 +53,7 @@ function BuildNotificationBasedOnType(
 function ConvertToNotification(
   dataset: SolidDataset,
   url: string,
-  parsers: Record<NotificationType, NotificationParser>
+  parsers: ParserList
 ): Notification | null {
   const notificationThing = getThing(dataset, "#notification");
   if (!notificationThing) {
@@ -74,7 +75,7 @@ function ConvertToNotification(
 
 function RetrieveNotifications(
   inboxAddress: string,
-  parsers: Record<NotificationType, NotificationParser>
+  parsers: ParserList
 ): {
   items: (Notification | null)[] | undefined;
   isLoading: boolean;
@@ -88,7 +89,7 @@ function RetrieveNotifications(
 
 export function useNotifications(
   inboxList: string[],
-  parsers: Record<NotificationType, NotificationParser>
+  parsers: ParserList
 ): {
   items: (Notification | null)[];
   isLoading: boolean;

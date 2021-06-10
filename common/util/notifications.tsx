@@ -13,8 +13,7 @@ import { notificationToRdfMap } from "../vocabularies/rdf_notification";
 import { Notification } from "../types/Notification";
 import { NotFoundError } from "./errors";
 import { GetSession } from "./solid";
-import { NotificationType } from "../types/NotificationsType";
-import { NotificationParser } from "../types/NotificationParser";
+import { ParserList } from "../types/ParserList";
 
 async function GlobSolidUrlPaths(
   urlRegex: string,
@@ -60,7 +59,7 @@ async function GlobSolidUrlPaths(
 export function RetrieveAllNotifications(
   coreUrl: string,
   inboxRegexList: string[],
-  parsers: Record<NotificationType, NotificationParser>
+  parsers: ParserList
 ): {
   items: (Notification | null)[];
   isLoading: boolean;

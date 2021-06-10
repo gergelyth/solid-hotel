@@ -39,17 +39,16 @@ function ActiveHotelProfileDetail(): JSX.Element {
     profileId = profileId[0];
   }
 
-  if (!profileId) {
-    throw new Error("Profile ID null");
-  }
+  //TODO probably get rid of IsMatch and list the fields in dataprotectionfields even if it's the same as requiredFields
+  const dataDetailsRetrieval = useDataProtectionInformation();
 
+  if (!profileId) {
+    return <Typography variant="body1">Profile ID null</Typography>;
+  }
   const guestWebId = ConstructWebIdFromProfileId(
     DataProtectionProfilesUrl,
     profileId
   );
-
-  //TODO probably get rid of IsMatch and list the fields in dataprotectionfields even if it's the same as requiredFields
-  const dataDetailsRetrieval = useDataProtectionInformation();
 
   return (
     <Grid

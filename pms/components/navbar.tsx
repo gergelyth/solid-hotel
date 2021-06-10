@@ -14,12 +14,14 @@ import { GetPodOfSession } from "../../common/util/solid";
 import { GetNotificationElements } from "../../common/components/notification-elements";
 import HouseIcon from "@material-ui/icons/House";
 import Link from "next/link";
+import { PMSParsers } from "../consts/parsers";
 
 function NavigationBar(): JSX.Element {
   const podAddress = GetPodOfSession();
   const notificationElements = GetNotificationElements(
     podAddress,
-    PMSInboxList
+    PMSInboxList,
+    PMSParsers
   );
 
   const additionalStyles = styles();

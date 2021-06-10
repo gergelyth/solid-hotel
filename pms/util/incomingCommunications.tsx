@@ -6,6 +6,7 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { AddReservationToHotelPod } from "../../common/util/solidhoteladmin";
 import { DoOnStateChange } from "./actionOnNewReservationState";
 import { ConfirmReservationStateRequest } from "./outgoingCommunications";
+import { CreateInboxForReservation } from "../../common/util/solid";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -37,7 +38,7 @@ export function ReceiveReservationStateChange(
 
 export function ReceiveBookingRequest(
   router: NextRouter,
-  hotelInboxUrl: string,
+  bookingRequestUrl: string,
   dataset: SolidDataset
 ): {
   text: string;
