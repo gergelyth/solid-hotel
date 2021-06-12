@@ -12,6 +12,7 @@ import Footer from "../../common/components/footer";
 import NavigationBar from "../components/navbar";
 import { SnackbarProvider } from "notistack";
 import GlobalSnackbar from "../../common/components/snackbar";
+import GlobalDialog from "../../common/components/global-dialog";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -39,6 +40,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <GlobalSnackbar />
             <NavigationBar />
             <Box className={additionalStyles.main}>
+              <GlobalDialog />
               <Component {...pageProps} />
             </Box>
             <Footer />

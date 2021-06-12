@@ -1,4 +1,5 @@
 import {
+  deleteSolidDataset,
   getContainedResourceUrlAll,
   getSolidDataset,
   saveSolidDatasetAt,
@@ -96,4 +97,10 @@ export async function SetIsProcessedForNotification(
   await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
     fetch: session.fetch,
   });
+}
+
+export async function DeleteNotification(
+  notificationUrl: string
+): Promise<void> {
+  await deleteSolidDataset(notificationUrl);
 }

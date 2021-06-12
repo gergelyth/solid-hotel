@@ -7,6 +7,8 @@ import { AddReservationToHotelPod } from "../../common/util/solidhoteladmin";
 import { DoOnStateChange } from "./actionOnNewReservationState";
 import { ConfirmReservationStateRequest } from "./outgoingCommunications";
 import { CreateInboxForReservation } from "../../common/util/solid";
+import { SetGlobalDialog } from "../../common/components/global-dialog";
+import ApproveChangeDialog from "../../common/components/profile/approve-change-dialog";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -77,8 +79,8 @@ export function ReceiveProfileModification(
   const text = `A guest changed a field in their Solid Pod and is trying to propagate the change to the hotel's side.
   Click here to review.`;
   const onClick = (): void => {
-    //TODO use POST request with the notification URL for safety reasons - in the approval page, we can parse the change object
-    router.push(`/approval/`);
+    //TODO we can get the notification URL from the calling method here (just have to rewrite for all parsers)
+    SetGlobalDialog(<ApproveChangeDialog />);
   };
   const onReceive = (): void => undefined;
 

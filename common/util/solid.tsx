@@ -140,9 +140,15 @@ export async function GetField(field: string): Promise<string> {
   return value;
 }
 
-export async function SetField(field: string, value: string): Promise<void> {
+export async function SetField(
+  field: string,
+  value: string,
+  webId?: string
+): Promise<void> {
   const session = getDefaultSession();
-  const solidProfile = await GetProfile();
+  const solidProfile = webId
+    ? await GetProfileOf(webId, session)
+    : await GetProfile();
 
   return SetFieldInSolidProfile(solidProfile, field, value, session);
 }
