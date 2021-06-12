@@ -3,7 +3,7 @@ import { ReservationClickHandler } from "../../../common/types/ReservationClickH
 import ConciseHotelReservationElement from "./concise-hotel-reservation";
 import { Grid } from "@material-ui/core";
 import CancelReservationButton from "../../../common/components/cancellation/cancellation";
-import OfflineCheckinButton from "../checkin/offline-checkin";
+import OfflineCheckinButton from "../checkin/offline-checkin-button";
 import { ConfirmReservationStateRequest } from "../../util/outgoingCommunications";
 import { ReservationState } from "../../../common/types/ReservationState";
 
@@ -35,7 +35,7 @@ function CreateReservationElement(
         />
       </Grid>
       <Grid item xs={2}>
-        <OfflineCheckinButton />
+        <OfflineCheckinButton reservation={reservation} />
       </Grid>
       <Grid item xs={2}>
         <CancelReservationButton

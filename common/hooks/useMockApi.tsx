@@ -5,7 +5,8 @@ import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { useGuest } from "./useGuest";
 
 function useMockApi<T>(
-  baseApiUrl: string
+  baseApiUrl: string,
+  nationality?: string
 ): {
   data: T | undefined;
   isLoading: boolean;
@@ -29,16 +30,25 @@ function useMockApi<T>(
     );
   };
 
-  const guest = useGuest([personFieldToRdfMap.nationality]);
-  const dependentFetchFunction = (): (string | null | undefined)[] | null => {
-    if (!guest || !guest.guestFields) {
-      return null;
-    }
+  //we call this conditionally - if we have the nationality, we won't call the SWR
+  const guest = useGuest(
+    nationality ? undefined : [personFieldToRdfMap.nationality]
+  );
 
-    return [baseApiUrl, guest.guestFields[0].fieldValue];
-  };
+  let fetchFunction;
+  if (nationality) {
+    fetchFunction = [baseApiUrl, nationality];
+  } else {
+    fetchFunction = (): (string | null | undefined)[] | null => {
+      if (!guest || !guest.guestFields) {
+        return null;
+      }
 
-  const { data, error } = useSWR(dependentFetchFunction, fetcher);
+      return [baseApiUrl, guest.guestFields[0].fieldValue];
+    };
+  }
+
+  const { data, error } = useSWR(fetchFunction, fetcher);
 
   return {
     data: data,
@@ -47,14 +57,17 @@ function useMockApi<T>(
   };
 }
 
-export function useRequiredFields(): {
+export function useRequiredFields(nationality?: string): {
   data: string[] | undefined;
   isLoading: boolean;
   isError: boolean;
 } {
   // return useMockApi<string[]>("/api/requiredFields");
   //TODO shouldnt be hardcoded!!!
-  return useMockApi<string[]>("http://localhost:3003/api/requiredFields");
+  return useMockApi<string[]>(
+    "http://localhost:3003/api/requiredFields",
+    nationality
+  );
 }
 
 export function useDataProtectionInformation(): {

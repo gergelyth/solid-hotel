@@ -297,6 +297,39 @@ export async function SetReservationOwnerToHotelProfile(
   });
 }
 
+export async function SetReservationOwnerAndState(
+  reservationId: string,
+  ownerWebId: string,
+  newState: ReservationState,
+  session = GetSession()
+): Promise<void> {
+  //TODO duplication getting this dataset
+  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const dataset = await GetDataSet(datasetUrl, session);
+
+  //TODO this is not working now with the new inbox structure
+  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  if (!reservationThing) {
+    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
+  }
+
+  let updatedReservation = setStringNoLocale(
+    reservationThing,
+    reservationFieldToRdfMap.owner,
+    ownerWebId
+  );
+  updatedReservation = setInteger(
+    reservationThing,
+    reservationFieldToRdfMap.state,
+    newState.valueOf()
+  );
+  const updatedDataSet = setThing(dataset, updatedReservation);
+
+  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
+    fetch: session.fetch,
+  });
+}
+
 export async function GetWebIdFromReservation(
   reservationId: string,
   session = GetSession()

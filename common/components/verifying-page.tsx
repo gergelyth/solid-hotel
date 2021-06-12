@@ -24,6 +24,21 @@ function ReturnButton({ router }: { router: NextRouter }): JSX.Element {
   );
 }
 
+export function SuccessPage({
+  router,
+  successText,
+}: {
+  router: NextRouter;
+  successText: string;
+}): JSX.Element {
+  return (
+    <Box>
+      <SuccessComponent text={successText} />
+      <ReturnButton router={router} />
+    </Box>
+  );
+}
+
 function VerifyingComponent({
   successText,
   router,
@@ -56,12 +71,7 @@ function VerifyingComponent({
       if (waitingPeriod) {
         clearTimeout(waitingPeriod);
       }
-      return (
-        <Box>
-          <SuccessComponent text={successText} />
-          <ReturnButton router={router} />
-        </Box>
-      );
+      return <SuccessPage router={router} successText={successText} />;
 
     case VerifyingPage.NoResponse:
       return (
