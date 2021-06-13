@@ -3,11 +3,13 @@ import {
   createSolidDataset,
   createThing,
   deleteSolidDataset,
+  getThing,
   saveSolidDatasetInContainer,
   setThing,
+  Thing,
 } from "@inrupt/solid-client";
 import { Field } from "../../common/types/Field";
-import { GetProfileOf, GetSession } from "../../common/util/solid";
+import { GetDataSet, GetProfileOf, GetSession } from "../../common/util/solid";
 import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../../common/consts/solidIdentifiers";
 import { useGuest } from "../../common/hooks/useGuest";
@@ -111,4 +113,19 @@ export async function CreateDataProtectionProfile(
   deleteSolidDataset(webId.split("#")[0]);
 
   return dataProtectionDatasetWebId;
+}
+
+export async function GetHotelProfileThing(
+  hotelProfileUrl: string
+): Promise<Thing> {
+  const session = GetSession();
+
+  const profileDataset = await GetDataSet(hotelProfileUrl, session);
+
+  const profileThing = getThing(profileDataset, `#${HotelProfileThingName}`);
+  if (!profileThing) {
+    throw new Error(`Hotel profile thing null in ${hotelProfileUrl}`);
+  }
+
+  return profileThing;
 }

@@ -3,4 +3,6 @@ export enum NotificationType {
   ReservationStateChange,
   FailureReport,
   ProfileModification,
+  InitialPairingRequest,
+  PairingRequestWithInformation,
 }

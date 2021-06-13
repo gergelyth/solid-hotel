@@ -1,3 +1,5 @@
+import { ReservationsUrl } from "../consts/solidIdentifiers";
+
 export function GetReservationIdFromInboxUrl(url: string): string {
   //TODO this is not very robust
   //structure:
@@ -14,4 +16,24 @@ export function GetReservationIdFromInboxUrl(url: string): string {
   }
 
   return reservationId;
+}
+
+export function CreateInboxUrlFromReservationId(reservationId: string): string {
+  return `${ReservationsUrl}${reservationId}/inbox`;
+}
+
+export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
+  //TODO this is not very robust
+  //structure:
+  //userpod.inrupt.net/reservations/49938104/reservation
+  //userpod.inrupt.net/reservations/49938104/inbox
+  return reservationUrl.replace(new RegExp("reservation$"), "inbox");
+}
+
+export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
+  //TODO this is not very robust
+  //structure:
+  //userpod.inrupt.net/reservations/49938104/reservation
+  //userpod.inrupt.net/reservations/49938104/inbox
+  return inboxUrl.replace(new RegExp("inbox$"), "reservation");
 }

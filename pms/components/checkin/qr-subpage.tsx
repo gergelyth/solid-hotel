@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import { GPAPairUrl } from "../../../common/consts/locations";
 import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
+import { CreateInboxUrlFromReservationId } from "../../../common/util/urlParser";
 
 function QrComponent({
   reservationId,
@@ -17,8 +18,14 @@ function QrComponent({
     return null;
   }
 
+  //TODO this way, since this is public, everybody could get the PI of the guest, since everybody could send a pairing request here
+  //would need a token in the reservation component which is sent in the pairing URL and only accept pairing requests which match this
+  const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
+
   //TODO more robust logic here
-  const targetUrl = `${GPAPairUrl}?reservationId=${reservationId}`;
+  const targetUrl = `${GPAPairUrl}?hotelInboxUrl=${encodeURIComponent(
+    hotelInboxUrl
+  )}`;
 
   return (
     <Grid

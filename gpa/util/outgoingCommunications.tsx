@@ -5,6 +5,7 @@ import { BookingInboxUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationState } from "../../common/types/ReservationState";
 import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { SerializeBookingRequest } from "../../common/notifications/BookingRequest";
+import { SerializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
 
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
@@ -78,4 +79,18 @@ export async function SubmitCheckoutRequest(
     ReservationState.PAST,
     session
   );
+}
+
+export async function SubmitInitialPairingRequest(
+  guestInboxUrl: Promise<string>,
+  hotelInboxUrl: string,
+  session = getDefaultSession()
+): Promise<void> {
+  const notificationDataset = SerializeInitialPairingRequest(
+    await guestInboxUrl
+  );
+
+  await saveSolidDatasetInContainer(hotelInboxUrl, notificationDataset, {
+    fetch: session.fetch,
+  });
 }

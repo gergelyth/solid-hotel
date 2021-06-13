@@ -1,14 +1,19 @@
 import {
   addStringNoLocale,
+  createContainerAt,
   createSolidDataset,
   createThing,
+  getPropertyAll,
   getSolidDataset,
   getStringNoLocale,
+  getTerm,
   getThing,
   removeAll,
   saveSolidDatasetAt,
+  saveSolidDatasetInContainer,
   setInteger,
   setStringNoLocale,
+  setTerm,
   setThing,
   SolidDataset,
   Thing,
@@ -22,6 +27,7 @@ import { cancellationFieldToRdfMap } from "../vocabularies/rdf_cancellation";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
 import { CreateReservationDataset } from "./solidCommon";
+import { GetInboxUrlFromReservationUrl } from "./urlParser";
 
 export type SolidProfile = {
   profileAddress: string;
@@ -224,18 +230,36 @@ async function CreateInboxIfNecessary(
 export async function AddReservation(
   reservation: ReservationAtHotel,
   session = GetSession()
-): Promise<void> {
+): Promise<string> {
   const reservationDataset = CreateReservationDataset(reservation);
 
   const reservationsUrl = GetUserReservationsPodUrl(session);
+  if (!reservationsUrl) {
+    throw new Error("Reservations url is null");
+  }
 
-  await saveSolidDatasetAt(
-    reservationsUrl + reservation.id,
+  const savedDataset = await saveSolidDatasetInContainer(
+    reservationsUrl,
     reservationDataset,
     {
       fetch: session.fetch,
     }
   );
+
+  const savedReservationUrl = savedDataset.internal_resourceInfo.sourceIri;
+
+  const inboxUrl = CreateInboxForReservationUrl(savedReservationUrl, session);
+  return inboxUrl;
+}
+
+async function CreateInboxForReservationUrl(
+  reservationUrl: string,
+  session = GetSession()
+): Promise<string> {
+  //TODO set publish privileges
+  const inboxUrl = GetInboxUrlFromReservationUrl(reservationUrl);
+  await createContainerAt(inboxUrl, { fetch: session.fetch });
+  return inboxUrl;
 }
 
 export async function SetReservationStateAndInbox(
@@ -366,9 +390,38 @@ export function CreateCancellationDataset(reservationId: string): SolidDataset {
   return cancellationDataset;
 }
 
-export function CreateInboxForReservation(
-  reservation: ReservationAtHotel
-): string {
-  //TODO - we have to set the publish permission
-  return "";
+export async function SaveProfileThingToPod(
+  profileThing: Thing,
+  session = GetSession()
+): Promise<void> {
+  const properties = getPropertyAll(profileThing);
+
+  const userProfile = await GetProfile();
+  if (!userProfile) {
+    throw new Error("User profile undefined");
+  }
+
+  let userProfileThing = userProfile.profile;
+
+  properties.forEach((property) => {
+    const term = getTerm(profileThing, property);
+    if (!term) {
+      throw new Error(`Property ${property} has no term`);
+    }
+
+    if (!userProfileThing) {
+      throw new Error("UserProfileThing is undefined");
+    }
+
+    userProfileThing = setTerm(userProfileThing, property, term);
+  });
+
+  if (!userProfile.dataSet || !userProfileThing) {
+    throw new Error("User profile dataset or user profile Thing is null");
+  }
+  const updatedDataSet = setThing(userProfile.dataSet, userProfileThing);
+
+  await saveSolidDatasetAt(userProfile.profileAddress, updatedDataSet, {
+    fetch: session.fetch,
+  });
 }
