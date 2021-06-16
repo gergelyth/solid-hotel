@@ -22,6 +22,10 @@ export function CreateInboxUrlFromReservationId(reservationId: string): string {
   return `${ReservationsUrl}${reservationId}/inbox`;
 }
 
+export function GetCoreReservationFolderFromInboxUrl(inboxUrl: string): string {
+  return inboxUrl.replace(new RegExp("inbox$"), "");
+}
+
 export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
   //TODO this is not very robust
   //structure:

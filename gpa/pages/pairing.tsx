@@ -1,4 +1,4 @@
-import { CircularProgress } from "@material-ui/core";
+import { Box, CircularProgress, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
@@ -33,6 +33,9 @@ function PairingPage(): JSX.Element {
   const hotelInboxUrl = decodeURIComponent(
     GetQueryParameter(router.query.hotelInboxUrl)
   );
+  const pairingToken = decodeURIComponent(
+    GetQueryParameter(router.query.token)
+  );
 
   const session = GetSession();
   if (!session.info.isLoggedIn) {
@@ -42,11 +45,24 @@ function PairingPage(): JSX.Element {
   }
 
   const guestInboxUrl = AddReservation(CreateDummyReservation());
-  SubmitInitialPairingRequest(guestInboxUrl, hotelInboxUrl, session);
+  SubmitInitialPairingRequest(
+    guestInboxUrl,
+    pairingToken,
+    hotelInboxUrl,
+    session
+  );
 
   //TODO wait for specific incoming request - potentially implement this in VerifyingPage as well
 
-  return <CircularProgress />;
+  return (
+    <Box>
+      <Typography variant="h4">Pairing request sent</Typography>
+      <Typography variant="h6">
+        Waiting for the hotel&apos;s response...
+      </Typography>
+      <CircularProgress />
+    </Box>
+  );
 }
 
 export default PairingPage;

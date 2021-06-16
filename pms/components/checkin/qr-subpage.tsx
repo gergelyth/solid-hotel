@@ -1,9 +1,47 @@
-import { Grid, Typography, Button, Box } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Button,
+  Box,
+  CircularProgress,
+} from "@material-ui/core";
 import QRCode from "react-qr-code";
 import { GPAPairUrl } from "../../../common/consts/locations";
 import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
-import { CreateInboxUrlFromReservationId } from "../../../common/util/urlParser";
+import {
+  CreateInboxUrlFromReservationId,
+  GetCoreReservationFolderFromInboxUrl,
+} from "../../../common/util/urlParser";
+import { GetPairingToken } from "../../util/pairingTokenHandler";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
+
+function QrCodeElement({
+  hotelInboxUrl,
+  reservationFolder,
+}: {
+  hotelInboxUrl: string;
+  reservationFolder: string;
+}): JSX.Element {
+  const pairingTokenPromise = GetPairingToken(reservationFolder);
+  pairingTokenPromise.then((token) => {
+    if (!token) {
+      ShowErrorSnackbar(
+        `Pairing token doesn't exist for reservation [${reservationFolder}]`
+      );
+      return null;
+    }
+
+    //TODO more robust logic here
+    const targetUrl = `${GPAPairUrl}?hotelInboxUrl=${encodeURIComponent(
+      hotelInboxUrl
+    )}&token=${encodeURIComponent(token)}`;
+
+    return <QRCode value={targetUrl} size={512} />;
+  });
+
+  return <CircularProgress />;
+}
 
 function QrComponent({
   reservationId,
@@ -21,11 +59,7 @@ function QrComponent({
   //TODO this way, since this is public, everybody could get the PI of the guest, since everybody could send a pairing request here
   //would need a token in the reservation component which is sent in the pairing URL and only accept pairing requests which match this
   const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
-
-  //TODO more robust logic here
-  const targetUrl = `${GPAPairUrl}?hotelInboxUrl=${encodeURIComponent(
-    hotelInboxUrl
-  )}`;
+  const reservationFolder = GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
 
   return (
     <Grid
@@ -45,7 +79,10 @@ function QrComponent({
         </Typography>
       </Grid>
       <Grid item>
-        <QRCode value={targetUrl} size={512} />
+        <QrCodeElement
+          hotelInboxUrl={hotelInboxUrl}
+          reservationFolder={reservationFolder}
+        />
       </Grid>
       <Grid item>
         <Box>

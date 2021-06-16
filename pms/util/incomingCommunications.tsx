@@ -12,7 +12,15 @@ import {
 } from "./outgoingCommunications";
 import { SetGlobalDialog } from "../../common/components/global-dialog";
 import ApproveChangeDialog from "../../common/components/profile/approve-change-dialog";
-import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
+import {
+  GetCoreReservationFolderFromInboxUrl,
+  GetReservationUrlFromInboxUrl,
+} from "../../common/util/urlParser";
+import { GetPairingToken } from "./pairingTokenHandler";
+import {
+  ShowErrorSnackbar,
+  ShowSuccessSnackbar,
+} from "../../common/components/snackbar";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -100,16 +108,40 @@ export function ReceiveInitialPairingRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  //TODO need to guard against repetitive requests, e.g. by removing the token
-  const { guestInboxUrl } = DeserializeInitialPairingRequest(dataset);
+  //TODO what happens if something goes wrong at the user's side and we delete the parsing token - we won't ever be able to repeat
+  const { guestInboxUrl, token: receivedToken } =
+    DeserializeInitialPairingRequest(dataset);
+  const coreReservationFolder =
+    GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
 
   const reservationUrl = GetReservationUrlFromInboxUrl(hotelInboxUrl);
 
-  const text = `Pairing request received for reservation ${reservationUrl}. Information was sent to the user.`;
+  const text = `Pairing request received for reservation ${reservationUrl}.`;
   const onClick = (): void => undefined;
-  const onReceive = (): void => {
-    //TODO add the token
-    SendPairingRequestWithInformation(reservationUrl, guestInboxUrl);
+  const onReceive = async (): Promise<void> => {
+    const expectedPairingToken = await GetPairingToken(coreReservationFolder);
+    if (!expectedPairingToken) {
+      ShowErrorSnackbar(
+        `Pairing token not found in the hotel pod for reservation [${reservationUrl}]`
+      );
+      return;
+    }
+
+    if (receivedToken != expectedPairingToken) {
+      ShowErrorSnackbar(
+        `Request pairing token [${receivedToken}] not matching the expected token [${expectedPairingToken}]`
+      );
+      return;
+    }
+
+    ShowSuccessSnackbar(
+      `Pairing request for [${reservationUrl}] successful. Sending information to guest.`
+    );
+    SendPairingRequestWithInformation(
+      reservationUrl,
+      hotelInboxUrl,
+      guestInboxUrl
+    );
   };
 
   return { text, onClick, onReceive };

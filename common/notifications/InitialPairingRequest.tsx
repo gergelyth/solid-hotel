@@ -10,9 +10,11 @@ import {
 import { AddNotificationThingToDataset } from "../util/solidCommon";
 import { NotificationType } from "../types/NotificationsType";
 import { initialPairingRequestRdfMap } from "../vocabularies/notification_payloads/rdf_initialPairingRequest";
+import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 
 export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
   guestInboxUrl: string;
+  token: string;
 } {
   const requestThing = getThing(dataset, "#pairingRequest");
   if (!requestThing) {
@@ -27,11 +29,20 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
     throw new Error("Guest inbox URL is null in initial pairing request");
   }
 
-  return { guestInboxUrl: guestInboxUrl };
+  const token = getStringNoLocale(
+    requestThing,
+    pairingTokenToRdfMap.pairingToken
+  );
+  if (!token) {
+    throw new Error("Pairing token is null in initial pairing request");
+  }
+
+  return { guestInboxUrl: guestInboxUrl, token: token };
 }
 
 export function SerializeInitialPairingRequest(
-  guestInboxUrl: string
+  guestInboxUrl: string,
+  token: string
 ): SolidDataset {
   //TODO need pairing token here as well
   let initialRequestDataset = createSolidDataset();
@@ -41,6 +52,12 @@ export function SerializeInitialPairingRequest(
     requestThing,
     initialPairingRequestRdfMap.guestInboxUrl,
     guestInboxUrl
+  );
+
+  requestThing = addStringNoLocale(
+    requestThing,
+    pairingTokenToRdfMap.pairingToken,
+    token
   );
 
   initialRequestDataset = setThing(initialRequestDataset, requestThing);

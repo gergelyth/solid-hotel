@@ -83,11 +83,13 @@ export async function SubmitCheckoutRequest(
 
 export async function SubmitInitialPairingRequest(
   guestInboxUrl: Promise<string>,
+  pairingToken: string,
   hotelInboxUrl: string,
   session = getDefaultSession()
 ): Promise<void> {
   const notificationDataset = SerializeInitialPairingRequest(
-    await guestInboxUrl
+    await guestInboxUrl,
+    pairingToken
   );
 
   await saveSolidDatasetInContainer(hotelInboxUrl, notificationDataset, {
