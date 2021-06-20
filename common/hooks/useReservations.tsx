@@ -57,9 +57,7 @@ function ConvertToReservation(
   return ParseReservation(reservationThing, reservationId);
 }
 
-export function useReservations(
-  reservationsUrl: string | null
-): {
+export function useReservations(reservationsUrl: string | null): {
   items: (ReservationAtHotel | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;

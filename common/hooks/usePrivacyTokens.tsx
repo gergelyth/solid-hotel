@@ -37,9 +37,7 @@ function ConvertToPrivacyToken(
   return token;
 }
 
-export function usePrivacyTokens(
-  privacyInbox: string
-): {
+export function usePrivacyTokens(privacyInbox: string): {
   items: (PrivacyToken | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;

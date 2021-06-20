@@ -4,9 +4,16 @@ import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
 import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid";
 
-function CreateSwrKey(rdfNames: string[] | undefined): string[] | null {
+function CreateSwrKey(
+  rdfNames: string[] | undefined,
+  webId: string | undefined
+): string[] | null {
   const swrKey = "guest";
-  return rdfNames ? [swrKey, rdfNames.join()] : null;
+  const result = rdfNames ? [swrKey, rdfNames.join()] : null;
+  if (result && webId) {
+    result.push(webId);
+  }
+  return result;
 }
 
 function GetFieldValues(
@@ -51,8 +58,7 @@ export function useGuest(
     );
   };
 
-  //TODO now that we have webId, we absolutely need to include it in the SWR key
-  const { data, error } = useSWR(() => CreateSwrKey(rdfNames), fetcher);
+  const { data, error } = useSWR(() => CreateSwrKey(rdfNames, webId), fetcher);
 
   return {
     guestFields: data,
@@ -61,13 +67,17 @@ export function useGuest(
   };
 }
 
-export function RevalidateGuest(rdfNames: string[] | undefined): void {
-  mutate(CreateSwrKey(rdfNames));
+export function RevalidateGuest(
+  rdfNames: string[] | undefined,
+  webId: string | undefined = undefined
+): void {
+  mutate(CreateSwrKey(rdfNames, webId));
 }
 
 export function TriggerRefetchGuest(
   rdfNames: string[] | undefined,
-  newFieldList: Field[]
+  newFieldList: Field[],
+  webId: string | undefined = undefined
 ): void {
-  mutate(CreateSwrKey(rdfNames), newFieldList, false);
+  mutate(CreateSwrKey(rdfNames, webId), newFieldList, false);
 }

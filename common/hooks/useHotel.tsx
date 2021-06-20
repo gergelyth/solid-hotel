@@ -30,9 +30,7 @@ function ConvertToHotelDetails(
   return hotel;
 }
 
-export function useHotel(
-  hotelWebId: string | undefined
-): {
+export function useHotel(hotelWebId: string | undefined): {
   hotelDetails: HotelDetails | undefined;
   isLoading: boolean;
   isError: boolean;
@@ -44,7 +42,7 @@ export function useHotel(
   };
 
   const { data, error } = useSWR(
-    () => (hotelWebId ? swrKey + hotelWebId : null),
+    () => (hotelWebId ? [swrKey, hotelWebId] : null),
     fetcher
   );
 

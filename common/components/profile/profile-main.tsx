@@ -66,8 +66,6 @@ function ProfileMain({
 
   return (
     <Box>
-      <h2>{/* {guest.firstName} {guest.lastName} */}</h2>
-      {/* <div>{guest["firstName"]}</div> */}
       {CreateFieldElements(guestFields, rdfFields, editable, deletable)}
     </Box>
   );

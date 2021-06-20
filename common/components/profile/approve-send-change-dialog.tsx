@@ -12,6 +12,7 @@ import {
 import { SetGlobalDialog } from "../global-dialog";
 import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 function ApproveSendChangeDialog({
   changedFieldRdf,
@@ -91,6 +92,7 @@ function ApproveSendChangeDialog({
                 color="secondary"
                 onClick={() => {
                   SetGlobalDialog(null);
+                  //TODO
                   //   DeleteNotification(notificationUrl);
                 }}
               >
@@ -100,7 +102,7 @@ function ApproveSendChangeDialog({
                 variant="contained"
                 color="primary"
                 className={"button"}
-                //TODO approve icon?
+                startIcon={<CheckCircleIcon />}
                 onClick={() => {
                   SetGlobalDialog(null);
                   //TODO send the change notification

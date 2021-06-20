@@ -34,9 +34,7 @@ function ConvertToRoomDefinition(
   return room;
 }
 
-export function useRooms(
-  roomDefinitionsUrl: string
-): {
+export function useRooms(roomDefinitionsUrl: string): {
   items: (RoomDefinition | null)[] | undefined;
   isLoading: boolean;
   isError: boolean;
@@ -49,9 +47,7 @@ export function useRooms(
   );
 }
 
-export function useSpecificRoom(
-  roomUrl: string | undefined
-): {
+export function useSpecificRoom(roomUrl: string | undefined): {
   room: RoomDefinition | null | undefined;
   isLoading: boolean;
   isError: boolean;
@@ -66,7 +62,7 @@ export function useSpecificRoom(
   };
 
   const { data, error } = useSWR(
-    () => (roomUrl ? swrKey + roomUrl : null),
+    () => (roomUrl ? [swrKey, roomUrl] : null),
     fetcher
   );
 

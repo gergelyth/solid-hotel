@@ -11,6 +11,7 @@ import {
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { GetSession } from "./solid";
 
+//TODO use the new Solid API if transition from beta before deadline
 export async function SetSubmitterAccessToEveryone(
   resourceUrl: string,
   session: Session = GetSession()

@@ -16,6 +16,7 @@ import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
 import { SetField } from "../../util/solid";
 import { DeleteNotification } from "../../util/notifications";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 function ApproveChangeDialog({
   dataset,
@@ -113,7 +114,7 @@ function ApproveChangeDialog({
                 variant="contained"
                 color="primary"
                 className={"button"}
-                //TODO approve icon?
+                startIcon={<CheckCircleIcon />}
                 onClick={() => {
                   SetGlobalDialog(null);
                   SetField(

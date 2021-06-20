@@ -40,7 +40,6 @@ function CancelReservationPopup({
           alignItems="center"
           direction="column"
         >
-          {/* TODO need grid items everywhere! */}
           <Grid item>
             <Typography>
               You intend to cancel the following reservation:
