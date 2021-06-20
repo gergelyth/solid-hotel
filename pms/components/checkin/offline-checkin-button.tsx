@@ -10,8 +10,11 @@ function OnConfirmation(
   nationality: string,
   router: NextRouter
 ): void {
-  //TODO convert this to use function argument options with query parameters
-  router.push("/checkin", reservation.id, nationality);
+  //nationality gets parsed in RequiredFieldsAtCheckin
+  router.push({
+    pathname: "/checkin",
+    query: { id: reservation.id, nationality: nationality },
+  });
 }
 
 function OfflineCheckinButton({

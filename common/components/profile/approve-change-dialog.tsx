@@ -13,16 +13,14 @@ import { SetGlobalDialog } from "../global-dialog";
 import { useGuest } from "../../hooks/useGuest";
 import { DeserializeProfileModification } from "../../notifications/ProfileModification";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { SolidDataset } from "@inrupt/solid-client";
+import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
 import { SetField } from "../../util/solid";
 import { DeleteNotification } from "../../util/notifications";
 
 function ApproveChangeDialog({
   dataset,
-  notificationUrl,
 }: {
   dataset: SolidDataset;
-  notificationUrl: string;
 }): JSX.Element {
   const { webId, fieldModified, newFieldValue } =
     DeserializeProfileModification(dataset);
@@ -39,7 +37,9 @@ function ApproveChangeDialog({
     return <CircularProgress />;
   }
 
-  if (isError || !guestFields) {
+  const notificationUrl = getSourceUrl(dataset);
+
+  if (isError || !guestFields || !notificationUrl) {
     return (
       <Container maxWidth="sm">
         <Typography>An error occurred.</Typography>

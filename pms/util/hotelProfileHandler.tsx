@@ -3,6 +3,7 @@ import {
   createSolidDataset,
   createThing,
   deleteSolidDataset,
+  getSourceUrl,
   getThing,
   saveSolidDatasetInContainer,
   setThing,
@@ -15,13 +16,6 @@ import { DataProtectionProfilesUrl } from "../../common/consts/solidIdentifiers"
 import { useGuest } from "../../common/hooks/useGuest";
 
 const HotelProfileThingName = "hotelProfile";
-
-export function ConstructWebIdFromProfileId(
-  baseUrl: string,
-  profileId: string
-): string {
-  return `${baseUrl}${profileId}#${HotelProfileThingName}`;
-}
 
 export async function CreateHotelProfile(
   fields: Field[],
@@ -55,9 +49,7 @@ export async function CreateHotelProfile(
     }
   );
 
-  return (
-    savedDataset.internal_resourceInfo.sourceIri + `#${HotelProfileThingName}`
-  );
+  return getSourceUrl(savedDataset) + `#${HotelProfileThingName}`;
 }
 
 export async function MoveProfileToDataProtectionFolder(
@@ -80,10 +72,7 @@ export async function MoveProfileToDataProtectionFolder(
 
   deleteSolidDataset(solidProfile.profileAddress);
 
-  return (
-    dataProtectionDataset.internal_resourceInfo.sourceIri +
-    `#${HotelProfileThingName}`
-  );
+  return getSourceUrl(dataProtectionDataset) + `#${HotelProfileThingName}`;
 }
 
 export async function CreateDataProtectionProfile(

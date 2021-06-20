@@ -5,6 +5,7 @@ import {
   createThing,
   getPropertyAll,
   getSolidDataset,
+  getSourceUrl,
   getStringNoLocale,
   getTerm,
   getThing,
@@ -27,6 +28,7 @@ import { cancellationFieldToRdfMap } from "../vocabularies/rdf_cancellation";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
 import { CreateReservationDataset } from "./solidCommon";
+import { SetSubmitterAccessToEveryone } from "./solid_access";
 import { GetInboxUrlFromReservationUrl } from "./urlParser";
 
 export type SolidProfile = {
@@ -193,38 +195,8 @@ export async function RemoveField(field: string): Promise<void> {
   });
 }
 
-export function GetReservationInboxUrl(
-  session: Session = getDefaultSession()
-): string | null {
-  const podOfSession = GetPodOfSession(session);
-  if (!podOfSession) {
-    return null;
-  }
-  const inboxUrl = podOfSession + "/" + reservationInbox;
-  CreateInboxIfNecessary(inboxUrl, session);
-  return inboxUrl;
-}
-
 export function GetReservationInboxFromWebId(webId: string): string {
   return webId.replace("profile/card#me", reservationInbox);
-}
-
-async function CreateInboxIfNecessary(
-  inboxUrl: string,
-  session: Session = getDefaultSession()
-): Promise<void> {
-  const dataSet = await getSolidDataset(inboxUrl, {
-    fetch: session.fetch,
-  });
-
-  if (dataSet) {
-    return;
-  }
-
-  await saveSolidDatasetAt(inboxUrl, createSolidDataset(), {
-    fetch: session.fetch,
-  });
-  //TODO we have to set the Submitter permission here!
 }
 
 export async function AddReservation(
@@ -246,19 +218,20 @@ export async function AddReservation(
     }
   );
 
-  const savedReservationUrl = savedDataset.internal_resourceInfo.sourceIri;
+  const savedReservationUrl = getSourceUrl(savedDataset);
 
   const inboxUrl = CreateInboxForReservationUrl(savedReservationUrl, session);
   return inboxUrl;
 }
 
-async function CreateInboxForReservationUrl(
+export async function CreateInboxForReservationUrl(
   reservationUrl: string,
   session = GetSession()
 ): Promise<string> {
   //TODO set publish privileges
   const inboxUrl = GetInboxUrlFromReservationUrl(reservationUrl);
   await createContainerAt(inboxUrl, { fetch: session.fetch });
+  await SetSubmitterAccessToEveryone(inboxUrl);
   return inboxUrl;
 }
 

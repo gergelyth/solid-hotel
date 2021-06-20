@@ -61,14 +61,11 @@ export function ReceiveBookingRequest(
   const text = `Reservation requested for ${reservation.owner} for dates ${reservation.dateFrom}-${reservation.dateTo}.
         Request was automatically confirmed.`;
   const onClick = (): void => {
-    //TODO fix this
-    router.push(`/users/${encodeURIComponent(reservation.owner)}`);
+    router.push("/reservations");
   };
-  const onReceive = (): void => {
+  const onReceive = async (): Promise<void> => {
     reservation.state = ReservationState.CONFIRMED;
-    AddReservationToHotelPod(reservation);
-    //TODO we have AddReservation returning the inbox url in solid.tsx
-    const hotelInboxUrl = CreateInboxForReservation(reservation);
+    const hotelInboxUrl = await AddReservationToHotelPod(reservation);
     ConfirmReservationStateRequest(
       ReservationState.CONFIRMED,
       reservation.inbox,
@@ -91,7 +88,6 @@ export function ReceiveProfileModification(
   const text = `A guest changed a field in their Solid Pod and is trying to propagate the change to the hotel's side.
   Click here to review.`;
   const onClick = (): void => {
-    //TODO we can get the notification URL from the calling method here (just have to rewrite for all parsers)
     SetGlobalDialog(<ApproveChangeDialog dataset={dataset} />);
   };
   const onReceive = (): void => undefined;

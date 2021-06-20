@@ -4,6 +4,7 @@ import { ReservationsUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import CreateReservationElement from "../components/reservations/reservation-element";
 import { Grid, Typography } from "@material-ui/core";
+import { ReservationState } from "../../common/types/ReservationState";
 
 function Reservations(): JSX.Element {
   const router = useRouter();
@@ -12,8 +13,24 @@ function Reservations(): JSX.Element {
     event: React.MouseEvent<HTMLElement>,
     reservation: ReservationAtHotel
   ): void {
-    //todo does this work?
-    // router.push(`/profile/${encodeURIComponent(reservation.owner)}`);
+    switch (reservation.state) {
+      case ReservationState.ACTIVE:
+        router.push({
+          pathname: "/activeprofile/[id]",
+          query: { id: reservation.owner },
+        });
+        break;
+
+      case ReservationState.PAST:
+        router.push({
+          pathname: "/dataprotectionprofile/[id]",
+          query: { id: reservation.owner },
+        });
+        break;
+
+      default:
+        break;
+    }
   }
 
   return (

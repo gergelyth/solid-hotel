@@ -3,6 +3,7 @@ import {
   createSolidDataset,
   createThing,
   deleteSolidDataset,
+  getSourceUrl,
   // getSolidDataset,
   saveSolidDatasetAt,
   setThing,
@@ -18,7 +19,11 @@ import {
   ReservationsUrl,
   RoomDefinitionsUrl,
 } from "../consts/solidIdentifiers";
-import { GetProfileOf, SetFieldInSolidProfile } from "./solid";
+import {
+  CreateInboxForReservationUrl,
+  GetProfileOf,
+  SetFieldInSolidProfile,
+} from "./solid";
 
 // import { NotFoundError } from "./errors";
 
@@ -61,7 +66,7 @@ export async function AddReservationToHotelPod(
   reservation: ReservationAtHotel,
   // TODO: get Hotel session here
   session = GetHotelSession()
-): Promise<void> {
+): Promise<string> {
   // const reservations = await GetReservationDataSet();
 
   // if (!reservations.dataSet) {
@@ -72,13 +77,18 @@ export async function AddReservationToHotelPod(
 
   const reservationDataset = CreateReservationDataset(reservation);
 
-  await saveSolidDatasetAt(
+  const savedDataset = await saveSolidDatasetAt(
     ReservationsUrl + reservation.id,
     reservationDataset,
     {
       fetch: session.fetch,
     }
   );
+
+  const savedReservationUrl = getSourceUrl(savedDataset);
+
+  const inboxUrl = CreateInboxForReservationUrl(savedReservationUrl, session);
+  return inboxUrl;
 }
 
 export async function CreateOrUpdateRoom(room: RoomDefinition): Promise<void> {

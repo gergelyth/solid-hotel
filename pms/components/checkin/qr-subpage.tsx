@@ -32,12 +32,13 @@ function QrCodeElement({
       return null;
     }
 
-    //TODO more robust logic here
-    const targetUrl = `${GPAPairUrl}?hotelInboxUrl=${encodeURIComponent(
-      hotelInboxUrl
-    )}&token=${encodeURIComponent(token)}`;
+    const targetUrl = new URL(GPAPairUrl);
+    targetUrl.search = new URLSearchParams({
+      hotelInboxUrl: encodeURIComponent(hotelInboxUrl),
+      token: encodeURIComponent(token),
+    }).toString();
 
-    return <QRCode value={targetUrl} size={512} />;
+    return <QRCode value={targetUrl.toString()} size={512} />;
   });
 
   return <CircularProgress />;
@@ -56,8 +57,6 @@ function QrComponent({
     return null;
   }
 
-  //TODO this way, since this is public, everybody could get the PI of the guest, since everybody could send a pairing request here
-  //would need a token in the reservation component which is sent in the pairing URL and only accept pairing requests which match this
   const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
   const reservationFolder = GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
 

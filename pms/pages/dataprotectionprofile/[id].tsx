@@ -1,9 +1,7 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
 import { CircularProgress, Grid, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
-import { DataProtectionProfilesUrl } from "../../../common/consts/solidIdentifiers";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
-import { ConstructWebIdFromProfileId } from "../../util/hotelProfileHandler";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 
 function GetDataRetentionPeriod({
@@ -33,22 +31,17 @@ function GetDataRetentionPeriod({
 function ActiveHotelProfileDetail(): JSX.Element {
   const router = useRouter();
 
-  //TODO this ID should be the "owner" field of the reservation minus the DataProtectionProfilesUrl
-  let profileId = router.query.id;
-  if (Array.isArray(profileId)) {
-    profileId = profileId[0];
+  let guestWebId = router.query.id;
+  if (Array.isArray(guestWebId)) {
+    guestWebId = guestWebId[0];
   }
 
   //TODO probably get rid of IsMatch and list the fields in dataprotectionfields even if it's the same as requiredFields
   const dataDetailsRetrieval = useDataProtectionInformation();
 
-  if (!profileId) {
-    return <Typography variant="body1">Profile ID null</Typography>;
+  if (!guestWebId) {
+    return <Typography variant="body1">Owner ID null</Typography>;
   }
-  const guestWebId = ConstructWebIdFromProfileId(
-    DataProtectionProfilesUrl,
-    profileId
-  );
 
   return (
     <Grid

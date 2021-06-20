@@ -7,7 +7,7 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
 import { OfflineCheckinPage } from "../../pages/checkin";
 import { useRouter } from "next/router";
@@ -25,6 +25,9 @@ function RequiredFieldsAtOfflineCheckin({
   executeCheckin: (hotelProfileWebId: string) => void;
 }): JSX.Element | null {
   const router = useRouter();
+  const [hotelProfileWebId, setHotelProfileWebId] = useState<
+    string | undefined
+  >();
 
   let reservationId = router.query.reservationId;
   if (Array.isArray(reservationId)) {
@@ -61,12 +64,13 @@ function RequiredFieldsAtOfflineCheckin({
   }
   nationalityField.fieldValue = nationality;
 
-  const hotelProfileWebId = CreateHotelProfile(
-    [nationalityField],
-    HotelProfilesUrl
+  CreateHotelProfile([nationalityField], HotelProfilesUrl).then((webId) =>
+    setHotelProfileWebId(webId)
   );
 
-  //TODO search internet how to write condition while Promise is not resolved return CircularProgress
+  if (!hotelProfileWebId) {
+    return <CircularProgress />;
+  }
 
   return (
     <Grid

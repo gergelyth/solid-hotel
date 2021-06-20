@@ -1,8 +1,6 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
-import { HotelProfilesUrl } from "../../../common/consts/solidIdentifiers";
-import { ConstructWebIdFromProfileId } from "../../util/hotelProfileHandler";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 
 function PrintRegistrationCard(): void {
@@ -16,18 +14,16 @@ function ExportForeignPoliceReport(): void {
 function ActiveHotelProfileDetail(): JSX.Element {
   const router = useRouter();
 
-  //TODO this ID should be the "owner" field of the reservation minus the HotelProfilesUrl
-  let profileId = router.query.id;
-  if (Array.isArray(profileId)) {
-    profileId = profileId[0];
+  let guestWebId = router.query.id;
+  if (Array.isArray(guestWebId)) {
+    guestWebId = guestWebId[0];
   }
 
   const requiredFields = useRequiredFields();
 
-  if (!profileId) {
-    return <Typography variant="body1">Profile ID null</Typography>;
+  if (!guestWebId) {
+    return <Typography variant="body1">Owner ID null</Typography>;
   }
-  const guestWebId = ConstructWebIdFromProfileId(HotelProfilesUrl, profileId);
 
   return (
     <Grid
