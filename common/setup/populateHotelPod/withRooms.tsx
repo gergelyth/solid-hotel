@@ -1,5 +1,5 @@
 import { RoomDefinition } from "../../types/RoomDefinition";
-import { CreateOrUpdateRoom } from "../../util/solidhoteladmin";
+import { CreateOrUpdateRoom } from "../../../pms/util/solidHotelSpecific";
 
 export function CreateRooms(): RoomDefinition[] {
   let id = 0;

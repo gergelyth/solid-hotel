@@ -7,12 +7,12 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
-import { GetReservationInboxFromWebId } from "../util/solid";
+import { GetReservationInboxFromWebId, GetSession } from "../util/solid";
 import { CreateRooms } from "./populateHotelPod/withRooms";
 
 export async function RecursiveDelete(
   url: string,
-  session: Session
+  session: Session = GetSession()
 ): Promise<void> {
   const dataSet = await getSolidDataset(url, {
     fetch: session.fetch,

@@ -7,7 +7,6 @@ import PopulateHotelPodWithReservations from "../setup/populateHotelPod/withRese
 import PopulateHotelPodWithRooms from "../setup/populateHotelPod/withRooms";
 import {
   DeleteAllHotelRooms,
-  DeleteAllHotelCancellations,
   DeleteAllHotelReservations,
 } from "../setup/populateHotelPod/util";
 import { DeleteAllUserReservations } from "../setup/populateUserPod/util";
@@ -67,14 +66,6 @@ export default function Home(): JSX.Element {
             color="primary"
             variant="contained"
           >
-            <Button
-              onClick={async () => {
-                await DeleteAllHotelCancellations();
-              }}
-            >
-              {/* TODO clear inbox here instead of this */}
-              Clear cancellations
-            </Button>
             <Button
               onClick={async () => {
                 await DeleteAllHotelReservations();

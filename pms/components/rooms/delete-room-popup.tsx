@@ -14,7 +14,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Revalidate } from "../../../common/hooks/useRooms";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
-import { DeleteRoom } from "../../../common/util/solidhoteladmin";
+import { DeleteRoom } from "../../util/solidHotelSpecific";
 
 function DeleteRoomPopup({
   room,

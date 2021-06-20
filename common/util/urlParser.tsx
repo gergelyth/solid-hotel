@@ -1,4 +1,4 @@
-import { ReservationsUrl } from "../consts/solidIdentifiers";
+import { GetUserReservationsPodUrl } from "./solid";
 
 export function GetReservationIdFromInboxUrl(url: string): string {
   //TODO this is not very robust
@@ -19,7 +19,8 @@ export function GetReservationIdFromInboxUrl(url: string): string {
 }
 
 export function CreateInboxUrlFromReservationId(reservationId: string): string {
-  return `${ReservationsUrl}${reservationId}/inbox`;
+  const containerUrl = GetUserReservationsPodUrl();
+  return `${containerUrl}${reservationId}/inbox`;
 }
 
 export function GetCoreReservationFolderFromInboxUrl(inboxUrl: string): string {

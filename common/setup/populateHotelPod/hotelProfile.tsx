@@ -1,5 +1,5 @@
 import { hotelFieldToRdfMap } from "../../vocabularies/rdf_hotel";
-import { SetHotelProfileField } from "../../util/solidhoteladmin";
+import { SetHotelProfileField } from "../../../pms/util/solidHotelSpecific";
 import {
   HotelAddress,
   HotelLocation,

@@ -4,7 +4,6 @@ import { DeserializeReservationStateChange } from "../../common/notifications/Re
 import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { DeserializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
 import { ReservationState } from "../../common/types/ReservationState";
-import { AddReservationToHotelPod } from "../../common/util/solidhoteladmin";
 import { DoOnStateChange } from "./actionOnNewReservationState";
 import {
   ConfirmReservationStateRequest,
@@ -21,6 +20,7 @@ import {
   ShowErrorSnackbar,
   ShowSuccessSnackbar,
 } from "../../common/components/snackbar";
+import { AddReservation } from "../../common/util/solid";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -65,7 +65,7 @@ export function ReceiveBookingRequest(
   };
   const onReceive = async (): Promise<void> => {
     reservation.state = ReservationState.CONFIRMED;
-    const hotelInboxUrl = await AddReservationToHotelPod(reservation);
+    const hotelInboxUrl = await AddReservation(reservation);
     ConfirmReservationStateRequest(
       ReservationState.CONFIRMED,
       reservation.inbox,

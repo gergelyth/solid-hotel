@@ -1,7 +1,7 @@
 import { HotelWebId, RoomDefinitionsUrl } from "../../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
-import { AddReservationToHotelPod } from "../../util/solidhoteladmin";
+import { AddReservation } from "../../util/solid";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 import { CreateRooms } from "./withRooms";
 
@@ -132,7 +132,7 @@ export default function PopulateHotelPodWithReservations(
     GetSharedReservations(userWebId)
   );
   reservations.forEach((reservation: ReservationAtHotel) =>
-    AddReservationToHotelPod(reservation)
+    AddReservation(reservation)
   );
   console.log("Hotel Pod populated with reservations.");
 }

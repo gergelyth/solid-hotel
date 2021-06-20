@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Revalidate } from "../../../common/hooks/useRooms";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
-import { CreateOrUpdateRoom } from "../../../common/util/solidhoteladmin";
+import { CreateOrUpdateRoom } from "../../util/solidHotelSpecific";
 import {
   Dialog,
   DialogTitle,
