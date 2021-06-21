@@ -3,7 +3,7 @@ import { Box } from "@material-ui/core";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
 import RequiredFieldsAtCheckin from "../components/checkin/fields-subpage";
-import { SetReservationOwnerAndState } from "../../common/util/solid";
+import { SetReservationOwnerAndState } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import QrComponent from "../components/checkin/qr-subpage";
 

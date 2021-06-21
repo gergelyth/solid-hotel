@@ -10,7 +10,7 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { ReservationState } from "../types/ReservationState";
-import { AddNotificationThingToDataset } from "../util/solidCommon";
+import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { failureReportRdfMap } from "../vocabularies/notification_payloads/rdf_failureReport";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";

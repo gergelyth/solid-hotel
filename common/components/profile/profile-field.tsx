@@ -1,7 +1,7 @@
 import { useState } from "react";
 import EditFieldPopup from "./edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
-import { RemoveField, SetField } from "../../util/solid";
+import { RemoveField, SetField } from "../../util/solid_profile";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Grid, Button, Box } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";

@@ -7,7 +7,8 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
-import { GetReservationInboxFromWebId, GetSession } from "../util/solid";
+import { GetSession } from "../util/solid";
+import { GetReservationInboxFromWebId } from "../util/solid_reservations";
 import { CreateRooms } from "./populateHotelPod/withRooms";
 
 export async function RecursiveDelete(

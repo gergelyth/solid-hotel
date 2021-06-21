@@ -1,7 +1,7 @@
 import { HotelWebId, RoomDefinitionsUrl } from "../../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
-import { AddReservation } from "../../util/solid";
+import { AddReservation } from "../../util/solid_reservations";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 import { CreateRooms } from "./withRooms";
 

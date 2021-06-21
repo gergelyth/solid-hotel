@@ -10,7 +10,8 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 import { Field } from "../../common/types/Field";
-import { GetDataSet, GetProfileOf, GetSession } from "../../common/util/solid";
+import { GetDataSet, GetSession } from "../../common/util/solid";
+import { GetProfileOf } from "../../common/util/solid_profile";
 import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../../common/consts/solidIdentifiers";
 import { useGuest } from "../../common/hooks/useGuest";

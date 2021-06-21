@@ -14,7 +14,7 @@ import { useGuest } from "../../hooks/useGuest";
 import { DeserializeProfileModification } from "../../notifications/ProfileModification";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
-import { SetField } from "../../util/solid";
+import { SetField } from "../../util/solid_profile";
 import { DeleteNotification } from "../../util/notifications";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 

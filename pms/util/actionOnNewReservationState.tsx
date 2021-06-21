@@ -3,7 +3,7 @@ import {
   GetWebIdFromReservation,
   SetReservationOwnerToHotelProfile,
   SetReservationStateAndInbox,
-} from "../../common/util/solid";
+} from "../../common/util/solid_reservations";
 import {
   ConfirmReservationStateRequest,
   ReportFailureToGuest,

@@ -1,5 +1,6 @@
 import { RecursiveDelete } from "../shared";
-import { GetSession, GetUserReservationsPodUrl } from "../../util/solid";
+import { GetSession } from "../../util/solid";
+import { GetUserReservationsPodUrl } from "../../util/GetUserReservationsPodUrl";
 
 export async function DeleteAllUserReservations(): Promise<void> {
   const session = GetSession();

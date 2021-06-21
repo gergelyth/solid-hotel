@@ -5,7 +5,7 @@ import {
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
-import { AddNotificationThingToDataset } from "../util/solidCommon";
+import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { ParseReservation } from "../hooks/useReservations";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";

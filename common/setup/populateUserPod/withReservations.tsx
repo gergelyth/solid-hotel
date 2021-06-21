@@ -1,6 +1,6 @@
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
-import { AddReservation } from "../../util/solid";
+import { AddReservation } from "../../util/solid_reservations";
 import { CreateInboxUrlFromReservationId } from "../../util/urlParser";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 

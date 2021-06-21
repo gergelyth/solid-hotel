@@ -7,7 +7,7 @@ import {
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
-import { AddNotificationThingToDataset } from "../util/solidCommon";
+import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { profileModificationRdfMap } from "../vocabularies/notification_payloads/rdf_profileModification";
 

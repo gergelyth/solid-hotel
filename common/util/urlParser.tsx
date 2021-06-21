@@ -1,4 +1,4 @@
-import { GetUserReservationsPodUrl } from "./solid";
+import { GetUserReservationsPodUrl } from "./solid_reservations";
 
 export function GetReservationIdFromInboxUrl(url: string): string {
   //TODO this is not very robust

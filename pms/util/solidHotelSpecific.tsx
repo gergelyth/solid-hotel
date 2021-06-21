@@ -15,9 +15,9 @@ import {
 } from "../../common/consts/solidIdentifiers";
 import {
   GetProfileOf,
-  GetSession,
   SetFieldInSolidProfile,
-} from "../../common/util/solid";
+} from "../../common/util/solid_profile";
+import { GetSession } from "../../common/util/solid";
 
 export async function SetHotelProfileField(
   field: string,

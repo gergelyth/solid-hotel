@@ -2,7 +2,7 @@ import { getLiteral } from "@inrupt/solid-client";
 import useSWR, { mutate } from "swr";
 import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
-import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid";
+import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid_profile";
 
 function CreateSwrKey(
   rdfNames: string[] | undefined,

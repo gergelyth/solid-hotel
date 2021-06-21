@@ -1,7 +1,7 @@
 import { getStringNoLocale, Thing } from "@inrupt/solid-client";
 import useSWR from "swr";
 import { HotelDetails } from "../types/HotelDetails";
-import { GetProfileOf } from "../util/solid";
+import { GetProfileOf } from "../util/solid_profile";
 import { hotelFieldToRdfMap } from "../vocabularies/rdf_hotel";
 
 const swrKey = "hotel";

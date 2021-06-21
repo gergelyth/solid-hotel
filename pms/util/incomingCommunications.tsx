@@ -20,7 +20,7 @@ import {
   ShowErrorSnackbar,
   ShowSuccessSnackbar,
 } from "../../common/components/snackbar";
-import { AddReservation } from "../../common/util/solid";
+import { AddReservation } from "../../common/util/solid_reservations";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,

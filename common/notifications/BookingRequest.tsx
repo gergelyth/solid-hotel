@@ -5,7 +5,7 @@ import { NotificationType } from "../types/NotificationsType";
 import {
   AddNotificationThingToDataset,
   CreateReservationDataset,
-} from "../util/solidCommon";
+} from "../util/datasetFactory";
 
 export function DeserializeBookingRequest(
   dataset: SolidDataset
