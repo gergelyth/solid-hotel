@@ -1,5 +1,6 @@
 import {
   createContainerAt,
+  createContainerInContainer,
   getSourceUrl,
   getStringNoLocale,
   getThing,
@@ -17,7 +18,6 @@ import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetSession } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
 import { SetSubmitterAccessToEveryone } from "./solid_access";
-import { GetInboxUrlFromReservationUrl } from "./urlParser";
 
 const reservationAddress = "reservations/";
 const reservationInbox = "reservations/inbox";
@@ -47,25 +47,31 @@ export async function AddReservation(
     throw new Error("Reservations url is null");
   }
 
-  const savedDataset = await saveSolidDatasetInContainer(
-    reservationsUrl,
+  const reservationContainer = await createContainerInContainer(
+    reservationsUrl
+  );
+  const reservationContainerUrl = getSourceUrl(reservationContainer);
+
+  await saveSolidDatasetInContainer(
+    reservationContainerUrl + "reservation",
     reservationDataset,
     {
       fetch: session.fetch,
     }
   );
 
-  const savedReservationUrl = getSourceUrl(savedDataset);
-
-  const inboxUrl = CreateInboxForReservationUrl(savedReservationUrl, session);
+  const inboxUrl = CreateInboxForReservationUrl(
+    reservationContainerUrl,
+    session
+  );
   return inboxUrl;
 }
 
-export async function CreateInboxForReservationUrl(
-  reservationUrl: string,
+async function CreateInboxForReservationUrl(
+  reservationContainerUrl: string,
   session = GetSession()
 ): Promise<string> {
-  const inboxUrl = GetInboxUrlFromReservationUrl(reservationUrl);
+  const inboxUrl = reservationContainerUrl + "inbox";
   await createContainerAt(inboxUrl, { fetch: session.fetch });
   await SetSubmitterAccessToEveryone(inboxUrl);
   return inboxUrl;
