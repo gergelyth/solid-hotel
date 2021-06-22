@@ -1,15 +1,15 @@
 import { SolidDataset } from "@inrupt/solid-client";
-import {
-  AddReservation,
-  GetSession,
-  SaveProfileThingToPod,
-  SetReservationStateAndInbox,
-} from "../../common/util/solid";
+import { GetSession } from "../../common/util/solid";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { DeserializeFailureReport } from "../../common/notifications/FailureReport";
 import { DeserializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
 import { ShowErrorSnackbar } from "../../common/components/snackbar";
+import {
+  AddReservation,
+  SetReservationStateAndInbox,
+} from "../../common/util/solid_reservations";
+import { SaveProfileThingToPod } from "../../common/util/solid_profile";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,

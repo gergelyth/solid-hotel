@@ -2,6 +2,7 @@ import {
   deleteSolidDataset,
   getContainedResourceUrlAll,
   getSolidDataset,
+  isContainer,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
@@ -19,10 +20,13 @@ export async function RecursiveDelete(
     fetch: session.fetch,
   });
   const urls = getContainedResourceUrlAll(dataSet);
-  urls.forEach(
-    async (itemUrl) =>
-      await deleteSolidDataset(itemUrl, { fetch: session.fetch })
-  );
+  urls.forEach(async (itemUrl) => {
+    if (isContainer(itemUrl)) {
+      RecursiveDelete(itemUrl);
+    }
+  });
+
+  await deleteSolidDataset(url, { fetch: session.fetch });
 }
 
 export function GetCurrentDatePushedBy(
@@ -43,10 +47,9 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
   const rooms = CreateRooms();
 
   const reservationInboxUrl = GetReservationInboxFromWebId(userWebId);
-  let id = 400;
   const sharedReservations: ReservationAtHotel[] = [
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: reservationInboxUrl,
       owner: userWebId,
       hotel: HotelWebId,
@@ -56,7 +59,7 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 0, 3),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: reservationInboxUrl,
       owner: userWebId,
       hotel: HotelWebId,
@@ -66,7 +69,7 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 0, 3),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: reservationInboxUrl,
       owner: userWebId,
       hotel: HotelWebId,

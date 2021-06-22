@@ -9,14 +9,15 @@ import {
 } from "@inrupt/solid-client";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { FetchItems } from "./util/listThenItemsFetcher";
+import { GetReservationIdFromDatasetUrl } from "../util/urlParser";
 
 export function ParseReservation(
   reservationThing: Thing,
-  reservationId: string
+  datasetUrl: string
 ): ReservationAtHotel {
   // TODO: modify No Id and No Name
   const reservation = {
-    id: reservationId,
+    id: GetReservationIdFromDatasetUrl(datasetUrl),
     inbox: getStringNoLocale(reservationThing, reservationFieldToRdfMap.inbox),
     owner:
       getStringNoLocale(reservationThing, reservationFieldToRdfMap.owner) ??
@@ -45,16 +46,12 @@ function ConvertToReservation(
   dataset: SolidDataset,
   url: string
 ): ReservationAtHotel | null {
-  const reservationId = url.split("/").pop();
-  if (!reservationId) {
-    return null;
-  }
   const reservationThing = getThing(dataset, url + "#reservation");
   if (!reservationThing) {
     return null;
   }
 
-  return ParseReservation(reservationThing, reservationId);
+  return ParseReservation(reservationThing, url);
 }
 
 export function useReservations(reservationsUrl: string | null): {

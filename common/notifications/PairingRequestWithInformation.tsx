@@ -1,5 +1,6 @@
 import {
   createSolidDataset,
+  getSourceUrl,
   getThing,
   setThing,
   SolidDataset,
@@ -21,8 +22,12 @@ export function DeserializePairingRequestWithInformation(
     throw new Error("Reservation cannot be null");
   }
 
-  //TODO fix ID nonsense
-  const reservation = ParseReservation(reservationThing, "randomId");
+  const datasetUrl = getSourceUrl(dataset);
+  if (!datasetUrl) {
+    throw new Error("Dataset URL is null");
+  }
+
+  const reservation = ParseReservation(reservationThing, datasetUrl);
 
   const hotelProfileThing = getThing(dataset, "#hotelProfile");
   if (!hotelProfileThing) {

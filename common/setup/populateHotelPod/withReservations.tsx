@@ -18,10 +18,9 @@ function CreateReservations(): ReservationAtHotel[] {
 
   const rooms = CreateRooms();
 
-  let id = 200;
   const reservations: ReservationAtHotel[] = [
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner1,
       hotel: HotelWebId,
@@ -31,7 +30,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 1, 2),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner5,
       hotel: HotelWebId,
@@ -41,7 +40,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 2, 25),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner2,
       hotel: HotelWebId,
@@ -51,7 +50,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 1, 17),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner4,
       hotel: HotelWebId,
@@ -61,7 +60,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 5, 7),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner1,
       hotel: HotelWebId,
@@ -71,7 +70,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 2, 15),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner3,
       hotel: HotelWebId,
@@ -81,7 +80,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, -3, -2),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner4,
       hotel: HotelWebId,
@@ -91,7 +90,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 0, 4),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner5,
       hotel: HotelWebId,
@@ -101,7 +100,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, -1, -2),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner6,
       hotel: HotelWebId,
@@ -111,7 +110,7 @@ function CreateReservations(): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 0, -11),
     },
     {
-      id: `reservation${id++}`,
+      id: null,
       inbox: null,
       owner: owner3,
       hotel: HotelWebId,

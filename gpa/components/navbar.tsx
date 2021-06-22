@@ -5,12 +5,13 @@ import { DynamicLoginComponent } from "../../common/components/auth/dynamic-logi
 import { GPAInboxList } from "../consts/inboxList";
 import { GetPodOfSession } from "../../common/util/solid";
 import { GetNotificationElements } from "../../common/components/notification-elements";
+import { GPAParsers } from "../consts/parsers";
 
 function NavigationBar(): JSX.Element {
-  const podAddress = GetPodOfSession();
   const notificationElements = GetNotificationElements(
-    podAddress,
-    GPAInboxList
+    GetPodOfSession(),
+    GPAInboxList,
+    GPAParsers
   );
 
   const additionalStyles = styles();

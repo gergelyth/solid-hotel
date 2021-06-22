@@ -1,7 +1,6 @@
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 import { AddReservation } from "../../util/solid_reservations";
-import { CreateInboxUrlFromReservationId } from "../../util/urlParser";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 
 function CreateReservations(userWebId: string): ReservationAtHotel[] {
@@ -9,12 +8,11 @@ function CreateReservations(userWebId: string): ReservationAtHotel[] {
     "https://someotherhotel.fakeprovider.net/profile/card#me";
   const room = "https://someotherhotel.fakeprovider.net/rooms/room1";
 
-  //TODO fix the inbox init after decided what to do with the IDs
-  let id = 300;
   const reservations: ReservationAtHotel[] = [
     {
-      id: `reservation${id++}`,
-      inbox: CreateInboxUrlFromReservationId(`reservation${id - 1}`),
+      id: null,
+      inbox:
+        "https://someotherhotel.fakeprovider.net/reservations/293801934/inbox/",
       owner: userWebId,
       hotel: otherHotelWebId,
       room: room,
@@ -23,8 +21,9 @@ function CreateReservations(userWebId: string): ReservationAtHotel[] {
       dateTo: GetCurrentDatePushedBy(0, 1, 2),
     },
     {
-      id: `reservation${id++}`,
-      inbox: CreateInboxUrlFromReservationId(`reservation${id - 1}`),
+      id: null,
+      inbox:
+        "https://someotherhotel.fakeprovider.net/reservations/103u40109231/inbox/",
       owner: userWebId,
       hotel: otherHotelWebId,
       room: room,

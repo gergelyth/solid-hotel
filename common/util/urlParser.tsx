@@ -42,3 +42,8 @@ export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
   //userpod.inrupt.net/reservations/49938104/inbox
   return inboxUrl.replace(new RegExp("inbox$"), "reservation");
 }
+
+export function GetReservationIdFromDatasetUrl(url: string): string {
+  const urlParts = url.split("/");
+  return urlParts[-2];
+}

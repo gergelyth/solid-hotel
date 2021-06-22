@@ -1,4 +1,4 @@
-import { getThing, SolidDataset } from "@inrupt/solid-client";
+import { getSourceUrl, getThing, SolidDataset } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ParseReservation } from "../hooks/useReservations";
 import { NotificationType } from "../types/NotificationsType";
@@ -15,8 +15,12 @@ export function DeserializeBookingRequest(
     throw new Error("Reservation cannot be null");
   }
 
-  //TODO fix ID nonsense
-  const reservation = ParseReservation(reservationThing, "randomId");
+  const datasetUrl = getSourceUrl(dataset);
+  if (!datasetUrl) {
+    throw new Error("Dataset URL is null");
+  }
+
+  const reservation = ParseReservation(reservationThing, datasetUrl);
   return reservation;
 }
 
