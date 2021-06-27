@@ -9,7 +9,7 @@ import {
 } from "@inrupt/solid-client";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { FetchItems } from "./util/listThenItemsFetcher";
-import { GetReservationIdFromDatasetUrl } from "../util/urlParser";
+import { GetIdFromDatasetUrl } from "../util/urlParser";
 
 export function ParseReservation(
   reservationThing: Thing,
@@ -17,7 +17,7 @@ export function ParseReservation(
 ): ReservationAtHotel {
   // TODO: modify No Id and No Name
   const reservation = {
-    id: GetReservationIdFromDatasetUrl(datasetUrl),
+    id: GetIdFromDatasetUrl(datasetUrl),
     inbox: getStringNoLocale(reservationThing, reservationFieldToRdfMap.inbox),
     owner:
       getStringNoLocale(reservationThing, reservationFieldToRdfMap.owner) ??

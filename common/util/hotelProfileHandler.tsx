@@ -9,12 +9,12 @@ import {
   setThing,
   Thing,
 } from "@inrupt/solid-client";
-import { Field } from "../../common/types/Field";
-import { GetDataSet, GetSession } from "../../common/util/solid";
-import { GetProfileOf } from "../../common/util/solid_profile";
-import { personFieldToRdfMap } from "../../common/vocabularies/rdf_person";
-import { DataProtectionProfilesUrl } from "../../common/consts/solidIdentifiers";
-import { useGuest } from "../../common/hooks/useGuest";
+import { Field } from "../types/Field";
+import { GetDataSet, GetSession } from "./solid";
+import { GetProfileOf } from "./solid_profile";
+import { personFieldToRdfMap } from "../vocabularies/rdf_person";
+import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
+import { useGuest } from "../hooks/useGuest";
 
 const HotelProfileThingName = "hotelProfile";
 

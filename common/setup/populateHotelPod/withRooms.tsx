@@ -2,33 +2,32 @@ import { RoomDefinition } from "../../types/RoomDefinition";
 import { CreateOrUpdateRoom } from "../../../pms/util/solidHotelSpecific";
 
 export function CreateRooms(): RoomDefinition[] {
-  let id = 0;
   const rooms: RoomDefinition[] = [
     {
-      id: `room${id++}`,
+      id: null,
       name: "5A",
       description: "Queen-sized bed, ocean-view.",
     },
     {
-      id: `room${id++}`,
+      id: null,
       name: "78Q",
       description:
         "Twin bed, equipped with a flat screen TV with international TV channels.",
     },
     {
-      id: `room${id++}`,
+      id: null,
       name: "209U",
       description:
         "King-sized bed, spacious wardrobe. Own bathrooms with a bathtub.",
     },
     {
-      id: `room${id++}`,
+      id: null,
       name: "9R",
       description:
         "Equipped with a shower, balcony overlooking the gardens. Room is air-conditioned.",
     },
     {
-      id: `room${id++}`,
+      id: null,
       name: "23A",
     },
   ];

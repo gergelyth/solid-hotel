@@ -12,6 +12,11 @@ import {
 import { DeleteAllUserReservations } from "../setup/populateUserPod/util";
 import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
 import { GetSession } from "../util/solid";
+import { ShowSuccessSnackbar } from "../components/snackbar";
+import {
+  PopulateHotelPodWithActiveProfiles,
+  PopulateHotelPodWithDataProtectionProfiles,
+} from "../setup/populateHotelPod/withProfiles";
 
 // TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
@@ -57,8 +62,6 @@ export default function Home(): JSX.Element {
         </Typography>
       </Grid>
 
-      {/* TODO add snackbar notifications for these operations */}
-
       <Grid container spacing={3} alignItems="center" justify="center">
         <Grid item>
           <ButtonGroup
@@ -69,6 +72,7 @@ export default function Home(): JSX.Element {
             <Button
               onClick={async () => {
                 await DeleteAllHotelReservations();
+                ShowSuccessSnackbar("All hotel reservations deleted");
               }}
             >
               Clear reservations
@@ -76,6 +80,7 @@ export default function Home(): JSX.Element {
             <Button
               onClick={async () => {
                 await DeleteAllHotelRooms();
+                ShowSuccessSnackbar("All hotel rooms deleted");
               }}
             >
               Clear rooms
@@ -88,19 +93,44 @@ export default function Home(): JSX.Element {
             color="primary"
             variant="contained"
           >
-            <Button onClick={SetupHotelProfile}>Setup hotel profile</Button>
             <Button
-              onClick={() =>
+              onClick={() => {
+                SetupHotelProfile();
+                ShowSuccessSnackbar("Hotel profile setup successful");
+              }}
+            >
+              Setup hotel profile
+            </Button>
+            <Button
+              onClick={() => {
                 //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
                 PopulateHotelPodWithReservations(
                   "https://gergelyth.inrupt.net/profile/card#me"
-                )
-              }
+                );
+                ShowSuccessSnackbar("Hotel Pod populated with reservations");
+              }}
             >
               Add reservations
             </Button>
-            {/* TODO make rooms public programatically */}
-            <Button onClick={PopulateHotelPodWithRooms}>Add rooms</Button>
+            <Button
+              onClick={() => {
+                PopulateHotelPodWithRooms();
+                ShowSuccessSnackbar("Hotel Pod populated with rooms");
+              }}
+            >
+              Add rooms
+            </Button>
+            <Button
+              onClick={() => {
+                PopulateHotelPodWithActiveProfiles();
+                PopulateHotelPodWithDataProtectionProfiles();
+                ShowSuccessSnackbar(
+                  "Hotel Pod populated with active and data protection profiles"
+                );
+              }}
+            >
+              Add rooms
+            </Button>
           </ButtonGroup>
         </Grid>
       </Grid>
@@ -119,6 +149,7 @@ export default function Home(): JSX.Element {
             <Button
               onClick={async () => {
                 await DeleteAllUserReservations();
+                ShowSuccessSnackbar("All user reservations have been deleted");
               }}
             >
               Clear reservations
@@ -132,12 +163,13 @@ export default function Home(): JSX.Element {
             variant="contained"
           >
             <Button
-              onClick={() =>
+              onClick={() => {
                 //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
                 PopulateUserPodWithReservations(
                   "https://gergelyth.inrupt.net/profile/card#me"
-                )
-              }
+                );
+                ShowSuccessSnackbar("Reservations added to user pod");
+              }}
             >
               Add reservations
             </Button>

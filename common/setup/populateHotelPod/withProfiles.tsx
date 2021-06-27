@@ -1,6 +1,6 @@
 import { FieldNameToFieldMap } from "../../util/fields";
 import { Field } from "../../types/Field";
-import { CreateHotelProfile } from "../../../pms/util/hotelProfileHandler";
+import { CreateHotelProfile } from "../../util/hotelProfileHandler";
 import {
   DataProtectionProfilesUrl,
   HotelProfilesUrl,
@@ -97,7 +97,6 @@ async function CreateProfiles(
       fields.push(field);
     });
 
-    //TODO hotel profile reference in PMS
     const hotelProfileWebId = await CreateHotelProfile(
       fields,
       profilesContainer
@@ -123,7 +122,6 @@ export async function PopulateHotelPodWithDataProtectionProfiles(): Promise<
   string[]
 > {
   const dataProtectionProfiles = GetDataProtectionProfiles();
-  //TODO hotel profile reference in PMS
   const dataProtectionProfileWebIds = await CreateProfiles(
     dataProtectionProfiles,
     DataProtectionProfilesUrl

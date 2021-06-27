@@ -5,7 +5,7 @@ import { SerializeReservationStateChange } from "../../common/notifications/Rese
 import { SerializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetSession } from "../../common/util/solid";
-import { GetHotelProfileThing } from "./hotelProfileHandler";
+import { GetHotelProfileThing } from "../../common/util/hotelProfileHandler";
 import {
   GetOwnerAndAnonymizeInMemory,
   SaveInboxAndReturnReservation,

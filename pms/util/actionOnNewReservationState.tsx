@@ -17,7 +17,7 @@ import {
   CreateDataProtectionProfile,
   CreateHotelProfile,
   MoveProfileToDataProtectionFolder,
-} from "./hotelProfileHandler";
+} from "../../common/util/hotelProfileHandler";
 import { HotelProfilesUrl } from "../../common/consts/solidIdentifiers";
 
 export function DoOnStateChange(

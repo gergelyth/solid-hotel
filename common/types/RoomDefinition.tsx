@@ -1,5 +1,5 @@
 export type RoomDefinition = {
-  id: string;
+  id: string | null;
   name: string;
   description?: string;
 };

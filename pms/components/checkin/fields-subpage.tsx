@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
 import { OfflineCheckinPage } from "../../pages/checkin";
 import { useRouter } from "next/router";
-import { CreateHotelProfile } from "../../util/hotelProfileHandler";
+import { CreateHotelProfile } from "../../../common/util/hotelProfileHandler";
 import GetSupportedFields from "../../../common/consts/supported-fields";
 import { HotelProfilesUrl } from "../../../common/consts/solidIdentifiers";
 

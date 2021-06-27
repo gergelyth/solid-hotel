@@ -43,7 +43,7 @@ export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
   return inboxUrl.replace(new RegExp("inbox$"), "reservation");
 }
 
-export function GetReservationIdFromDatasetUrl(url: string): string {
+export function GetIdFromDatasetUrl(url: string): string {
   const urlParts = url.split("/");
   return urlParts[-2];
 }

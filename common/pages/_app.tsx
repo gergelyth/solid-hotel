@@ -8,6 +8,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../styles/theme";
 import { Box, Container } from "@material-ui/core";
 import styles from "../styles/styles";
+import { SnackbarProvider } from "notistack";
+import GlobalSnackbar from "../components/snackbar";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -30,11 +32,14 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="sm">
-          <Box className={additionalStyles.main}>
-            <Component {...pageProps} />
-          </Box>
-        </Container>
+        <SnackbarProvider maxSnack={3}>
+          <Container maxWidth="sm">
+            <GlobalSnackbar />
+            <Box className={additionalStyles.main}>
+              <Component {...pageProps} />
+            </Box>
+          </Container>
+        </SnackbarProvider>
       </ThemeProvider>
     </React.Fragment>
   );

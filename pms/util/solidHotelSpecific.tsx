@@ -1,9 +1,11 @@
 import {
   addStringNoLocale,
+  createContainerAt,
   createSolidDataset,
   createThing,
   deleteSolidDataset,
-  saveSolidDatasetAt,
+  getSolidDataset,
+  saveSolidDatasetInContainer,
   setThing,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
@@ -18,6 +20,8 @@ import {
   SetFieldInSolidProfile,
 } from "../../common/util/solid_profile";
 import { GetSession } from "../../common/util/solid";
+import { SetReadAccessToEveryone } from "../../common/util/solid_access";
+import { ShowWarningSnackbar } from "../../common/components/snackbar";
 
 export async function SetHotelProfileField(
   field: string,
@@ -33,7 +37,6 @@ export async function CreateOrUpdateRoom(
   room: RoomDefinition,
   session: Session = GetSession()
 ): Promise<void> {
-  // TODO: make rooms folder public programatically
   let roomDataset = createSolidDataset();
 
   let newRoom = createThing({ name: "room" });
@@ -48,9 +51,25 @@ export async function CreateOrUpdateRoom(
 
   roomDataset = setThing(roomDataset, newRoom);
 
-  await saveSolidDatasetAt(RoomDefinitionsUrl + room.id, roomDataset, {
+  await CheckOrCreateRoomContainer(session);
+
+  await saveSolidDatasetInContainer(RoomDefinitionsUrl, roomDataset, {
     fetch: session.fetch,
   });
+}
+
+async function CheckOrCreateRoomContainer(session: Session): Promise<void> {
+  try {
+    await getSolidDataset(RoomDefinitionsUrl, {
+      fetch: session.fetch,
+    });
+  } catch (e) {
+    ShowWarningSnackbar(
+      `Room container at [${RoomDefinitionsUrl}] doesn't exist. Creating...`
+    );
+    await createContainerAt(RoomDefinitionsUrl, { fetch: session.fetch });
+    await SetReadAccessToEveryone(RoomDefinitionsUrl, session);
+  }
 }
 
 export async function DeleteRoom(

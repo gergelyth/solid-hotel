@@ -8,6 +8,7 @@ import { RoomDefinition } from "../types/RoomDefinition";
 import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
 import useSWR, { mutate } from "swr";
 import { GetDataSet } from "../util/solid";
+import { GetIdFromDatasetUrl } from "../util/urlParser";
 
 const swrKey = "rooms";
 
@@ -15,17 +16,12 @@ function ConvertToRoomDefinition(
   dataset: SolidDataset,
   url: string
 ): RoomDefinition | null {
-  const roomId = url.split("/").pop();
-  if (!roomId) {
-    return null;
-  }
   const roomThing = getThing(dataset, url + "#room");
   if (!roomThing) {
     return null;
   }
-  // TODO: modify No Id and No Name
   const room = {
-    id: roomId,
+    id: GetIdFromDatasetUrl(url),
     name:
       getStringNoLocale(roomThing, roomFieldToRdfMap.name) ?? "<No room name>",
     description:

@@ -74,7 +74,7 @@ function EditRoomPopup({
           className={"button"}
           onClick={() => {
             const newRoom = {
-              id: room.id,
+              id: null,
               name: currentRoomName,
               description:
                 currentRoomDescription === ""

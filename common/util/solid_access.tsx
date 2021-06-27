@@ -7,14 +7,15 @@ import {
   getResourceAcl,
   saveAclFor,
   setPublicResourceAccess,
+  Access,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { GetSession } from "./solid";
 
-//TODO use the new Solid API if transition from beta before deadline
-export async function SetSubmitterAccessToEveryone(
+async function SetPublicAccess(
   resourceUrl: string,
-  session: Session = GetSession()
+  accessSpecification: Access,
+  session: Session
 ): Promise<void> {
   const datasetWithAcl = await getSolidDatasetWithAcl(resourceUrl, {
     fetch: session.fetch,
@@ -37,12 +38,40 @@ export async function SetSubmitterAccessToEveryone(
     resourceAcl = getResourceAcl(datasetWithAcl);
   }
 
-  const updatedAcl = setPublicResourceAccess(resourceAcl, {
-    read: false,
-    append: true,
-    write: false,
-    control: false,
-  });
+  const updatedAcl = setPublicResourceAccess(resourceAcl, accessSpecification);
 
   await saveAclFor(datasetWithAcl, updatedAcl, { fetch: session.fetch });
+}
+
+//TODO use the new Solid API if transition from beta before deadline
+export async function SetSubmitterAccessToEveryone(
+  resourceUrl: string,
+  session: Session = GetSession()
+): Promise<void> {
+  await SetPublicAccess(
+    resourceUrl,
+    {
+      read: false,
+      append: true,
+      write: false,
+      control: false,
+    },
+    session
+  );
+}
+
+export async function SetReadAccessToEveryone(
+  resourceUrl: string,
+  session: Session = GetSession()
+): Promise<void> {
+  await SetPublicAccess(
+    resourceUrl,
+    {
+      read: true,
+      append: false,
+      write: false,
+      control: false,
+    },
+    session
+  );
 }
