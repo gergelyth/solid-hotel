@@ -42,6 +42,24 @@
                             "schema:email"
                         ]
                     }
+                },
+                {
+                    "nationality": "Danish",
+                    "fields": [
+                        "foaf:firstName",
+                        "foaf:familyName",
+                        "schema:nationality",
+                        "schema:idDocumentType",
+                        "schema:idDocumentNumber",
+                        "schema:idDocumentExpiry",
+                        "schema:email",
+                        "schema:phone_number"
+                    ],
+                    "dataProtectionInformation": {
+                        "dataProtectionYears": 5,
+                        "dataProtectionFieldsMatch": true,
+                        "dataProtectionFields": []
+                    }
                 }
             ]
         },
