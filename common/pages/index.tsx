@@ -129,7 +129,7 @@ export default function Home(): JSX.Element {
                 );
               }}
             >
-              Add rooms
+              Add profiles
             </Button>
           </ButtonGroup>
         </Grid>

@@ -78,7 +78,21 @@ export function RetrieveAllNotifications(
     }
   });
 
-  return useNotifications(urlPaths, parsers);
+  const notificationsRetrieval = useNotifications(urlPaths, parsers);
+  TriggerOnReceivedLogic(notificationsRetrieval.items);
+  return notificationsRetrieval;
+}
+
+function TriggerOnReceivedLogic(notifications: (Notification | null)[]): void {
+  if (!notifications) {
+    return;
+  }
+
+  notifications.forEach((notification) => {
+    if (!notification?.isProcessed) {
+      notification?.onReceive();
+    }
+  });
 }
 
 export async function SetIsProcessedForNotification(

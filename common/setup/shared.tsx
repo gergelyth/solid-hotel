@@ -2,7 +2,6 @@ import {
   deleteSolidDataset,
   getContainedResourceUrlAll,
   getSolidDataset,
-  isContainer,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
@@ -19,11 +18,11 @@ export async function RecursiveDelete(
   const dataSet = await getSolidDataset(url, {
     fetch: session.fetch,
   });
+
+  //in case it's a container
   const urls = getContainedResourceUrlAll(dataSet);
   urls.forEach(async (itemUrl) => {
-    if (isContainer(itemUrl)) {
-      RecursiveDelete(itemUrl);
-    }
+    await RecursiveDelete(itemUrl);
   });
 
   await deleteSolidDataset(url, { fetch: session.fetch });
