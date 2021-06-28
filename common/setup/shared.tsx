@@ -1,31 +1,22 @@
-import {
-  deleteSolidDataset,
-  getContainedResourceUrlAll,
-  getSolidDataset,
-} from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import { getContainedResourceUrlAll } from "@inrupt/solid-client";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
-import { GetSession } from "../util/solid";
 import { GetReservationInboxFromWebId } from "../util/solid_reservations";
+import { SafeDeleteDataset, SafeGetDataset } from "../util/solid_wrapper";
 import { CreateRooms } from "./populateHotelPod/withRooms";
 
-export async function RecursiveDelete(
-  url: string,
-  session: Session = GetSession()
-): Promise<void> {
-  const dataSet = await getSolidDataset(url, {
-    fetch: session.fetch,
-  });
+export async function RecursiveDelete(url: string): Promise<void> {
+  const dataSet = await SafeGetDataset(url);
+  if (!dataSet) {
+    return;
+  }
 
   //in case it's a container
   const urls = getContainedResourceUrlAll(dataSet);
-  urls.forEach(async (itemUrl) => {
-    await RecursiveDelete(itemUrl);
-  });
+  await Promise.all(urls.map((url) => RecursiveDelete(url)));
 
-  await deleteSolidDataset(url, { fetch: session.fetch });
+  await SafeDeleteDataset(url);
 }
 
 export function GetCurrentDatePushedBy(

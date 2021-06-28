@@ -36,14 +36,14 @@ function CreateReservations(userWebId: string): ReservationAtHotel[] {
   return reservations;
 }
 
-export default function PopulateUserPodWithReservations(
+export default async function PopulateUserPodWithReservations(
   userWebId: string
-): void {
+): Promise<void> {
   const reservations = CreateReservations(userWebId).concat(
     GetSharedReservations(userWebId)
   );
-  reservations.forEach((reservation: ReservationAtHotel) =>
-    AddReservation(reservation)
+  await Promise.all(
+    reservations.map((reservation) => AddReservation(reservation))
   );
   console.log("User Pod populated with reservations.");
 }

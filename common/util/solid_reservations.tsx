@@ -5,7 +5,6 @@ import {
   getStringNoLocale,
   getThing,
   saveSolidDatasetAt,
-  saveSolidDatasetInContainer,
   setInteger,
   setStringNoLocale,
   setThing,
@@ -47,12 +46,21 @@ export async function AddReservation(
     throw new Error("Reservations url is null");
   }
 
+  try {
+    await createContainerAt(reservationsUrl, { fetch: session.fetch });
+  } catch {
+    undefined;
+  }
+
   const reservationContainer = await createContainerInContainer(
-    reservationsUrl
+    reservationsUrl,
+    {
+      fetch: session.fetch,
+    }
   );
   const reservationContainerUrl = getSourceUrl(reservationContainer);
 
-  await saveSolidDatasetInContainer(
+  await saveSolidDatasetAt(
     reservationContainerUrl + "reservation",
     reservationDataset,
     {

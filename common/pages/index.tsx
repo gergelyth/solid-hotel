@@ -12,7 +12,7 @@ import {
 import { DeleteAllUserReservations } from "../setup/populateUserPod/util";
 import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
 import { GetSession } from "../util/solid";
-import { ShowSuccessSnackbar } from "../components/snackbar";
+import { ShowInfoSnackbar, ShowSuccessSnackbar } from "../components/snackbar";
 import {
   PopulateHotelPodWithActiveProfiles,
   PopulateHotelPodWithDataProtectionProfiles,
@@ -148,6 +148,7 @@ export default function Home(): JSX.Element {
           >
             <Button
               onClick={async () => {
+                ShowInfoSnackbar("Deleting user reservations...");
                 await DeleteAllUserReservations();
                 ShowSuccessSnackbar("All user reservations have been deleted");
               }}
@@ -163,9 +164,10 @@ export default function Home(): JSX.Element {
             variant="contained"
           >
             <Button
-              onClick={() => {
+              onClick={async () => {
+                ShowInfoSnackbar("Populating user Pod with reservations...");
                 //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-                PopulateUserPodWithReservations(
+                await PopulateUserPodWithReservations(
                   "https://gergelyth.inrupt.net/profile/card#me"
                 );
                 ShowSuccessSnackbar("Reservations added to user pod");
