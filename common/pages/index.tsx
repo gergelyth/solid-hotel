@@ -75,6 +75,13 @@ export default function Home(): JSX.Element {
           >
             <Button
               onClick={async () => {
+                ShowInfoSnackbar(
+                  "Deleting hotel and data protection profiles..."
+                );
+                await DeleteAllProfiles();
+                ShowSuccessSnackbar(
+                  "All hotel and data protection profiles deleted"
+                );
                 ShowInfoSnackbar("Deleting hotel reservations...");
                 await DeleteAllHotelReservations();
                 ShowSuccessSnackbar("All hotel reservations deleted");
@@ -90,19 +97,6 @@ export default function Home(): JSX.Element {
               }}
             >
               Clear rooms
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar(
-                  "Deleting hotel and data protection profiles..."
-                );
-                await DeleteAllProfiles();
-                ShowSuccessSnackbar(
-                  "All hotel and data protection profiles deleted"
-                );
-              }}
-            >
-              Clear profiles
             </Button>
           </ButtonGroup>
         </Grid>
@@ -124,16 +118,29 @@ export default function Home(): JSX.Element {
             <Button
               onClick={async () => {
                 ShowInfoSnackbar(
-                  "Populating hotel Pod with reservations and creating booking inbox..."
+                  "Populating hotel Pod with active and data protection profiles..."
                 );
-                await Promise.all([
-                  //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-                  PopulateHotelPodWithReservations(
-                    "https://gergelyth.inrupt.net/profile/card#me"
-                  ),
-                  CreateBookingInbox(),
-                ]);
-                ShowSuccessSnackbar("Hotel Pod populated with reservations");
+                Promise.all([
+                  PopulateHotelPodWithActiveProfiles(),
+                  PopulateHotelPodWithDataProtectionProfiles(),
+                ]).then(async ([activeProfiles, dataProtectionProfiles]) => {
+                  ShowSuccessSnackbar(
+                    "Hotel Pod populated with active and data protection profiles"
+                  );
+                  ShowInfoSnackbar(
+                    "Populating hotel Pod with reservations and creating booking inbox..."
+                  );
+                  await Promise.all([
+                    //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
+                    PopulateHotelPodWithReservations(
+                      "https://gergelyth.inrupt.net/profile/card#me",
+                      activeProfiles,
+                      dataProtectionProfiles
+                    ),
+                    await CreateBookingInbox(),
+                  ]);
+                  ShowSuccessSnackbar("Hotel Pod populated with reservations");
+                });
               }}
             >
               Add reservations
@@ -146,23 +153,6 @@ export default function Home(): JSX.Element {
               }}
             >
               Add rooms
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar(
-                  "Populating hotel Pod with active and data protection profiles..."
-                );
-                Promise.all([
-                  PopulateHotelPodWithActiveProfiles(),
-                  PopulateHotelPodWithDataProtectionProfiles(),
-                ]).then(() => {
-                  ShowSuccessSnackbar(
-                    "Hotel Pod populated with active and data protection profiles"
-                  );
-                });
-              }}
-            >
-              Add profiles
             </Button>
           </ButtonGroup>
         </Grid>

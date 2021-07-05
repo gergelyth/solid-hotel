@@ -40,7 +40,7 @@ export default async function PopulateUserPodWithReservations(
   userWebId: string
 ): Promise<void> {
   const reservations = CreateReservations(userWebId).concat(
-    GetSharedReservations(userWebId)
+    GetSharedReservations(userWebId, userWebId, userWebId)
   );
   await Promise.all(
     reservations.map((reservation) => AddReservation(reservation))

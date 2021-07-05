@@ -12,16 +12,15 @@ import { AddReservation } from "../../util/solid_reservations";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 import { CreateRooms } from "./withRooms";
 
-function CreateReservations(): ReservationAtHotel[] {
-  //TODO populate the hotel profiles and data protection information according to data.sql
-  //TODO adjust these according to the fake data created in data.sql
-  //TODO ownerIDs were adjusted = id 3 was extracted to shared, id 7 renamed to 3
+function CreateReservations(
+  activeProfileIds: string[],
+  dataProtectionProfileIds: string[]
+): ReservationAtHotel[] {
   const owner1 = "https://owner1.fakeprovider.net/profile/card#me";
-  const owner2 = "https://owner1.fakeprovider.net/profile/card#me";
-  const owner3 = "https://owner1.fakeprovider.net/profile/card#me";
-  const owner4 = "https://owner1.fakeprovider.net/profile/card#me";
-  const owner5 = "https://owner1.fakeprovider.net/profile/card#me";
-  const owner6 = "https://owner1.fakeprovider.net/profile/card#me";
+  const owner2 = "https://owner2.fakeprovider.net/profile/card#me";
+  const owner3 = "https://owner3.fakeprovider.net/profile/card#me";
+  const owner4 = "https://owner4.fakeprovider.net/profile/card#me";
+  const owner5 = "https://owner5.fakeprovider.net/profile/card#me";
 
   const rooms = CreateRooms();
 
@@ -89,7 +88,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: null,
       inbox: null,
-      owner: owner4,
+      owner: activeProfileIds[0],
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[3].id,
       state: ReservationState.ACTIVE,
@@ -99,7 +98,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: null,
       inbox: null,
-      owner: owner5,
+      owner: dataProtectionProfileIds[0],
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[2].id,
       state: ReservationState.PAST,
@@ -109,7 +108,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: null,
       inbox: null,
-      owner: owner6,
+      owner: dataProtectionProfileIds[1],
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[0].id,
       state: ReservationState.PAST,
@@ -119,7 +118,7 @@ function CreateReservations(): ReservationAtHotel[] {
     {
       id: null,
       inbox: null,
-      owner: owner3,
+      owner: dataProtectionProfileIds[2],
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.PAST,
@@ -132,10 +131,33 @@ function CreateReservations(): ReservationAtHotel[] {
 }
 
 export async function PopulateHotelPodWithReservations(
-  userWebId: string
+  sharedReservationWebId: string,
+  activeProfileIds: string[],
+  dataProtectionProfileIds: string[]
 ): Promise<void> {
-  const reservations = CreateReservations().concat(
-    GetSharedReservations(userWebId)
+  if (activeProfileIds.length != 2) {
+    throw new Error("Fake data - active profile ID count does not equal 2!");
+  }
+  if (dataProtectionProfileIds.length != 4) {
+    throw new Error(
+      "Fake data - data protection profile ID count does not equal 4!"
+    );
+  }
+
+  //the first ID is the shared guest's
+  const [sharedActiveProfileWebId, ...otherActiveProfileIds] = activeProfileIds;
+  const [sharedDataProtectionProfileWebId, ...otherDataProtectionProfileIds] =
+    dataProtectionProfileIds;
+
+  const reservations = CreateReservations(
+    otherActiveProfileIds,
+    otherDataProtectionProfileIds
+  ).concat(
+    GetSharedReservations(
+      sharedReservationWebId,
+      sharedActiveProfileWebId,
+      sharedDataProtectionProfileWebId
+    )
   );
   await Promise.all(
     reservations.map((reservation) => AddReservation(reservation))
@@ -144,8 +166,6 @@ export async function PopulateHotelPodWithReservations(
 
 export async function CreateBookingInbox(): Promise<void> {
   const session = GetSession();
-  await Promise.all([
-    createContainerAt(BookingInboxUrl, { fetch: session.fetch }),
-    SetSubmitterAccessToEveryone(BookingInboxUrl),
-  ]);
+  await createContainerAt(BookingInboxUrl, { fetch: session.fetch });
+  await SetSubmitterAccessToEveryone(BookingInboxUrl);
 }

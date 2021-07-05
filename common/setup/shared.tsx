@@ -33,7 +33,11 @@ export function GetCurrentDatePushedBy(
   return date;
 }
 
-export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
+export function GetSharedReservations(
+  userWebId: string,
+  activeProfileWebId: string,
+  dataProtectionProfileWebId: string
+): ReservationAtHotel[] {
   const rooms = CreateRooms();
 
   const reservationInboxUrl = GetReservationInboxFromWebId(userWebId);
@@ -51,7 +55,7 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
     {
       id: null,
       inbox: reservationInboxUrl,
-      owner: userWebId,
+      owner: activeProfileWebId,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[0].id,
       state: ReservationState.ACTIVE,
@@ -61,7 +65,7 @@ export function GetSharedReservations(userWebId: string): ReservationAtHotel[] {
     {
       id: null,
       inbox: reservationInboxUrl,
-      owner: userWebId,
+      owner: dataProtectionProfileWebId,
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[3].id,
       state: ReservationState.PAST,

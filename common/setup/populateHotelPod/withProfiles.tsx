@@ -12,16 +12,6 @@ function GetActiveProfiles(): Record<string, string>[] {
   //because the hotel is in France
   const profiles: Record<string, string>[] = [
     {
-      firstName: "Bob",
-      lastName: "Ford",
-      nationality: "English",
-      email: "bob@ford.com",
-      //   phone: "+40111222333",
-      //   idDocumentType: "IDENTIFICATION_CARD",
-      idDocumentNumber: "AA 784 GOE",
-      //   idDocumentExpiry: "2027-10-17",
-    },
-    {
       firstName: "Mark",
       lastName: "Williams",
       nationality: "Spanish",
@@ -31,6 +21,16 @@ function GetActiveProfiles(): Record<string, string>[] {
       idDocumentNumber: "BB 939 OAL",
       idDocumentExpiry: "2028-03-11",
     },
+    {
+      firstName: "Bob",
+      lastName: "Ford",
+      nationality: "English",
+      email: "bob@ford.com",
+      //   phone: "+40111222333",
+      //   idDocumentType: "IDENTIFICATION_CARD",
+      idDocumentNumber: "AA 784 GOE",
+      //   idDocumentExpiry: "2027-10-17",
+    },
   ];
 
   return profiles;
@@ -39,6 +39,17 @@ function GetActiveProfiles(): Record<string, string>[] {
 function GetDataProtectionProfiles(): Record<string, string>[] {
   //because the hotel is in France
   const profiles: Record<string, string>[] = [
+    //Mark is meant to be the shared one (the guest)
+    {
+      firstName: "Mark",
+      lastName: "Williams",
+      nationality: "Spanish",
+      email: "mark@williams.com",
+      //   phone: "+40222333444",
+      idDocumentType: "PASSPORT",
+      idDocumentNumber: "BB 939 OAL",
+      //   idDocumentExpiry: "2028-03-11",
+    },
     {
       firstName: "John",
       lastName: "Smith",
@@ -68,17 +79,6 @@ function GetDataProtectionProfiles(): Record<string, string>[] {
       idDocumentType: "PASSPORT",
       idDocumentNumber: "GU 191 PAS",
       //   idDocumentExpiry: "2023-02-12",
-    },
-    //Mark is meant to be the shared one (the guest)
-    {
-      firstName: "Mark",
-      lastName: "Williams",
-      nationality: "Spanish",
-      email: "mark@williams.com",
-      //   phone: "+40222333444",
-      idDocumentType: "PASSPORT",
-      idDocumentNumber: "BB 939 OAL",
-      //   idDocumentExpiry: "2028-03-11",
     },
   ];
 
