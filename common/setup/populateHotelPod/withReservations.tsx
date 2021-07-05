@@ -1,6 +1,13 @@
-import { HotelWebId, RoomDefinitionsUrl } from "../../consts/solidIdentifiers";
+import { createContainerAt } from "@inrupt/solid-client";
+import {
+  BookingInboxUrl,
+  HotelWebId,
+  RoomDefinitionsUrl,
+} from "../../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
+import { GetSession } from "../../util/solid";
+import { SetSubmitterAccessToEveryone } from "../../util/solid_access";
 import { AddReservation } from "../../util/solid_reservations";
 import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
 import { CreateRooms } from "./withRooms";
@@ -124,14 +131,21 @@ function CreateReservations(): ReservationAtHotel[] {
   return reservations;
 }
 
-export default function PopulateHotelPodWithReservations(
+export async function PopulateHotelPodWithReservations(
   userWebId: string
-): void {
+): Promise<void> {
   const reservations = CreateReservations().concat(
     GetSharedReservations(userWebId)
   );
-  reservations.forEach((reservation: ReservationAtHotel) =>
-    AddReservation(reservation)
+  await Promise.all(
+    reservations.map((reservation) => AddReservation(reservation))
   );
-  console.log("Hotel Pod populated with reservations.");
+}
+
+export async function CreateBookingInbox(): Promise<void> {
+  const session = GetSession();
+  await Promise.all([
+    createContainerAt(BookingInboxUrl, { fetch: session.fetch }),
+    SetSubmitterAccessToEveryone(BookingInboxUrl),
+  ]);
 }

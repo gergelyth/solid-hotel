@@ -16,6 +16,7 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { NotFoundError } from "./errors";
 import { GetSession } from "./solid";
+import { SafeSaveDatasetAt } from "./solid_wrapper";
 
 export type SolidProfile = {
   profileAddress: string;
@@ -78,14 +79,13 @@ export async function SetField(
     ? await GetProfileOf(webId, session)
     : await GetProfile();
 
-  return SetFieldInSolidProfile(solidProfile, field, value, session);
+  return SetFieldInSolidProfile(solidProfile, field, value);
 }
 
 export async function SetFieldInSolidProfile(
   solidProfile: SolidProfile | null,
   field: string,
-  value: string,
-  session: Session
+  value: string
 ): Promise<void> {
   if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
     throw new NotFoundError("Profile not found.");
@@ -94,9 +94,7 @@ export async function SetFieldInSolidProfile(
   const updatedProfile = setStringNoLocale(solidProfile.profile, field, value);
   const updatedDataSet = setThing(solidProfile.dataSet, updatedProfile);
 
-  await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
 }
 
 export async function RemoveField(field: string): Promise<void> {

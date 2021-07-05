@@ -35,8 +35,7 @@ export function CreateRooms(): RoomDefinition[] {
   return rooms;
 }
 
-export default function PopulateHotelPodWithRooms(): void {
+export default async function PopulateHotelPodWithRooms(): Promise<void> {
   const rooms = CreateRooms();
-  rooms.forEach((room: RoomDefinition) => CreateOrUpdateRoom(room));
-  console.log("Hotel Pod populated with rooms.");
+  await Promise.all(rooms.map((room) => CreateOrUpdateRoom(room)));
 }

@@ -8,6 +8,7 @@ import {
   saveAclFor,
   setPublicResourceAccess,
   Access,
+  setPublicDefaultAccess,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { GetSession } from "./solid";
@@ -15,6 +16,7 @@ import { GetSession } from "./solid";
 async function SetPublicAccess(
   resourceUrl: string,
   accessSpecification: Access,
+  isDefaultAccess: boolean,
   session: Session
 ): Promise<void> {
   const datasetWithAcl = await getSolidDatasetWithAcl(resourceUrl, {
@@ -38,7 +40,12 @@ async function SetPublicAccess(
     resourceAcl = getResourceAcl(datasetWithAcl);
   }
 
-  const updatedAcl = setPublicResourceAccess(resourceAcl, accessSpecification);
+  let updatedAcl;
+  if (isDefaultAccess) {
+    updatedAcl = setPublicDefaultAccess(resourceAcl, accessSpecification);
+  } else {
+    updatedAcl = setPublicResourceAccess(resourceAcl, accessSpecification);
+  }
 
   await saveAclFor(datasetWithAcl, updatedAcl, { fetch: session.fetch });
 }
@@ -56,6 +63,7 @@ export async function SetSubmitterAccessToEveryone(
       write: false,
       control: false,
     },
+    false,
     session
   );
 }
@@ -72,6 +80,7 @@ export async function SetReadAccessToEveryone(
       write: false,
       control: false,
     },
+    true,
     session
   );
 }

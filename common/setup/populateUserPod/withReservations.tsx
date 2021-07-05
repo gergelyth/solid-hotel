@@ -45,5 +45,4 @@ export default async function PopulateUserPodWithReservations(
   await Promise.all(
     reservations.map((reservation) => AddReservation(reservation))
   );
-  console.log("User Pod populated with reservations.");
 }

@@ -21,7 +21,6 @@ import {
 } from "../../common/util/solid_profile";
 import { GetSession } from "../../common/util/solid";
 import { SetReadAccessToEveryone } from "../../common/util/solid_access";
-import { ShowWarningSnackbar } from "../../common/components/snackbar";
 
 export async function SetHotelProfileField(
   field: string,
@@ -29,8 +28,7 @@ export async function SetHotelProfileField(
   session: Session = GetSession()
 ): Promise<void> {
   const hotelProfile = await GetProfileOf(HotelWebId, session);
-
-  SetFieldInSolidProfile(hotelProfile, field, value, session);
+  SetFieldInSolidProfile(hotelProfile, field, value);
 }
 
 export async function CreateOrUpdateRoom(
@@ -64,9 +62,6 @@ async function CheckOrCreateRoomContainer(session: Session): Promise<void> {
       fetch: session.fetch,
     });
   } catch (e) {
-    ShowWarningSnackbar(
-      `Room container at [${RoomDefinitionsUrl}] doesn't exist. Creating...`
-    );
     await createContainerAt(RoomDefinitionsUrl, { fetch: session.fetch });
     await SetReadAccessToEveryone(RoomDefinitionsUrl, session);
   }

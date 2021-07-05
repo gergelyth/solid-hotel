@@ -3,11 +3,15 @@ import { HotelWebId } from "../consts/solidIdentifiers";
 import { HotelName, HotelLocation } from "../consts/hotelConsts";
 import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
 import SetupHotelProfile from "../setup/populateHotelPod/hotelProfile";
-import PopulateHotelPodWithReservations from "../setup/populateHotelPod/withReservations";
+import {
+  PopulateHotelPodWithReservations,
+  CreateBookingInbox,
+} from "../setup/populateHotelPod/withReservations";
 import PopulateHotelPodWithRooms from "../setup/populateHotelPod/withRooms";
 import {
   DeleteAllHotelRooms,
   DeleteAllHotelReservations,
+  DeleteAllProfiles,
 } from "../setup/populateHotelPod/util";
 import { DeleteAllUserReservations } from "../setup/populateUserPod/util";
 import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
@@ -71,6 +75,7 @@ export default function Home(): JSX.Element {
           >
             <Button
               onClick={async () => {
+                ShowInfoSnackbar("Deleting hotel reservations...");
                 await DeleteAllHotelReservations();
                 ShowSuccessSnackbar("All hotel reservations deleted");
               }}
@@ -79,11 +84,25 @@ export default function Home(): JSX.Element {
             </Button>
             <Button
               onClick={async () => {
+                ShowInfoSnackbar("Deleting hotel rooms...");
                 await DeleteAllHotelRooms();
                 ShowSuccessSnackbar("All hotel rooms deleted");
               }}
             >
               Clear rooms
+            </Button>
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar(
+                  "Deleting hotel and data protection profiles..."
+                );
+                await DeleteAllProfiles();
+                ShowSuccessSnackbar(
+                  "All hotel and data protection profiles deleted"
+                );
+              }}
+            >
+              Clear profiles
             </Button>
           </ButtonGroup>
         </Grid>
@@ -94,39 +113,53 @@ export default function Home(): JSX.Element {
             variant="contained"
           >
             <Button
-              onClick={() => {
-                SetupHotelProfile();
+              onClick={async () => {
+                ShowInfoSnackbar("Adding information to the hotel profile...");
+                await SetupHotelProfile();
                 ShowSuccessSnackbar("Hotel profile setup successful");
               }}
             >
               Setup hotel profile
             </Button>
             <Button
-              onClick={() => {
-                //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-                PopulateHotelPodWithReservations(
-                  "https://gergelyth.inrupt.net/profile/card#me"
+              onClick={async () => {
+                ShowInfoSnackbar(
+                  "Populating hotel Pod with reservations and creating booking inbox..."
                 );
+                await Promise.all([
+                  //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
+                  PopulateHotelPodWithReservations(
+                    "https://gergelyth.inrupt.net/profile/card#me"
+                  ),
+                  CreateBookingInbox(),
+                ]);
                 ShowSuccessSnackbar("Hotel Pod populated with reservations");
               }}
             >
               Add reservations
             </Button>
             <Button
-              onClick={() => {
-                PopulateHotelPodWithRooms();
+              onClick={async () => {
+                ShowInfoSnackbar("Populating hotel Pod with rooms...");
+                await PopulateHotelPodWithRooms();
                 ShowSuccessSnackbar("Hotel Pod populated with rooms");
               }}
             >
               Add rooms
             </Button>
             <Button
-              onClick={() => {
-                PopulateHotelPodWithActiveProfiles();
-                PopulateHotelPodWithDataProtectionProfiles();
-                ShowSuccessSnackbar(
-                  "Hotel Pod populated with active and data protection profiles"
+              onClick={async () => {
+                ShowInfoSnackbar(
+                  "Populating hotel Pod with active and data protection profiles..."
                 );
+                Promise.all([
+                  PopulateHotelPodWithActiveProfiles(),
+                  PopulateHotelPodWithDataProtectionProfiles(),
+                ]).then(() => {
+                  ShowSuccessSnackbar(
+                    "Hotel Pod populated with active and data protection profiles"
+                  );
+                });
               }}
             >
               Add profiles

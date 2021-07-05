@@ -5,6 +5,8 @@ import {
   DataProtectionProfilesUrl,
   HotelProfilesUrl,
 } from "../../consts/solidIdentifiers";
+import { createContainerAt } from "@inrupt/solid-client";
+import { GetSession } from "../../util/solid";
 
 function GetActiveProfiles(): Record<string, string>[] {
   //because the hotel is in France
@@ -89,7 +91,7 @@ async function CreateProfiles(
 ): Promise<string[]> {
   const profileWebIds: string[] = [];
 
-  profiles.forEach(async (profile) => {
+  const profilePromises = profiles.map((profile) => {
     const fields: Field[] = [];
     Object.entries(profile).forEach((record) => {
       const field = FieldNameToFieldMap[record[0]];
@@ -97,35 +99,38 @@ async function CreateProfiles(
       fields.push(field);
     });
 
-    const hotelProfileWebId = await CreateHotelProfile(
-      fields,
-      profilesContainer
+    return CreateHotelProfile(fields, profilesContainer).then(
+      (hotelProfileWebId) => profileWebIds.push(hotelProfileWebId)
     );
-
-    profileWebIds.push(hotelProfileWebId);
   });
+
+  await Promise.all(profilePromises);
 
   return profileWebIds;
 }
 
 export async function PopulateHotelPodWithActiveProfiles(): Promise<string[]> {
+  const session = GetSession();
+  await createContainerAt(HotelProfilesUrl, { fetch: session.fetch });
+
   const activeProfiles = GetActiveProfiles();
   const activeProfileWebIds = await CreateProfiles(
     activeProfiles,
     HotelProfilesUrl
   );
-  console.log("Hotel Pod populated with active profiles.");
   return activeProfileWebIds;
 }
 
 export async function PopulateHotelPodWithDataProtectionProfiles(): Promise<
   string[]
 > {
+  const session = GetSession();
+  await createContainerAt(DataProtectionProfilesUrl, { fetch: session.fetch });
+
   const dataProtectionProfiles = GetDataProtectionProfiles();
   const dataProtectionProfileWebIds = await CreateProfiles(
     dataProtectionProfiles,
     DataProtectionProfilesUrl
   );
-  console.log("Hotel Pod populated with data protection profiles.");
   return dataProtectionProfileWebIds;
 }
