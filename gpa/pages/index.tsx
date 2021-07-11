@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "../components/checkout/reservationselect-subpage";
-import { GetUserReservationsPodUrl } from "../../common/util/solid";
+import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import {
   Button,
   CircularProgress,

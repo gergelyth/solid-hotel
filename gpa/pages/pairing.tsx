@@ -2,7 +2,8 @@ import { Box, CircularProgress, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
-import { AddReservation, GetSession } from "../../common/util/solid";
+import { GetSession } from "../../common/util/solid";
+import { AddReservation } from "../../common/util/solid_reservations";
 import { SubmitInitialPairingRequest } from "../util/outgoingCommunications";
 
 function GetQueryParameter(parameter: string | string[] | undefined): string {

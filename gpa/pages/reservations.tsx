@@ -1,4 +1,4 @@
-import { GetUserReservationsPodUrl } from "../../common/util/solid";
+import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
 import ReservationStatusList from "../components/reservations/reservation-status-list";

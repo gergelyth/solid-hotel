@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { HotelDetailsOneLiner } from "../../../common/components/reservations/hotel-details";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 function ReservationRadioSelector({
   selectedReservationId,
@@ -40,7 +41,13 @@ function ReservationRadioSelector({
                       titleElement={
                         <HotelDetailsOneLiner hotelWebId={item.hotel} />
                       }
-                      onClickAction={() => setSelectedReservationId(item?.id)}
+                      onClickAction={() => {
+                        if (!item?.id) {
+                          ShowErrorSnackbar("Reservation ID is null");
+                          return;
+                        }
+                        setSelectedReservationId(item.id);
+                      }}
                     />
                   }
                 />

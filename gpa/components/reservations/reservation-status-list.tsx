@@ -5,6 +5,7 @@ import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { HotelDetailsOneLiner } from "../../../common/components/reservations/hotel-details";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 function ReservationStatusList({
   userReservationsUrl,
@@ -21,6 +22,10 @@ function ReservationStatusList({
     event: React.MouseEvent<HTMLElement>,
     reservation: ReservationAtHotel
   ): void {
+    if (!reservation.id) {
+      ShowErrorSnackbar("Reservation ID is null");
+      return;
+    }
     router.push(`/reservations/${encodeURIComponent(reservation.id)}`);
   }
 

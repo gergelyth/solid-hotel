@@ -1,6 +1,6 @@
 import { useReservations } from "../../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { GetUserReservationsPodUrl } from "../../../common/util/solid";
+import { GetUserReservationsPodUrl } from "../../../common/util/solid_reservations";
 import {
   Box,
   Grid,

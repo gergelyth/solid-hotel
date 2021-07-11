@@ -1,10 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { ReservationState } from "../../../common/types/ReservationState";
-import {
-  AddReservation,
-  GetReservationInboxUrl,
-  GetSession,
-} from "../../../common/util/solid";
+import { GetSession } from "../../../common/util/solid";
 import RoomSelector from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";
 import DateSelector from "./date-selector";
@@ -16,6 +12,7 @@ import {
 import { SubmitBookingRequest } from "../../util/outgoingCommunications";
 import { Subscribe } from "../../../common/util/tracker/tracker";
 import { Subscriber } from "../../../common/types/WebSocketResource";
+import { AddReservation } from "../../../common/util/solid_reservations";
 
 function BookRoom(
   roomIdString: string | undefined,
@@ -34,16 +31,9 @@ function BookRoom(
     return;
   }
 
-  const reservationInbox = GetReservationInboxUrl(session);
-  if (!reservationInbox) {
-    return;
-  }
-
-  const reservationId = "reservation5";
   const reservation = {
-    //TODO fix this here as well
-    id: reservationId,
-    inbox: reservationInbox,
+    id: null,
+    inbox: null,
     owner: webId,
     hotel: HotelWebId,
     room: room,
@@ -62,7 +52,7 @@ function BookRoom(
     },
     onClick: () => undefined,
   };
-  Subscribe(reservationInbox, subscriber);
+  // Subscribe(reservationInbox, subscriber);
   //TODO hotel adds the complete reservation to the inbox (until then we show the previous state) and we just overwrite the existing one in the user pod
 }
 
