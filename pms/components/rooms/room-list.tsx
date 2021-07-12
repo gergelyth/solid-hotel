@@ -16,7 +16,7 @@ function CreateRoomElement(
   room: RoomDefinition | null,
   updateList: (newRoom: RoomDefinition, isDelete: boolean) => void
 ): JSX.Element {
-  if (!room) {
+  if (!room?.id) {
     return <Typography>Room element empty</Typography>;
   }
   return (
