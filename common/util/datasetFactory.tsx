@@ -12,6 +12,8 @@ import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { SolidDataset } from "@inrupt/solid-client";
 import { notificationToRdfMap } from "../vocabularies/rdf_notification";
 import { NotificationType } from "../types/NotificationsType";
+import { PrivacyToken } from "../types/PrivacyToken";
+import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
 
 export function CreateReservationDataset(
   reservation: ReservationAtHotel
@@ -78,4 +80,42 @@ export function AddNotificationThingToDataset(
   );
 
   return setThing(dataset, notification);
+}
+
+export function CreatePrivacyTokenDataset(
+  privacyToken: PrivacyToken
+): SolidDataset {
+  let privacyTokenDataset = createSolidDataset();
+
+  let newPrivacyToken = createThing({ name: "privacy" });
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
+    privacyTokenToRdfMap.hotel,
+    privacyToken.hotel
+  );
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
+    privacyTokenToRdfMap.guest,
+    privacyToken.guest
+  );
+  privacyToken.fieldList.forEach((field) => {
+    newPrivacyToken = addStringNoLocale(
+      newPrivacyToken,
+      privacyTokenToRdfMap.fieldList,
+      field
+    );
+  });
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
+    privacyTokenToRdfMap.reason,
+    privacyToken.reason
+  );
+  newPrivacyToken = addDatetime(
+    newPrivacyToken,
+    privacyTokenToRdfMap.expiry,
+    privacyToken.expiry
+  );
+
+  privacyTokenDataset = setThing(privacyTokenDataset, newPrivacyToken);
+  return privacyTokenDataset;
 }

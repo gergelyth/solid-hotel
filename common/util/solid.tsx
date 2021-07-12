@@ -7,6 +7,8 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { NotFoundError } from "./errors";
 
+const privacyAddress = "privacy/";
+
 export async function CheckIfLoggedIn(): Promise<boolean> {
   const session = getDefaultSession();
   await session.handleIncomingRedirect(window.location.href);
@@ -58,4 +60,14 @@ export async function GetDataSet(
   }
 
   return dataSet;
+}
+
+export function GetUserPrivacyPodUrl(
+  session: Session = GetSession()
+): string | null {
+  const podOfSession = GetPodOfSession(session);
+  if (!podOfSession) {
+    return null;
+  }
+  return podOfSession + "/" + privacyAddress;
 }

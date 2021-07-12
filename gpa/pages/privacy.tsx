@@ -9,6 +9,7 @@ import _ from "lodash";
 import { usePrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { NotEmptyItem } from "../../common/util/helpers";
+import { GetUserPrivacyPodUrl } from "../../common/util/solid";
 
 function PrivacyField({
   field,
@@ -84,7 +85,9 @@ function HotelPrivacy({
 }
 
 function PrivacyDashboard(): JSX.Element {
-  const { items, isLoading, isError } = usePrivacyTokens("");
+  const { items, isLoading, isError } = usePrivacyTokens(
+    GetUserPrivacyPodUrl() ?? ""
+  );
 
   if (isLoading) {
     return <CircularProgress />;

@@ -2,7 +2,9 @@ import { saveSolidDatasetInContainer } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { SerializeFailureReport } from "../../common/notifications/FailureReport";
 import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
+import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { SerializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
+import { SerializePrivacyNotification } from "../../common/notifications/PrivacyNotification";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetSession } from "../../common/util/solid";
 import { GetHotelProfileThing } from "../../common/util/hotelProfileHandler";
@@ -73,6 +75,18 @@ export async function SendPairingRequestWithInformation(
     finalReservationThing,
     hotelProfileThing
   );
+
+  await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
+    fetch: session.fetch,
+  });
+}
+
+export async function SendPrivacyToken(
+  guestInboxUrl: string,
+  privacyToken: PrivacyToken,
+  session: Session = GetSession()
+): Promise<void> {
+  const notificationDataset = SerializePrivacyNotification(privacyToken);
 
   await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
     fetch: session.fetch,

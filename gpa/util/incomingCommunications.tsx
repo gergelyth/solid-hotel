@@ -1,9 +1,13 @@
-import { SolidDataset } from "@inrupt/solid-client";
-import { GetSession } from "../../common/util/solid";
+import {
+  saveSolidDatasetInContainer,
+  SolidDataset,
+} from "@inrupt/solid-client";
+import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { DeserializeFailureReport } from "../../common/notifications/FailureReport";
 import { DeserializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
+import { DeserializePrivacyNotification } from "../../common/notifications/PrivacyNotification";
 import { ShowErrorSnackbar } from "../../common/components/snackbar";
 import {
   AddReservation,
@@ -92,6 +96,35 @@ export function ReceivePairingRequestWithInformation(
     }
     reservation.owner = webId;
     AddReservation(reservation, session);
+  };
+
+  return { text, onClick, onReceive };
+}
+
+export function ReceivePrivacyToken(
+  router: NextRouter,
+  url: string,
+  dataset: SolidDataset
+): {
+  text: string;
+  onClick: (event: React.MouseEvent<EventTarget>) => void;
+  onReceive: () => void;
+} {
+  const privacyToken = DeserializePrivacyNotification(dataset);
+  const text = `Privacy token received from ${privacyToken.hotel}`;
+  const onClick = (): void => {
+    router.push("/privacy");
+  };
+  const onReceive = async (): Promise<void> => {
+    const session = GetSession();
+    const privacyPodUrl = GetUserPrivacyPodUrl();
+    if (!privacyPodUrl) {
+      ShowErrorSnackbar("User not logged in");
+      return;
+    }
+    await saveSolidDatasetInContainer(privacyPodUrl, dataset, {
+      fetch: session.fetch,
+    });
   };
 
   return { text, onClick, onReceive };

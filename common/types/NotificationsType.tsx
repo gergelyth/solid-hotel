@@ -5,4 +5,5 @@ export enum NotificationType {
   ProfileModification,
   InitialPairingRequest,
   PairingRequestWithInformation,
+  PrivacyToken,
 }

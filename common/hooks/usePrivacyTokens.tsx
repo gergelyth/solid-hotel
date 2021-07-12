@@ -6,12 +6,12 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { PrivacyToken } from "../types/PrivacyToken";
-import { privacyTokenToRdfMap } from "../vocabularies/rdf_privacy";
+import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
 import { FetchItems } from "./util/listThenItemsFetcher";
 
 const swrKey = "privacy";
 
-function ConvertToPrivacyToken(
+export function ConvertToPrivacyToken(
   dataset: SolidDataset,
   url: string
 ): PrivacyToken | null {

@@ -3,6 +3,7 @@ import { NotificationType } from "../../common/types/NotificationsType";
 import {
   ReceiveFailureReport,
   ReceivePairingRequestWithInformation,
+  ReceivePrivacyToken,
   ReceiveReservationStateChange,
 } from "../util/incomingCommunications";
 
@@ -11,4 +12,5 @@ export const GPAParsers: ParserList = {
   [NotificationType.FailureReport]: ReceiveFailureReport,
   [NotificationType.PairingRequestWithInformation]:
     ReceivePairingRequestWithInformation,
+  [NotificationType.PrivacyToken]: ReceivePrivacyToken,
 };
