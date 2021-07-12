@@ -20,7 +20,11 @@ function CreateReservationElement(
       </Grid>
     );
   }
-  return <Grid item>{reservationElement(reservation)}</Grid>;
+  return (
+    <Grid item key={reservation.id}>
+      {reservationElement(reservation)}
+    </Grid>
+  );
 }
 
 function ReservationElements(

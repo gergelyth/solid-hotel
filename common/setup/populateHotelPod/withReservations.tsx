@@ -23,6 +23,7 @@ function CreateReservations(
   const owner5 = "https://owner5.fakeprovider.net/profile/card#me";
 
   const rooms = CreateRooms();
+  //TODO room IDs are null!
 
   const reservations: ReservationAtHotel[] = [
     {

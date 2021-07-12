@@ -18,7 +18,8 @@ function ProcessItem<T>(
 export function FetchItems<T>(
   swrKey: string,
   listUrl: string,
-  convertToType: (dataset: SolidDataset, url: string) => T | null
+  convertToType: (dataset: SolidDataset, url: string) => T | null,
+  decorateContainedItemUrl: (itemUrl: string) => string = (itemUrl) => itemUrl
 ): {
   items: (T | null)[] | undefined;
   isLoading: boolean;
@@ -28,9 +29,10 @@ export function FetchItems<T>(
   const fetcher = (_: string, url: string): Promise<(T | null)[]> => {
     return GetDataSet(url).then((dataset) => {
       const urls = getContainedResourceUrlAll(dataset);
-      const items = urls.map((itemUrl) =>
-        ProcessItem<T>(itemUrl, convertToType)
-      );
+      const items = urls.map((itemUrl) => {
+        const decoratedUrl = decorateContainedItemUrl(itemUrl);
+        return ProcessItem<T>(decoratedUrl, convertToType);
+      });
       return Promise.all(items);
     });
   };

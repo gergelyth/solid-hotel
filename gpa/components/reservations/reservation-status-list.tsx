@@ -31,7 +31,7 @@ function ReservationStatusList({
 
   return (
     <Box>
-      <Grid item justify="flex-start">
+      <Grid item>
         <Typography variant="body1">
           <Box px={2} fontWeight="fontWeightBold">
             {reservationsTitle}

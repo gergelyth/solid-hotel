@@ -43,6 +43,7 @@ async function SetPublicAccess(
   let updatedAcl;
   if (isDefaultAccess) {
     updatedAcl = setPublicDefaultAccess(resourceAcl, accessSpecification);
+    updatedAcl = setPublicResourceAccess(updatedAcl, accessSpecification);
   } else {
     updatedAcl = setPublicResourceAccess(resourceAcl, accessSpecification);
   }

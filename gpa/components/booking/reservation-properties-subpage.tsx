@@ -13,12 +13,13 @@ import { SubmitBookingRequest } from "../../util/outgoingCommunications";
 import { Subscribe } from "../../../common/util/tracker/tracker";
 import { Subscriber } from "../../../common/types/WebSocketResource";
 import { AddReservation } from "../../../common/util/solid_reservations";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 
-function BookRoom(
+async function BookRoom(
   roomIdString: string | undefined,
   checkinDate: Date | undefined,
   checkoutDate: Date | undefined
-): void {
+): Promise<void> {
   if (!roomIdString || !checkinDate || !checkoutDate) {
     return;
   }
@@ -31,7 +32,7 @@ function BookRoom(
     return;
   }
 
-  const reservation = {
+  const reservation: ReservationAtHotel = {
     id: null,
     inbox: null,
     owner: webId,
@@ -42,8 +43,11 @@ function BookRoom(
     dateTo: checkoutDate,
   };
 
-  AddReservation(reservation, session);
+  const inboxUrl = AddReservation(reservation, session);
+  reservation.inbox = await inboxUrl;
+
   SubmitBookingRequest(reservation, session);
+
   //TODO subscribe to inbox - possibly wait for solid-client implementation
   const subscriber: Subscriber = {
     onReceive: () => {
@@ -53,7 +57,6 @@ function BookRoom(
     onClick: () => undefined,
   };
   // Subscribe(reservationInbox, subscriber);
-  //TODO hotel adds the complete reservation to the inbox (until then we show the previous state) and we just overwrite the existing one in the user pod
 }
 
 function ReservationPropertiesPage({

@@ -21,7 +21,7 @@ function ConvertToRoomDefinition(
     return null;
   }
   const room = {
-    id: GetIdFromDatasetUrl(url),
+    id: GetIdFromDatasetUrl(url, 0),
     name:
       getStringNoLocale(roomThing, roomFieldToRdfMap.name) ?? "<No room name>",
     description:

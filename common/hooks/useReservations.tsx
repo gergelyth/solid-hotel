@@ -17,7 +17,7 @@ export function ParseReservation(
 ): ReservationAtHotel {
   // TODO: modify No Id and No Name
   const reservation = {
-    id: GetIdFromDatasetUrl(datasetUrl),
+    id: GetIdFromDatasetUrl(datasetUrl, 1),
     inbox: getStringNoLocale(reservationThing, reservationFieldToRdfMap.inbox),
     owner:
       getStringNoLocale(reservationThing, reservationFieldToRdfMap.owner) ??
@@ -66,6 +66,9 @@ export function useReservations(reservationsUrl: string | null): {
   return FetchItems<ReservationAtHotel>(
     "reservations",
     reservationsUrl,
-    ConvertToReservation
+    ConvertToReservation,
+    (itemUrl) => {
+      return itemUrl + "reservation";
+    }
   );
 }

@@ -43,7 +43,20 @@ export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
   return inboxUrl.replace(new RegExp("inbox$"), "reservation");
 }
 
-export function GetIdFromDatasetUrl(url: string): string {
+export function GetIdFromDatasetUrl(
+  url: string,
+  idIndexFromLast: number
+): string {
   const urlParts = url.split("/");
-  return urlParts[-2];
+  const lastElement = urlParts[urlParts.length - 1];
+  if (!lastElement || lastElement.trim() === "") {
+    //if it's a container, i.e. the URL is ending in a /
+    urlParts.pop();
+  }
+  const result = urlParts[urlParts.length - 1 - idIndexFromLast];
+  if (!result) {
+    throw new Error(`Bad dataset url [${url}]`);
+  }
+
+  return result;
 }

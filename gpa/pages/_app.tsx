@@ -35,7 +35,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SnackbarProvider maxSnack={3}>
-          <Container maxWidth="sm">
+          <Container>
             <GlobalSnackbar />
             <NavigationBar />
             <Box className={additionalStyles.main}>
