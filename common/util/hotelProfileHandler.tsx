@@ -112,7 +112,11 @@ export async function GetHotelProfileThing(
 
   const profileDataset = await GetDataSet(hotelProfileUrl, session);
 
-  const profileThing = getThing(profileDataset, `#${HotelProfileThingName}`);
+  const url = getSourceUrl(profileDataset);
+  const profileThing = getThing(
+    profileDataset,
+    url + `#${HotelProfileThingName}`
+  );
   if (!profileThing) {
     throw new Error(`Hotel profile thing null in ${hotelProfileUrl}`);
   }

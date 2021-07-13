@@ -15,7 +15,10 @@ export async function SaveInboxAndReturnReservation(
 ): Promise<Thing> {
   const session = GetSession();
   let reservationDataset = await GetDataSet(reservationUrl, session);
-  let reservationThing = getThing(reservationDataset, "#reservation");
+  let reservationThing = getThing(
+    reservationDataset,
+    reservationUrl + "#reservation"
+  );
   if (!reservationThing) {
     throw new Error(
       `Reservation thing null in reservation dataset ${reservationUrl}`

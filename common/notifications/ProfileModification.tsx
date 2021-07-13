@@ -2,6 +2,7 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
+  getSourceUrl,
   getStringNoLocale,
   getThing,
   setThing,
@@ -18,7 +19,8 @@ export function DeserializeProfileModification(dataset: SolidDataset): {
   fieldModified: string;
   newFieldValue: string;
 } {
-  const modificationThing = getThing(dataset, `#${thingName}`);
+  const url = getSourceUrl(dataset);
+  const modificationThing = getThing(dataset, url + `#${thingName}`);
   if (!modificationThing) {
     throw new Error("Modification thing cannot be null");
   }

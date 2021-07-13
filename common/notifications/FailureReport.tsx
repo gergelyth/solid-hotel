@@ -23,7 +23,7 @@ export function DeserializeFailureReport(
   errorMessage: string;
   resultState: ReservationState;
 } {
-  const failureThing = getThing(dataset, "#failure");
+  const failureThing = getThing(dataset, url + "#failure");
   if (!failureThing) {
     throw new Error("Failure thing cannot be null");
   }

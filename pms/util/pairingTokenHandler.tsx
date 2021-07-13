@@ -57,7 +57,7 @@ export async function GetPairingToken(
     return null;
   }
 
-  const tokenThing = getThing(tokenDataset, `#${PairingTokenThing}`);
+  const tokenThing = getThing(tokenDataset, tokenUrl + `#${PairingTokenThing}`);
   if (!tokenThing) {
     return null;
   }

@@ -17,14 +17,14 @@ import Link from "next/link";
 import { PMSParsers } from "../consts/parsers";
 
 function NavigationBar(): JSX.Element {
+  const additionalStyles = styles();
+
   const podAddress = GetPodOfSession();
   const notificationElements = GetNotificationElements(
     podAddress,
     PMSInboxList,
     PMSParsers
   );
-
-  const additionalStyles = styles();
 
   return (
     <Box>

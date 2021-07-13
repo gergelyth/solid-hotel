@@ -10,14 +10,14 @@ import {
 export function DeserializeBookingRequest(
   dataset: SolidDataset
 ): ReservationAtHotel {
-  const reservationThing = getThing(dataset, "#reservation");
-  if (!reservationThing) {
-    throw new Error("Reservation cannot be null");
-  }
-
   const datasetUrl = getSourceUrl(dataset);
   if (!datasetUrl) {
     throw new Error("Dataset URL is null");
+  }
+
+  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  if (!reservationThing) {
+    throw new Error("Reservation cannot be null");
   }
 
   const reservation = ParseReservation(reservationThing, datasetUrl);

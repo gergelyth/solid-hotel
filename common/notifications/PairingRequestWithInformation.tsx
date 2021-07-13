@@ -17,19 +17,19 @@ export function DeserializePairingRequestWithInformation(
   reservation: ReservationAtHotel;
   profileThing: Thing;
 } {
-  const reservationThing = getThing(dataset, "#reservation");
-  if (!reservationThing) {
-    throw new Error("Reservation cannot be null");
-  }
-
   const datasetUrl = getSourceUrl(dataset);
   if (!datasetUrl) {
     throw new Error("Dataset URL is null");
   }
 
+  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  if (!reservationThing) {
+    throw new Error("Reservation cannot be null");
+  }
+
   const reservation = ParseReservation(reservationThing, datasetUrl);
 
-  const hotelProfileThing = getThing(dataset, "#hotelProfile");
+  const hotelProfileThing = getThing(dataset, datasetUrl + "#hotelProfile");
   if (!hotelProfileThing) {
     throw new Error("Hotel profile null in pairing request");
   }

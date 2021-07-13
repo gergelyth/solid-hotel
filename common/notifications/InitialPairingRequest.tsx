@@ -2,6 +2,7 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
+  getSourceUrl,
   getStringNoLocale,
   getThing,
   setThing,
@@ -16,7 +17,8 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
   guestInboxUrl: string;
   token: string;
 } {
-  const requestThing = getThing(dataset, "#pairingRequest");
+  const url = getSourceUrl(dataset);
+  const requestThing = getThing(dataset, url + "#pairingRequest");
   if (!requestThing) {
     throw new Error("Initial pairing request thing cannot be null");
   }

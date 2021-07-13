@@ -26,6 +26,7 @@ function GetBadgeContent(
   }
 
   if (notificationRetrieval.isLoading || !notificationRetrieval.items) {
+    //TODO for some reason this doesn't show, even though code gets here
     return <CircularProgress />;
   }
 
@@ -37,14 +38,11 @@ export function GetNotificationElements(
   inboxRegexList: string[],
   parsers: ParserList
 ): { panel: JSX.Element; icon: JSX.Element } {
-  let notificationRetrieval;
-  if (podAddress) {
-    notificationRetrieval = RetrieveAllNotifications(
-      podAddress,
-      inboxRegexList,
-      parsers
-    );
-  }
+  const notificationRetrieval = RetrieveAllNotifications(
+    podAddress,
+    inboxRegexList,
+    parsers
+  );
 
   const [isNotificationsOpen, setNotificationsOpen] = useState(false);
 
