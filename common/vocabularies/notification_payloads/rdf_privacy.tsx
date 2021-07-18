@@ -1,4 +1,6 @@
 export const privacyTokenToRdfMap: Record<string, string> = {
+  hotelInboxForDeletion: "schema:hotelInboxForDeletion",
+  datasetUrlTarget: "schema:datasetUrlTarget",
   hotel: "schema:hotel",
   guest: "schema:guest",
   fieldList: "schema:fields",

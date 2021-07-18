@@ -23,6 +23,14 @@ export function ConvertToPrivacyToken(
   //TODO handle null values
   const token = {
     url: url,
+    hotelInboxForDeletion:
+      getStringNoLocale(
+        privacyThing,
+        privacyTokenToRdfMap.hotelInboxForDeletion
+      ) ?? "",
+    datasetUrlTarget:
+      getStringNoLocale(privacyThing, privacyTokenToRdfMap.datasetUrlTarget) ??
+      undefined,
     hotel: getStringNoLocale(privacyThing, privacyTokenToRdfMap.hotel) ?? "",
     guest: getStringNoLocale(privacyThing, privacyTokenToRdfMap.guest) ?? "",
     fieldList: getStringNoLocaleAll(

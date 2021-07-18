@@ -6,6 +6,9 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { SerializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { SerializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
+import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import { PrivacyToken } from "../../common/types/PrivacyToken";
+import { GetSession } from "../../common/util/solid";
 
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
@@ -95,4 +98,21 @@ export async function SubmitInitialPairingRequest(
   await saveSolidDatasetInContainer(hotelInboxUrl, notificationDataset, {
     fetch: session.fetch,
   });
+}
+
+export async function SubmitPrivacyTokenDeletionRequest(
+  privacyToken: PrivacyToken,
+  session = GetSession()
+): Promise<void> {
+  const notificationDataset = SerializePrivacyInformationDeletion(
+    privacyToken.url
+  );
+
+  await saveSolidDatasetInContainer(
+    privacyToken.hotelInboxForDeletion,
+    notificationDataset,
+    {
+      fetch: session.fetch,
+    }
+  );
 }

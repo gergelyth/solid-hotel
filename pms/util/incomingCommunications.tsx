@@ -1,8 +1,9 @@
-import { SolidDataset } from "@inrupt/solid-client";
+import { getSolidDataset, SolidDataset } from "@inrupt/solid-client";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { DeserializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
+import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import { ReservationState } from "../../common/types/ReservationState";
 import { DoOnStateChange } from "./actionOnNewReservationState";
 import {
@@ -21,6 +22,9 @@ import {
   ShowSuccessSnackbar,
 } from "../../common/components/snackbar";
 import { AddReservation } from "../../common/util/solid_reservations";
+import { ConvertToPrivacyToken } from "../../common/hooks/usePrivacyTokens";
+import { GetSession } from "../../common/util/solid";
+import { AnonymizeFieldsAndDeleteToken } from "../../common/util/privacyHelper";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -138,6 +142,45 @@ export function ReceiveInitialPairingRequest(
       hotelInboxUrl,
       guestInboxUrl
     );
+  };
+
+  return { text, onClick, onReceive };
+}
+
+export function ReceivePrivacyTokenDeletionRequest(
+  router: NextRouter,
+  hotelInboxUrl: string,
+  dataset: SolidDataset
+): {
+  text: string;
+  onClick: (event: React.MouseEvent<EventTarget>) => void;
+  onReceive: () => void;
+} {
+  const tokenUrl = DeserializePrivacyInformationDeletion(dataset);
+
+  const text = `Privacy token at [${tokenUrl}] was requested to be deleted.`;
+  const onClick = (): void => undefined;
+  const onReceive = async (): Promise<void> => {
+    const session = GetSession();
+
+    //TODO this especially needs to be a safe Solid call in case we get a bad URL
+    const tokenDataset = await getSolidDataset(tokenUrl, {
+      fetch: session.fetch,
+    });
+
+    const privacyToken = ConvertToPrivacyToken(tokenDataset, tokenUrl);
+    if (!privacyToken) {
+      throw new Error(`Parsing of privacy token ${tokenUrl} failed`);
+    }
+
+    if (privacyToken.expiry >= new Date()) {
+      ShowErrorSnackbar(
+        "Privacy token have not expired yet. Deletion request denied."
+      );
+      return;
+    }
+
+    AnonymizeFieldsAndDeleteToken(privacyToken);
   };
 
   return { text, onClick, onReceive };

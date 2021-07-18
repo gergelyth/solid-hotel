@@ -6,4 +6,5 @@ export enum NotificationType {
   InitialPairingRequest,
   PairingRequestWithInformation,
   PrivacyToken,
+  PrivacyTokenDeletion,
 }
