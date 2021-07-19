@@ -157,7 +157,6 @@ export function ReceiveInitialPairingRequest(
       hotelInboxUrl,
       guestInboxUrl
     );
-    //TODO create privacy token
   };
 
   return { text, onClick, onReceive };

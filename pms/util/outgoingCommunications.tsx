@@ -1,4 +1,5 @@
 import {
+  getPropertyAll,
   saveSolidDatasetInContainer,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -15,6 +16,12 @@ import {
   SaveInboxAndReturnReservation,
   SetInboxToHotelInboxInMemory,
 } from "./pairingRequestUtil";
+import {
+  CreateActiveProfilePrivacyToken,
+  CreateReservationPrivacyToken,
+} from "./privacyHelper";
+import { ParseReservation } from "../../common/hooks/useReservations";
+import { GetWebIdFromReservationInbox } from "../../common/util/urlParser";
 
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
@@ -81,6 +88,24 @@ export async function SendPairingRequestWithInformation(
   await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
     fetch: session.fetch,
   });
+
+  const parsedReservation = ParseReservation(
+    finalReservationThing,
+    reservationUrl
+  );
+  const reservationPrivacyTokenDataset = await CreateReservationPrivacyToken(
+    reservationUrl,
+    parsedReservation
+  );
+  SendPrivacyToken(guestInboxUrl, reservationPrivacyTokenDataset);
+
+  const profilePrivacyTokenDataset = await CreateActiveProfilePrivacyToken(
+    hotelProfileOwnerUrl,
+    GetWebIdFromReservationInbox(guestInboxUrl),
+    getPropertyAll(hotelProfileThing),
+    parsedReservation.dateTo
+  );
+  SendPrivacyToken(guestInboxUrl, profilePrivacyTokenDataset);
 }
 
 export async function SendPrivacyToken(
