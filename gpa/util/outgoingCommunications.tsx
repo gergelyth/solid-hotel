@@ -104,6 +104,12 @@ export async function SubmitPrivacyTokenDeletionRequest(
   privacyToken: PrivacyToken,
   session = GetSession()
 ): Promise<void> {
+  if (!privacyToken.url) {
+    throw new Error(
+      "Token URL was annulled outside of the application. Cannot delete"
+    );
+  }
+
   const notificationDataset = SerializePrivacyInformationDeletion(
     privacyToken.url
   );

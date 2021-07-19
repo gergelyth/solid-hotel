@@ -1,5 +1,5 @@
 export type PrivacyToken = {
-  url: string;
+  url: string | null;
   //TODO maybe NamedNode
   hotelInboxForDeletion: string;
   //it doesn't matter that we expose this URL to the outside, because it doesn't contain any sensitive information

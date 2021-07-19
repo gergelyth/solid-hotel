@@ -7,6 +7,7 @@ const BookingInbox = "bookingrequests";
 const HotelProfileAddress = "hotelprofiles/";
 const DataProtectionProfileAddress = "dataprotection/";
 const PrivacyTokens = "privacy/";
+const PrivacyTokensInbox = "privacy/inbox/";
 
 export const ReservationsUrl = HotelPod + ReservationAddress;
 export const RoomDefinitionsUrl = HotelPod + RoomDefinitionAddress;
@@ -15,3 +16,4 @@ export const HotelProfilesUrl = HotelPod + HotelProfileAddress;
 export const DataProtectionProfilesUrl =
   HotelPod + DataProtectionProfileAddress;
 export const PrivacyTokensUrl = HotelPod + PrivacyTokens;
+export const PrivacyTokensInboxUrl = HotelPod + PrivacyTokensInbox;

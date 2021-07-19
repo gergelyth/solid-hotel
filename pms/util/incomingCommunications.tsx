@@ -24,7 +24,7 @@ import {
 import { AddReservation } from "../../common/util/solid_reservations";
 import { ConvertToPrivacyToken } from "../../common/hooks/usePrivacyTokens";
 import { GetSession } from "../../common/util/solid";
-import { AnonymizeFieldsAndDeleteToken } from "../../common/util/privacyHelper";
+import { AnonymizeFieldsAndDeleteToken } from "./privacyHelper";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
