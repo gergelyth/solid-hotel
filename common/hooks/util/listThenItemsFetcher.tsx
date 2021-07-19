@@ -17,7 +17,7 @@ function ProcessItem<T>(
 
 export function FetchItems<T>(
   swrKey: string,
-  listUrl: string,
+  listUrl: string | null,
   convertToType: (dataset: SolidDataset, url: string) => T | null,
   decorateContainedItemUrl: (itemUrl: string) => string = (itemUrl) => itemUrl
 ): {
