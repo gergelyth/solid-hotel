@@ -6,10 +6,11 @@ import {
 } from "../../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
+import { GetCurrentDatePushedBy } from "../../util/helpers";
 import { GetSession } from "../../util/solid";
 import { SetSubmitterAccessToEveryone } from "../../util/solid_access";
 import { AddReservation } from "../../util/solid_reservations";
-import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
+import { GetSharedReservations } from "../shared";
 import { CreateRooms } from "./withRooms";
 
 function CreateReservations(

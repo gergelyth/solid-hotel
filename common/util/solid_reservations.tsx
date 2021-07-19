@@ -8,6 +8,7 @@ import {
   setInteger,
   setStringNoLocale,
   setThing,
+  Thing,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
@@ -121,7 +122,7 @@ export async function SetReservationOwnerToHotelProfile(
   reservationId: string,
   hotelProfileWebId: string,
   session = GetSession()
-): Promise<void> {
+): Promise<Thing> {
   //TODO duplication getting this dataset
   const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
   const dataset = await GetDataSet(datasetUrl, session);
@@ -142,6 +143,8 @@ export async function SetReservationOwnerToHotelProfile(
   await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
     fetch: session.fetch,
   });
+
+  return reservationThing;
 }
 
 export async function SetReservationOwnerAndState(

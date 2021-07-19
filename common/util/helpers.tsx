@@ -51,3 +51,17 @@ export async function GlobSolidUrlPaths(
 
   return Promise.all(promises).then(() => result);
 }
+
+export function GetCurrentDatePushedBy(
+  yearOffset: number,
+  monthOffset: number,
+  dayOffset: number
+): Date {
+  const date = new Date();
+  const year = date.getFullYear() + yearOffset;
+  const month = date.getMonth() + monthOffset;
+  const day = date.getDate() + dayOffset;
+
+  date.setFullYear(year, month, day);
+  return date;
+}

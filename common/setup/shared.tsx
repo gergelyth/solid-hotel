@@ -2,6 +2,7 @@ import { getContainedResourceUrlAll } from "@inrupt/solid-client";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
+import { GetCurrentDatePushedBy } from "../util/helpers";
 import { GetReservationInboxFromWebId } from "../util/solid_reservations";
 import { SafeDeleteDataset, SafeGetDataset } from "../util/solid_wrapper";
 import { CreateRooms } from "./populateHotelPod/withRooms";
@@ -17,20 +18,6 @@ export async function RecursiveDelete(url: string): Promise<void> {
   await Promise.all(urls.map((url) => RecursiveDelete(url)));
 
   await SafeDeleteDataset(url);
-}
-
-export function GetCurrentDatePushedBy(
-  yearOffset: number,
-  monthOffset: number,
-  dayOffset: number
-): Date {
-  const date = new Date();
-  const year = date.getFullYear() + yearOffset;
-  const month = date.getMonth() + monthOffset;
-  const day = date.getDate() + dayOffset;
-
-  date.setFullYear(year, month, day);
-  return date;
 }
 
 export function GetSharedReservations(

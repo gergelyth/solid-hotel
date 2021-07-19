@@ -1,8 +1,5 @@
 import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
-import {
-  AddNotificationThingToDataset,
-  CreatePrivacyTokenDataset,
-} from "../util/datasetFactory";
+import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { ConvertToPrivacyToken } from "../hooks/usePrivacyTokens";
@@ -24,9 +21,8 @@ export function DeserializePrivacyNotification(
 }
 
 export function SerializePrivacyNotification(
-  privacyToken: PrivacyToken
+  privacyTokenDataset: SolidDataset
 ): SolidDataset {
-  const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
   const notificationDataset = AddNotificationThingToDataset(
     privacyTokenDataset,
     NotificationType.PrivacyToken

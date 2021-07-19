@@ -7,6 +7,7 @@ import {
   saveSolidDatasetInContainer,
   setStringNoLocale,
   setThing,
+  SolidDataset,
 } from "@inrupt/solid-client";
 import {
   PrivacyTokensInboxUrl,
@@ -14,7 +15,10 @@ import {
 } from "../../common/consts/solidIdentifiers";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
+import {
+  CreatePrivacyTokenDataset,
+  SetUrlInPrivacyTokenDataset,
+} from "../../common/util/datasetFactory";
 import { GetSession } from "../../common/util/solid";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 
@@ -67,12 +71,12 @@ export async function AnonymizeFieldsAndDeleteToken(
 export async function CreateReservationPrivacyToken(
   datasetUrlTarget: string,
   reservation: ReservationAtHotel
-): Promise<string> {
+): Promise<SolidDataset> {
   const session = GetSession();
 
   const hotelWebId = session.info.webId;
   if (!hotelWebId) {
-    throw new Error("Hotel not logged in. This would never happen");
+    throw new Error("Hotel not logged in. This should never happen");
   }
 
   const privacyToken: PrivacyToken = {
@@ -93,5 +97,70 @@ export async function CreateReservationPrivacyToken(
     { fetch: session.fetch }
   );
 
-  return getSourceUrl(savedDataset);
+  const url = getSourceUrl(savedDataset);
+  return SetUrlInPrivacyTokenDataset(savedDataset, url);
+}
+
+export async function CreateActiveProfilePrivacyToken(
+  datasetUrlTarget: string,
+  guestWebId: string,
+  fields: string[],
+  expiryDate: Date
+): Promise<SolidDataset> {
+  return CreateProfilePrivacyToken(
+    datasetUrlTarget,
+    guestWebId,
+    fields,
+    expiryDate,
+    "Local profile copy made for an active reservation."
+  );
+}
+
+export async function CreateDataProtectionProfilePrivacyToken(
+  datasetUrlTarget: string,
+  guestWebId: string,
+  fields: string[],
+  expiryDate: Date
+): Promise<SolidDataset> {
+  return CreateProfilePrivacyToken(
+    datasetUrlTarget,
+    guestWebId,
+    fields,
+    expiryDate,
+    "Local profile copy made for preserving data protection information."
+  );
+}
+
+async function CreateProfilePrivacyToken(
+  datasetUrlTarget: string,
+  guestWebId: string,
+  fields: string[],
+  expiryDate: Date,
+  reason: string
+): Promise<SolidDataset> {
+  const session = GetSession();
+
+  const hotelWebId = session.info.webId;
+  if (!hotelWebId) {
+    throw new Error("Hotel not logged in. This should never happen");
+  }
+
+  const privacyToken: PrivacyToken = {
+    url: null,
+    hotelInboxForDeletion: PrivacyTokensInboxUrl,
+    datasetUrlTarget: datasetUrlTarget,
+    hotel: hotelWebId,
+    guest: guestWebId,
+    fieldList: fields,
+    reason: reason,
+    expiry: expiryDate,
+  };
+
+  const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
+  const savedDataset = await saveSolidDatasetInContainer(
+    PrivacyTokensUrl,
+    privacyTokenDataset,
+    { fetch: session.fetch }
+  );
+  return savedDataset;
 }

@@ -9,6 +9,7 @@ import { DoOnStateChange } from "./actionOnNewReservationState";
 import {
   ConfirmReservationStateRequest,
   SendPairingRequestWithInformation,
+  SendPrivacyToken,
 } from "./outgoingCommunications";
 import { SetGlobalDialog } from "../../common/components/global-dialog";
 import ApproveChangeDialog from "../../common/components/profile/approve-change-dialog";
@@ -24,7 +25,10 @@ import {
 import { AddReservation } from "../../common/util/solid_reservations";
 import { ConvertToPrivacyToken } from "../../common/hooks/usePrivacyTokens";
 import { GetSession } from "../../common/util/solid";
-import { AnonymizeFieldsAndDeleteToken } from "./privacyHelper";
+import {
+  AnonymizeFieldsAndDeleteToken,
+  CreateReservationPrivacyToken,
+} from "./privacyHelper";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -68,6 +72,11 @@ export function ReceiveBookingRequest(
     router.push("/reservations");
   };
   const onReceive = async (): Promise<void> => {
+    if (!reservation.inbox) {
+      ShowErrorSnackbar("Inbox is null in received reservation request");
+      return;
+    }
+
     reservation.state = ReservationState.CONFIRMED;
     const hotelInboxUrl = await AddReservation(reservation);
     ConfirmReservationStateRequest(
@@ -75,6 +84,12 @@ export function ReceiveBookingRequest(
       reservation.inbox,
       hotelInboxUrl
     );
+
+    const privacyTokenDataset = await CreateReservationPrivacyToken(
+      GetReservationUrlFromInboxUrl(hotelInboxUrl),
+      reservation
+    );
+    SendPrivacyToken(reservation.inbox, privacyTokenDataset);
   };
 
   return { text, onClick, onReceive };
@@ -142,6 +157,7 @@ export function ReceiveInitialPairingRequest(
       hotelInboxUrl,
       guestInboxUrl
     );
+    //TODO create privacy token
   };
 
   return { text, onClick, onReceive };
