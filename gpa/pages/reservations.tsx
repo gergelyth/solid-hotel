@@ -1,7 +1,35 @@
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
-import ReservationStatusList from "../components/reservations/reservation-status-list";
+import ReservationStatusList from "../../common/components/reservations/reservation-status-list";
+import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
+import { useRouter } from "next/router";
+import { ShowErrorSnackbar } from "../../common/components/snackbar";
+import ReservationConciseElement from "../../common/components/reservations/reservation-concise-element";
+import { HotelDetailsOneLiner } from "../../common/components/reservations/hotel-details";
+
+function OnReservationClick(
+  event: React.MouseEvent<HTMLElement>,
+  reservation: ReservationAtHotel
+): void {
+  const router = useRouter();
+
+  if (!reservation.id) {
+    ShowErrorSnackbar("Reservation ID is null");
+    return;
+  }
+  router.push(`/reservations/${encodeURIComponent(reservation.id)}`);
+}
+
+function CreateReservationElement(item: ReservationAtHotel): JSX.Element {
+  return (
+    <ReservationConciseElement
+      reservation={item}
+      titleElement={<HotelDetailsOneLiner hotelWebId={item.hotel} />}
+      onClickAction={OnReservationClick}
+    />
+  );
+}
 
 function Reservations(): JSX.Element {
   const userReservationsUrl = GetUserReservationsPodUrl();
@@ -35,30 +63,34 @@ function Reservations(): JSX.Element {
 
       <Grid item>
         <ReservationStatusList
-          userReservationsUrl={userReservationsUrl}
+          reservationsUrl={userReservationsUrl}
           reservationState={ReservationState.ACTIVE}
           reservationsTitle="Active reservations"
+          createReservationElement={CreateReservationElement}
         />
       </Grid>
       <Grid item>
         <ReservationStatusList
-          userReservationsUrl={userReservationsUrl}
+          reservationsUrl={userReservationsUrl}
           reservationState={ReservationState.REQUESTED}
           reservationsTitle="Requested reservations"
+          createReservationElement={CreateReservationElement}
         />
       </Grid>
       <Grid item>
         <ReservationStatusList
-          userReservationsUrl={userReservationsUrl}
+          reservationsUrl={userReservationsUrl}
           reservationState={ReservationState.CONFIRMED}
           reservationsTitle="Confirmed upcoming reservations"
+          createReservationElement={CreateReservationElement}
         />
       </Grid>
       <Grid item>
         <ReservationStatusList
-          userReservationsUrl={userReservationsUrl}
+          reservationsUrl={userReservationsUrl}
           reservationState={ReservationState.PAST || ReservationState.CANCELLED}
           reservationsTitle="Past and cancelled reservations"
+          createReservationElement={CreateReservationElement}
         />
       </Grid>
     </Grid>

@@ -42,8 +42,7 @@ export function ReceiveReservationStateChange(
   const { reservationId, newState, replyInbox } =
     DeserializeReservationStateChange(hotelInboxUrl, dataset);
   //TODO check if onReceive gets no Error, and adjust this text accordingly
-  const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
-        Click to view reservation.`;
+  const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservation.`;
   const onClick = (): void => {
     router.push(`/reservations/${encodeURIComponent(reservationId)}`);
   };
@@ -66,8 +65,9 @@ export function ReceiveBookingRequest(
 } {
   const reservation = DeserializeBookingRequest(dataset);
 
-  const text = `Reservation requested for ${reservation.owner} for dates ${reservation.dateFrom}-${reservation.dateTo}.
-        Request was automatically confirmed.`;
+  const text = `Reservation requested for [${
+    reservation.owner
+  }] for dates [${reservation.dateFrom.toDateString()}]-[${reservation.dateTo.toDateString()}].\nRequest was automatically confirmed.`;
   const onClick = (): void => {
     router.push("/reservations");
   };
@@ -104,8 +104,7 @@ export function ReceiveProfileModification(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const text = `A guest changed a field in their Solid Pod and is trying to propagate the change to the hotel's side.
-  Click here to review.`;
+  const text = `A guest changed a field in their Solid Pod and is trying to propagate the change to the hotel's side.\nClick here to review.`;
   const onClick = (): void => {
     SetGlobalDialog(<ApproveChangeDialog dataset={dataset} />);
   };
@@ -131,7 +130,7 @@ export function ReceiveInitialPairingRequest(
 
   const reservationUrl = GetReservationUrlFromInboxUrl(hotelInboxUrl);
 
-  const text = `Pairing request received for reservation ${reservationUrl}.`;
+  const text = `Pairing request received for reservation [${reservationUrl}].`;
   const onClick = (): void => undefined;
   const onReceive = async (): Promise<void> => {
     const expectedPairingToken = await GetPairingToken(coreReservationFolder);

@@ -8,6 +8,8 @@ import {
   DialogActions,
   Button,
   TextField,
+  Box,
+  Grid,
 } from "@material-ui/core";
 
 function EditRoomPopup({
@@ -40,56 +42,72 @@ function EditRoomPopup({
       open={isPopupShowing}
     >
       <DialogTitle id="popup-title">Edit room</DialogTitle>
-      <TextField
-        required
-        id="nameInput"
-        label="Name"
-        variant="outlined"
-        value={currentRoomName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setRoomName(e.target.value)
-        }
-      />
-
-      <TextField
-        id="descriptionInput"
-        label="Description"
-        variant="outlined"
-        value={currentRoomDescription}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setRoomDescription(e.target.value)
-        }
-      />
-      <DialogActions>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => setPopupVisibility(false)}
+      <Box m={2} p={2}>
+        <Grid
+          container
+          spacing={2}
+          justify="center"
+          alignItems="center"
+          direction="column"
         >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          className={"button"}
-          onClick={() => {
-            const newRoom = {
-              id: null,
-              name: currentRoomName,
-              description:
-                currentRoomDescription === ""
-                  ? undefined
-                  : currentRoomDescription,
-            };
-            updateRoomLocally(newRoom, false);
-            CreateOrUpdateRoom(newRoom);
-            Revalidate();
-            setPopupVisibility(false);
-          }}
-        >
-          Save
-        </Button>
-      </DialogActions>
+          <Grid item>
+            <TextField
+              required
+              id="nameInput"
+              label="Name"
+              variant="outlined"
+              value={currentRoomName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setRoomName(e.target.value)
+              }
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              id="descriptionInput"
+              label="Description"
+              variant="outlined"
+              multiline
+              value={currentRoomDescription}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setRoomDescription(e.target.value)
+              }
+            />
+          </Grid>
+          <Grid item>
+            <DialogActions>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setPopupVisibility(false)}
+              >
+                Back
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={"button"}
+                onClick={() => {
+                  const newRoom = {
+                    id: null,
+                    name: currentRoomName,
+                    description:
+                      currentRoomDescription === ""
+                        ? undefined
+                        : currentRoomDescription,
+                  };
+                  updateRoomLocally(newRoom, false);
+                  CreateOrUpdateRoom(newRoom);
+                  Revalidate();
+                  setPopupVisibility(false);
+                }}
+              >
+                Save
+              </Button>
+            </DialogActions>
+          </Grid>
+        </Grid>
+      </Box>
     </Dialog>
   );
 }

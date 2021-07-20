@@ -34,14 +34,16 @@ function CreateReservationElement(
           onClickAction={onClickAction}
         />
       </Grid>
-      <Grid item xs={2}>
-        <OfflineCheckinButton reservation={reservation} />
-      </Grid>
-      <Grid item xs={2}>
-        <CancelReservationButton
-          reservation={reservation}
-          confirmCancellation={ConfirmCancellation}
-        />
+      <Grid item container xs={4} justify="flex-end">
+        <Grid item>
+          <OfflineCheckinButton reservation={reservation} />
+        </Grid>
+        <Grid item>
+          <CancelReservationButton
+            reservation={reservation}
+            confirmCancellation={ConfirmCancellation}
+          />
+        </Grid>
       </Grid>
     </Grid>
   );

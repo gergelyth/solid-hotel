@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import ReservationList from "../../common/components/reservations/reservation-list";
 import { ReservationsUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import CreateReservationElement from "../components/reservations/reservation-element";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Box } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
+import ReservationStatusList from "../../common/components/reservations/reservation-status-list";
 
 function Reservations(): JSX.Element {
   const router = useRouter();
@@ -38,21 +38,41 @@ function Reservations(): JSX.Element {
       container
       spacing={3}
       justify="center"
-      alignItems="center"
+      alignItems="stretch"
       direction="column"
     >
       <Grid item>
-        <Grid item>
-          <Typography variant="h4">Reservations</Typography>
-        </Grid>
+        <Typography variant="h4">
+          <Box textAlign="center">Reservations</Box>
+        </Typography>
       </Grid>
-      {/* <h2>Reservation count: {reservations.length}</h2> */}
 
       <Grid item>
-        <ReservationList
+        <ReservationStatusList
           reservationsUrl={ReservationsUrl}
-          reservationFilter={() => true}
-          reservationElement={(reservation: ReservationAtHotel) =>
+          reservationState={ReservationState.ACTIVE}
+          reservationsTitle="Active reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
+      </Grid>
+      <Grid item>
+        <ReservationStatusList
+          reservationsUrl={ReservationsUrl}
+          reservationState={ReservationState.CONFIRMED}
+          reservationsTitle="Confirmed upcoming reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
+      </Grid>
+      <Grid item>
+        <ReservationStatusList
+          reservationsUrl={ReservationsUrl}
+          reservationState={ReservationState.PAST || ReservationState.CANCELLED}
+          reservationsTitle="Past and cancelled reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
             CreateReservationElement(reservation, OnReservationClick)
           }
         />

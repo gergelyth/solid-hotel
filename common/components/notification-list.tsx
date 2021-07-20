@@ -27,14 +27,18 @@ function NotificationItem({
         notification.onClick(event)
       }
       key={key}
+      raised
     >
       <CardActionArea>
         <CardContent>
           <Grid container spacing={4} justify="center" alignItems="center">
-            <Grid item xs={8}>
-              <Typography variant="caption">{notification.text}</Typography>
+            <Grid item>
+              <Typography variant="caption" align="center">
+                {/* PRE style to preserve line breaks */}
+                <pre style={{ fontFamily: "inherit" }}>{notification.text}</pre>
+              </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item>
               <Button variant="contained" color="primary" size="medium">
                 Clear
               </Button>
