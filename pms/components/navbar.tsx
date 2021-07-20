@@ -32,10 +32,9 @@ function NavigationBar(): JSX.Element {
         {notificationElements.panel}
         <Toolbar>
           <Grid container spacing={3} alignItems="center">
+            <Grid item>{notificationElements.icon}</Grid>
             <Grid item>
               <HouseIcon />
-            </Grid>
-            <Grid item>
               <Typography variant="h6">Property Management System</Typography>
             </Grid>
             <Grid item>
@@ -52,7 +51,6 @@ function NavigationBar(): JSX.Element {
                 </Button>
               </Link>
             </Grid>
-            <Grid item>{notificationElements.icon}</Grid>
             <Grid item>
               <DynamicLoginComponent />
             </Grid>

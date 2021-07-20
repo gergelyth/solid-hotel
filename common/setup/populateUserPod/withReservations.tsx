@@ -1,7 +1,8 @@
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
+import { GetCurrentDatePushedBy } from "../../util/helpers";
 import { AddReservation } from "../../util/solid_reservations";
-import { GetCurrentDatePushedBy, GetSharedReservations } from "../shared";
+import { GetSharedReservations } from "../shared";
 
 function CreateReservations(userWebId: string): ReservationAtHotel[] {
   const otherHotelWebId =

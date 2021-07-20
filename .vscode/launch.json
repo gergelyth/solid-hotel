@@ -2,12 +2,36 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "firefox",
+      "request": "attach",
+      "name": "Attach",
+      "pathMappings": [
+        //PMS config
+        {
+          "url": "webpack://_n_e/common",
+          "path": "${workspaceFolder}/common"
+        },
+        {
+          "url": "webpack://_n_e/components",
+          "path": "${workspaceFolder}/pms/components"
+        },
+        {
+          "url": "webpack://_n_e/pages",
+          "path": "${workspaceFolder}/pms/pages"
+        },
+        {
+          "url": "webpack://_n_e/util",
+          "path": "${workspaceFolder}/pms/util"
+        }
+      ]
+    },
+    {
       "type": "node",
       "request": "attach",
       "name": "Solid Hotel Debug",
       "port": 9229,
       "sourceMaps": true,
-      "restart": true,
-    },
+      "restart": true
+    }
   ]
 }
