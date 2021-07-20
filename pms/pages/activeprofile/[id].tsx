@@ -1,5 +1,5 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography, Divider } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 
@@ -19,7 +19,7 @@ function ActiveHotelProfileDetail(): JSX.Element {
     guestWebId = guestWebId[0];
   }
 
-  const requiredFields = useRequiredFields();
+  const requiredFields = useRequiredFields(undefined, guestWebId);
 
   if (!guestWebId) {
     return <Typography variant="body1">Owner ID null</Typography>;
@@ -31,37 +31,48 @@ function ActiveHotelProfileDetail(): JSX.Element {
       spacing={3}
       justify="center"
       alignItems="center"
-      direction="column"
+      direction="row"
     >
-      <Grid item>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            PrintRegistrationCard();
-          }}
-        >
-          Print registration card
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            ExportForeignPoliceReport();
-          }}
-        >
-          Export foreign police report
-        </Button>
-      </Grid>
-      <Grid item>
+      <Grid item xs={5}>
         <ProfileMain
           rdfFields={requiredFields.data}
           webId={guestWebId}
           editable={true}
           deletable={false}
         />
+      </Grid>
+      <Divider orientation="vertical" flexItem />
+      <Grid
+        item
+        xs={5}
+        container
+        spacing={3}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              PrintRegistrationCard();
+            }}
+          >
+            Print registration card
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              ExportForeignPoliceReport();
+            }}
+          >
+            Export foreign police report
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );

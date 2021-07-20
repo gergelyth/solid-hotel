@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { Field } from "../../types/Field";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
 function CreateFieldElements(
   guestFields: Field[],
@@ -18,7 +19,7 @@ function CreateFieldElements(
   return (
     <Grid
       container
-      spacing={2}
+      spacing={3}
       justify="center"
       alignItems="center"
       direction="column"
@@ -65,9 +66,41 @@ function ProfileMain({
   }
 
   return (
-    <Box>
-      {CreateFieldElements(guestFields, rdfFields, editable, deletable)}
-    </Box>
+    <Grid
+      container
+      spacing={3}
+      justify="center"
+      alignItems="stretch"
+      direction="column"
+    >
+      <Grid
+        item
+        container
+        spacing={1}
+        justify="center"
+        alignItems="center"
+        direction="row"
+      >
+        <Grid item>
+          <AccountBoxIcon style={{ fontSize: 80 }} />
+        </Grid>
+        <Grid item>
+          <Typography variant="h6">
+            {
+              guestFields.find((field) => field.fieldShortName === "firstName")
+                ?.fieldValue
+            }{" "}
+            {
+              guestFields.find((field) => field.fieldShortName === "lastName")
+                ?.fieldValue
+            }
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item>
+        {CreateFieldElements(guestFields, rdfFields, editable, deletable)}
+      </Grid>
+    </Grid>
   );
 }
 

@@ -6,7 +6,10 @@
       "request": "attach",
       "name": "PMS - Attach to Firefox",
       "pathMappings": [
-        //PMS config
+        {
+          "url": "webpack-internal:///pages",
+          "path": "${workspaceFolder}/pms/pages"
+        },
         {
           "url": "webpack://_n_e/common",
           "path": "${workspaceFolder}/common"
@@ -16,11 +19,7 @@
           "path": "${workspaceFolder}/pms/components"
         },
         {
-          "url": "webpack://_n_e/pages",
-          "path": "${workspaceFolder}/pms/pages"
-        },
-        {
-          "url": "webpack://_n_e/util",
+          "url": "webpack-internal:///util",
           "path": "${workspaceFolder}/pms/util"
         }
       ]

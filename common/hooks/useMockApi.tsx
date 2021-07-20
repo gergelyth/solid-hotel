@@ -6,7 +6,8 @@ import { useGuest } from "./useGuest";
 
 function useMockApi<T>(
   baseApiUrl: string,
-  nationality?: string
+  nationality?: string,
+  webId?: string
 ): {
   data: T | undefined;
   isLoading: boolean;
@@ -32,7 +33,8 @@ function useMockApi<T>(
 
   //we call this conditionally - if we have the nationality, we won't call the SWR
   const guest = useGuest(
-    nationality ? undefined : [personFieldToRdfMap.nationality]
+    nationality ? undefined : [personFieldToRdfMap.nationality],
+    webId
   );
 
   let fetchFunction;
@@ -57,7 +59,10 @@ function useMockApi<T>(
   };
 }
 
-export function useRequiredFields(nationality?: string): {
+export function useRequiredFields(
+  nationality?: string,
+  webId?: string
+): {
   data: string[] | undefined;
   isLoading: boolean;
   isError: boolean;
@@ -66,7 +71,8 @@ export function useRequiredFields(nationality?: string): {
   //TODO shouldnt be hardcoded!!!
   return useMockApi<string[]>(
     "http://localhost:3003/api/requiredFields",
-    nationality
+    nationality,
+    webId
   );
 }
 
