@@ -8,8 +8,10 @@ import {
   DialogActions,
   Button,
 } from "@material-ui/core";
-import { Dispatch, SetStateAction } from "react";
+import { useRef, Dispatch, SetStateAction } from "react";
 import PrintIcon from "@material-ui/icons/Print";
+import { useReactToPrint } from "react-to-print";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 export function RegistrationCard({
   rdfFields,
@@ -22,90 +24,106 @@ export function RegistrationCard({
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element {
+  const printComponentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => printComponentRef.current ?? null,
+  });
+
   return (
     <Dialog
       onClose={() => setPopupVisibility(false)}
       open={isPopupShowing}
       fullWidth
     >
-      <DialogTitle id="popup-title">Registration card</DialogTitle>
-      <Box m={2} p={2}>
-        <Grid
-          container
-          spacing={3}
-          justify="center"
-          alignItems="stretch"
-          direction="column"
-        >
-          <Grid item>
-            <ProfileMain
-              rdfFields={rdfFields}
-              webId={webId}
-              editable={false}
-              deletable={false}
-            />
-          </Grid>
-          <Grid item>
-            <Typography variant="caption">
-              Date: {new Date().toDateString()}
-            </Typography>
-          </Grid>
+      <Grid item innerRef={printComponentRef}>
+        <Box m={2} p={2}>
           <Grid
-            item
             container
             spacing={3}
             justify="center"
-            alignItems="center"
-            direction="row"
+            alignItems="stretch"
+            direction="column"
           >
-            <Grid item xs={6}>
-              <Typography variant="body1" align="center">
-                ...............................................
+            <DialogTitle id="popup-title">Registration card</DialogTitle>
+            <Grid item container justify="flex-end">
+              <Typography variant="caption" align="center">
+                Date: {new Date().toDateString()}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body1" align="center">
-                ...............................................
-              </Typography>
+            <Grid item>
+              <ProfileMain
+                rdfFields={rdfFields}
+                webId={webId}
+                editable={false}
+                deletable={false}
+                centerJustify={true}
+              />
+            </Grid>
+            <Grid
+              item
+              container
+              spacing={3}
+              justify="center"
+              alignItems="center"
+              direction="row"
+            >
+              <Grid item xs={6}>
+                <Typography variant="body1" align="center">
+                  ...............................................
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" align="center">
+                  ...............................................
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              item
+              container
+              spacing={3}
+              justify="center"
+              alignItems="center"
+              direction="row"
+            >
+              <Grid item xs={6}>
+                <Typography variant="body1" align="center">
+                  Guest
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" align="center">
+                  Hotel employee
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            spacing={3}
-            justify="center"
-            alignItems="center"
-            direction="row"
-          >
-            <Grid item xs={6}>
-              <Typography variant="body1" align="center">
-                Guest
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body1" align="center">
-                Hotel employee
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <DialogActions>
-              <Button
-                variant="contained"
-                color="primary"
-                className={"button"}
-                startIcon={<PrintIcon />}
-                onClick={() => {
-                  //TODO print it
-                  setPopupVisibility(false);
-                }}
-              >
-                Print
-              </Button>
-            </DialogActions>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </Grid>
+      <Grid item container justify="center">
+        <Box m={1} p={1}>
+          <DialogActions>
+            <Button
+              variant="contained"
+              color="primary"
+              className={"button"}
+              startIcon={<PrintIcon />}
+              onClick={() => {
+                if (handlePrint) {
+                  handlePrint();
+                } else {
+                  ShowErrorSnackbar(
+                    "Print preparation failed (handlePrint is undefined)"
+                  );
+                }
+                setPopupVisibility(false);
+              }}
+            >
+              Print
+            </Button>
+          </DialogActions>
+        </Box>
+      </Grid>
     </Dialog>
   );
 }

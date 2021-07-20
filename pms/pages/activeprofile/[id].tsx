@@ -10,7 +10,7 @@ function ExportForeignPoliceReport(): void {
 }
 
 function ActiveHotelProfileDetail(): JSX.Element {
-  const [isPopupShowing, setPopupVisibility] = useState(false);
+  const [isRegPopupShowing, setRegPopupVisibility] = useState(false);
   const router = useRouter();
 
   let guestWebId = router.query.id;
@@ -56,7 +56,7 @@ function ActiveHotelProfileDetail(): JSX.Element {
             variant="contained"
             color="primary"
             onClick={() => {
-              setPopupVisibility(true);
+              setRegPopupVisibility(true);
             }}
           >
             Print registration card
@@ -77,8 +77,8 @@ function ActiveHotelProfileDetail(): JSX.Element {
       <RegistrationCard
         rdfFields={requiredFields.data}
         webId={guestWebId}
-        isPopupShowing={isPopupShowing}
-        setPopupVisibility={setPopupVisibility}
+        isPopupShowing={isRegPopupShowing}
+        setPopupVisibility={setRegPopupVisibility}
       />
     </Grid>
   );

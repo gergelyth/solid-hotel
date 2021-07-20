@@ -15,7 +15,8 @@ function CreateFieldElements(
   guestFields: Field[],
   rdfFields: string[] | undefined,
   editable: boolean,
-  deletable: boolean
+  deletable: boolean,
+  centerJustify: boolean
 ): JSX.Element {
   return (
     <Grid
@@ -34,6 +35,7 @@ function CreateFieldElements(
             rdfFields={rdfFields}
             editable={editable}
             deletable={deletable}
+            centerJustify={centerJustify}
           />
         );
       })}
@@ -46,11 +48,13 @@ function ProfileMain({
   webId,
   editable = true,
   deletable = true,
+  centerJustify = false,
 }: {
   rdfFields: string[] | undefined;
   webId?: string;
   editable?: boolean;
   deletable?: boolean;
+  centerJustify?: boolean;
 }): JSX.Element {
   const { guestFields, isLoading, isError } = useGuest(rdfFields, webId);
 
@@ -90,7 +94,13 @@ function ProfileMain({
         </Grid>
       </Grid>
       <Grid item>
-        {CreateFieldElements(guestFields, rdfFields, editable, deletable)}
+        {CreateFieldElements(
+          guestFields,
+          rdfFields,
+          editable,
+          deletable,
+          centerJustify
+        )}
       </Grid>
     </Grid>
   );

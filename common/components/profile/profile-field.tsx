@@ -124,20 +124,32 @@ function ProfileField({
   rdfFields,
   editable,
   deletable,
+  centerJustify,
 }: {
   field: Field;
   guestFields: Field[];
   rdfFields: string[] | undefined;
   editable: boolean;
   deletable: boolean;
+  centerJustify: boolean;
 }): JSX.Element {
   return (
     <Grid container item spacing={2} justify="center" alignItems="center">
       <Grid item xs={4}>
-        <Typography variant="body1">{field.fieldPrettyName}:</Typography>
+        <Typography
+          variant="body1"
+          align={centerJustify ? "center" : "inherit"}
+        >
+          {field.fieldPrettyName}:
+        </Typography>
       </Grid>
       <Grid item xs={4}>
-        <Typography variant="body1">{field.fieldValue}</Typography>
+        <Typography
+          variant="body1"
+          align={centerJustify ? "center" : "inherit"}
+        >
+          {field.fieldValue}
+        </Typography>
       </Grid>
       <EditElements
         field={field}
