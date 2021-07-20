@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { Field } from "../../types/Field";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import { GuestFullName } from "./guest-full-name";
 
 function CreateFieldElements(
   guestFields: Field[],
@@ -85,16 +86,7 @@ function ProfileMain({
           <AccountBoxIcon style={{ fontSize: 80 }} />
         </Grid>
         <Grid item>
-          <Typography variant="h6">
-            {
-              guestFields.find((field) => field.fieldShortName === "firstName")
-                ?.fieldValue
-            }{" "}
-            {
-              guestFields.find((field) => field.fieldShortName === "lastName")
-                ?.fieldValue
-            }
-          </Typography>
+          <GuestFullName guestFields={guestFields} />
         </Grid>
       </Grid>
       <Grid item>

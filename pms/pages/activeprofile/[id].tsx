@@ -2,16 +2,15 @@ import ProfileMain from "../../../common/components/profile/profile-main";
 import { Button, Grid, Typography, Divider } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
-
-function PrintRegistrationCard(): void {
-  //TODO
-}
+import { RegistrationCard } from "../../components/profile/registration-card";
+import { useState } from "react";
 
 function ExportForeignPoliceReport(): void {
   //TODO
 }
 
 function ActiveHotelProfileDetail(): JSX.Element {
+  const [isPopupShowing, setPopupVisibility] = useState(false);
   const router = useRouter();
 
   let guestWebId = router.query.id;
@@ -22,6 +21,7 @@ function ActiveHotelProfileDetail(): JSX.Element {
   const requiredFields = useRequiredFields(undefined, guestWebId);
 
   if (!guestWebId) {
+    //TODO redirect to 404 instead
     return <Typography variant="body1">Owner ID null</Typography>;
   }
 
@@ -56,7 +56,7 @@ function ActiveHotelProfileDetail(): JSX.Element {
             variant="contained"
             color="primary"
             onClick={() => {
-              PrintRegistrationCard();
+              setPopupVisibility(true);
             }}
           >
             Print registration card
@@ -74,6 +74,12 @@ function ActiveHotelProfileDetail(): JSX.Element {
           </Button>
         </Grid>
       </Grid>
+      <RegistrationCard
+        rdfFields={requiredFields.data}
+        webId={guestWebId}
+        isPopupShowing={isPopupShowing}
+        setPopupVisibility={setPopupVisibility}
+      />
     </Grid>
   );
 }

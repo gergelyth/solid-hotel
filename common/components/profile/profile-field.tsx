@@ -3,7 +3,7 @@ import EditFieldPopup from "./edit-field-popup";
 import DeleteFieldPopup from "./delete-field-popup";
 import { RemoveField, SetField } from "../../util/solid_profile";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { Grid, Button, Box } from "@material-ui/core";
+import { Grid, Button, Box, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Field } from "../../types/Field";
 import { RevalidateGuest, TriggerRefetchGuest } from "../../hooks/useGuest";
@@ -134,10 +134,10 @@ function ProfileField({
   return (
     <Grid container item spacing={2} justify="center" alignItems="center">
       <Grid item xs={4}>
-        {field.fieldPrettyName}:
+        <Typography variant="body1">{field.fieldPrettyName}:</Typography>
       </Grid>
       <Grid item xs={4}>
-        {field.fieldValue}
+        <Typography variant="body1">{field.fieldValue}</Typography>
       </Grid>
       <EditElements
         field={field}
