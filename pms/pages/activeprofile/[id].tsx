@@ -4,10 +4,7 @@ import { useRouter } from "next/router";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { RegistrationCard } from "../../components/profile/registration-card";
 import { useState } from "react";
-
-function ExportForeignPoliceReport(): void {
-  //TODO
-}
+import { ForeignPoliceReport } from "../../components/profile/foreign-police-report";
 
 function ActiveHotelProfileDetail(): JSX.Element {
   const [isRegPopupShowing, setRegPopupVisibility] = useState(false);
@@ -63,15 +60,10 @@ function ActiveHotelProfileDetail(): JSX.Element {
           </Button>
         </Grid>
         <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              ExportForeignPoliceReport();
-            }}
-          >
-            Export foreign police report
-          </Button>
+          <ForeignPoliceReport
+            rdfFields={requiredFields.data}
+            webId={guestWebId}
+          />
         </Grid>
       </Grid>
       <RegistrationCard
