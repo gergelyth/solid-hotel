@@ -1,12 +1,12 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
-import { Button, Grid, Typography, Divider } from "@material-ui/core";
+import { Button, Grid, Divider } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { RegistrationCard } from "../../components/profile/registration-card";
 import { useState } from "react";
 import { ForeignPoliceReport } from "../../components/profile/foreign-police-report";
 
-function ActiveHotelProfileDetail(): JSX.Element {
+function ActiveHotelProfileDetail(): JSX.Element | null {
   const [isRegPopupShowing, setRegPopupVisibility] = useState(false);
   const router = useRouter();
 
@@ -18,8 +18,8 @@ function ActiveHotelProfileDetail(): JSX.Element {
   const requiredFields = useRequiredFields(undefined, guestWebId);
 
   if (!guestWebId) {
-    //TODO redirect to 404 instead
-    return <Typography variant="body1">Owner ID null</Typography>;
+    router.push("/404");
+    return null;
   }
 
   return (

@@ -16,10 +16,13 @@ function ConfirmCancellation(reservation: ReservationAtHotel): void {
   );
 }
 
-function CreateReservationElement(
-  reservation: ReservationAtHotel,
-  onClickAction: ReservationClickHandler
-): JSX.Element {
+function ConfirmedReservationDetails({
+  reservation,
+  onClickAction,
+}: {
+  reservation: ReservationAtHotel;
+  onClickAction: ReservationClickHandler;
+}): JSX.Element {
   return (
     <Grid
       container
@@ -34,7 +37,7 @@ function CreateReservationElement(
           onClickAction={onClickAction}
         />
       </Grid>
-      <Grid item container xs={4} justify="flex-end">
+      <Grid item xs={4} container justify="flex-end" direction="row">
         <Grid item>
           <OfflineCheckinButton reservation={reservation} />
         </Grid>
@@ -47,6 +50,52 @@ function CreateReservationElement(
       </Grid>
     </Grid>
   );
+}
+
+function OtherReservationDetails({
+  reservation,
+  onClickAction,
+}: {
+  reservation: ReservationAtHotel;
+  onClickAction: ReservationClickHandler;
+}): JSX.Element {
+  return (
+    <Grid
+      container
+      spacing={2}
+      justify="center"
+      alignItems="center"
+      direction="row"
+    >
+      <Grid item xs={12}>
+        <ConciseHotelReservationElement
+          reservation={reservation}
+          onClickAction={onClickAction}
+        />
+      </Grid>
+    </Grid>
+  );
+}
+
+function CreateReservationElement(
+  reservation: ReservationAtHotel,
+  onClickAction: ReservationClickHandler
+): JSX.Element {
+  if (reservation.state == ReservationState.CONFIRMED) {
+    return (
+      <ConfirmedReservationDetails
+        reservation={reservation}
+        onClickAction={onClickAction}
+      />
+    );
+  } else {
+    return (
+      <OtherReservationDetails
+        reservation={reservation}
+        onClickAction={onClickAction}
+      />
+    );
+  }
 }
 
 export default CreateReservationElement;

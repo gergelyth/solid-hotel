@@ -97,7 +97,7 @@ function ProfileWrapper({
   );
 }
 
-function DataProtectionProfileDetail(): JSX.Element {
+function DataProtectionProfileDetail(): JSX.Element | null {
   const router = useRouter();
 
   let guestWebId = router.query.id;
@@ -114,8 +114,8 @@ function DataProtectionProfileDetail(): JSX.Element {
   const requiredFields = useRequiredFields(undefined, guestWebId);
 
   if (!guestWebId) {
-    //TODO redirect to 404 instead
-    return <Typography variant="body1">Owner ID null</Typography>;
+    router.push("/404");
+    return null;
   }
 
   return (
