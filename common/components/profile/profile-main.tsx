@@ -21,6 +21,7 @@ function CreateFieldElements(
   return (
     <Grid
       container
+      item
       spacing={3}
       justify="center"
       alignItems="center"
@@ -93,15 +94,13 @@ function ProfileMain({
           <GuestFullName guestFields={guestFields} />
         </Grid>
       </Grid>
-      <Grid item>
-        {CreateFieldElements(
-          guestFields,
-          rdfFields,
-          editable,
-          deletable,
-          centerJustify
-        )}
-      </Grid>
+      {CreateFieldElements(
+        guestFields,
+        rdfFields,
+        editable,
+        deletable,
+        centerJustify
+      )}
     </Grid>
   );
 }

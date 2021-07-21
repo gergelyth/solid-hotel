@@ -134,8 +134,8 @@ function ProfileField({
   centerJustify: boolean;
 }): JSX.Element {
   return (
-    <Grid container item spacing={2} justify="center" alignItems="center">
-      <Grid item xs={4}>
+    <Grid container item justify="center" alignItems="center" direction="row">
+      <Grid item xs={6}>
         <Typography
           variant="body1"
           align={centerJustify ? "center" : "inherit"}
@@ -143,7 +143,7 @@ function ProfileField({
           {field.fieldPrettyName}:
         </Typography>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={6}>
         <Typography
           variant="body1"
           align={centerJustify ? "center" : "inherit"}
