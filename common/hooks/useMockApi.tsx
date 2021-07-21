@@ -76,7 +76,10 @@ export function useRequiredFields(
   );
 }
 
-export function useDataProtectionInformation(): {
+export function useDataProtectionInformation(
+  nationality?: string,
+  webId?: string
+): {
   data: DataProtectionInformation | undefined;
   isLoading: boolean;
   isError: boolean;
@@ -84,6 +87,8 @@ export function useDataProtectionInformation(): {
   // return useMockApi<DataProtectionInformation>("/api/dataprotection");
   //TODO shouldnt be hardcoded!!!
   return useMockApi<DataProtectionInformation>(
-    "http://localhost:3003/api/dataprotection"
+    "http://localhost:3003/api/dataprotection",
+    nationality,
+    webId
   );
 }
