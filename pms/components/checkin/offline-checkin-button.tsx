@@ -2,19 +2,37 @@ import { Box, Button } from "@material-ui/core";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
 import EditFieldPopup from "../../../common/components/profile/edit-field-popup";
+import { HotelProfilesUrl } from "../../../common/consts/solidIdentifiers";
+import GetSupportedFields from "../../../common/consts/supported-fields";
+import { Field } from "../../../common/types/Field";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { FieldNameToFieldMap } from "../../../common/util/fields";
+import { CreateHotelProfile } from "../../../common/util/hotelProfileHandler";
 
 function OnConfirmation(
   reservation: ReservationAtHotel,
+  nationalityField: Field,
   nationality: string,
   router: NextRouter
 ): void {
-  //nationality gets parsed in RequiredFieldsAtCheckin
-  router.push({
-    pathname: "/checkin",
-    query: { id: reservation.id, nationality: nationality },
-  });
+  nationalityField.fieldValue = nationality;
+
+  CreateHotelProfile([nationalityField], HotelProfilesUrl).then(
+    (hotelProfileId) => {
+      router.push({
+        pathname: "/checkin",
+        query: {
+          id: reservation.id,
+          nationality: nationality,
+          hotelProfile: hotelProfileId,
+        },
+      });
+    }
+  );
+
+  //TODO some indiciation that we're waiting for the hotel profile creation?
+  // if (!hotelProfileWebId) {
+  //   return <CircularProgress />;
+  // }
 }
 
 function OfflineCheckinButton({
@@ -26,6 +44,13 @@ function OfflineCheckinButton({
 
   const [isNationalityPopupShowing, setNationalityPopupVisibility] =
     useState(false);
+
+  const nationalityField = GetSupportedFields().find(
+    (x) => x.fieldShortName == "nationality"
+  );
+  if (!nationalityField) {
+    throw new Error("Nationality field not in supported fields list");
+  }
 
   return (
     <Box>
@@ -39,9 +64,9 @@ function OfflineCheckinButton({
         Check-in
       </Button>
       <EditFieldPopup
-        field={FieldNameToFieldMap["nationality"]}
+        field={nationalityField}
         onConfirmation={(nationalityFieldName: string, nationality: string) =>
-          OnConfirmation(reservation, nationality, router)
+          OnConfirmation(reservation, nationalityField, nationality, router)
         }
         isPopupShowing={isNationalityPopupShowing}
         setPopupVisibility={setNationalityPopupVisibility}

@@ -6,8 +6,6 @@ import RequiredFieldsAtCheckin from "../components/checkin/fields-subpage";
 import { SetReservationOwnerAndState } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import QrComponent from "../components/checkin/qr-subpage";
-import { AppProps } from "next/app";
-import { GetServerSidePropsResult } from "next";
 
 export enum OfflineCheckinPage {
   RequiredFields,
@@ -31,40 +29,23 @@ function FinishPage({
   return <SuccessPage successText={successText} router={router} />;
 }
 
-export function getServerSideProps(
-  appProps: AppProps
-): GetServerSidePropsResult<{
-  id: string;
-}> {
-  const query = appProps.router.query;
-  if (!query.id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const id = Array.isArray(query.id) ? query.id[0] : query.id;
-
-  return {
-    props: { id },
-  };
-}
-
-function OfflineCheckin(
-  appProps: AppProps<{
-    id: string;
-  }>
-): JSX.Element | null {
+function OfflineCheckin(): JSX.Element | null {
   const [currentPage, setCurrentPage] = useState(
     OfflineCheckinPage.RequiredFields
   );
 
   const router = useRouter();
 
-  const reservationId = appProps.pageProps.id;
+  const queryId = router.query.id;
+  if (!queryId) {
+    router.push("/404");
+    return null;
+  }
+
+  const reservationId = Array.isArray(queryId) ? queryId[0] : queryId;
 
   return (
-    <Box>
+    <Box width={1}>
       <RequiredFieldsAtCheckin
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

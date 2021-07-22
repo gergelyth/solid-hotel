@@ -97,9 +97,14 @@ export async function SetFieldInSolidProfile(
   await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
 }
 
-export async function RemoveField(field: string): Promise<void> {
+export async function RemoveField(
+  field: string,
+  webId?: string
+): Promise<void> {
   const session = getDefaultSession();
-  const solidProfile = await GetProfile();
+  const solidProfile = webId
+    ? await GetProfileOf(webId, session)
+    : await GetProfile();
 
   if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
     throw new NotFoundError("Profile not found.");

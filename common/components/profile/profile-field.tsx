@@ -12,29 +12,31 @@ function OnEditConfirmation(
   fieldName: string,
   newValue: string,
   fields: Field[],
-  rdfFields: string[] | undefined
+  rdfFields: string[] | undefined,
+  webId?: string
 ): void {
   fields.forEach((field) => {
     if (field.fieldShortName === fieldName) {
       field.fieldValue = newValue;
     }
   });
-  TriggerRefetchGuest(rdfFields, fields);
-  SetField(personFieldToRdfMap[fieldName], newValue);
-  RevalidateGuest(rdfFields);
+  TriggerRefetchGuest(rdfFields, fields, webId);
+  SetField(personFieldToRdfMap[fieldName], newValue, webId);
+  RevalidateGuest(rdfFields, webId);
 }
 
 function OnDeleteConfirmation(
   fieldName: string,
   fields: Field[],
-  rdfFields: string[] | undefined
+  rdfFields: string[] | undefined,
+  webId?: string
 ): void {
   fields.forEach((field, index) => {
     if (field?.fieldShortName === fieldName) fields.splice(index, 1);
   });
-  TriggerRefetchGuest(rdfFields, fields);
-  RemoveField(personFieldToRdfMap[fieldName]);
-  RevalidateGuest(rdfFields);
+  TriggerRefetchGuest(rdfFields, fields, webId);
+  RemoveField(personFieldToRdfMap[fieldName], webId);
+  RevalidateGuest(rdfFields, webId);
 }
 
 function EditElements({
@@ -42,11 +44,15 @@ function EditElements({
   guestFields,
   rdfFields,
   editable,
+  forceRender,
+  webId,
 }: {
   field: Field;
   guestFields: Field[];
   rdfFields: string[] | undefined;
   editable: boolean;
+  forceRender: () => void;
+  webId?: string;
 }): JSX.Element | null {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
 
@@ -67,9 +73,16 @@ function EditElements({
       </Grid>
       <EditFieldPopup
         field={field}
-        onConfirmation={(fieldName, newValue) =>
-          OnEditConfirmation(fieldName, newValue, guestFields, rdfFields)
-        }
+        onConfirmation={(fieldName, newValue) => {
+          OnEditConfirmation(
+            fieldName,
+            newValue,
+            guestFields,
+            rdfFields,
+            webId
+          );
+          forceRender();
+        }}
         isPopupShowing={isEditPopupShowing}
         setPopupVisibility={setEditPopupVisibility}
       />
@@ -82,11 +95,15 @@ function DeleteElements({
   guestFields,
   rdfFields,
   deletable,
+  forceRender,
+  webId,
 }: {
   field: Field;
   guestFields: Field[];
   rdfFields: string[] | undefined;
   deletable: boolean;
+  forceRender: () => void;
+  webId?: string;
 }): JSX.Element | null {
   const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
 
@@ -108,9 +125,10 @@ function DeleteElements({
       </Grid>
       <DeleteFieldPopup
         fieldName={field.fieldShortName}
-        onConfirmation={(fieldName) =>
-          OnDeleteConfirmation(fieldName, guestFields, rdfFields)
-        }
+        onConfirmation={(fieldName) => {
+          OnDeleteConfirmation(fieldName, guestFields, rdfFields, webId);
+          forceRender();
+        }}
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
       />
@@ -125,6 +143,8 @@ function ProfileField({
   editable,
   deletable,
   centerJustify,
+  forceRender,
+  webId,
 }: {
   field: Field;
   guestFields: Field[];
@@ -132,7 +152,17 @@ function ProfileField({
   editable: boolean;
   deletable: boolean;
   centerJustify: boolean;
+  forceRender?: () => void;
+  webId?: string;
 }): JSX.Element {
+  const [renderHelper, setRenderHelper] = useState(false);
+  const render = (): void => {
+    setRenderHelper(!renderHelper);
+    if (forceRender) {
+      forceRender();
+    }
+  };
+
   return (
     <Grid container item spacing={2} justify="center" alignItems="center">
       <Grid item xs={4}>
@@ -156,12 +186,16 @@ function ProfileField({
         guestFields={guestFields}
         rdfFields={rdfFields}
         editable={editable}
+        forceRender={render}
+        webId={webId}
       />
       <DeleteElements
         field={field}
         guestFields={guestFields}
         rdfFields={rdfFields}
         deletable={deletable}
+        forceRender={render}
+        webId={webId}
       />
     </Grid>
   );
