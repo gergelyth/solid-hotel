@@ -3,7 +3,6 @@ import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
 import { GetCurrentDatePushedBy } from "../util/helpers";
-import { GetReservationInboxFromWebId } from "../util/solid_reservations";
 import { SafeDeleteDataset, SafeGetDataset } from "../util/solid_wrapper";
 import { CreateRooms } from "./populateHotelPod/withRooms";
 
@@ -27,7 +26,8 @@ export function GetSharedReservations(
 ): ReservationAtHotel[] {
   const rooms = CreateRooms();
 
-  const reservationInboxUrl = GetReservationInboxFromWebId(userWebId);
+  //TODO we need guestInbox for hotel, hotelInbox for guest
+  const reservationInboxUrl = "TODO";
   const sharedReservations: ReservationAtHotel[] = [
     {
       id: null,

@@ -18,9 +18,9 @@ import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetSession } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
 import { SetSubmitterAccessToEveryone } from "./solid_access";
+import { GetGuestReservationUrlFromReservationId } from "./urlParser";
 
 const reservationAddress = "reservations/";
-const reservationInbox = "reservations/inbox";
 
 export function GetUserReservationsPodUrl(
   session: Session = GetSession()
@@ -30,10 +30,6 @@ export function GetUserReservationsPodUrl(
     return null;
   }
   return podOfSession + "/" + reservationAddress;
-}
-
-export function GetReservationInboxFromWebId(webId: string): string {
-  return webId.replace("profile/card#me", reservationInbox);
 }
 
 export async function AddReservation(
@@ -92,10 +88,9 @@ export async function SetReservationStateAndInbox(
   inboxUrl: string,
   session = GetSession()
 ): Promise<void> {
-  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
   const dataset = await GetDataSet(datasetUrl, session);
 
-  //TODO this is not working now with the new inbox structure
   const reservationThing = getThing(dataset, datasetUrl + "#reservation");
   if (!reservationThing) {
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
@@ -124,10 +119,9 @@ export async function SetReservationOwnerToHotelProfile(
   session = GetSession()
 ): Promise<Thing> {
   //TODO duplication getting this dataset
-  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
   const dataset = await GetDataSet(datasetUrl, session);
 
-  //TODO this is not working now with the new inbox structure
   const reservationThing = getThing(dataset, datasetUrl + "#reservation");
   if (!reservationThing) {
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
@@ -154,10 +148,9 @@ export async function SetReservationOwnerAndState(
   session = GetSession()
 ): Promise<void> {
   //TODO duplication getting this dataset
-  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
   const dataset = await GetDataSet(datasetUrl, session);
 
-  //TODO this is not working now with the new inbox structure
   const reservationThing = getThing(dataset, datasetUrl + "#reservation");
   if (!reservationThing) {
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
@@ -185,10 +178,9 @@ export async function GetWebIdFromReservation(
   session = GetSession()
 ): Promise<string | null> {
   //TODO duplication getting this dataset
-  const datasetUrl = GetUserReservationsPodUrl(session) + reservationId;
+  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
   const dataset = await GetDataSet(datasetUrl, session);
 
-  //TODO this is not working now with the new inbox structure
   const reservationThing = getThing(dataset, datasetUrl + "#reservation");
   if (!reservationThing) {
     throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);

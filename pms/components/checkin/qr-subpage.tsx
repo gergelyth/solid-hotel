@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import QRCode from "react-qr-code";
 import { GPAPairUrl } from "../../../common/consts/locations";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
 import {
   CreateInboxUrlFromReservationId,
@@ -15,6 +15,30 @@ import {
 } from "../../../common/util/urlParser";
 import { GetPairingToken } from "../../../common/util/pairingTokenHandler";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
+import Link from "next/link";
+
+async function SetTargetUrl(
+  hotelInboxUrl: string,
+  reservationFolder: string,
+  setTargetUrl: Dispatch<SetStateAction<string | undefined>>
+): Promise<void> {
+  const pairingToken = await GetPairingToken(reservationFolder);
+
+  if (!pairingToken) {
+    ShowErrorSnackbar(
+      `Pairing token doesn't exist for reservation [${reservationFolder}]`
+    );
+    return;
+  }
+
+  const targetUrl = new URL(GPAPairUrl);
+  targetUrl.search = new URLSearchParams({
+    hotelInboxUrl: encodeURIComponent(hotelInboxUrl),
+    token: encodeURIComponent(pairingToken),
+  }).toString();
+
+  setTargetUrl(targetUrl.toString());
+}
 
 function QrCodeElement({
   hotelInboxUrl,
@@ -23,25 +47,31 @@ function QrCodeElement({
   hotelInboxUrl: string;
   reservationFolder: string;
 }): JSX.Element {
-  const pairingTokenPromise = GetPairingToken(reservationFolder);
-  pairingTokenPromise.then((token) => {
-    if (!token) {
-      ShowErrorSnackbar(
-        `Pairing token doesn't exist for reservation [${reservationFolder}]`
-      );
-      return null;
-    }
+  const [targetUrl, setTargetUrl] = useState<string>();
 
-    const targetUrl = new URL(GPAPairUrl);
-    targetUrl.search = new URLSearchParams({
-      hotelInboxUrl: encodeURIComponent(hotelInboxUrl),
-      token: encodeURIComponent(token),
-    }).toString();
+  if (!targetUrl) {
+    SetTargetUrl(hotelInboxUrl, reservationFolder, setTargetUrl);
+    return <CircularProgress />;
+  }
 
-    return <QRCode value={targetUrl.toString()} size={512} />;
-  });
-
-  return <CircularProgress />;
+  return (
+    <Grid
+      container
+      spacing={4}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <Typography align="center">
+          <Link href={targetUrl}>{targetUrl}</Link>
+        </Typography>
+      </Grid>
+      <Grid item>
+        <QRCode value={targetUrl} size={512} />;
+      </Grid>
+    </Grid>
+  );
 }
 
 function QrComponent({

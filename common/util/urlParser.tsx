@@ -23,6 +23,13 @@ export function CreateInboxUrlFromReservationId(reservationId: string): string {
   return `${containerUrl}${reservationId}/inbox`;
 }
 
+export function GetGuestReservationUrlFromReservationId(
+  reservationId: string
+): string {
+  const containerUrl = GetUserReservationsPodUrl();
+  return `${containerUrl}${reservationId}/reservation`;
+}
+
 export function GetCoreReservationFolderFromInboxUrl(inboxUrl: string): string {
   //delete trailing slash character if necessary
   inboxUrl = inboxUrl.replace(/\/$/, "");
