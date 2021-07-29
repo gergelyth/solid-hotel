@@ -13,7 +13,7 @@ import {
   CreateInboxUrlFromReservationId,
   GetCoreReservationFolderFromInboxUrl,
 } from "../../../common/util/urlParser";
-import { GetPairingToken } from "../../util/pairingTokenHandler";
+import { GetPairingToken } from "../../../common/util/pairingTokenHandler";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 function QrCodeElement({

@@ -17,7 +17,7 @@ import {
   GetCoreReservationFolderFromInboxUrl,
   GetReservationUrlFromInboxUrl,
 } from "../../common/util/urlParser";
-import { GetPairingToken } from "./pairingTokenHandler";
+import { GetPairingToken } from "../../common/util/pairingTokenHandler";
 import {
   ShowErrorSnackbar,
   ShowSuccessSnackbar,

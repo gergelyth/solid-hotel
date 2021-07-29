@@ -1,5 +1,8 @@
 //TODO the token will be in userpod.com/reservations/394839/pairingToken
 
+//TODO this is very much PMS specific - it's only in common because of the hotel Pod population
+// is there a better structure for this?
+
 import {
   addStringNoLocale,
   createSolidDataset,
@@ -12,17 +15,17 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { GetSession } from "../../common/util/solid";
-import { pairingTokenToRdfMap } from "../../common/vocabularies/rdf_pairingToken";
+import { GetSession } from "./solid";
+import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 
 const PairingTokenThing = "pairingToken";
 
-function GetTokenDatasetUrl(reservationUrl: string): string {
-  return `${reservationUrl}/${PairingTokenThing}`;
+function GetTokenDatasetUrl(reservationFolder: string): string {
+  return `${reservationFolder}${PairingTokenThing}`;
 }
 
 export async function CreateAndSavePairingToken(
-  reservationUrl: string,
+  reservationFolder: string,
   session: Session = GetSession()
 ): Promise<void> {
   const token = Math.random().toString(36);
@@ -38,17 +41,17 @@ export async function CreateAndSavePairingToken(
 
   tokenDataset = setThing(tokenDataset, tokenThing);
 
-  const tokenUrl = GetTokenDatasetUrl(reservationUrl);
+  const tokenUrl = GetTokenDatasetUrl(reservationFolder);
   await saveSolidDatasetAt(tokenUrl, tokenDataset, {
     fetch: session.fetch,
   });
 }
 
 export async function GetPairingToken(
-  reservationUrl: string,
+  reservationFolder: string,
   session: Session = GetSession()
 ): Promise<string | null> {
-  const tokenUrl = GetTokenDatasetUrl(reservationUrl);
+  const tokenUrl = GetTokenDatasetUrl(reservationFolder);
 
   const tokenDataset = await getSolidDataset(tokenUrl, {
     fetch: session.fetch,
@@ -70,9 +73,9 @@ export async function GetPairingToken(
 }
 
 export async function DeletePairingToken(
-  reservationUrl: string,
+  reservationFolder: string,
   session: Session = GetSession()
 ): Promise<void> {
-  const tokenUrl = GetTokenDatasetUrl(reservationUrl);
+  const tokenUrl = GetTokenDatasetUrl(reservationFolder);
   deleteSolidDataset(tokenUrl, { fetch: session.fetch });
 }

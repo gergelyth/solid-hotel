@@ -7,9 +7,11 @@ import {
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 import { GetCurrentDatePushedBy } from "../../util/helpers";
+import { CreateAndSavePairingToken } from "../../util/pairingTokenHandler";
 import { GetSession } from "../../util/solid";
 import { SetSubmitterAccessToEveryone } from "../../util/solid_access";
 import { AddReservation } from "../../util/solid_reservations";
+import { GetCoreReservationFolderFromInboxUrl } from "../../util/urlParser";
 import { GetSharedReservations } from "../shared";
 import { CreateRooms } from "./withRooms";
 
@@ -21,7 +23,7 @@ function CreateReservations(
   const owner2 = "https://owner2.fakeprovider.net/profile/card#me";
   const owner3 = "https://owner3.fakeprovider.net/profile/card#me";
   const owner4 = "https://owner4.fakeprovider.net/profile/card#me";
-  const owner5 = "https://owner5.fakeprovider.net/profile/card#me";
+  // const owner5 = "https://owner5.fakeprovider.net/profile/card#me";
 
   const rooms = CreateRooms();
   //TODO room IDs are null!
@@ -30,7 +32,8 @@ function CreateReservations(
     {
       id: null,
       inbox: null,
-      owner: owner1,
+      //TODO here and below I think it should be null owner
+      owner: "<no owner>",
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.CONFIRMED,
@@ -40,7 +43,7 @@ function CreateReservations(
     {
       id: null,
       inbox: null,
-      owner: owner5,
+      owner: "<no owner>",
       hotel: HotelWebId,
       room: RoomDefinitionsUrl + rooms[1].id,
       state: ReservationState.CONFIRMED,
@@ -151,18 +154,32 @@ export async function PopulateHotelPodWithReservations(
   const [sharedDataProtectionProfileWebId, ...otherDataProtectionProfileIds] =
     dataProtectionProfileIds;
 
-  const reservations = CreateReservations(
+  const hotelReservations = CreateReservations(
     otherActiveProfileIds,
     otherDataProtectionProfileIds
-  ).concat(
-    GetSharedReservations(
-      sharedReservationWebId,
-      sharedActiveProfileWebId,
-      sharedDataProtectionProfileWebId
-    )
   );
   await Promise.all(
-    reservations.map((reservation) => AddReservation(reservation))
+    hotelReservations.map(async (reservation) => {
+      const reservationPromise = AddReservation(reservation);
+      //TODO change this when offline owner will be changed to NULL
+      if (reservation.owner === "<no owner>") {
+        const inboxUrl = await reservationPromise;
+        const reservationFolder =
+          GetCoreReservationFolderFromInboxUrl(inboxUrl);
+        return CreateAndSavePairingToken(reservationFolder);
+      } else {
+        return reservationPromise;
+      }
+    })
+  );
+
+  const sharedReservations = GetSharedReservations(
+    sharedReservationWebId,
+    sharedActiveProfileWebId,
+    sharedDataProtectionProfileWebId
+  );
+  await Promise.all(
+    sharedReservations.map((reservation) => AddReservation(reservation))
   );
 }
 

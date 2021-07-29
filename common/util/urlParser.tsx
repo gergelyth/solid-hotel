@@ -24,7 +24,17 @@ export function CreateInboxUrlFromReservationId(reservationId: string): string {
 }
 
 export function GetCoreReservationFolderFromInboxUrl(inboxUrl: string): string {
+  //delete trailing slash character if necessary
+  inboxUrl = inboxUrl.replace(/\/$/, "");
   return inboxUrl.replace(new RegExp("inbox$"), "");
+}
+
+export function GetCoreReservationFolderFromReservationUrl(
+  reservationUrl: string
+): string {
+  //delete trailing slash character if necessary
+  reservationUrl = reservationUrl.replace(/\/$/, "");
+  return reservationUrl.replace(new RegExp("reservation$"), "");
 }
 
 export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
