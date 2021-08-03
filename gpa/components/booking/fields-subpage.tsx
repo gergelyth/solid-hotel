@@ -9,6 +9,8 @@ import {
 import { BookingPage } from "../../pages/booking";
 import { Dispatch, SetStateAction } from "react";
 import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
+import { GetSession } from "../../../common/util/solid";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 function RequiredFields({
   currentPage,
@@ -24,6 +26,12 @@ function RequiredFields({
 
   //TODO if there is an error in log then call hooks always here, but add a parameter condition in it to return null if false
   if (currentPage !== BookingPage.RequiredFields) {
+    return null;
+  }
+
+  const webId = GetSession().info.webId;
+  if (!webId) {
+    ShowErrorSnackbar("Not logged in! WebId is required.");
     return null;
   }
 
@@ -62,6 +70,8 @@ function RequiredFields({
         <ConfirmRequiredFieldsButton
           onClickFunction={ProceedButtonClick}
           rdfFields={data}
+          webId={webId}
+          onMount={() => undefined}
         />
       </Grid>
     </Grid>

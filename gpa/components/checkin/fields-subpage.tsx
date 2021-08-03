@@ -12,6 +12,8 @@ import { Dispatch, SetStateAction, useState } from "react";
 import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
 import { CheckinPage } from "../../pages/reservations/[id]";
 import TocPopup from "./toc-popup";
+import { GetSession } from "../../../common/util/solid";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 function RequiredFieldsAtCheckin({
   currentPage,
@@ -29,6 +31,12 @@ function RequiredFieldsAtCheckin({
 
   //TODO if there is an error in log then call hooks always here, but add a parameter condition in it to return null if false
   if (currentPage !== CheckinPage.RequiredFields) {
+    return null;
+  }
+
+  const webId = GetSession().info.webId;
+  if (!webId) {
+    ShowErrorSnackbar("Not logged in! WebId is required.");
     return null;
   }
 
@@ -83,6 +91,8 @@ function RequiredFieldsAtCheckin({
         <ConfirmRequiredFieldsButton
           onClickFunction={ProceedButtonClick}
           rdfFields={data}
+          webId={webId}
+          onMount={() => undefined}
         />
       </Grid>
       <TocPopup
