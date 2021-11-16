@@ -13,12 +13,18 @@ import { NotEmptyItem } from "../util/helpers";
 function PrivacyField({
   field,
   token,
-  deleteButton,
+  deleteButtonFunction,
 }: {
   field: string;
   token: PrivacyToken;
-  deleteButton: (token: PrivacyToken) => JSX.Element | null;
+  deleteButtonFunction: (token: PrivacyToken) => JSX.Element | null;
 }): JSX.Element {
+  const deleteButton = deleteButtonFunction(token) ? (
+    <Grid item xs={2}>
+      {deleteButtonFunction(token)}
+    </Grid>
+  ) : null;
+
   return (
     <Grid
       item
@@ -37,19 +43,17 @@ function PrivacyField({
       <Grid item xs={2}>
         {token.expiry.toDateString()}
       </Grid>
-      <Grid item xs={2}>
-        {deleteButton(token)}
-      </Grid>
+      {deleteButton}
     </Grid>
   );
 }
 
 function HotelPrivacy({
-  hotelName,
+  counterparty,
   privacyTokens,
   deleteButton,
 }: {
-  hotelName: string;
+  counterparty: string;
   privacyTokens: PrivacyToken[];
   deleteButton: (token: PrivacyToken) => JSX.Element | null;
 }): JSX.Element {
@@ -69,13 +73,13 @@ function HotelPrivacy({
     <Box>
       <Grid item justify="flex-start">
         <Typography variant="body1">
-          <Box px={2} fontWeight="fontWeightBold">
-            {hotelName}
+          <Box mx={2} px={2} fontWeight="fontWeightBold">
+            {counterparty}
           </Box>
         </Typography>
       </Grid>
       <Grid item>
-        <Box px={2}>
+        <Box p={2}>
           <Grid container spacing={1} justify="center" direction="column">
             {Object.entries(groupByField).map(([field, tokens]) => {
               return tokens.map((token) => {
@@ -84,7 +88,7 @@ function HotelPrivacy({
                     key={field}
                     field={field}
                     token={token}
-                    deleteButton={deleteButton}
+                    deleteButtonFunction={deleteButton}
                   />
                 );
               });
@@ -98,9 +102,11 @@ function HotelPrivacy({
 
 export function PrivacyDashboard({
   privacyTokenContainerUrl,
+  tokenGrouping,
   deleteButton,
 }: {
   privacyTokenContainerUrl: string | null;
+  tokenGrouping: (token: PrivacyToken) => string;
   deleteButton: (token: PrivacyToken) => JSX.Element | null;
 }): JSX.Element {
   const { items, isLoading, isError } = usePrivacyTokens(
@@ -119,9 +125,9 @@ export function PrivacyDashboard({
   }
 
   const filteredTokens = items.filter(NotEmptyItem);
-  const groupByHotel = _.groupBy<PrivacyToken>(
+  const groupByCounterparty = _.groupBy<PrivacyToken>(
     filteredTokens,
-    (token) => token.hotel
+    tokenGrouping
   );
 
   return (
@@ -132,11 +138,11 @@ export function PrivacyDashboard({
       alignItems="stretch"
       direction="column"
     >
-      {Object.entries(groupByHotel).map(([hotelName, tokens]) => {
+      {Object.entries(groupByCounterparty).map(([counterparty, tokens]) => {
         return (
           <HotelPrivacy
-            key={hotelName}
-            hotelName={hotelName}
+            key={counterparty}
+            counterparty={counterparty}
             privacyTokens={tokens}
             deleteButton={deleteButton}
           />

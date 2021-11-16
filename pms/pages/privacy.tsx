@@ -5,6 +5,7 @@ function PrivacyDashboardPage(): JSX.Element {
   return (
     <PrivacyDashboard
       privacyTokenContainerUrl={PrivacyTokensUrl}
+      tokenGrouping={(token) => token.guest}
       deleteButton={() => null}
     />
   );

@@ -21,6 +21,7 @@ function PrivacyDashboardPage(): JSX.Element {
   return (
     <PrivacyDashboard
       privacyTokenContainerUrl={GetUserPrivacyPodUrl()}
+      tokenGrouping={(token) => token.hotel}
       deleteButton={CreateDeleteButton}
     />
   );
