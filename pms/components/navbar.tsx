@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -14,8 +14,25 @@ import { GetPodOfSession } from "../../common/util/solid";
 import { GetNotificationElements } from "../../common/components/notification-elements";
 import Link from "next/link";
 import { PMSParsers } from "../consts/parsers";
+import {
+  handleIncomingRedirect,
+  onSessionRestore,
+} from "@inrupt/solid-client-authn-browser";
+import { useRouter } from "next/router";
 
 function NavigationBar(): JSX.Element {
+  const router = useRouter();
+
+  onSessionRestore((url) => {
+    router.push(url);
+  });
+
+  useEffect(() => {
+    handleIncomingRedirect({
+      restorePreviousSession: true,
+    });
+  }, []);
+
   const additionalStyles = styles();
 
   const podAddress = GetPodOfSession();
