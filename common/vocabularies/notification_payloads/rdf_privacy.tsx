@@ -6,4 +6,5 @@ export const privacyTokenToRdfMap: Record<string, string> = {
   fieldList: "schema:fields",
   reason: "schema:reason",
   expiry: "schema:expiry",
+  url: "schema:url",
 };

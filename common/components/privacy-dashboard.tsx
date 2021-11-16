@@ -35,7 +35,7 @@ function PrivacyField({
         {token.reason}
       </Grid>
       <Grid item xs={2}>
-        {token.expiry}
+        {token.expiry.toDateString()}
       </Grid>
       <Grid item xs={2}>
         {deleteButton(token)}

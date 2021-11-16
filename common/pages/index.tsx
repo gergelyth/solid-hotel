@@ -6,6 +6,7 @@ import SetupHotelProfile from "../setup/populateHotelPod/hotelProfile";
 import {
   PopulateHotelPodWithReservations,
   CreateBookingInbox,
+  CreatePrivacyFolders,
 } from "../setup/populateHotelPod/withReservations";
 import PopulateHotelPodWithRooms from "../setup/populateHotelPod/withRooms";
 import {
@@ -152,6 +153,15 @@ export default function Home(): JSX.Element {
               }}
             >
               Add rooms
+            </Button>
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Creating privacy folders...");
+                await CreatePrivacyFolders();
+                ShowSuccessSnackbar("Privacy folders created");
+              }}
+            >
+              Create privacy folders
             </Button>
           </ButtonGroup>
         </Grid>
