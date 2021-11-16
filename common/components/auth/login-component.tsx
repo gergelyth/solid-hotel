@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import {
+  getDefaultSession,
+  handleIncomingRedirect,
+} from "@inrupt/solid-client-authn-browser";
 import { SolidLogout } from "../../util/solid";
 import { useGuest } from "../../hooks/useGuest";
 import {
@@ -9,6 +12,7 @@ import {
   CircularProgress,
   Typography,
 } from "@material-ui/core";
+import { useEffect } from "react";
 
 function GetLoginComponent(): JSX.Element {
   return (
@@ -61,6 +65,12 @@ function GetLogoutComponent(): JSX.Element {
 }
 
 function LoginButtonComponent(): JSX.Element {
+  useEffect(() => {
+    handleIncomingRedirect({
+      restorePreviousSession: true,
+    });
+  }, []);
+
   const session = getDefaultSession();
 
   return session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent();

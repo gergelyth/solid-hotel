@@ -22,7 +22,6 @@ import {
   PopulateHotelPodWithDataProtectionProfiles,
 } from "../setup/populateHotelPod/withProfiles";
 
-// TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
   return (
     <Grid

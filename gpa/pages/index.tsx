@@ -46,7 +46,6 @@ function CheckoutButton(
   }
 }
 
-// TODO: login status doesn't survive refresh
 export default function Home(): JSX.Element {
   const { items, isLoading, isError } = useReservations(
     GetUserReservationsPodUrl()
