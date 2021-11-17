@@ -11,6 +11,9 @@ import { Notification } from "../types/Notification";
 import NotificationList from "./notification-list";
 import { RetrieveAllNotifications } from "../util/notifications";
 import { ParserList } from "../types/ParserList";
+import { ShowErrorSnackbar } from "./snackbar";
+import { RevalidateNotifications } from "../hooks/useNotifications";
+import { SafeDeleteDataset } from "../util/solid_wrapper";
 
 function GetBadgeContent(
   notificationRetrieval:
@@ -33,6 +36,20 @@ function GetBadgeContent(
   return <Typography>{notificationRetrieval.items.length}</Typography>;
 }
 
+async function DeleteNotification(
+  notification: Notification,
+  podUrl: string | null,
+  inboxRegexList: string[]
+): Promise<void> {
+  if (!notification.isProcessed) {
+    ShowErrorSnackbar("Notification is not processed yet - can't be deleted.");
+    return;
+  }
+
+  await SafeDeleteDataset(notification.notificationUrl);
+  RevalidateNotifications(podUrl, inboxRegexList);
+}
+
 export function GetNotificationElements(
   podAddress: string | null,
   inboxRegexList: string[],
@@ -52,7 +69,12 @@ export function GetNotificationElements(
       open={isNotificationsOpen}
       onClose={() => setNotificationsOpen(false)}
     >
-      <NotificationList notificationRetrieval={notificationRetrieval} />
+      <NotificationList
+        notificationRetrieval={notificationRetrieval}
+        deleteNotification={(notification: Notification) =>
+          DeleteNotification(notification, podAddress, inboxRegexList)
+        }
+      />
     </Drawer>
   );
 

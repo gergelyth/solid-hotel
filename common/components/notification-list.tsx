@@ -13,9 +13,11 @@ import { Notification } from "../types/Notification";
 function NotificationItem({
   notification,
   key,
+  deleteNotification,
 }: {
   notification: Notification | null;
   key: number;
+  deleteNotification: (notification: Notification) => Promise<void>;
 }): JSX.Element | null {
   if (!notification) {
     return null;
@@ -39,7 +41,15 @@ function NotificationItem({
               </Typography>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary" size="medium">
+              <Button
+                variant="contained"
+                color="primary"
+                size="medium"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteNotification(notification);
+                }}
+              >
                 Clear
               </Button>
             </Grid>
@@ -52,6 +62,7 @@ function NotificationItem({
 
 function NotificationList({
   notificationRetrieval,
+  deleteNotification,
 }: {
   notificationRetrieval:
     | {
@@ -60,6 +71,7 @@ function NotificationList({
         isError: boolean;
       }
     | undefined;
+  deleteNotification: (notification: Notification) => Promise<void>;
 }): JSX.Element {
   if (!notificationRetrieval || notificationRetrieval.isError) {
     return <Typography>Error retrieving notifications</Typography>;
@@ -72,7 +84,11 @@ function NotificationList({
   return (
     <List>
       {notificationRetrieval.items.map((notification, index) => (
-        <NotificationItem notification={notification} key={index} />
+        <NotificationItem
+          notification={notification}
+          key={index}
+          deleteNotification={deleteNotification}
+        />
       ))}
     </List>
   );

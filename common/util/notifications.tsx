@@ -1,5 +1,4 @@
 import {
-  deleteSolidDataset,
   saveSolidDatasetAt,
   setBoolean,
   setThing,
@@ -59,10 +58,4 @@ export async function SetIsProcessedForNotification(
   await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
     fetch: session.fetch,
   });
-}
-
-export async function DeleteNotification(
-  notificationUrl: string
-): Promise<void> {
-  await deleteSolidDataset(notificationUrl);
 }

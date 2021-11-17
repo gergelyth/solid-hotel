@@ -15,7 +15,7 @@ import { NotificationParser } from "../types/NotificationParser";
 import { NotificationType } from "../types/NotificationsType";
 import { ParserList } from "../types/ParserList";
 import { GetDataSet } from "../util/solid";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { GlobSolidUrlPaths } from "../util/helpers";
 
 const swrKey = "notifications";
@@ -206,4 +206,11 @@ export function useNotifications(
     isLoading: fetch.isLoading,
     isError: fetch.isError,
   };
+}
+
+export function RevalidateNotifications(
+  podUrl: string | null,
+  inboxRegexList: string[]
+): void {
+  mutate([swrKey, podUrl, inboxRegexList]);
 }

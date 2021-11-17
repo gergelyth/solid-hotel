@@ -15,7 +15,6 @@ import { DeserializeProfileModification } from "../../notifications/ProfileModif
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
 import { SetField } from "../../util/solid_profile";
-import { DeleteNotification } from "../../util/notifications";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 function ApproveChangeDialog({
@@ -105,7 +104,7 @@ function ApproveChangeDialog({
                 color="secondary"
                 onClick={() => {
                   SetGlobalDialog(null);
-                  DeleteNotification(notificationUrl);
+                  // DeleteNotification(notificationUrl);
                 }}
               >
                 No
@@ -122,7 +121,7 @@ function ApproveChangeDialog({
                     newFieldValue,
                     webId
                   );
-                  DeleteNotification(notificationUrl);
+                  // DeleteNotification(notificationUrl);
                 }}
               >
                 Yes
