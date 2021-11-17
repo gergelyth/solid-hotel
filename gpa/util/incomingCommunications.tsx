@@ -14,6 +14,7 @@ import {
   SetReservationStateAndInbox,
 } from "../../common/util/solid_reservations";
 import { SaveProfileThingToPod } from "../../common/util/solid_profile";
+import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -122,7 +123,11 @@ export function ReceivePrivacyToken(
       ShowErrorSnackbar("User not logged in");
       return;
     }
-    await saveSolidDatasetInContainer(privacyPodUrl, dataset, {
+
+    //we need this workaround, otherwise we would save the Thing with the inbox url (we also delete the notification Thing this way)
+    const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
+
+    await saveSolidDatasetInContainer(privacyPodUrl, privacyTokenDataset, {
       fetch: session.fetch,
     });
   };
