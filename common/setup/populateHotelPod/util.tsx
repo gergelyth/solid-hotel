@@ -2,6 +2,7 @@ import {
   BookingInboxUrl,
   DataProtectionProfilesUrl,
   HotelProfilesUrl,
+  PrivacyTokensUrl,
   ReservationsUrl,
   RoomDefinitionsUrl,
 } from "../../consts/solidIdentifiers";
@@ -23,4 +24,8 @@ export async function DeleteAllProfiles(): Promise<void> {
     RecursiveDelete(HotelProfilesUrl),
     RecursiveDelete(DataProtectionProfilesUrl),
   ]);
+}
+
+export async function DeletePrivacyFolders(): Promise<void> {
+  await RecursiveDelete(PrivacyTokensUrl);
 }

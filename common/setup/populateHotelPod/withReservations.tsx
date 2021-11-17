@@ -2,8 +2,6 @@ import { createContainerAt } from "@inrupt/solid-client";
 import {
   BookingInboxUrl,
   HotelWebId,
-  PrivacyTokensInboxUrl,
-  PrivacyTokensUrl,
   RoomDefinitionsUrl,
 } from "../../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
@@ -189,11 +187,4 @@ export async function CreateBookingInbox(): Promise<void> {
   const session = GetSession();
   await createContainerAt(BookingInboxUrl, { fetch: session.fetch });
   await SetSubmitterAccessToEveryone(BookingInboxUrl);
-}
-
-export async function CreatePrivacyFolders(): Promise<void> {
-  const session = GetSession();
-  await createContainerAt(PrivacyTokensUrl, { fetch: session.fetch });
-  await createContainerAt(PrivacyTokensInboxUrl, { fetch: session.fetch });
-  await SetSubmitterAccessToEveryone(PrivacyTokensInboxUrl);
 }

@@ -1,8 +1,13 @@
-import { getContainedResourceUrlAll } from "@inrupt/solid-client";
+import {
+  createContainerAt,
+  getContainedResourceUrlAll,
+} from "@inrupt/solid-client";
 import { HotelWebId, RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
 import { GetCurrentDatePushedBy } from "../util/helpers";
+import { GetSession } from "../util/solid";
+import { SetSubmitterAccessToEveryone } from "../util/solid_access";
 import { SafeDeleteDataset, SafeGetDataset } from "../util/solid_wrapper";
 import { CreateRooms } from "./populateHotelPod/withRooms";
 
@@ -17,6 +22,18 @@ export async function RecursiveDelete(url: string): Promise<void> {
   await Promise.all(urls.map((url) => RecursiveDelete(url)));
 
   await SafeDeleteDataset(url);
+}
+
+export async function CreatePrivacyFolders(
+  privacyUrl: string,
+  privacyInboxUrl?: string
+): Promise<void> {
+  const session = GetSession();
+  await createContainerAt(privacyUrl, { fetch: session.fetch });
+  if (privacyInboxUrl) {
+    await createContainerAt(privacyInboxUrl, { fetch: session.fetch });
+    await SetSubmitterAccessToEveryone(privacyInboxUrl);
+  }
 }
 
 export function GetSharedReservations(

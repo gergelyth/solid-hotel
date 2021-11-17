@@ -5,8 +5,6 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
-  getThing,
-  setStringNoLocale,
   setThing,
 } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
@@ -118,22 +116,14 @@ export function CreatePrivacyTokenDataset(
     privacyToken.expiry
   );
 
+  if (privacyToken.url) {
+    newPrivacyToken = addStringNoLocale(
+      newPrivacyToken,
+      privacyTokenToRdfMap.url,
+      privacyToken.url
+    );
+  }
+
   privacyTokenDataset = setThing(privacyTokenDataset, newPrivacyToken);
   return privacyTokenDataset;
-}
-
-export function SetUrlInPrivacyTokenDataset(
-  dataset: SolidDataset,
-  tokenUrl: string
-): SolidDataset {
-  let newPrivacyToken = getThing(dataset, tokenUrl + "#privacy");
-  if (!newPrivacyToken) {
-    throw new Error("Privacy thing is null in dataset");
-  }
-  newPrivacyToken = setStringNoLocale(
-    newPrivacyToken,
-    privacyTokenToRdfMap.url,
-    tokenUrl
-  );
-  return setThing(dataset, newPrivacyToken);
 }

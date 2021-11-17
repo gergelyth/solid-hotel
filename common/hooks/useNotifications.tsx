@@ -155,6 +155,7 @@ function FetchItemsArray<T>(
     const urlPaths = await GetUrlPaths(coreUrl, inboxRegexList);
 
     const promises = urlPaths.map((inboxAddress: string) => {
+      console.log(inboxAddress);
       return GetNotificationsForSpecificUrl<T>(
         inboxAddress,
         convertToType

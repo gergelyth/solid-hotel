@@ -13,12 +13,6 @@ import {
 import { useRouter } from "next/router";
 
 function NavigationBar(): JSX.Element {
-  const notificationElements = GetNotificationElements(
-    GetPodOfSession(),
-    GPAInboxList,
-    GPAParsers
-  );
-
   const router = useRouter();
 
   onSessionRestore((url) => {
@@ -32,6 +26,12 @@ function NavigationBar(): JSX.Element {
   }, []);
 
   const additionalStyles = styles();
+
+  const notificationElements = GetNotificationElements(
+    GetPodOfSession(),
+    GPAInboxList,
+    GPAParsers
+  );
 
   return (
     <Box>

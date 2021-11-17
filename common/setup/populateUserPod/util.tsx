@@ -1,5 +1,5 @@
 import { RecursiveDelete } from "../shared";
-import { GetSession } from "../../util/solid";
+import { GetPodOfSession, GetSession } from "../../util/solid";
 import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 import { ShowErrorSnackbar } from "../../components/snackbar";
 
@@ -13,4 +13,9 @@ export async function DeleteAllUserReservations(): Promise<void> {
   }
 
   await RecursiveDelete(reservationsUrl);
+}
+
+export async function DeleteUserPrivacyFolders(): Promise<void> {
+  //TODO extract this into variable
+  await RecursiveDelete(GetPodOfSession() + "/privacy");
 }

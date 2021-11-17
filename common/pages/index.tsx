@@ -1,27 +1,35 @@
 import { Button, ButtonGroup, Grid, Typography } from "@material-ui/core";
-import { HotelWebId } from "../consts/solidIdentifiers";
+import {
+  HotelWebId,
+  PrivacyTokensInboxUrl,
+  PrivacyTokensUrl,
+} from "../consts/solidIdentifiers";
 import { HotelName, HotelLocation } from "../consts/hotelConsts";
 import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
 import SetupHotelProfile from "../setup/populateHotelPod/hotelProfile";
 import {
   PopulateHotelPodWithReservations,
   CreateBookingInbox,
-  CreatePrivacyFolders,
 } from "../setup/populateHotelPod/withReservations";
 import PopulateHotelPodWithRooms from "../setup/populateHotelPod/withRooms";
 import {
   DeleteAllHotelRooms,
   DeleteAllHotelReservations,
   DeleteAllProfiles,
+  DeletePrivacyFolders,
 } from "../setup/populateHotelPod/util";
-import { DeleteAllUserReservations } from "../setup/populateUserPod/util";
+import {
+  DeleteAllUserReservations,
+  DeleteUserPrivacyFolders,
+} from "../setup/populateUserPod/util";
 import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
-import { GetSession } from "../util/solid";
+import { GetPodOfSession, GetSession } from "../util/solid";
 import { ShowInfoSnackbar, ShowSuccessSnackbar } from "../components/snackbar";
 import {
   PopulateHotelPodWithActiveProfiles,
   PopulateHotelPodWithDataProtectionProfiles,
 } from "../setup/populateHotelPod/withProfiles";
+import { CreatePrivacyFolders } from "../setup/shared";
 
 export default function Home(): JSX.Element {
   return (
@@ -73,6 +81,15 @@ export default function Home(): JSX.Element {
             color="primary"
             variant="contained"
           >
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Deleting privacy folders...");
+                await DeletePrivacyFolders();
+                ShowSuccessSnackbar("All privacy folders deleted");
+              }}
+            >
+              Delete privacy folders
+            </Button>
             <Button
               onClick={async () => {
                 ShowInfoSnackbar(
@@ -157,7 +174,10 @@ export default function Home(): JSX.Element {
             <Button
               onClick={async () => {
                 ShowInfoSnackbar("Creating privacy folders...");
-                await CreatePrivacyFolders();
+                await CreatePrivacyFolders(
+                  PrivacyTokensUrl,
+                  PrivacyTokensInboxUrl
+                );
                 ShowSuccessSnackbar("Privacy folders created");
               }}
             >
@@ -178,6 +198,17 @@ export default function Home(): JSX.Element {
             color="primary"
             variant="contained"
           >
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Deleting user privacy folders...");
+                await DeleteUserPrivacyFolders();
+                ShowSuccessSnackbar(
+                  "All user privacy folders have been deleted"
+                );
+              }}
+            >
+              Delete privacy folders
+            </Button>
             <Button
               onClick={async () => {
                 ShowInfoSnackbar("Deleting user reservations...");
@@ -206,6 +237,16 @@ export default function Home(): JSX.Element {
               }}
             >
               Add reservations
+            </Button>
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Creating privacy folders...");
+                //TODO make this a variable
+                await CreatePrivacyFolders(GetPodOfSession() + "/privacy");
+                ShowSuccessSnackbar("Privacy folders created");
+              }}
+            >
+              Create privacy folders
             </Button>
           </ButtonGroup>
         </Grid>

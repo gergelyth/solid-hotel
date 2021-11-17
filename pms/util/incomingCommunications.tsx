@@ -85,11 +85,11 @@ export function ReceiveBookingRequest(
       hotelInboxUrl
     );
 
-    const privacyTokenDataset = await CreateReservationPrivacyToken(
+    const privacyToken = await CreateReservationPrivacyToken(
       GetReservationUrlFromInboxUrl(hotelInboxUrl),
       reservation
     );
-    SendPrivacyToken(reservation.inbox, privacyTokenDataset);
+    SendPrivacyToken(reservation.inbox, privacyToken);
   };
 
   return { text, onClick, onReceive };

@@ -1,2 +1,3 @@
 //have a regex (or url pattern list) where to look for the inboxes - all relative to the pod address core
-export const GPAInboxList: string[] = ["/reservations/*/inbox"];
+// TODO: its unintiutive that   "/reservations/*inbox" has to look like that, but it's correct - fix that
+export const GPAInboxList: string[] = ["/reservations/*inbox"];

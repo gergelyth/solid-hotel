@@ -74,10 +74,10 @@ export function SerializeReservationStateChange(
 
   requestDataset = setThing(requestDataset, request);
 
-  AddNotificationThingToDataset(
+  const notificationDataset = AddNotificationThingToDataset(
     requestDataset,
     NotificationType.ReservationStateChange
   );
 
-  return requestDataset;
+  return notificationDataset;
 }

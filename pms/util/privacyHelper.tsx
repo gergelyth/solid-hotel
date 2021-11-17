@@ -15,10 +15,7 @@ import {
 } from "../../common/consts/solidIdentifiers";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import {
-  CreatePrivacyTokenDataset,
-  SetUrlInPrivacyTokenDataset,
-} from "../../common/util/datasetFactory";
+import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetSession } from "../../common/util/solid";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 
@@ -71,7 +68,7 @@ export async function AnonymizeFieldsAndDeleteToken(
 export async function CreateReservationPrivacyToken(
   datasetUrlTarget: string,
   reservation: ReservationAtHotel
-): Promise<SolidDataset> {
+): Promise<PrivacyToken> {
   const session = GetSession();
 
   const hotelWebId = session.info.webId;
@@ -97,8 +94,8 @@ export async function CreateReservationPrivacyToken(
     { fetch: session.fetch }
   );
 
-  const url = getSourceUrl(savedDataset);
-  return SetUrlInPrivacyTokenDataset(savedDataset, url);
+  privacyToken.url = getSourceUrl(savedDataset);
+  return privacyToken;
 }
 
 export async function CreateActiveProfilePrivacyToken(
