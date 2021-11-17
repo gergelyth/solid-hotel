@@ -4,15 +4,22 @@ import ConciseHotelReservationElement from "./concise-hotel-reservation";
 import { Grid } from "@material-ui/core";
 import CancelReservationButton from "../../../common/components/cancellation/cancellation";
 import OfflineCheckinButton from "../checkin/offline-checkin-button";
-import { ConfirmReservationStateRequest } from "../../util/outgoingCommunications";
 import { ReservationState } from "../../../common/types/ReservationState";
+import { DoOnStateChange } from "../../util/actionOnNewReservationState";
 
 function ConfirmCancellation(reservation: ReservationAtHotel): void {
-  //TODO fix this
-  ConfirmReservationStateRequest(
+  if (!reservation.id) {
+    throw new Error("Reservation ID is null");
+  }
+
+  if (!reservation.inbox) {
+    throw new Error("Guest inbox for reservation is null");
+  }
+
+  DoOnStateChange(
+    reservation.id,
     ReservationState.CANCELLED,
-    reservation.inbox,
-    ""
+    reservation.inbox
   );
 }
 
