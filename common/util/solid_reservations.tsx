@@ -102,7 +102,7 @@ export async function SetReservationStateAndInbox(
     newState.valueOf()
   );
   updatedReservation = setStringNoLocale(
-    reservationThing,
+    updatedReservation,
     reservationFieldToRdfMap.inbox,
     inboxUrl
   );
@@ -162,7 +162,7 @@ export async function SetReservationOwnerAndState(
     ownerWebId
   );
   updatedReservation = setInteger(
-    reservationThing,
+    updatedReservation,
     reservationFieldToRdfMap.state,
     newState.valueOf()
   );

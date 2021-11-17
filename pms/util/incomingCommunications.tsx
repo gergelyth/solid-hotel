@@ -32,7 +32,7 @@ import {
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
-  hotelInboxUrl: string,
+  notificationUrl: string,
   dataset: SolidDataset
 ): {
   text: string;
@@ -40,7 +40,7 @@ export function ReceiveReservationStateChange(
   onReceive: () => void;
 } {
   const { reservationId, newState, replyInbox } =
-    DeserializeReservationStateChange(hotelInboxUrl, dataset);
+    DeserializeReservationStateChange(notificationUrl, dataset);
   //TODO check if onReceive gets no Error, and adjust this text accordingly
   const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservation.`;
   const onClick = (): void => {
@@ -48,7 +48,7 @@ export function ReceiveReservationStateChange(
   };
   const onReceive = (): void => {
     //TODO we'll probably need the full reservation here and we get the dataset in the previous command - so unify that
-    DoOnStateChange(reservationId, newState, replyInbox, hotelInboxUrl);
+    DoOnStateChange(reservationId, newState, replyInbox);
   };
 
   return { text, onClick, onReceive };

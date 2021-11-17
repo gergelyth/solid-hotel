@@ -9,6 +9,7 @@ import { SerializeInitialPairingRequest } from "../../common/notifications/Initi
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { GetSession } from "../../common/util/solid";
+import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
@@ -34,12 +35,14 @@ async function SubmitReservationStateChangeRequest(
     );
   }
 
-  if (!reservation.inbox) {
-    throw new Error("Reservation inbox null");
+  if (!reservation.id) {
+    throw new Error("Reservation id null");
   }
 
+  const replyInbox = CreateInboxUrlFromReservationId(reservation.id);
+
   const notificationDataset = SerializeReservationStateChange(
-    reservation.inbox,
+    replyInbox,
     requestedState
   );
 

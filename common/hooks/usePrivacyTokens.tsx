@@ -22,7 +22,7 @@ export function ConvertToPrivacyToken(
 
   //TODO handle null values
   const token = {
-    url: url,
+    url: getStringNoLocale(privacyThing, privacyTokenToRdfMap.url),
     hotelInboxForDeletion:
       getStringNoLocale(
         privacyThing,

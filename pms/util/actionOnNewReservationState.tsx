@@ -27,12 +27,12 @@ import {
 import { getDatetime } from "@inrupt/solid-client";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 import { GetCurrentDatePushedBy } from "../../common/util/helpers";
+import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 
 export function DoOnStateChange(
   reservationId: string,
   newState: ReservationState,
-  guestInboxUrl: string,
-  hotelInboxUrl: string
+  guestInboxUrl: string
 ): void {
   switch (newState) {
     case ReservationState.CANCELLED:
@@ -74,6 +74,8 @@ export function DoOnStateChange(
   }
 
   SetReservationStateAndInbox(reservationId, newState, guestInboxUrl);
+
+  const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
   ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);
 }
 

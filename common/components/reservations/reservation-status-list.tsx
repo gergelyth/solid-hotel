@@ -5,12 +5,12 @@ import { ReservationState } from "../../types/ReservationState";
 
 function ReservationStatusList({
   reservationsUrl,
-  reservationState,
+  reservationFilter,
   reservationsTitle,
   createReservationElement,
 }: {
   reservationsUrl: string | null;
-  reservationState: ReservationState;
+  reservationFilter: (state: ReservationState) => boolean;
   reservationsTitle: string;
   createReservationElement: (reservation: ReservationAtHotel) => JSX.Element;
 }): JSX.Element {
@@ -27,9 +27,9 @@ function ReservationStatusList({
         <Box px={2}>
           <ReservationList
             reservationsUrl={reservationsUrl}
-            reservationFilter={(reservation: ReservationAtHotel) => {
-              return reservation.state === reservationState;
-            }}
+            reservationFilter={(reservation) =>
+              reservationFilter(reservation.state)
+            }
             reservationElement={createReservationElement}
           />
         </Box>

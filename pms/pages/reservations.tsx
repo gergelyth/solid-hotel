@@ -50,7 +50,9 @@ function Reservations(): JSX.Element {
       <Grid item>
         <ReservationStatusList
           reservationsUrl={ReservationsUrl}
-          reservationState={ReservationState.ACTIVE}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.ACTIVE
+          }
           reservationsTitle="Active reservations"
           createReservationElement={(reservation: ReservationAtHotel) =>
             CreateReservationElement(reservation, OnReservationClick)
@@ -60,7 +62,9 @@ function Reservations(): JSX.Element {
       <Grid item>
         <ReservationStatusList
           reservationsUrl={ReservationsUrl}
-          reservationState={ReservationState.CONFIRMED}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.CONFIRMED
+          }
           reservationsTitle="Confirmed upcoming reservations"
           createReservationElement={(reservation: ReservationAtHotel) =>
             CreateReservationElement(reservation, OnReservationClick)
@@ -70,7 +74,10 @@ function Reservations(): JSX.Element {
       <Grid item>
         <ReservationStatusList
           reservationsUrl={ReservationsUrl}
-          reservationState={ReservationState.PAST || ReservationState.CANCELLED}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.PAST ||
+            state === ReservationState.CANCELLED
+          }
           reservationsTitle="Past and cancelled reservations"
           createReservationElement={(reservation: ReservationAtHotel) =>
             CreateReservationElement(reservation, OnReservationClick)

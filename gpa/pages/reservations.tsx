@@ -7,32 +7,36 @@ import { useRouter } from "next/router";
 import { ShowErrorSnackbar } from "../../common/components/snackbar";
 import ReservationConciseElement from "../../common/components/reservations/reservation-concise-element";
 import { HotelDetailsOneLiner } from "../../common/components/reservations/hotel-details";
+import { ReservationClickHandler } from "../../common/types/ReservationClickHandler";
 
-function OnReservationClick(
-  event: React.MouseEvent<HTMLElement>,
-  reservation: ReservationAtHotel
-): void {
-  const router = useRouter();
-
-  if (!reservation.id) {
-    ShowErrorSnackbar("Reservation ID is null");
-    return;
-  }
-  router.push(`/reservations/${encodeURIComponent(reservation.id)}`);
-}
-
-function CreateReservationElement(item: ReservationAtHotel): JSX.Element {
+function CreateReservationElement(
+  item: ReservationAtHotel,
+  onClickAction: ReservationClickHandler
+): JSX.Element {
   return (
     <ReservationConciseElement
       reservation={item}
       titleElement={<HotelDetailsOneLiner hotelWebId={item.hotel} />}
-      onClickAction={OnReservationClick}
+      onClickAction={onClickAction}
     />
   );
 }
 
 function Reservations(): JSX.Element {
   const userReservationsUrl = GetUserReservationsPodUrl();
+
+  const router = useRouter();
+
+  function OnReservationClick(
+    event: React.MouseEvent<HTMLElement>,
+    reservation: ReservationAtHotel
+  ): void {
+    if (!reservation.id) {
+      ShowErrorSnackbar("Reservation ID is null");
+      return;
+    }
+    router.push(`/reservations/${encodeURIComponent(reservation.id)}`);
+  }
 
   return (
     <Grid
@@ -64,33 +68,50 @@ function Reservations(): JSX.Element {
       <Grid item>
         <ReservationStatusList
           reservationsUrl={userReservationsUrl}
-          reservationState={ReservationState.ACTIVE}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.ACTIVE
+          }
           reservationsTitle="Active reservations"
-          createReservationElement={CreateReservationElement}
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
         />
       </Grid>
       <Grid item>
         <ReservationStatusList
           reservationsUrl={userReservationsUrl}
-          reservationState={ReservationState.REQUESTED}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.REQUESTED
+          }
           reservationsTitle="Requested reservations"
-          createReservationElement={CreateReservationElement}
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
         />
       </Grid>
       <Grid item>
         <ReservationStatusList
           reservationsUrl={userReservationsUrl}
-          reservationState={ReservationState.CONFIRMED}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.CONFIRMED
+          }
           reservationsTitle="Confirmed upcoming reservations"
-          createReservationElement={CreateReservationElement}
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
         />
       </Grid>
       <Grid item>
         <ReservationStatusList
           reservationsUrl={userReservationsUrl}
-          reservationState={ReservationState.PAST || ReservationState.CANCELLED}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.PAST ||
+            state === ReservationState.CANCELLED
+          }
           reservationsTitle="Past and cancelled reservations"
-          createReservationElement={CreateReservationElement}
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
         />
       </Grid>
     </Grid>
