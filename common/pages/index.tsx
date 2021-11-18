@@ -1,5 +1,7 @@
 import { Button, ButtonGroup, Grid, Typography } from "@material-ui/core";
 import {
+  DataProtectionProfilesUrl,
+  HotelProfilesUrl,
   HotelWebId,
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
@@ -30,6 +32,8 @@ import {
   PopulateHotelPodWithDataProtectionProfiles,
 } from "../setup/populateHotelPod/withProfiles";
 import { CreatePrivacyFolders } from "../setup/shared";
+import { createContainerAt } from "@inrupt/solid-client";
+import { GetUserReservationsPodUrl } from "../util/solid_reservations";
 
 export default function Home(): JSX.Element {
   return (
@@ -123,6 +127,27 @@ export default function Home(): JSX.Element {
             color="primary"
             variant="contained"
           >
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Creating only the folders...");
+                const session = GetSession();
+                await Promise.all([
+                  CreateBookingInbox(),
+                  createContainerAt(HotelProfilesUrl, {
+                    fetch: session.fetch,
+                  }),
+                  createContainerAt(DataProtectionProfilesUrl, {
+                    fetch: session.fetch,
+                  }),
+                  createContainerAt(GetUserReservationsPodUrl() ?? "", {
+                    fetch: session.fetch,
+                  }),
+                ]);
+                ShowSuccessSnackbar("Folders created");
+              }}
+            >
+              Empty setup
+            </Button>
             <Button
               onClick={async () => {
                 ShowInfoSnackbar("Adding information to the hotel profile...");
@@ -226,6 +251,18 @@ export default function Home(): JSX.Element {
             color="primary"
             variant="contained"
           >
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Creating only the folders...");
+                const session = GetSession();
+                await createContainerAt(GetUserReservationsPodUrl() ?? "", {
+                  fetch: session.fetch,
+                });
+                ShowSuccessSnackbar("Folders created");
+              }}
+            >
+              Empty setup
+            </Button>
             <Button
               onClick={async () => {
                 ShowInfoSnackbar("Populating user Pod with reservations...");
