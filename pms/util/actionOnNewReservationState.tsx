@@ -9,25 +9,16 @@ import {
   ReportFailureToGuest,
   SendPrivacyToken,
 } from "./outgoingCommunications";
-import { useGuest } from "../../common/hooks/useGuest";
-import {
-  useDataProtectionInformation,
-  useRequiredFields,
-} from "../../common/hooks/useMockApi";
+import { useDataProtectionInformation } from "../../common/hooks/useMockApi";
 import {
   CreateDataProtectionProfile,
-  CreateHotelProfile,
   MoveProfileToDataProtectionFolder,
 } from "../../common/util/hotelProfileHandler";
-import { HotelProfilesUrl } from "../../common/consts/solidIdentifiers";
-import {
-  CreateActiveProfilePrivacyToken,
-  CreateDataProtectionProfilePrivacyToken,
-} from "./privacyHelper";
-import { getDatetime } from "@inrupt/solid-client";
-import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import { CreateDataProtectionProfilePrivacyToken } from "./privacyHelper";
 import { GetCurrentDatePushedBy } from "../../common/util/helpers";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
+import { ShowCustomSnackbar } from "../../common/components/snackbar";
+import CheckinProgressSnackbar from "../components/checkin/checkin-progress-snackbar";
 
 export function DoOnStateChange(
   reservationId: string,
@@ -79,56 +70,14 @@ export function DoOnStateChange(
   ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);
 }
 
-async function OnCheckIn(
-  reservationId: string,
-  replyInbox: string
-): Promise<void> {
-  const guestWebId = await GetWebIdFromReservation(reservationId);
-  if (!guestWebId) {
-    //TODO solve for offline checkin
-    throw new Error(`Guest webID null in reservation ${reservationId}`);
-  }
-
-  const requiredFields = useRequiredFields();
-  const { guestFields, isLoading, isError } = useGuest(
-    requiredFields?.data,
-    guestWebId
-  );
-
-  //TODO this is dirty, possibly a better solution?
-  while (isLoading || !requiredFields.data) {
-    await new Promise((r) => setTimeout(r, 500));
-  }
-
-  if (!guestFields || isError) {
-    throw new Error("Failed to retrieve required elements from guest Pod");
-  }
-
-  const hotelProfileWebId = await CreateHotelProfile(
-    guestFields,
-    HotelProfilesUrl
-  );
-  //TODO are we allowed to do this? we probably won't need the guest WebId anymore
-  const reservationThing = await SetReservationOwnerToHotelProfile(
-    reservationId,
-    hotelProfileWebId
-  );
-
-  const checkoutDate = getDatetime(
-    reservationThing,
-    reservationFieldToRdfMap.checkoutTime
-  );
-  if (!checkoutDate) {
-    throw new Error("Checkout date is null in reservation");
-  }
-
-  const privacyTokenDataset = await CreateActiveProfilePrivacyToken(
-    hotelProfileWebId,
-    guestWebId,
-    requiredFields.data,
-    checkoutDate
-  );
-  SendPrivacyToken(replyInbox, privacyTokenDataset);
+function OnCheckIn(reservationId: string, replyInbox: string): void {
+  ShowCustomSnackbar((key) => (
+    <CheckinProgressSnackbar
+      key={key}
+      reservationId={reservationId}
+      replyInbox={replyInbox}
+    />
+  ));
 }
 
 async function OnCheckOut(
@@ -167,12 +116,13 @@ async function OnCheckOut(
   //TODO are we allowed to do this? we probably won't need the guest WebId anymore
   SetReservationOwnerToHotelProfile(reservationId, dataProtectionProfileWebId);
 
-  const privacyTokenDataset = await CreateDataProtectionProfilePrivacyToken(
+  const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,
     guestWebId,
     //TODO this doesn't work if it match - I think we should get rid of the matching parameter in the API file
     data.dataProtectionFields,
     GetCurrentDatePushedBy(data.dataProtectionYears, 0, 0)
   );
-  SendPrivacyToken(replyInbox, privacyTokenDataset);
+
+  SendPrivacyToken(replyInbox, privacyToken);
 }

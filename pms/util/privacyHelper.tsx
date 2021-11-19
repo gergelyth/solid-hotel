@@ -7,7 +7,6 @@ import {
   saveSolidDatasetInContainer,
   setStringNoLocale,
   setThing,
-  SolidDataset,
 } from "@inrupt/solid-client";
 import {
   PrivacyTokensInboxUrl,
@@ -103,7 +102,7 @@ export async function CreateActiveProfilePrivacyToken(
   guestWebId: string,
   fields: string[],
   expiryDate: Date
-): Promise<SolidDataset> {
+): Promise<PrivacyToken> {
   return CreateProfilePrivacyToken(
     datasetUrlTarget,
     guestWebId,
@@ -118,7 +117,7 @@ export async function CreateDataProtectionProfilePrivacyToken(
   guestWebId: string,
   fields: string[],
   expiryDate: Date
-): Promise<SolidDataset> {
+): Promise<PrivacyToken> {
   return CreateProfilePrivacyToken(
     datasetUrlTarget,
     guestWebId,
@@ -134,7 +133,7 @@ async function CreateProfilePrivacyToken(
   fields: string[],
   expiryDate: Date,
   reason: string
-): Promise<SolidDataset> {
+): Promise<PrivacyToken> {
   const session = GetSession();
 
   const hotelWebId = session.info.webId;
@@ -154,10 +153,9 @@ async function CreateProfilePrivacyToken(
   };
 
   const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
-  const savedDataset = await saveSolidDatasetInContainer(
-    PrivacyTokensUrl,
-    privacyTokenDataset,
-    { fetch: session.fetch }
-  );
-  return savedDataset;
+  await saveSolidDatasetInContainer(PrivacyTokensUrl, privacyTokenDataset, {
+    fetch: session.fetch,
+  });
+
+  return privacyToken;
 }

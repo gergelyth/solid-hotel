@@ -5,6 +5,25 @@ function ShowSnackbar(variant: VariantType, message: string): void {
   snackbarContext.enqueueSnackbar(message, { variant });
 }
 
+export function CloseSnackbar(key: string | number): void {
+  snackbarContext.closeSnackbar(key);
+}
+
+export function ShowCustomSnackbar(
+  createSnackbarElement: (key: string | number) => JSX.Element
+): void {
+  snackbarContext.enqueueSnackbar("asdf", {
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "right",
+    },
+    content: (key) => {
+      return createSnackbarElement(key);
+    },
+    persist: true,
+  });
+}
+
 export function ShowSuccessSnackbar(message: string): void {
   ShowSnackbar("success", message);
 }
