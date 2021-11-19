@@ -70,11 +70,21 @@ export function DoOnStateChange(
   ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);
 }
 
-function OnCheckIn(reservationId: string, replyInbox: string): void {
+async function OnCheckIn(
+  reservationId: string,
+  replyInbox: string
+): Promise<void> {
+  const guestWebId = await GetWebIdFromReservation(reservationId);
+  if (!guestWebId) {
+    //TODO solve for offline checkin
+    throw new Error(`Guest webID null in reservation ${reservationId}`);
+  }
+
   ShowCustomSnackbar((key) => (
     <CheckinProgressSnackbar
       key={key}
       reservationId={reservationId}
+      guestWebId={guestWebId}
       replyInbox={replyInbox}
     />
   ));

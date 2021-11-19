@@ -1,11 +1,8 @@
 import { Grid, Typography, Box, LinearProgress, Card } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
 import { makeStyles } from "@material-ui/core/styles";
-import { forwardRef } from "react";
-import {
-  GetWebIdFromReservation,
-  SetReservationOwnerToHotelProfile,
-} from "../../../common/util/solid_reservations";
+import { forwardRef, useEffect } from "react";
+import { SetReservationOwnerToHotelProfile } from "../../../common/util/solid_reservations";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { useGuest } from "../../../common/hooks/useGuest";
 import { CreateHotelProfile } from "../../../common/util/hotelProfileHandler";
@@ -15,6 +12,7 @@ import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reser
 import { CreateActiveProfilePrivacyToken } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
+import { Field } from "../../../common/types/Field";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,29 +27,12 @@ const useStyles = makeStyles((theme) => ({
 
 async function ExecuteCheckIn(
   reservationId: string,
+  guestWebId: string,
+  guestFields: Field[],
+  requiredFields: string[],
   replyInbox: string
 ): Promise<void> {
-  const guestWebId = await GetWebIdFromReservation(reservationId);
-  if (!guestWebId) {
-    //TODO solve for offline checkin
-    throw new Error(`Guest webID null in reservation ${reservationId}`);
-  }
-
-  const requiredFields = useRequiredFields(undefined, guestWebId);
-  const { guestFields, isLoading, isError } = useGuest(
-    requiredFields?.data,
-    guestWebId
-  );
-
-  //TODO this is dirty, possibly a better solution?
-  while (isLoading || !requiredFields.data) {
-    await new Promise((r) => setTimeout(r, 500));
-  }
-
-  if (!guestFields || isError) {
-    throw new Error("Failed to retrieve required elements from guest Pod");
-  }
-
+  console.log("execute check-in started");
   const hotelProfileWebId = await CreateHotelProfile(
     guestFields,
     HotelProfilesUrl
@@ -73,7 +54,7 @@ async function ExecuteCheckIn(
   const privacyToken = await CreateActiveProfilePrivacyToken(
     hotelProfileWebId,
     guestWebId,
-    requiredFields.data,
+    requiredFields,
     checkoutDate
   );
 
@@ -83,14 +64,49 @@ async function ExecuteCheckIn(
 
 const CheckinProgressSnackbar = forwardRef<
   HTMLDivElement,
-  { key: string | number; reservationId: string; replyInbox: string }
+  {
+    key: string | number;
+    reservationId: string;
+    guestWebId: string;
+    replyInbox: string;
+  }
 >((props, ref) => {
-  const classes = useStyles();
-
-  ExecuteCheckIn(props.reservationId, props.replyInbox).then(() =>
-    CloseSnackbar(props.key)
+  const requiredFields = useRequiredFields(undefined, props.guestWebId);
+  const { guestFields, isError } = useGuest(
+    requiredFields?.data,
+    props.guestWebId
   );
 
+  useEffect(() => {
+    console.log("effect started");
+    if (isError) {
+      CloseSnackbar(props.key);
+      throw new Error(
+        "Error using the hooks during check-in (potentially failed to retrieve fields from user's Pod)."
+      );
+    }
+
+    if (!guestFields) {
+      console.log("guest fields null");
+      return;
+    }
+
+    if (!requiredFields?.data) {
+      throw new Error(
+        "Required fields is undefined during check-in even though guest fields is not. This shouldn't happen."
+      );
+    }
+
+    ExecuteCheckIn(
+      props.reservationId,
+      props.guestWebId,
+      guestFields,
+      requiredFields.data,
+      props.replyInbox
+    ).then(() => CloseSnackbar(props.key));
+  }, [guestFields, isError]);
+
+  const classes = useStyles();
   return (
     <SnackbarContent ref={ref} className={classes.root} key={props.key}>
       <Card className={classes.card} raised>
