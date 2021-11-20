@@ -1,6 +1,4 @@
-import { Grid, Typography, Box, LinearProgress, Card } from "@material-ui/core";
-import { SnackbarContent } from "notistack";
-import { makeStyles } from "@material-ui/core/styles";
+import CustomProgressSnackbar from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import { SetReservationOwnerToHotelProfile } from "../../../common/util/solid_reservations";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
@@ -13,17 +11,6 @@ import { CreateActiveProfilePrivacyToken } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { Field } from "../../../common/types/Field";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.up("sm")]: {
-      minWidth: "344px !important",
-    },
-  },
-  card: {
-    width: "100%",
-  },
-}));
 
 async function ExecuteCheckIn(
   reservationId: string,
@@ -106,26 +93,12 @@ const CheckinProgressSnackbar = forwardRef<
     ).then(() => CloseSnackbar(props.key));
   }, [guestFields, isError]);
 
-  const classes = useStyles();
   return (
-    <SnackbarContent ref={ref} className={classes.root} key={props.key}>
-      <Card className={classes.card} raised>
-        <Box m={2} p={2}>
-          <Grid container spacing={2} justify="center" direction="column">
-            <Grid item>
-              <Typography variant="h6">
-                <Box fontWeight="fontWeightBold" textAlign="center">
-                  Checking in guest
-                </Box>
-              </Typography>
-            </Grid>
-            <Grid item>
-              <LinearProgress />
-            </Grid>
-          </Grid>
-        </Box>
-      </Card>
-    </SnackbarContent>
+    <CustomProgressSnackbar
+      ref={ref}
+      key={props.key}
+      message={"Checking in guest"}
+    />
   );
 });
 
