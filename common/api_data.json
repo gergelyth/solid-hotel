@@ -14,8 +14,13 @@
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
-                        "dataProtectionFieldsMatch": true,
-                        "dataProtectionFields": []
+                        "dataProtectionFields": [                        
+                            "foaf:firstName",
+                            "foaf:familyName",
+                            "schema:nationality",
+                            "schema:idDocumentNumber",
+                            "schema:email"
+                        ]
                     }
                 },
                 {
@@ -32,7 +37,6 @@
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
-                        "dataProtectionFieldsMatch": false,
                         "dataProtectionFields": [
                             "foaf:firstName",
                             "foaf:familyName",
@@ -57,8 +61,16 @@
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
-                        "dataProtectionFieldsMatch": true,
-                        "dataProtectionFields": []
+                        "dataProtectionFields": [                        
+                            "foaf:firstName",
+                            "foaf:familyName",
+                            "schema:nationality",
+                            "schema:idDocumentType",
+                            "schema:idDocumentNumber",
+                            "schema:idDocumentExpiry",
+                            "schema:email",
+                            "schema:phone_number"
+                        ]
                     }
                 }
             ]
@@ -80,8 +92,16 @@
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 3,
-                        "dataProtectionFieldsMatch": true,
-                        "dataProtectionFields": []
+                        "dataProtectionFields": [                        
+                            "foaf:firstName",
+                            "foaf:familyName",
+                            "schema:nationality",
+                            "schema:idDocumentType",
+                            "schema:idDocumentNumber",
+                            "schema:idDocumentExpiry",
+                            "schema:email",
+                            "schema:phone_number"
+                        ]
                     }
                 },
                 {
@@ -98,8 +118,16 @@
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
-                        "dataProtectionFieldsMatch": true,
-                        "dataProtectionFields": []
+                        "dataProtectionFields": [                        
+                            "foaf:firstName",
+                            "foaf:familyName",
+                            "schema:nationality",
+                            "schema:idDocumentType",
+                            "schema:idDocumentNumber",
+                            "schema:idDocumentExpiry",
+                            "schema:email",
+                            "schema:phone_number"
+                        ]
                     }
                 }
             ]

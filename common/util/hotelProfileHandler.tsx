@@ -11,7 +11,6 @@ import {
 } from "@inrupt/solid-client";
 import { Field } from "../types/Field";
 import { GetDataSet, GetSession } from "./solid";
-import { GetProfileOf } from "./solid_profile";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
 import { useGuest } from "../hooks/useGuest";
@@ -51,29 +50,6 @@ export async function CreateHotelProfile(
   );
 
   return getSourceUrl(savedDataset) + `#${HotelProfileThingName}`;
-}
-
-export async function MoveProfileToDataProtectionFolder(
-  webId: string
-): Promise<string> {
-  const session = GetSession();
-
-  const solidProfile = await GetProfileOf(webId);
-  if (!solidProfile?.dataSet) {
-    throw new Error(`Error retrieving solid profile with webId ${webId}`);
-  }
-
-  const dataProtectionDataset = await saveSolidDatasetInContainer(
-    DataProtectionProfilesUrl,
-    solidProfile?.dataSet,
-    {
-      fetch: session.fetch,
-    }
-  );
-
-  deleteSolidDataset(solidProfile.profileAddress);
-
-  return getSourceUrl(dataProtectionDataset) + `#${HotelProfileThingName}`;
 }
 
 export async function CreateDataProtectionProfile(

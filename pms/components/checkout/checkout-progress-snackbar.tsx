@@ -5,10 +5,7 @@ import {
   SetReservationOwnerToHotelProfile,
 } from "../../../common/util/solid_reservations";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
-import {
-  CreateDataProtectionProfile,
-  MoveProfileToDataProtectionFolder,
-} from "../../../common/util/hotelProfileHandler";
+import { CreateDataProtectionProfile } from "../../../common/util/hotelProfileHandler";
 import { CreateDataProtectionProfilePrivacyToken } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
@@ -28,17 +25,10 @@ async function ExecuteCheckOut(
     throw new Error(`Guest webID null in reservation ${reservationId}`);
   }
 
-  let dataProtectionProfileWebId: string;
-  if (dataProtectionInformation.dataProtectionFieldsMatch) {
-    dataProtectionProfileWebId = await MoveProfileToDataProtectionFolder(
-      guestWebId
-    );
-  } else {
-    dataProtectionProfileWebId = await CreateDataProtectionProfile(
-      dataProtectionInformation.dataProtectionFields,
-      guestWebId
-    );
-  }
+  const dataProtectionProfileWebId = await CreateDataProtectionProfile(
+    dataProtectionInformation.dataProtectionFields,
+    guestWebId
+  );
 
   //TODO are we allowed to do this? we probably won't need the guest WebId anymore
   SetReservationOwnerToHotelProfile(reservationId, dataProtectionProfileWebId);
@@ -46,7 +36,6 @@ async function ExecuteCheckOut(
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,
     guestWebId,
-    //TODO this doesn't work if it match - I think we should get rid of the matching parameter in the API file
     dataProtectionInformation.dataProtectionFields,
     GetCurrentDatePushedBy(dataProtectionInformation.dataProtectionYears, 0, 0)
   );

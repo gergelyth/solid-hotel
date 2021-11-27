@@ -3,7 +3,6 @@ import apiData from "../api_data.json";
 
 export type DataProtectionInformation = {
   dataProtectionYears: number;
-  dataProtectionFieldsMatch: boolean;
   dataProtectionFields: string[];
 };
 

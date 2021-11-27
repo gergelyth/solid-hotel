@@ -1,10 +1,7 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
 import { CircularProgress, Grid, Typography } from "@material-ui/core";
 import { useRouter } from "next/router";
-import {
-  useDataProtectionInformation,
-  useRequiredFields,
-} from "../../../common/hooks/useMockApi";
+import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 
 function GetDataRetentionPeriod({
@@ -33,23 +30,24 @@ function GetDataRetentionPeriod({
   );
 }
 
-function ProfileWrapper({
-  guestWebId,
-  dataDetailsRetrieval,
-  requiredFields,
-}: {
-  guestWebId: string;
-  dataDetailsRetrieval: {
-    data: DataProtectionInformation | undefined;
-    isLoading: boolean;
-    isError: boolean;
-  };
-  requiredFields: {
-    data: string[] | undefined;
-    isLoading: boolean;
-    isError: boolean;
-  };
-}): JSX.Element | null {
+function DataProtectionProfileDetail(): JSX.Element | null {
+  const router = useRouter();
+
+  let guestWebId = router.query.id;
+  if (Array.isArray(guestWebId)) {
+    guestWebId = guestWebId[0];
+  }
+
+  const dataDetailsRetrieval = useDataProtectionInformation(
+    undefined,
+    guestWebId
+  );
+
+  if (!guestWebId) {
+    router.push("/404");
+    return null;
+  }
+
   if (dataDetailsRetrieval.isLoading) {
     return <CircularProgress />;
   }
@@ -60,62 +58,6 @@ function ProfileWrapper({
         Error occured during data protection info retrieval
       </Typography>
     );
-  }
-
-  if (dataDetailsRetrieval.data.dataProtectionFieldsMatch === false) {
-    return (
-      <ProfileMain
-        rdfFields={dataDetailsRetrieval.data.dataProtectionFields}
-        webId={guestWebId}
-        editable={false}
-        deletable={false}
-        centerJustify={true}
-      />
-    );
-  }
-
-  if (requiredFields.isLoading) {
-    return <CircularProgress />;
-  }
-
-  if (!requiredFields.data || requiredFields.isError) {
-    return (
-      <Typography variant="body1">
-        Error occured during required fields retrieval
-      </Typography>
-    );
-  }
-
-  return (
-    <ProfileMain
-      rdfFields={requiredFields.data}
-      webId={guestWebId}
-      editable={false}
-      deletable={false}
-      centerJustify={true}
-    />
-  );
-}
-
-function DataProtectionProfileDetail(): JSX.Element | null {
-  const router = useRouter();
-
-  let guestWebId = router.query.id;
-  if (Array.isArray(guestWebId)) {
-    guestWebId = guestWebId[0];
-  }
-
-  //TODO probably get rid of IsMatch and list the fields in dataprotectionfields even if it's the same as requiredFields
-  //in that case we wouldn't need the ProfileWrapper either
-  const dataDetailsRetrieval = useDataProtectionInformation(
-    undefined,
-    guestWebId
-  );
-  const requiredFields = useRequiredFields(undefined, guestWebId);
-
-  if (!guestWebId) {
-    router.push("/404");
-    return null;
   }
 
   return (
@@ -134,10 +76,12 @@ function DataProtectionProfileDetail(): JSX.Element | null {
         />
       </Grid>
       <Grid item>
-        <ProfileWrapper
-          guestWebId={guestWebId}
-          dataDetailsRetrieval={dataDetailsRetrieval}
-          requiredFields={requiredFields}
+        <ProfileMain
+          rdfFields={dataDetailsRetrieval.data.dataProtectionFields}
+          webId={guestWebId}
+          editable={false}
+          deletable={false}
+          centerJustify={true}
         />
       </Grid>
     </Grid>
