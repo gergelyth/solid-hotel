@@ -2,7 +2,6 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
-  deleteSolidDataset,
   getSourceUrl,
   getThing,
   saveSolidDatasetInContainer,
@@ -13,7 +12,6 @@ import { Field } from "../types/Field";
 import { GetDataSet, GetSession } from "./solid";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
-import { useGuest } from "../hooks/useGuest";
 
 const HotelProfileThingName = "hotelProfile";
 
@@ -53,30 +51,12 @@ export async function CreateHotelProfile(
 }
 
 export async function CreateDataProtectionProfile(
-  dataProtectionFields: string[],
-  webId: string
+  guestFields: Field[]
 ): Promise<string> {
-  const { guestFields, isLoading, isError } = useGuest(
-    dataProtectionFields,
-    webId
-  );
-
-  while (isLoading) {
-    await new Promise((r) => setTimeout(r, 500));
-  }
-
-  if (!guestFields || isError) {
-    throw new Error(
-      "Failed to retrieve data protection information from hotel profile"
-    );
-  }
-
   const dataProtectionDatasetWebId = CreateHotelProfile(
     guestFields,
     DataProtectionProfilesUrl
   );
-
-  deleteSolidDataset(webId.split("#")[0]);
 
   return dataProtectionDatasetWebId;
 }

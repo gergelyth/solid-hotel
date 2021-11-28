@@ -45,7 +45,7 @@ async function ExecuteCheckIn(
     checkoutDate
   );
 
-  SendPrivacyToken(replyInbox, privacyToken);
+  await SendPrivacyToken(replyInbox, privacyToken);
   console.log("privacy token sent");
 }
 
@@ -58,15 +58,18 @@ const CheckinProgressSnackbar = forwardRef<
     replyInbox: string;
   }
 >((props, ref) => {
-  const requiredFields = useRequiredFields(undefined, props.guestWebId);
-  const { guestFields, isError } = useGuest(
-    requiredFields?.data,
+  const { data: requiredFields, isError: apiError } = useRequiredFields(
+    undefined,
+    props.guestWebId
+  );
+  const { guestFields, isError: guestError } = useGuest(
+    requiredFields,
     props.guestWebId
   );
 
   useEffect(() => {
     console.log("effect started");
-    if (isError) {
+    if (apiError || guestError) {
       CloseSnackbar(props.key);
       throw new Error(
         "Error using the hooks during check-in (potentially failed to retrieve fields from user's Pod)."
@@ -78,7 +81,7 @@ const CheckinProgressSnackbar = forwardRef<
       return;
     }
 
-    if (!requiredFields?.data) {
+    if (!requiredFields) {
       throw new Error(
         "Required fields is undefined during check-in even though guest fields is not. This shouldn't happen."
       );
@@ -88,10 +91,10 @@ const CheckinProgressSnackbar = forwardRef<
       props.reservationId,
       props.guestWebId,
       guestFields,
-      requiredFields.data,
+      requiredFields,
       props.replyInbox
     ).then(() => CloseSnackbar(props.key));
-  }, [guestFields, isError]);
+  }, [guestFields, apiError, guestError]);
 
   return (
     <CustomProgressSnackbar

@@ -44,8 +44,8 @@ function GetFieldValues(
 }
 
 export function useGuest(
-  rdfNames: string[] | undefined,
-  webId: string | undefined = undefined
+  rdfNames?: string[],
+  webId?: string
 ): {
   guestFields: Field[] | undefined;
   isLoading: boolean;

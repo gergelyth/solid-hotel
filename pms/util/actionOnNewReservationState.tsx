@@ -82,11 +82,23 @@ async function OnCheckIn(
   ));
 }
 
-function OnCheckOut(reservationId: string, replyInbox: string): void {
+async function OnCheckOut(
+  reservationId: string,
+  replyInbox: string
+): Promise<void> {
+  const reservationOwner = await GetWebIdFromReservation(reservationId);
+  if (!reservationOwner) {
+    //TODO solve for offline checkin
+    throw new Error(
+      `Reservation owner is null in reservation ${reservationId}`
+    );
+  }
+
   ShowCustomSnackbar((key) => (
     <CheckoutProgressSnackbar
       key={key}
       reservationId={reservationId}
+      reservationOwner={reservationOwner}
       replyInbox={replyInbox}
     />
   ));
