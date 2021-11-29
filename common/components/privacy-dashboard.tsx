@@ -4,20 +4,53 @@ import {
   Container,
   Grid,
   Typography,
+  Paper,
+  Divider,
 } from "@material-ui/core";
 import _ from "lodash";
 import { usePrivacyTokens } from "../hooks/usePrivacyTokens";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { NotEmptyItem } from "../util/helpers";
 
+function FindLatestExpiryDate(tokens: PrivacyToken[]): Date {
+  return tokens.reduce((x, y) => (x.expiry > y.expiry ? x : y)).expiry;
+}
+
+function AreDatesOnTheSameDay(d1: Date, d2: Date): boolean {
+  return (
+    d1.getDate() === d2.getDate() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getFullYear() === d2.getFullYear()
+  );
+}
+
+function GetHighlightedOrNotEntry(
+  text: string,
+  highlightValue: boolean
+): JSX.Element {
+  return (
+    <Typography>
+      {highlightValue ? (
+        <Box>{text}</Box>
+      ) : (
+        <Box color="text.disabled">{text}</Box>
+      )}
+    </Typography>
+  );
+}
+
 function PrivacyField({
   field,
   token,
   deleteButtonFunction,
+  showLabel,
+  highlightValue,
 }: {
   field: string;
   token: PrivacyToken;
   deleteButtonFunction: (token: PrivacyToken) => JSX.Element | null;
+  showLabel: boolean;
+  highlightValue: boolean;
 }): JSX.Element {
   const deleteButton = deleteButtonFunction(token) ? (
     <Grid item xs={2}>
@@ -35,13 +68,13 @@ function PrivacyField({
       direction="row"
     >
       <Grid item xs={3}>
-        {field}
+        <Typography>{showLabel ? field : ""}</Typography>
       </Grid>
       <Grid item xs={5}>
-        {token.reason}
+        {GetHighlightedOrNotEntry(token.reason, highlightValue)}
       </Grid>
       <Grid item xs={2}>
-        {token.expiry.toDateString()}
+        {GetHighlightedOrNotEntry(token.expiry.toDateString(), highlightValue)}
       </Grid>
       {deleteButton}
     </Grid>
@@ -70,10 +103,10 @@ function HotelPrivacy({
   });
 
   return (
-    <Box>
-      <Grid item justify="flex-start">
+    <Paper elevation={12}>
+      <Grid item>
         <Typography variant="body1">
-          <Box mx={2} px={2} fontWeight="fontWeightBold">
+          <Box fontWeight="fontWeightBold" textAlign="center" border={5}>
             {counterparty}
           </Box>
         </Typography>
@@ -81,22 +114,46 @@ function HotelPrivacy({
       <Grid item>
         <Box p={2}>
           <Grid container spacing={1} justify="center" direction="column">
+            <Box my={2}>
+              <Divider variant="middle" />
+            </Box>
             {Object.entries(groupByField).map(([field, tokens]) => {
-              return tokens.map((token) => {
-                return (
-                  <PrivacyField
-                    key={field}
-                    field={field}
-                    token={token}
-                    deleteButtonFunction={deleteButton}
-                  />
-                );
-              });
+              const latestExpiry = FindLatestExpiryDate(tokens);
+              console.log(latestExpiry);
+              return (
+                <Box key={field}>
+                  {tokens.map((token, index) => {
+                    return (
+                      <Box key={index}>
+                        <PrivacyField
+                          key={field}
+                          field={field}
+                          token={token}
+                          deleteButtonFunction={deleteButton}
+                          showLabel={index === 0}
+                          highlightValue={AreDatesOnTheSameDay(
+                            token.expiry,
+                            latestExpiry
+                          )}
+                        />
+                        <Box>
+                          {index === tokens.length - 1 ? null : (
+                            <Divider variant="middle" />
+                          )}
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                  <Box my={2}>
+                    <Divider variant="middle" />
+                  </Box>
+                </Box>
+              );
             })}
           </Grid>
         </Box>
       </Grid>
-    </Box>
+    </Paper>
   );
 }
 
@@ -133,7 +190,8 @@ export function PrivacyDashboard({
   return (
     <Grid
       container
-      spacing={1}
+      item
+      spacing={3}
       justify="center"
       alignItems="stretch"
       direction="column"
