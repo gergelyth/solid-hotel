@@ -1,3 +1,4 @@
+import { changeLogAsMarkdown, getSolidDataset } from "@inrupt/solid-client";
 import { Subscriber, WebSocketResource } from "../../types/WebSocketResource";
 import { GetSession } from "../solid";
 
@@ -90,6 +91,7 @@ function processMessage(
   const match = /^pub +(.+)/.exec(data);
   if (!match) return;
 
+  const url = match[1];
   // Invalidate the cache for the resource
   //   const url = match[1];
   //   ldflex.clearCache(url);
@@ -98,7 +100,7 @@ function processMessage(
   console.log("Calling method");
   console.log(data);
   subscribers.forEach((subscriber) => {
-    subscriber.onReceive(data);
+    subscriber.onReceive(url);
   });
 
   //TODO create notification

@@ -4,6 +4,6 @@ export type WebSocketResource = {
 };
 
 export type Subscriber = {
-  onReceive: (data: string) => void;
+  onReceive: (url: string) => void;
   onClick: (data: string) => void;
 };
