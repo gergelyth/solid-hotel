@@ -2,10 +2,8 @@ import {
   Grid,
   Typography,
   Box,
-  Button,
   Card,
   CircularProgress,
-  ButtonGroup,
   RadioGroup,
   Radio,
   FormControlLabel,
@@ -20,12 +18,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { HotelProfileCache } from "./profileCache";
 import { Field } from "../../types/Field";
 import { CloseSnackbar } from "../../components/snackbar";
+import { SendChangeActionButtons } from "./actionButtons";
 
 //TODO this is the same style as CustomProgressSnackbar - unify this
 const useStyles = makeStyles((theme) => ({
@@ -96,9 +94,10 @@ function ValueChangeComponent({
       <FormControl>
         <RadioGroup
           row
-          value={String(optionValue)}
+          value={optionValue}
+          defaultValue={"true"}
           onChange={(e, newValue) =>
-            setOptionValue(fieldValueChange.rdfName, Boolean(newValue))
+            setOptionValue(fieldValueChange.rdfName, newValue === "true")
           }
         >
           <FormControlLabel value="false" control={<Radio />} label="Hide" />
@@ -118,17 +117,22 @@ function GetChangeElements(
     SetStateAction<{
       [rdfName: string]: boolean;
     }>
-  >
+  >,
+  setSendButtonDisabled: Dispatch<SetStateAction<boolean | undefined>>
 ): JSX.Element[] {
   const changeValue = (rdfName: string, newValue: boolean): void => {
     fieldOptions[rdfName] = newValue;
     setFieldOptions(fieldOptions);
+    const asdf = Object.entries(fieldOptions).every((option) => !option[1]);
+    console.log("called");
+
+    setSendButtonDisabled(asdf);
   };
   const changes = changedFields.map((changeField) => (
     <ValueChangeComponent
       key={changeField.name}
       fieldValueChange={changeField}
-      optionValue={fieldOptions[changeField.rdfName] ?? true}
+      optionValue={fieldOptions[changeField.rdfName]}
       setOptionValue={changeValue}
     />
   ));
@@ -147,35 +151,6 @@ function GetChangeElements(
     </Grid>,
 
     ...changes,
-
-    <Grid item key="buttons">
-      <ButtonGroup>
-        <Box px={2}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              //TODO
-            }}
-          >
-            Cancel
-          </Button>
-        </Box>
-        <Box px={2}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={"button"}
-            startIcon={<CheckCircleIcon />}
-            onClick={() => {
-              //TODO send the change notification
-            }}
-          >
-            Send selected
-          </Button>
-        </Box>
-      </ButtonGroup>
-    </Grid>,
   ];
 }
 
@@ -197,6 +172,7 @@ const SendChangeSnackbar = forwardRef<
   const [fieldOptions, setFieldOptions] = useState<{
     [rdfName: string]: boolean;
   }>({});
+  const [isSendButtonDisabled, setSendButtonDisabled] = useState<boolean>();
 
   useEffect(() => {
     if (isLoading) {
@@ -254,9 +230,11 @@ const SendChangeSnackbar = forwardRef<
         lastName,
         changedFields,
         fieldOptions,
-        setFieldOptions
+        setFieldOptions,
+        setSendButtonDisabled
       )
     );
+    setSendButtonDisabled(false);
   }, [guestFields, isLoading, isError]);
 
   return (
@@ -274,6 +252,10 @@ const SendChangeSnackbar = forwardRef<
               <Typography>Changes in a profile detected</Typography>
             </Grid>
             {retrievalElements}
+            <SendChangeActionButtons
+              isSendButtonDisabled={isSendButtonDisabled}
+              fieldOptions={fieldOptions}
+            />
           </Grid>
         </Box>
       </Card>
