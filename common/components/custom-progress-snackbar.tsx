@@ -3,7 +3,7 @@ import { SnackbarContent } from "notistack";
 import { makeStyles } from "@material-ui/core/styles";
 import { forwardRef } from "react";
 
-const useStyles = makeStyles((theme) => ({
+export const useCustomSnackbarStyles = makeStyles((theme) => ({
   root: {
     [theme.breakpoints.up("sm")]: {
       minWidth: "344px !important",
@@ -21,7 +21,7 @@ const CustomProgressSnackbar = forwardRef<
     message: string;
   }
 >((props, ref) => {
-  const classes = useStyles();
+  const classes = useCustomSnackbarStyles();
   return (
     <SnackbarContent ref={ref} className={classes.root} key={props.key}>
       <Card className={classes.card} raised>

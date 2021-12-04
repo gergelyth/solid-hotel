@@ -4,13 +4,8 @@ import {
   Box,
   Card,
   CircularProgress,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  FormControl,
 } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Dispatch,
   forwardRef,
@@ -24,112 +19,9 @@ import { HotelProfileCache } from "./profileCache";
 import { Field } from "../../types/Field";
 import { CloseSnackbar } from "../../components/snackbar";
 import { SendChangeActionButtons } from "./actionButtons";
-
-//TODO this is the same style as CustomProgressSnackbar - unify this
-const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.up("sm")]: {
-      minWidth: "344px !important",
-    },
-  },
-  card: {
-    width: "100%",
-  },
-}));
-
-type FieldValueChange = {
-  name: string;
-  rdfName: string;
-  oldValue: string;
-  newValue: string;
-};
-
-function FindChangedFields(
-  cachedFields: Field[],
-  newFields: Field[]
-): FieldValueChange[] {
-  const changedFields: FieldValueChange[] = [];
-
-  newFields.forEach((newField) => {
-    const cachedField = cachedFields.find(
-      (x) => x.rdfName === newField.rdfName
-    );
-    if (!cachedField) {
-      return;
-    }
-
-    if (cachedField.fieldValue !== newField.fieldValue) {
-      changedFields.push({
-        name: cachedField.fieldPrettyName,
-        rdfName: cachedField.rdfName,
-        //TODO change default value
-        oldValue: cachedField.fieldValue ?? "",
-        newValue: newField.fieldValue ?? "",
-      });
-    }
-  });
-
-  return changedFields;
-}
-
-function ValueChangeComponent({
-  fieldValueChange,
-  optionValue,
-  setOptionValue,
-}: {
-  fieldValueChange: FieldValueChange;
-  optionValue: boolean;
-  setOptionValue: (rdfName: string, newValue: boolean) => void;
-}): JSX.Element {
-  return (
-    <Grid
-      item
-      container
-      justify="center"
-      alignItems="center"
-      spacing={2}
-      direction="row"
-    >
-      <Grid
-        item
-        xs={7}
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        spacing={1}
-      >
-        <Grid item>
-          <Typography>
-            <Box fontWeight="fontWeightBold" fontStyle="underlined">
-              {fieldValueChange.name}
-            </Box>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography>
-            {fieldValueChange.oldValue} -&gt; {fieldValueChange.newValue}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid item xs={5}>
-        <FormControl>
-          <RadioGroup
-            row
-            value={optionValue}
-            defaultValue={"true"}
-            onChange={(e, newValue) =>
-              setOptionValue(fieldValueChange.rdfName, newValue === "true")
-            }
-          >
-            <FormControlLabel value="false" control={<Radio />} label="Hide" />
-            <FormControlLabel value="true" control={<Radio />} label="Send" />
-          </RadioGroup>
-        </FormControl>
-      </Grid>
-    </Grid>
-  );
-}
+import { useCustomSnackbarStyles } from "../../components/custom-progress-snackbar";
+import { FieldValueChange, FindChangedFields } from "./util";
+import { ValueChangeComponent } from "./valueChangeComponent";
 
 function GetChangeElements(
   firstName: Field | undefined,
@@ -163,7 +55,7 @@ function GetChangeElements(
   return [
     <Grid item key="name">
       <Typography>
-        {firstName?.fieldValue} {lastName?.fieldValue}
+        Profile of {firstName?.fieldValue} {lastName?.fieldValue}
       </Typography>
     </Grid>,
 
@@ -185,7 +77,7 @@ const SendChangeSnackbar = forwardRef<
     rdfFields: string[];
   }
 >((props, ref) => {
-  const classes = useStyles();
+  const classes = useCustomSnackbarStyles();
   const { guestFields, isLoading, isError } = useGuest(
     props.rdfFields,
     props.profileUrl
