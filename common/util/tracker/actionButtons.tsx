@@ -12,14 +12,7 @@ export function SendChangeActionButtons({
     return null;
   }
   return (
-    <Grid
-      item
-      container
-      justify="center"
-      alignItems="center"
-      spacing={4}
-      key="buttons"
-    >
+    <Grid item container justify="center" alignItems="center" spacing={4}>
       <Grid item>
         <Button
           variant="contained"
