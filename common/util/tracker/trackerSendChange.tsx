@@ -6,10 +6,20 @@ import {
   Card,
   CircularProgress,
   ButtonGroup,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  FormControl,
 } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
 import { makeStyles } from "@material-ui/core/styles";
-import { forwardRef, useEffect, useState } from "react";
+import {
+  Dispatch,
+  forwardRef,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
@@ -29,7 +39,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type FieldValueChange = { name: string; oldValue: string; newValue: string };
+type FieldValueChange = {
+  name: string;
+  rdfName: string;
+  oldValue: string;
+  newValue: string;
+};
 
 function FindChangedFields(
   cachedFields: Field[],
@@ -48,6 +63,7 @@ function FindChangedFields(
     if (cachedField.fieldValue !== newField.fieldValue) {
       changedFields.push({
         name: cachedField.fieldPrettyName,
+        rdfName: cachedField.rdfName,
         //TODO change default value
         oldValue: cachedField.fieldValue ?? "",
         newValue: newField.fieldValue ?? "",
@@ -60,30 +76,61 @@ function FindChangedFields(
 
 function ValueChangeComponent({
   fieldValueChange,
+  optionValue,
+  setOptionValue,
 }: {
   fieldValueChange: FieldValueChange;
+  optionValue: boolean;
+  setOptionValue: (rdfName: string, newValue: boolean) => void;
 }): JSX.Element {
   return (
-    <Typography>
-      <Box fontWeight="fontWeightBold" fontStyle="underlined">
-        {fieldValueChange.name}
-      </Box>
+    <Grid item>
       <Typography>
-        {fieldValueChange.oldValue} -&gt; {fieldValueChange.newValue}
+        <Box fontWeight="fontWeightBold" fontStyle="underlined">
+          {fieldValueChange.name}
+        </Box>
+        <Typography>
+          {fieldValueChange.oldValue} -&gt; {fieldValueChange.newValue}
+        </Typography>
       </Typography>
-    </Typography>
+      <FormControl>
+        <RadioGroup
+          row
+          value={String(optionValue)}
+          onChange={(e, newValue) =>
+            setOptionValue(fieldValueChange.rdfName, Boolean(newValue))
+          }
+        >
+          <FormControlLabel value="false" control={<Radio />} label="Hide" />
+          <FormControlLabel value="true" control={<Radio />} label="Send" />
+        </RadioGroup>
+      </FormControl>
+    </Grid>
   );
 }
 
 function GetChangeElements(
   firstName: Field | undefined,
   lastName: Field | undefined,
-  changedFields: FieldValueChange[]
+  changedFields: FieldValueChange[],
+  fieldOptions: { [rdfName: string]: boolean },
+  setFieldOptions: Dispatch<
+    SetStateAction<{
+      [rdfName: string]: boolean;
+    }>
+  >
 ): JSX.Element[] {
+  const changeValue = (rdfName: string, newValue: boolean): void => {
+    fieldOptions[rdfName] = newValue;
+    setFieldOptions(fieldOptions);
+  };
   const changes = changedFields.map((changeField) => (
-    <Grid item key={changeField.name}>
-      <ValueChangeComponent fieldValueChange={changeField} />
-    </Grid>
+    <ValueChangeComponent
+      key={changeField.name}
+      fieldValueChange={changeField}
+      optionValue={fieldOptions[changeField.rdfName] ?? true}
+      setOptionValue={changeValue}
+    />
   ));
 
   return [
@@ -147,6 +194,9 @@ const SendChangeSnackbar = forwardRef<
   );
 
   const [retrievalElements, setRetrievalElements] = useState<JSX.Element[]>([]);
+  const [fieldOptions, setFieldOptions] = useState<{
+    [rdfName: string]: boolean;
+  }>({});
 
   useEffect(() => {
     if (isLoading) {
@@ -192,7 +242,21 @@ const SendChangeSnackbar = forwardRef<
 
     const changedFields = FindChangedFields(cachedFields, guestFields);
 
-    setRetrievalElements(GetChangeElements(firstName, lastName, changedFields));
+    const fieldOptionsTemp: { [rdfName: string]: boolean } = {};
+    changedFields.forEach(
+      (changedField) => (fieldOptionsTemp[changedField.rdfName] = true)
+    );
+    setFieldOptions(fieldOptionsTemp);
+
+    setRetrievalElements(
+      GetChangeElements(
+        firstName,
+        lastName,
+        changedFields,
+        fieldOptions,
+        setFieldOptions
+      )
+    );
   }, [guestFields, isLoading, isError]);
 
   return (
