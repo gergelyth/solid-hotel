@@ -24,14 +24,12 @@ const TrackerSetupSnackbar = forwardRef<
     }
 
     if (!guestFields) {
-      console.log("Guest field information null");
       return;
     }
 
-    console.log(guestFields);
-    HotelProfileCache[props.profileUrl] = guestFields;
+    HotelProfileCache[props.profileUrl] = guestFields.map((x) => ({ ...x }));
     CloseSnackbar(props.key);
-    console.log("cache updated");
+    console.log("Hotel profile cache updated");
   }, [guestFields, guestError]);
 
   return (

@@ -124,6 +124,28 @@ export default function Home(): JSX.Element | null {
       >
         Subscribe
       </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={async () => {
+          const url =
+            "https://solidhotel.inrupt.net/hotelprofiles/fbca7620-4a33-11ec-a883-c7d01e95c64a.ttl#hotelProfile";
+          const profile = await GetProfileOf(url);
+          if (!profile?.profile) {
+            return;
+          }
+          const rdfFields = getPropertyAll(profile?.profile);
+          ShowCustomSnackbar((key) => (
+            <SendChangeSnackbar
+              key={key}
+              profileUrl={url}
+              rdfFields={rdfFields}
+            />
+          ));
+        }}
+      >
+        Show Snackbar
+      </Button>
     </Grid>
   );
 }

@@ -5,16 +5,17 @@ import {
   Button,
   Card,
   CircularProgress,
-  Container,
+  ButtonGroup,
 } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
 import { makeStyles } from "@material-ui/core/styles";
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { HotelProfileCache } from "./profileCache";
 import { Field } from "../../types/Field";
+import { CloseSnackbar } from "../../components/snackbar";
 
 //TODO this is the same style as CustomProgressSnackbar - unify this
 const useStyles = makeStyles((theme) => ({
@@ -74,6 +75,63 @@ function ValueChangeComponent({
   );
 }
 
+function GetChangeElements(
+  firstName: Field | undefined,
+  lastName: Field | undefined,
+  changedFields: FieldValueChange[]
+): JSX.Element[] {
+  const changes = changedFields.map((changeField) => (
+    <Grid item key={changeField.name}>
+      <ValueChangeComponent fieldValueChange={changeField} />
+    </Grid>
+  ));
+
+  return [
+    <Grid item key="name">
+      <Typography>
+        {firstName?.fieldValue} {lastName?.fieldValue}
+      </Typography>
+    </Grid>,
+
+    <Grid item key="instruction">
+      <Typography>
+        Would you like to update the following field in your Pod as well?
+      </Typography>
+    </Grid>,
+
+    ...changes,
+
+    <Grid item key="buttons">
+      <ButtonGroup>
+        <Box px={2}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              //TODO
+            }}
+          >
+            Cancel
+          </Button>
+        </Box>
+        <Box px={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={"button"}
+            startIcon={<CheckCircleIcon />}
+            onClick={() => {
+              //TODO send the change notification
+            }}
+          >
+            Send selected
+          </Button>
+        </Box>
+      </ButtonGroup>
+    </Grid>,
+  ];
+}
+
 const SendChangeSnackbar = forwardRef<
   HTMLDivElement,
   {
@@ -88,51 +146,54 @@ const SendChangeSnackbar = forwardRef<
     props.profileUrl
   );
 
-  //TODO probably put all this info useEffect as there seem to be many calls to hooks
+  const [retrievalElements, setRetrievalElements] = useState<JSX.Element[]>([]);
 
-  console.log("Old guest");
-  const cachedFields = HotelProfileCache[props.profileUrl];
-  console.log(cachedFields);
+  useEffect(() => {
+    if (isLoading) {
+      setRetrievalElements([
+        <Grid item key="loadingtag">
+          <Typography>Loading results</Typography>
+        </Grid>,
+        <Grid item key="progress">
+          <CircularProgress />
+        </Grid>,
+      ]);
+      return;
+    }
 
-  if (isLoading) {
-    return (
-      <SnackbarContent ref={ref} className={classes.root} key={props.key}>
-        <Card className={classes.card} raised>
-          <Box m={2} p={2}>
-            <CircularProgress />
-          </Box>
-        </Card>
-      </SnackbarContent>
+    if (isError || !guestFields) {
+      setRetrievalElements([
+        <Grid item key="error">
+          <Typography>An error occurred.</Typography>
+          <Typography>{isError}</Typography>
+        </Grid>,
+      ]);
+      CloseSnackbar(props.key);
+      //TODO
+      throw new Error(`Failed to cache hotel profile ${props.profileUrl}`);
+    }
+
+    console.log("Logic entered");
+    //TODO default value only for debug
+    const cachedFields = HotelProfileCache[props.profileUrl] ?? [
+      {
+        fieldPrettyName: "Nationality",
+        rdfName: "schema:nationality",
+        fieldValue: "oldNationality",
+        fieldShortName: "nationality",
+      },
+    ];
+    const firstName = cachedFields.find(
+      (x) => x.rdfName == personFieldToRdfMap.firstName
     );
-  }
-
-  if (isError || !guestFields) {
-    return (
-      <SnackbarContent ref={ref} className={classes.root} key={props.key}>
-        <Card className={classes.card} raised>
-          <Box m={2} p={2}>
-            <Container maxWidth="sm">
-              <Typography>An error occurred.</Typography>
-              <Typography>{isError}</Typography>
-            </Container>
-          </Box>
-        </Card>
-      </SnackbarContent>
+    const lastName = cachedFields.find(
+      (x) => x.rdfName == personFieldToRdfMap.lastName
     );
-  }
 
-  console.log("New guest");
-  console.log(guestFields);
+    const changedFields = FindChangedFields(cachedFields, guestFields);
 
-  const firstName = cachedFields.find(
-    (x) => x.rdfName == personFieldToRdfMap.firstName
-  );
-  const lastName = cachedFields.find(
-    (x) => x.rdfName == personFieldToRdfMap.lastName
-  );
-
-  const changedFields = FindChangedFields(cachedFields, guestFields);
-  console.log(changedFields);
+    setRetrievalElements(GetChangeElements(firstName, lastName, changedFields));
+  }, [guestFields, isLoading, isError]);
 
   return (
     <SnackbarContent ref={ref} className={classes.root} key={props.key}>
@@ -146,51 +207,9 @@ const SendChangeSnackbar = forwardRef<
             direction="column"
           >
             <Grid item>
-              <Typography>
-                {firstName?.fieldValue} {lastName?.fieldValue}
-              </Typography>
+              <Typography>Changes in a profile detected</Typography>
             </Grid>
-            <Grid item>
-              <Typography>
-                There were some modifications in your local profile.
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography>
-                Would you like to update the following field in your Pod as
-                well?
-              </Typography>
-            </Grid>
-            {changedFields.map((changeField) => (
-              <Grid item key={changeField.name}>
-                <ValueChangeComponent fieldValueChange={changeField} />
-              </Grid>
-            ))}
-
-            <Grid item>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => {
-                  //TODO
-                }}
-              >
-                No
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                className={"button"}
-                startIcon={<CheckCircleIcon />}
-                onClick={() => {
-                  //TODO send the change notification
-                }}
-              >
-                Yes
-              </Button>
-            </Grid>
+            {retrievalElements}
           </Grid>
         </Box>
       </Card>
