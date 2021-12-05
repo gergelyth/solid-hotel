@@ -11,8 +11,6 @@ import {
   SendPairingRequestWithInformation,
   SendPrivacyToken,
 } from "./outgoingCommunications";
-import { SetGlobalDialog } from "../../common/components/global-dialog";
-import ApproveChangeDialog from "../../common/components/profile/approve-change-dialog";
 import {
   GetCoreReservationFolderFromInboxUrl,
   GetReservationUrlFromInboxUrl,

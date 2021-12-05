@@ -114,6 +114,7 @@ export default function Home(): JSX.Element | null {
                     key={key}
                     profileUrl={url}
                     rdfFields={rdfFields}
+                    requiresApproval={true}
                   />
                 ));
               },
@@ -140,6 +141,7 @@ export default function Home(): JSX.Element | null {
               key={key}
               profileUrl={url}
               rdfFields={rdfFields}
+              requiresApproval={true}
             />
           ));
         }}

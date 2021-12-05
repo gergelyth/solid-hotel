@@ -6,13 +6,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
-import {
-  Dispatch,
-  forwardRef,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { HotelProfileCache } from "./profileCache";
@@ -28,29 +22,22 @@ function GetChangeElements(
   lastName: Field | undefined,
   changedFields: FieldValueChange[],
   fieldOptions: { [rdfName: string]: boolean },
-  setFieldOptions: Dispatch<
-    SetStateAction<{
-      [rdfName: string]: boolean;
-    }>
-  >,
-  setSendButtonDisabled: Dispatch<SetStateAction<boolean | undefined>>
+  changeOptionValue: (rdfName: string, newValue: boolean) => void,
+  requiresApproval: boolean
 ): JSX.Element[] {
-  const changeValue = (rdfName: string, newValue: boolean): void => {
-    fieldOptions[rdfName] = newValue;
-    setFieldOptions(fieldOptions);
-    const asdf = Object.entries(fieldOptions).every((option) => !option[1]);
-    console.log("called");
-
-    setSendButtonDisabled(asdf);
-  };
   const changes = changedFields.map((changeField) => (
     <ValueChangeComponent
       key={changeField.name}
       fieldValueChange={changeField}
       optionValue={fieldOptions[changeField.rdfName]}
-      setOptionValue={changeValue}
+      setOptionValue={changeOptionValue}
+      requiresApproval={requiresApproval}
     />
   ));
+
+  const instructionText = requiresApproval
+    ? "Would you like to update the following field in your Pod as well?"
+    : "The following updates are sent to the guest automatically";
 
   return [
     <Grid item key="name">
@@ -60,9 +47,7 @@ function GetChangeElements(
     </Grid>,
 
     <Grid item key="instruction">
-      <Typography>
-        Would you like to update the following field in your Pod as well?
-      </Typography>
+      <Typography>{instructionText}</Typography>
     </Grid>,
 
     ...changes,
@@ -75,6 +60,7 @@ const SendChangeSnackbar = forwardRef<
     key: string | number;
     profileUrl: string;
     rdfFields: string[];
+    requiresApproval: boolean;
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
@@ -88,6 +74,14 @@ const SendChangeSnackbar = forwardRef<
     [rdfName: string]: boolean;
   }>({});
   const [isSendButtonDisabled, setSendButtonDisabled] = useState<boolean>();
+
+  const changeOptionValue = (rdfName: string, newValue: boolean): void => {
+    fieldOptions[rdfName] = newValue;
+    setFieldOptions(fieldOptions);
+    setSendButtonDisabled(
+      Object.entries(fieldOptions).every((option) => !option[1])
+    );
+  };
 
   useEffect(() => {
     if (isLoading) {
@@ -145,8 +139,8 @@ const SendChangeSnackbar = forwardRef<
         lastName,
         changedFields,
         fieldOptions,
-        setFieldOptions,
-        setSendButtonDisabled
+        changeOptionValue,
+        props.requiresApproval
       )
     );
     setSendButtonDisabled(false);
@@ -170,6 +164,7 @@ const SendChangeSnackbar = forwardRef<
             <SendChangeActionButtons
               isSendButtonDisabled={isSendButtonDisabled}
               fieldOptions={fieldOptions}
+              requiresApproval={props.requiresApproval}
             />
           </Grid>
         </Box>

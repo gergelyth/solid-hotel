@@ -13,10 +13,12 @@ export function ValueChangeComponent({
   fieldValueChange,
   optionValue,
   setOptionValue,
+  requiresApproval,
 }: {
   fieldValueChange: FieldValueChange;
   optionValue: boolean;
   setOptionValue: (rdfName: string, newValue: boolean) => void;
+  requiresApproval: boolean;
 }): JSX.Element {
   return (
     <Grid
@@ -50,7 +52,7 @@ export function ValueChangeComponent({
         </Grid>
       </Grid>
       <Grid item xs={5}>
-        <FormControl>
+        <FormControl disabled={!requiresApproval}>
           <RadioGroup
             row
             value={optionValue}
