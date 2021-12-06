@@ -9,13 +9,14 @@ import { SnackbarContent } from "notistack";
 import { forwardRef, useEffect, useState } from "react";
 import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { HotelProfileCache } from "./profileCache";
+import { ProfileCache } from "./profileCache";
 import { Field } from "../../types/Field";
-import { CloseSnackbar } from "../../components/snackbar";
+import { CloseSnackbar, ShowErrorSnackbar } from "../../components/snackbar";
 import { SendChangeActionButtons } from "./actionButtons";
 import { useCustomSnackbarStyles } from "../../components/custom-progress-snackbar";
 import { FieldValueChange, FindChangedFields } from "./util";
 import { ValueChangeComponent } from "./valueChangeComponent";
+import { ProfileChangeStrings } from "./profileChangeStrings";
 
 function GetChangeElements(
   firstName: Field | undefined,
@@ -23,7 +24,8 @@ function GetChangeElements(
   changedFields: FieldValueChange[],
   fieldOptions: { [rdfName: string]: boolean },
   changeOptionValue: (rdfName: string, newValue: boolean) => void,
-  requiresApproval: boolean
+  requiresApproval: boolean,
+  profileChangeStrings: ProfileChangeStrings
 ): JSX.Element[] {
   const changes = changedFields.map((changeField) => (
     <ValueChangeComponent
@@ -32,12 +34,9 @@ function GetChangeElements(
       optionValue={fieldOptions[changeField.rdfName]}
       setOptionValue={changeOptionValue}
       requiresApproval={requiresApproval}
+      profileChangeStrings={profileChangeStrings}
     />
   ));
-
-  const instructionText = requiresApproval
-    ? "Would you like to update the following field in your Pod as well?"
-    : "The following updates are sent to the guest automatically";
 
   return [
     <Grid item key="name">
@@ -47,7 +46,7 @@ function GetChangeElements(
     </Grid>,
 
     <Grid item key="instruction">
-      <Typography>{instructionText}</Typography>
+      <Typography>{profileChangeStrings.instruction}</Typography>
     </Grid>,
 
     ...changes,
@@ -61,6 +60,10 @@ const SendChangeSnackbar = forwardRef<
     profileUrl: string;
     rdfFields: string[];
     requiresApproval: boolean;
+    profileChangeStrings: ProfileChangeStrings;
+    approveButtonFunction: (
+      fieldOptions: { [rdfName: string]: boolean }
+    ) => void;
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
@@ -104,13 +107,13 @@ const SendChangeSnackbar = forwardRef<
         </Grid>,
       ]);
       CloseSnackbar(props.key);
-      //TODO
-      throw new Error(`Failed to cache hotel profile ${props.profileUrl}`);
+      ShowErrorSnackbar(`Failed to retrieve guestFields from profile ${props.profileUrl}`);
+      return;
     }
 
     console.log("Logic entered");
     //TODO default value only for debug
-    const cachedFields = HotelProfileCache[props.profileUrl] ?? [
+    const cachedFields = ProfileCache[props.profileUrl] ?? [
       {
         fieldPrettyName: "Nationality",
         rdfName: "schema:nationality",
@@ -140,7 +143,8 @@ const SendChangeSnackbar = forwardRef<
         changedFields,
         fieldOptions,
         changeOptionValue,
-        props.requiresApproval
+        props.requiresApproval,
+        props.profileChangeStrings
       )
     );
     setSendButtonDisabled(false);
@@ -158,13 +162,15 @@ const SendChangeSnackbar = forwardRef<
             direction="column"
           >
             <Grid item>
-              <Typography>Changes in a profile detected</Typography>
+              <Typography>{props.profileChangeStrings.headline}</Typography>
             </Grid>
             {retrievalElements}
             <SendChangeActionButtons
               isSendButtonDisabled={isSendButtonDisabled}
-              fieldOptions={fieldOptions}
               requiresApproval={props.requiresApproval}
+              label={props.profileChangeStrings.approveButtonText}
+              approveButtonAction={() => props.approveButtonFunction(fieldOptions)}
+              closeSnackbar={() => CloseSnackbar(props.key)}
             />
           </Grid>
         </Box>

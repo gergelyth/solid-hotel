@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   FormControl,
 } from "@material-ui/core";
+import { ProfileChangeStrings } from "./profileChangeStrings";
 import { FieldValueChange } from "./util";
 
 export function ValueChangeComponent({
@@ -14,11 +15,13 @@ export function ValueChangeComponent({
   optionValue,
   setOptionValue,
   requiresApproval,
+  profileChangeStrings,
 }: {
   fieldValueChange: FieldValueChange;
   optionValue: boolean;
   setOptionValue: (rdfName: string, newValue: boolean) => void;
   requiresApproval: boolean;
+  profileChangeStrings: ProfileChangeStrings;
 }): JSX.Element {
   return (
     <Grid
@@ -61,8 +64,16 @@ export function ValueChangeComponent({
               setOptionValue(fieldValueChange.rdfName, newValue === "true")
             }
           >
-            <FormControlLabel value="false" control={<Radio />} label="Hide" />
-            <FormControlLabel value="true" control={<Radio />} label="Send" />
+            <FormControlLabel
+              value="false"
+              control={<Radio />}
+              label={profileChangeStrings.keepRadioText}
+            />
+            <FormControlLabel
+              value="true"
+              control={<Radio />}
+              label={profileChangeStrings.approveRadioText}
+            />
           </RadioGroup>
         </FormControl>
       </Grid>

@@ -2,7 +2,7 @@ import CustomProgressSnackbar from "../../../common/components/custom-progress-s
 import { forwardRef, useEffect } from "react";
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { useGuest } from "../../../common/hooks/useGuest";
-import { HotelProfileCache } from "./profileCache";
+import { ProfileCache } from "./profileCache";
 
 const TrackerSetupSnackbar = forwardRef<
   HTMLDivElement,
@@ -20,23 +20,23 @@ const TrackerSetupSnackbar = forwardRef<
   useEffect(() => {
     if (guestError) {
       CloseSnackbar(props.key);
-      throw new Error(`Failed to cache hotel profile ${props.profileUrl}`);
+      throw new Error(`Failed to cache profile ${props.profileUrl}`);
     }
 
     if (!guestFields) {
       return;
     }
 
-    HotelProfileCache[props.profileUrl] = guestFields.map((x) => ({ ...x }));
+    ProfileCache[props.profileUrl] = guestFields.map((x) => ({ ...x }));
     CloseSnackbar(props.key);
-    console.log("Hotel profile cache updated");
+    console.log("Profile cache updated");
   }, [guestFields, guestError]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
       key={props.key}
-      message={"Caching hotel profile"}
+      message={"Caching profiles"}
     />
   );
 });

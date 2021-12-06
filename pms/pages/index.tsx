@@ -13,6 +13,10 @@ import TrackerSetupSnackbar from "../../common/util/tracker/trackersetup";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { GetProfileOf } from "../../common/util/solid_profile";
 import { getPropertyAll } from "@inrupt/solid-client";
+import {
+  IncomingProfileChangeStrings,
+  OutgoingProfileChangeStrings,
+} from "../../common/util/tracker/profileChangeStrings";
 
 export default function Home(): JSX.Element | null {
   let reservationId: string;
@@ -115,6 +119,7 @@ export default function Home(): JSX.Element | null {
                     profileUrl={url}
                     rdfFields={rdfFields}
                     requiresApproval={true}
+                    profileChangeStrings={OutgoingProfileChangeStrings(true)}
                   />
                 ));
               },
@@ -142,6 +147,7 @@ export default function Home(): JSX.Element | null {
               profileUrl={url}
               rdfFields={rdfFields}
               requiresApproval={true}
+              profileChangeStrings={OutgoingProfileChangeStrings()}
             />
           ));
         }}

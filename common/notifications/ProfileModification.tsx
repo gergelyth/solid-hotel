@@ -56,7 +56,7 @@ export function DeserializeProfileModification(dataset: SolidDataset): {
   return { webId, fieldModified, newFieldValue };
 }
 
-export function SerializeFailureReport(
+export function SerializeProfileModification(
   webId: string,
   fieldModified: string,
   newFieldValue: string

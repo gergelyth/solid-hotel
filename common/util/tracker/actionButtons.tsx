@@ -4,9 +4,15 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 function SendButton({
   isSendButtonDisabled,
   requiresApproval,
+  label,
+  approveButtonAction,
+  closeSnackbar,
 }: {
   isSendButtonDisabled: boolean;
   requiresApproval: boolean;
+  label: string;
+  approveButtonAction: () => void;
+  closeSnackbar: () => void;
 }): JSX.Element | null {
   if (!requiresApproval) {
     return null;
@@ -20,10 +26,11 @@ function SendButton({
         disabled={isSendButtonDisabled}
         startIcon={<CheckCircleIcon />}
         onClick={() => {
-          //TODO send the change notification
+          approveButtonAction();
+          closeSnackbar();
         }}
       >
-        Send selected
+        {label}
       </Button>
     </Grid>
   );
@@ -31,12 +38,16 @@ function SendButton({
 
 export function SendChangeActionButtons({
   isSendButtonDisabled,
-  fieldOptions,
   requiresApproval,
+  label,
+  approveButtonAction,
+  closeSnackbar,
 }: {
   isSendButtonDisabled: boolean | undefined;
-  fieldOptions: { [rdfName: string]: boolean };
   requiresApproval: boolean;
+  label: string;
+  approveButtonAction: () => void;
+  closeSnackbar: () => void;
 }): JSX.Element | null {
   if (isSendButtonDisabled === undefined) {
     return null;
@@ -48,15 +59,18 @@ export function SendChangeActionButtons({
           variant="contained"
           color="secondary"
           onClick={() => {
-            //TODO
+            closeSnackbar();
           }}
         >
-          Cancel
+          {requiresApproval ? "Cancel" : "OK"}
         </Button>
       </Grid>
       <SendButton
         isSendButtonDisabled={isSendButtonDisabled}
         requiresApproval={requiresApproval}
+        label={label}
+        approveButtonAction={approveButtonAction}
+        closeSnackbar={closeSnackbar}
       />
     </Grid>
   );
