@@ -2,85 +2,71 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
-  getSourceUrl,
   getStringNoLocale,
-  getThing,
+  getThingAll,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { profileModificationRdfMap } from "../vocabularies/notification_payloads/rdf_profileModification";
+import { ProfileUpdate } from "../util/tracker/trackerSendChange";
 
 const thingName = "profileModification";
 
 export function DeserializeProfileModification(dataset: SolidDataset): {
-  webId: string;
-  fieldModified: string;
-  newFieldValue: string;
+  [rdfName: string]: string;
 } {
-  const url = getSourceUrl(dataset);
-  const modificationThing = getThing(dataset, url + `#${thingName}`);
-  if (!modificationThing) {
-    throw new Error("Modification thing cannot be null");
-  }
+  const result: { [rdfName: string]: string } = {};
+  const things = getThingAll(dataset);
 
-  const webId = getStringNoLocale(
-    modificationThing,
-    profileModificationRdfMap.webId
-  );
-  if (!webId) {
-    throw new Error("WebId is null in profile modification notification");
-  }
-
-  const fieldModified = getStringNoLocale(
-    modificationThing,
-    profileModificationRdfMap.fieldModified
-  );
-  if (!fieldModified) {
-    throw new Error(
-      "Modified field name is null in profile modification notification"
+  things.forEach((thing) => {
+    const rdfModified = getStringNoLocale(
+      thing,
+      profileModificationRdfMap.fieldModified
     );
-  }
+    if (!rdfModified) {
+      //there will be the notification Thing here
+      return;
+    }
 
-  const newFieldValue = getStringNoLocale(
-    modificationThing,
-    profileModificationRdfMap.newFieldValue
-  );
-  if (!newFieldValue) {
-    throw new Error(
-      "New field value is null in profile modification notification"
+    const newFieldValue = getStringNoLocale(
+      thing,
+      profileModificationRdfMap.newFieldValue
     );
-  }
+    if (!newFieldValue) {
+      return;
+    }
 
-  return { webId, fieldModified, newFieldValue };
+    result[rdfModified] = newFieldValue;
+  });
+
+  return result;
 }
 
 export function SerializeProfileModification(
-  webId: string,
-  fieldModified: string,
-  newFieldValue: string
+  profileUpdate: ProfileUpdate
 ): SolidDataset {
   let changeDataset = createSolidDataset();
 
-  let changeThing = createThing({ name: thingName });
-  changeThing = addStringNoLocale(
-    changeThing,
-    profileModificationRdfMap.webId,
-    webId
-  );
-  changeThing = addStringNoLocale(
-    changeThing,
-    profileModificationRdfMap.fieldModified,
-    fieldModified
-  );
-  changeThing = addStringNoLocale(
-    changeThing,
-    profileModificationRdfMap.newFieldValue,
-    newFieldValue
-  );
+  const counter = 0;
+  for (const rdfField in profileUpdate) {
+    const details = profileUpdate[rdfField];
 
-  changeDataset = setThing(changeDataset, changeThing);
+    let changeThing = createThing({ name: `${thingName}_${counter}` });
+    changeThing = addStringNoLocale(
+      changeThing,
+      profileModificationRdfMap.fieldModified,
+      rdfField
+    );
+    changeThing = addStringNoLocale(
+      changeThing,
+      profileModificationRdfMap.newFieldValue,
+      details.newValue
+    );
+    changeDataset = setThing(changeDataset, changeThing);
+  }
+
   const notificationDataset = AddNotificationThingToDataset(
     changeDataset,
     NotificationType.ProfileModification

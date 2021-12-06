@@ -17,6 +17,7 @@ import {
   IncomingProfileChangeStrings,
   OutgoingProfileChangeStrings,
 } from "../../common/util/tracker/profileChangeStrings";
+import SendProfileModificationSnackbar from "../components/profile/send-profile-modification";
 
 export default function Home(): JSX.Element | null {
   let reservationId: string;
@@ -100,13 +101,13 @@ export default function Home(): JSX.Element | null {
             <TrackerSetupSnackbar
               key={key}
               profileUrl={
-                "https://solidhotel.inrupt.net/hotelprofiles/fbca7620-4a33-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
+                "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
               }
               rdfFields={rdfFields}
             />
           ));
           await Subscribe(
-            "https://solidhotel.inrupt.net/hotelprofiles/fbca7620-4a33-11ec-a883-c7d01e95c64a.ttl#hotelProfile",
+            "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile",
             {
               onClick: () => {
                 undefined;
@@ -135,7 +136,7 @@ export default function Home(): JSX.Element | null {
         color="primary"
         onClick={async () => {
           const url =
-            "https://solidhotel.inrupt.net/hotelprofiles/fbca7620-4a33-11ec-a883-c7d01e95c64a.ttl#hotelProfile";
+            "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile";
           const profile = await GetProfileOf(url);
           if (!profile?.profile) {
             return;
@@ -147,7 +148,18 @@ export default function Home(): JSX.Element | null {
               profileUrl={url}
               rdfFields={rdfFields}
               requiresApproval={true}
-              profileChangeStrings={OutgoingProfileChangeStrings()}
+              profileChangeStrings={OutgoingProfileChangeStrings(true)}
+              approveButtonFunction={(fieldOptions) =>
+                ShowCustomSnackbar((key) => (
+                  <SendProfileModificationSnackbar
+                    key={key}
+                    fieldOptions={fieldOptions}
+                    profileUrl={
+                      "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
+                    }
+                  />
+                ))
+              }
             />
           ));
         }}

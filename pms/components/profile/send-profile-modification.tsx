@@ -8,11 +8,13 @@ import {
 import { useReservations } from "../../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { NotEmptyItem } from "../../../common/util/helpers";
+import { ProfileUpdate } from "../../../common/util/tracker/trackerSendChange";
+import { SendProfileModification } from "../../util/outgoingCommunications";
 
-async function SendProfileModification(
+async function ExecuteSendProfileModification(
   reservations: (ReservationAtHotel | null)[],
   profileUrl: string,
-  fieldOptions: { [rdfName: string]: boolean }
+  fieldOptions: ProfileUpdate
 ): Promise<void> {
   const reservationsWithProfile = reservations
     .filter(NotEmptyItem)
@@ -26,6 +28,38 @@ async function SendProfileModification(
     );
     return;
   }
+
+  const approvedFields = Object.keys(fieldOptions).reduce(function (
+    filtered: ProfileUpdate,
+    key
+  ) {
+    if (fieldOptions[key].status) {
+      filtered[key] = fieldOptions[key];
+    }
+    return filtered;
+  },
+  {});
+
+  if (Object.keys(approvedFields).length === 0) {
+    ShowWarningSnackbar(
+      "There are no approved fields to send. Sending nothing."
+    );
+    return;
+  }
+
+  await Promise.all(
+    reservationsWithProfile.map(async (reservation) => {
+      if (!reservation.inbox) {
+        ShowWarningSnackbar(
+          "Reservation inbox null when trying to send profile modification notification"
+        );
+        return;
+      }
+      await SendProfileModification(approvedFields, reservation.inbox);
+    })
+  );
+
+  console.log("profile modifications sent");
 }
 
 const SendProfileModificationSnackbar = forwardRef<
@@ -33,7 +67,7 @@ const SendProfileModificationSnackbar = forwardRef<
   {
     key: string | number;
     profileUrl: string;
-    fieldOptions: { [rdfName: string]: boolean };
+    fieldOptions: ProfileUpdate;
   }
 >((props, ref) => {
   const { items: reservations, isError } = useReservations(ReservationsUrl);
@@ -50,11 +84,14 @@ const SendProfileModificationSnackbar = forwardRef<
       return;
     }
 
-    SendProfileModification(
-      reservations,
-      props.profileUrl,
-      props.fieldOptions
-    ).then(() => CloseSnackbar(props.key));
+    Promise.all([
+      new Promise((res) => setTimeout(res, 2000)),
+      ExecuteSendProfileModification(
+        reservations,
+        props.profileUrl,
+        props.fieldOptions
+      ),
+    ]).then(() => CloseSnackbar(props.key));
   }, [reservations, isError]);
 
   return (

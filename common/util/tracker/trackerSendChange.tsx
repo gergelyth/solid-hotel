@@ -18,11 +18,15 @@ import { FieldValueChange, FindChangedFields } from "./util";
 import { ValueChangeComponent } from "./valueChangeComponent";
 import { ProfileChangeStrings } from "./profileChangeStrings";
 
+export type ProfileUpdate = {
+  [rdfName: string]: { status: boolean; newValue: string };
+};
+
 function GetChangeElements(
   firstName: Field | undefined,
   lastName: Field | undefined,
   changedFields: FieldValueChange[],
-  fieldOptions: { [rdfName: string]: boolean },
+  fieldOptions: ProfileUpdate,
   changeOptionValue: (rdfName: string, newValue: boolean) => void,
   requiresApproval: boolean,
   profileChangeStrings: ProfileChangeStrings
@@ -31,7 +35,7 @@ function GetChangeElements(
     <ValueChangeComponent
       key={changeField.name}
       fieldValueChange={changeField}
-      optionValue={fieldOptions[changeField.rdfName]}
+      optionValue={fieldOptions[changeField.rdfName]?.status}
       setOptionValue={changeOptionValue}
       requiresApproval={requiresApproval}
       profileChangeStrings={profileChangeStrings}
@@ -61,9 +65,7 @@ const SendChangeSnackbar = forwardRef<
     rdfFields: string[];
     requiresApproval: boolean;
     profileChangeStrings: ProfileChangeStrings;
-    approveButtonFunction: (
-      fieldOptions: { [rdfName: string]: boolean }
-    ) => void;
+    approveButtonFunction: (fieldOptions: ProfileUpdate) => void;
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
@@ -73,13 +75,11 @@ const SendChangeSnackbar = forwardRef<
   );
 
   const [retrievalElements, setRetrievalElements] = useState<JSX.Element[]>([]);
-  const [fieldOptions, setFieldOptions] = useState<{
-    [rdfName: string]: boolean;
-  }>({});
+  const [fieldOptions, setFieldOptions] = useState<ProfileUpdate>({});
   const [isSendButtonDisabled, setSendButtonDisabled] = useState<boolean>();
 
   const changeOptionValue = (rdfName: string, newValue: boolean): void => {
-    fieldOptions[rdfName] = newValue;
+    fieldOptions[rdfName].status = newValue;
     setFieldOptions(fieldOptions);
     setSendButtonDisabled(
       Object.entries(fieldOptions).every((option) => !option[1])
@@ -107,7 +107,9 @@ const SendChangeSnackbar = forwardRef<
         </Grid>,
       ]);
       CloseSnackbar(props.key);
-      ShowErrorSnackbar(`Failed to retrieve guestFields from profile ${props.profileUrl}`);
+      ShowErrorSnackbar(
+        `Failed to retrieve guestFields from profile ${props.profileUrl}`
+      );
       return;
     }
 
@@ -130,9 +132,13 @@ const SendChangeSnackbar = forwardRef<
 
     const changedFields = FindChangedFields(cachedFields, guestFields);
 
-    const fieldOptionsTemp: { [rdfName: string]: boolean } = {};
+    const fieldOptionsTemp: ProfileUpdate = {};
     changedFields.forEach(
-      (changedField) => (fieldOptionsTemp[changedField.rdfName] = true)
+      (changedField) =>
+        (fieldOptionsTemp[changedField.rdfName] = {
+          status: true,
+          newValue: changedField.newValue,
+        })
     );
     setFieldOptions(fieldOptionsTemp);
 
@@ -169,7 +175,9 @@ const SendChangeSnackbar = forwardRef<
               isSendButtonDisabled={isSendButtonDisabled}
               requiresApproval={props.requiresApproval}
               label={props.profileChangeStrings.approveButtonText}
-              approveButtonAction={() => props.approveButtonFunction(fieldOptions)}
+              approveButtonAction={() =>
+                props.approveButtonFunction(fieldOptions)
+              }
               closeSnackbar={() => CloseSnackbar(props.key)}
             />
           </Grid>

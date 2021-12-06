@@ -6,13 +6,11 @@ function SendButton({
   requiresApproval,
   label,
   approveButtonAction,
-  closeSnackbar,
 }: {
   isSendButtonDisabled: boolean;
   requiresApproval: boolean;
   label: string;
   approveButtonAction: () => void;
-  closeSnackbar: () => void;
 }): JSX.Element | null {
   if (!requiresApproval) {
     return null;
@@ -27,7 +25,6 @@ function SendButton({
         startIcon={<CheckCircleIcon />}
         onClick={() => {
           approveButtonAction();
-          closeSnackbar();
         }}
       >
         {label}
@@ -70,7 +67,6 @@ export function SendChangeActionButtons({
         requiresApproval={requiresApproval}
         label={label}
         approveButtonAction={approveButtonAction}
-        closeSnackbar={closeSnackbar}
       />
     </Grid>
   );

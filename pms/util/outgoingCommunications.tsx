@@ -22,6 +22,8 @@ import {
 import { ParseReservation } from "../../common/hooks/useReservations";
 import { GetWebIdFromReservationInbox } from "../../common/util/urlParser";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
+import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
+import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
@@ -116,6 +118,18 @@ export async function SendPrivacyToken(
   const notificationDataset = SerializePrivacyNotification(privacyToken);
 
   await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
+    fetch: session.fetch,
+  });
+}
+
+export async function SendProfileModification(
+  approvedFields: ProfileUpdate,
+  guestInboxUrl: string,
+  session: Session = GetSession()
+): Promise<void> {
+  const profileModification = SerializeProfileModification(approvedFields);
+
+  await saveSolidDatasetInContainer(guestInboxUrl, profileModification, {
     fetch: session.fetch,
   });
 }
