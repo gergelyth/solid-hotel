@@ -1,22 +1,15 @@
-import {
-  Grid,
-  Typography,
-  Box,
-  Card,
-  CircularProgress,
-} from "@material-ui/core";
+import { Grid, Typography, Box, Card } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
 import { forwardRef, useEffect, useState } from "react";
-import { useGuest } from "../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { ProfileCache } from "./profileCache";
 import { Field } from "../../types/Field";
-import { CloseSnackbar, ShowErrorSnackbar } from "../../components/snackbar";
+import { CloseSnackbar } from "../../components/snackbar";
 import { SendChangeActionButtons } from "./actionButtons";
 import { useCustomSnackbarStyles } from "../../components/custom-progress-snackbar";
-import { FieldValueChange, FindChangedFields } from "./util";
+import { FieldValueChange } from "./util";
 import { ValueChangeComponent } from "./valueChangeComponent";
 import { ProfileChangeStrings } from "./profileChangeStrings";
+import DefineChangesElement from "./defineChanges";
 
 export type ProfileUpdate = {
   [rdfName: string]: { status: boolean; newValue: string };
@@ -66,17 +59,19 @@ const SendChangeSnackbar = forwardRef<
     requiresApproval: boolean;
     profileChangeStrings: ProfileChangeStrings;
     approveButtonFunction: (fieldOptions: ProfileUpdate) => void;
+    oldFields?: Field[];
+    newValues?: {
+      [rdfName: string]: string;
+    };
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
-  const { guestFields, isLoading, isError } = useGuest(
-    props.rdfFields,
-    props.profileUrl
-  );
 
   const [retrievalElements, setRetrievalElements] = useState<JSX.Element[]>([]);
   const [fieldOptions, setFieldOptions] = useState<ProfileUpdate>({});
   const [isSendButtonDisabled, setSendButtonDisabled] = useState<boolean>();
+  const [changedFields, setChangedFields] = useState<FieldValueChange[]>();
+  const [oldGuestFields, setOldGuestFields] = useState<Field[]>();
 
   const changeOptionValue = (rdfName: string, newValue: boolean): void => {
     fieldOptions[rdfName].status = newValue;
@@ -87,50 +82,35 @@ const SendChangeSnackbar = forwardRef<
   };
 
   useEffect(() => {
-    if (isLoading) {
+    if (!changedFields) {
       setRetrievalElements([
         <Grid item key="loadingtag">
           <Typography>Loading results</Typography>
         </Grid>,
         <Grid item key="progress">
-          <CircularProgress />
+          <DefineChangesElement
+            key={props.key}
+            profileUrl={props.profileUrl}
+            rdfFields={props.rdfFields}
+            setChangedFields={setChangedFields}
+            setOldGuestFields={setOldGuestFields}
+            oldFields={props.oldFields}
+            newChangeValues={props.newValues}
+          />
         </Grid>,
       ]);
-      return;
-    }
-
-    if (isError || !guestFields) {
-      setRetrievalElements([
-        <Grid item key="error">
-          <Typography>An error occurred.</Typography>
-          <Typography>{isError}</Typography>
-        </Grid>,
-      ]);
-      CloseSnackbar(props.key);
-      ShowErrorSnackbar(
-        `Failed to retrieve guestFields from profile ${props.profileUrl}`
-      );
       return;
     }
 
     console.log("Logic entered");
-    //TODO default value only for debug
-    const cachedFields = ProfileCache[props.profileUrl] ?? [
-      {
-        fieldPrettyName: "Nationality",
-        rdfName: "schema:nationality",
-        fieldValue: "oldNationality",
-        fieldShortName: "nationality",
-      },
-    ];
-    const firstName = cachedFields.find(
+    const firstName = oldGuestFields?.find(
       (x) => x.rdfName == personFieldToRdfMap.firstName
     );
-    const lastName = cachedFields.find(
+    const lastName = oldGuestFields?.find(
       (x) => x.rdfName == personFieldToRdfMap.lastName
     );
 
-    const changedFields = FindChangedFields(cachedFields, guestFields);
+    //TODO if no changedFields, display "No changes" and return (e.g. if the guest's profile was modified, it may not have a been a watched field)
 
     const fieldOptionsTemp: ProfileUpdate = {};
     changedFields.forEach(
@@ -154,7 +134,7 @@ const SendChangeSnackbar = forwardRef<
       )
     );
     setSendButtonDisabled(false);
-  }, [guestFields, isLoading, isError]);
+  }, [changedFields]);
 
   return (
     <SnackbarContent ref={ref} className={classes.root} key={props.key}>

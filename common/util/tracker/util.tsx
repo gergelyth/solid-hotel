@@ -8,29 +8,32 @@ export type FieldValueChange = {
 };
 
 export function FindChangedFields(
-  cachedFields: Field[],
-  newFields: Field[]
+  oldFields: Field[],
+  newValues: {
+    [rdfName: string]: string;
+  }
 ): FieldValueChange[] {
-  const changedFields: FieldValueChange[] = [];
+  const changedFields = Object.keys(newValues).reduce(
+    (changedFields: FieldValueChange[], newValueRdf) => {
+      const oldField = oldFields.find((x) => x.rdfName === newValueRdf);
+      if (!oldField) {
+        return changedFields;
+      }
 
-  newFields.forEach((newField) => {
-    const cachedField = cachedFields.find(
-      (x) => x.rdfName === newField.rdfName
-    );
-    if (!cachedField) {
-      return;
-    }
+      if (oldField.fieldValue !== newValues[newValueRdf]) {
+        changedFields.push({
+          name: oldField.fieldPrettyName,
+          rdfName: oldField.rdfName,
+          //TODO change default value
+          oldValue: oldField.fieldValue ?? "",
+          newValue: newValues[newValueRdf] ?? "",
+        });
+      }
 
-    if (cachedField.fieldValue !== newField.fieldValue) {
-      changedFields.push({
-        name: cachedField.fieldPrettyName,
-        rdfName: cachedField.rdfName,
-        //TODO change default value
-        oldValue: cachedField.fieldValue ?? "",
-        newValue: newField.fieldValue ?? "",
-      });
-    }
-  });
+      return changedFields;
+    },
+    []
+  );
 
   return changedFields;
 }

@@ -173,7 +173,7 @@ export async function SetReservationOwnerAndState(
   });
 }
 
-export async function GetWebIdFromReservation(
+export async function GetOwnerFromReservation(
   reservationId: string,
   session = GetSession()
 ): Promise<string | null> {

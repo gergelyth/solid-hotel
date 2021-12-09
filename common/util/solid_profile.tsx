@@ -82,6 +82,32 @@ export async function SetField(
   return SetFieldInSolidProfile(solidProfile, field, value);
 }
 
+export async function SetMultipleFieldsInProfile(
+  profileUrl: string,
+  newFields: {
+    [rdfName: string]: string;
+  }
+): Promise<void> {
+  const session = getDefaultSession();
+  const solidProfile = await GetProfileOf(profileUrl, session);
+
+  if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
+    throw new NotFoundError("Profile not found.");
+  }
+
+  let updatedProfile = solidProfile.profile;
+  Object.keys(newFields).forEach((rdfName: string) => {
+    updatedProfile = setStringNoLocale(
+      updatedProfile,
+      rdfName,
+      newFields[rdfName]
+    );
+  });
+
+  const updatedDataSet = setThing(solidProfile.dataSet, updatedProfile);
+  await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
+}
+
 export async function SetFieldInSolidProfile(
   solidProfile: SolidProfile | null,
   field: string,

@@ -4,6 +4,7 @@ import { DeserializeReservationStateChange } from "../../common/notifications/Re
 import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { DeserializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
 import { ReservationState } from "../../common/types/ReservationState";
 import { DoOnStateChange } from "./actionOnNewReservationState";
 import {
@@ -13,20 +14,28 @@ import {
 } from "./outgoingCommunications";
 import {
   GetCoreReservationFolderFromInboxUrl,
+  GetReservationIdFromInboxUrl,
   GetReservationUrlFromInboxUrl,
 } from "../../common/util/urlParser";
 import { GetPairingToken } from "../../common/util/pairingTokenHandler";
 import {
+  ShowCustomSnackbar,
   ShowErrorSnackbar,
   ShowSuccessSnackbar,
 } from "../../common/components/snackbar";
-import { AddReservation } from "../../common/util/solid_reservations";
+import {
+  AddReservation,
+  GetOwnerFromReservation,
+} from "../../common/util/solid_reservations";
 import { ConvertToPrivacyToken } from "../../common/hooks/usePrivacyTokens";
 import { GetSession } from "../../common/util/solid";
 import {
   AnonymizeFieldsAndDeleteToken,
   CreateReservationPrivacyToken,
 } from "./privacyHelper";
+import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
+import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import UpdateLocalProfileSnackbar from "../components/profile/update-local-profile";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -103,8 +112,36 @@ export function ReceiveProfileModification(
   onReceive: () => void;
 } {
   const text = `A guest changed a field in their Solid Pod and is trying to propagate the change to the hotel's side.\nClick here to review.`;
-  const onClick = (): void => {
-    SetGlobalDialog(<ApproveChangeDialog dataset={dataset} />);
+  const onClick = async (): Promise<void> => {
+    const reservationId = GetReservationIdFromInboxUrl(hotelInboxUrl);
+    const reservationOwner = await GetOwnerFromReservation(reservationId);
+    if (!reservationOwner) {
+      throw new Error(
+        `Reservation ${reservationId} doesn't have an owner in ReceiveProfileModification`
+      );
+    }
+
+    const fieldChanges = DeserializeProfileModification(dataset);
+
+    ShowCustomSnackbar((key) => (
+      <SendChangeSnackbar
+        key={key}
+        profileUrl={reservationOwner}
+        rdfFields={Object.keys(fieldChanges)}
+        requiresApproval={true}
+        profileChangeStrings={IncomingProfileChangeStrings()}
+        approveButtonFunction={(fieldOptions) =>
+          ShowCustomSnackbar((key) => (
+            <UpdateLocalProfileSnackbar
+              key={key}
+              profileUrl={reservationOwner}
+              fieldOptions={fieldOptions}
+            />
+          ))
+        }
+        newValues={fieldChanges}
+      />
+    ));
   };
   const onReceive = (): void => undefined;
 

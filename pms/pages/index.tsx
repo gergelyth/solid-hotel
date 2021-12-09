@@ -18,6 +18,7 @@ import {
   OutgoingProfileChangeStrings,
 } from "../../common/util/tracker/profileChangeStrings";
 import SendProfileModificationSnackbar from "../components/profile/send-profile-modification";
+import { ProfileCache } from "../../common/util/tracker/profileCache";
 
 export default function Home(): JSX.Element | null {
   let reservationId: string;
@@ -159,6 +160,11 @@ export default function Home(): JSX.Element | null {
                     }
                   />
                 ))
+              }
+              oldFields={
+                ProfileCache[
+                  "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
+                ]
               }
             />
           ));

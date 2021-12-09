@@ -1,6 +1,6 @@
 import { ReservationState } from "../../common/types/ReservationState";
 import {
-  GetWebIdFromReservation,
+  GetOwnerFromReservation,
   SetReservationStateAndInbox,
 } from "../../common/util/solid_reservations";
 import {
@@ -66,7 +66,7 @@ async function OnCheckIn(
   reservationId: string,
   replyInbox: string
 ): Promise<void> {
-  const guestWebId = await GetWebIdFromReservation(reservationId);
+  const guestWebId = await GetOwnerFromReservation(reservationId);
   if (!guestWebId) {
     //TODO solve for offline checkin
     throw new Error(`Guest webID null in reservation ${reservationId}`);
@@ -86,7 +86,7 @@ async function OnCheckOut(
   reservationId: string,
   replyInbox: string
 ): Promise<void> {
-  const reservationOwner = await GetWebIdFromReservation(reservationId);
+  const reservationOwner = await GetOwnerFromReservation(reservationId);
   if (!reservationOwner) {
     //TODO solve for offline checkin
     throw new Error(
