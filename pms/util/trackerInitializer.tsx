@@ -3,7 +3,6 @@ import {
   ShowCustomSnackbar,
 } from "../../common/components/snackbar";
 import { Subscribe } from "../../common/util/tracker/tracker";
-import TrackerSetupSnackbar from "../../common/util/tracker/trackerSetupSnackbar";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { GetProfileOf } from "../../common/util/solid_profile";
 import {
@@ -14,7 +13,10 @@ import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileC
 import { GetDataSet } from "../../common/util/solid";
 import { HotelProfilesUrl } from "../../common/consts/solidIdentifiers";
 import SendProfileModificationSnackbar from "../components/profile/send-profile-modification";
-import { ProfileCache } from "../../common/util/tracker/profileCache";
+import {
+  CacheProfile,
+  ProfileCache,
+} from "../../common/util/tracker/profileCache";
 import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
 
 async function SubscribeToProfileChanges(
@@ -26,6 +28,7 @@ async function SubscribeToProfileChanges(
       undefined;
     },
     onReceive: (url) => {
+      //TODO update cache with new values!
       ShowCustomSnackbar((key) => (
         <SendChangeSnackbar
           key={key}
@@ -42,7 +45,7 @@ async function SubscribeToProfileChanges(
               />
             ))
           }
-          oldFields={ProfileCache[url]}
+          oldFields={() => ProfileCache[url]}
         />
       ));
     },
@@ -53,38 +56,30 @@ export async function CacheHotelProfiles(): Promise<void> {
   const hotelProfileContainer = await GetDataSet(HotelProfilesUrl);
   const hotelProfileUrls = getContainedResourceUrlAll(hotelProfileContainer);
 
-  const snackbarKey = "cachingSnackbar";
-  ShowCustomSnackbar(() => (
-    <CustomProgressSnackbar
-      key={snackbarKey}
-      message={`Caching ${hotelProfileUrls.length} profiles`}
-    />
-  ));
+  let snackbarKey: string | number;
+  ShowCustomSnackbar((key) => {
+    snackbarKey = key;
+    return (
+      <CustomProgressSnackbar
+        key={key}
+        message={`Caching ${hotelProfileUrls.length} profiles`}
+      />
+    );
+  });
 
-  const promises = [];
-  for (let hotelProfileUrl of hotelProfileUrls) {
+  const promises = hotelProfileUrls.map(async (hotelProfileUrl) => {
     hotelProfileUrl += "#hotelProfile";
     const profile = await GetProfileOf(hotelProfileUrl);
     if (!profile?.profile) {
       console.log(`Profile fetch of ${hotelProfileUrl} failed`);
-      continue;
+      return;
     }
+
     const rdfFields = getPropertyAll(profile?.profile);
+    await CacheProfile(hotelProfileUrl, rdfFields);
 
-    ShowCustomSnackbar(
-      (key) => (
-        <TrackerSetupSnackbar
-          key={key}
-          profileUrl={hotelProfileUrl}
-          rdfFields={rdfFields}
-        />
-      ),
-      true
-    );
-
-    promises.push(SubscribeToProfileChanges(hotelProfileUrl, rdfFields));
-    console.log("subscribed in index");
-  }
+    return SubscribeToProfileChanges(hotelProfileUrl, rdfFields);
+  });
 
   Promise.all(promises).then(() => CloseSnackbar(snackbarKey));
 }

@@ -59,7 +59,7 @@ const SendChangeSnackbar = forwardRef<
     requiresApproval: boolean;
     profileChangeStrings: ProfileChangeStrings;
     approveButtonFunction: (fieldOptions: ProfileUpdate) => void;
-    oldFields?: Field[];
+    oldFields?: () => Field[];
     newValues?: {
       [rdfName: string]: string;
     };
@@ -89,12 +89,11 @@ const SendChangeSnackbar = forwardRef<
         </Grid>,
         <Grid item key="progress">
           <DefineChangesElement
-            key={props.key}
             profileUrl={props.profileUrl}
             rdfFields={props.rdfFields}
             setChangedFields={setChangedFields}
             setOldGuestFields={setOldGuestFields}
-            oldFields={props.oldFields}
+            oldFields={props.oldFields ? props.oldFields() : undefined}
             newChangeValues={props.newValues}
           />
         </Grid>,

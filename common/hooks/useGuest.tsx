@@ -16,7 +16,7 @@ function CreateSwrKey(
   return result;
 }
 
-function GetFieldValues(
+export function GetGuestFieldValues(
   solidProfile: SolidProfile | null,
   rdfNames: string[] | undefined
 ): Field[] | undefined {
@@ -54,7 +54,7 @@ export function useGuest(
   const fetcher = (): Promise<Field[] | undefined> => {
     const profile = webId ? GetProfileOf(webId) : GetProfile();
     return profile.then((solidProfile) =>
-      GetFieldValues(solidProfile, rdfNames)
+      GetGuestFieldValues(solidProfile, rdfNames)
     );
   };
 

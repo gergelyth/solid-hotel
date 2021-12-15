@@ -1,12 +1,59 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { RevalidateGuest, useGuest } from "../../hooks/useGuest";
+import { GetGuestFieldValues } from "../../hooks/useGuest";
 import { Field } from "../../types/Field";
 import { FieldValueChange, FindChangedFields } from "./util";
-import { CloseSnackbar } from "../../components/snackbar";
 import { CircularProgress } from "@material-ui/core";
+import { GetProfileOf } from "../solid_profile";
+
+async function CalculateChanges(
+  profileUrl: string,
+  rdfFields: string[],
+  setChangedFields: Dispatch<SetStateAction<FieldValueChange[] | undefined>>,
+  setOldGuestFields: Dispatch<SetStateAction<Field[] | undefined>>,
+  oldFields?: Field[],
+  newChangeValues?: {
+    [rdfName: string]: string;
+  }
+): Promise<void> {
+  const profile = await GetProfileOf(profileUrl);
+  const guestFields = GetGuestFieldValues(profile, rdfFields);
+
+  if (!guestFields) {
+    console.log(`Guest retrieval failed of ${profileUrl}`);
+    return;
+  }
+
+  console.log(oldFields);
+  console.log(newChangeValues);
+
+  //TODO default value only for debug
+  const previousFields = oldFields ?? guestFields;
+  const newValues =
+    newChangeValues ??
+    guestFields.reduce(
+      (
+        newChanges: {
+          [rdfName: string]: string;
+        },
+        guestField
+      ) => {
+        //TODO default value
+        newChanges[guestField.rdfName] = guestField.fieldValue ?? "";
+        return newChanges;
+      },
+      {}
+    );
+
+  console.log("define changes");
+  console.log(previousFields);
+  console.log(newValues);
+
+  const changedFields = FindChangedFields(previousFields, newValues);
+  setChangedFields(changedFields);
+  setOldGuestFields(guestFields);
+}
 
 function DefineChangesElement({
-  key,
   profileUrl,
   rdfFields,
   setChangedFields,
@@ -14,7 +61,6 @@ function DefineChangesElement({
   oldFields,
   newChangeValues,
 }: {
-  key: string | number;
   profileUrl: string;
   rdfFields: string[];
   setChangedFields: Dispatch<SetStateAction<FieldValueChange[] | undefined>>;
@@ -25,40 +71,16 @@ function DefineChangesElement({
     [rdfName: string]: string;
   };
 }): JSX.Element {
-  RevalidateGuest(rdfFields, profileUrl);
-  const { guestFields, isError } = useGuest(rdfFields, profileUrl);
-
   useEffect(() => {
-    if (isError) {
-      CloseSnackbar(key);
-      throw new Error(`Failed to retrieve profile ${profileUrl}`);
-    }
-    if (!guestFields) {
-      return;
-    }
-
-    //TODO default value only for debug
-    const previousFields = oldFields ?? guestFields;
-    const newValues =
-      newChangeValues ??
-      guestFields.reduce(
-        (
-          newChanges: {
-            [rdfName: string]: string;
-          },
-          guestField
-        ) => {
-          //TODO default value
-          newChanges[guestField.rdfName] = guestField.fieldValue ?? "";
-          return newChanges;
-        },
-        {}
-      );
-
-    const changedFields = FindChangedFields(previousFields, newValues);
-    setChangedFields(changedFields);
-    setOldGuestFields(guestFields);
-  }, [guestFields, isError]);
+    CalculateChanges(
+      profileUrl,
+      rdfFields,
+      setChangedFields,
+      setOldGuestFields,
+      oldFields,
+      newChangeValues
+    );
+  });
 
   return <CircularProgress />;
 }
