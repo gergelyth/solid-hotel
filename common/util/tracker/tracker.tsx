@@ -1,4 +1,3 @@
-import { changeLogAsMarkdown, getSolidDataset } from "@inrupt/solid-client";
 import { Subscriber, WebSocketResource } from "../../types/WebSocketResource";
 import { GetSession } from "../solid";
 
@@ -30,12 +29,11 @@ async function trackResource(
   subscriber: Subscriber
 ): Promise<void> {
   // Obtain a WebSocket for the given host
-  const { host } = new URL(url);
-  if (!(host in webSockets)) {
-    webSockets[host] = await createWebSocket(url);
+  if (!(url in webSockets)) {
+    webSockets[url] = await createWebSocket(url);
   }
 
-  const webSocketResource = webSockets[host];
+  const webSocketResource = webSockets[url];
   webSocketResource.subscribers.add(subscriber);
 
   // Track subscribed resources to resubscribe later if needed

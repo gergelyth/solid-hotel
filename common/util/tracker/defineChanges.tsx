@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useGuest } from "../../hooks/useGuest";
+import { RevalidateGuest, useGuest } from "../../hooks/useGuest";
 import { Field } from "../../types/Field";
 import { FieldValueChange, FindChangedFields } from "./util";
 import { CloseSnackbar } from "../../components/snackbar";
@@ -25,6 +25,7 @@ function DefineChangesElement({
     [rdfName: string]: string;
   };
 }): JSX.Element {
+  RevalidateGuest(rdfFields, profileUrl);
   const { guestFields, isError } = useGuest(rdfFields, profileUrl);
 
   useEffect(() => {

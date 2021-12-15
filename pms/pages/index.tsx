@@ -8,17 +8,6 @@ import { Button, Grid } from "@material-ui/core";
 import { AddReservation } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetReservationIdFromInboxUrl } from "../../common/util/urlParser";
-import { Subscribe } from "../../common/util/tracker/tracker";
-import TrackerSetupSnackbar from "../../common/util/tracker/trackersetup";
-import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
-import { GetProfileOf } from "../../common/util/solid_profile";
-import { getPropertyAll } from "@inrupt/solid-client";
-import {
-  IncomingProfileChangeStrings,
-  OutgoingProfileChangeStrings,
-} from "../../common/util/tracker/profileChangeStrings";
-import SendProfileModificationSnackbar from "../components/profile/send-profile-modification";
-import { ProfileCache } from "../../common/util/tracker/profileCache";
 
 export default function Home(): JSX.Element | null {
   let reservationId: string;
@@ -86,91 +75,6 @@ export default function Home(): JSX.Element | null {
         }}
       >
         Checkout
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={async () => {
-          const profile = await GetProfileOf(
-            "https://solidhotel.inrupt.net/hotelprofiles/fbca7620-4a33-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
-          );
-          if (!profile?.profile) {
-            return;
-          }
-          const rdfFields = getPropertyAll(profile?.profile);
-          ShowCustomSnackbar((key) => (
-            <TrackerSetupSnackbar
-              key={key}
-              profileUrl={
-                "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
-              }
-              rdfFields={rdfFields}
-            />
-          ));
-          await Subscribe(
-            "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile",
-            {
-              onClick: () => {
-                undefined;
-              },
-              onReceive: (url) => {
-                console.log(url);
-                ShowCustomSnackbar((key) => (
-                  <SendChangeSnackbar
-                    key={key}
-                    profileUrl={url}
-                    rdfFields={rdfFields}
-                    requiresApproval={true}
-                    profileChangeStrings={OutgoingProfileChangeStrings(true)}
-                  />
-                ));
-              },
-            }
-          );
-          console.log("subscribed in index");
-        }}
-      >
-        Subscribe
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={async () => {
-          const url =
-            "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile";
-          const profile = await GetProfileOf(url);
-          if (!profile?.profile) {
-            return;
-          }
-          const rdfFields = getPropertyAll(profile?.profile);
-          ShowCustomSnackbar((key) => (
-            <SendChangeSnackbar
-              key={key}
-              profileUrl={url}
-              rdfFields={rdfFields}
-              requiresApproval={true}
-              profileChangeStrings={OutgoingProfileChangeStrings(true)}
-              approveButtonFunction={(fieldOptions) =>
-                ShowCustomSnackbar((key) => (
-                  <SendProfileModificationSnackbar
-                    key={key}
-                    fieldOptions={fieldOptions}
-                    profileUrl={
-                      "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
-                    }
-                  />
-                ))
-              }
-              oldFields={
-                ProfileCache[
-                  "https://solidhotel.inrupt.net/hotelprofiles/134b4ea0-4a34-11ec-a883-c7d01e95c64a.ttl#hotelProfile"
-                ]
-              }
-            />
-          ));
-        }}
-      >
-        Show Snackbar
       </Button>
     </Grid>
   );

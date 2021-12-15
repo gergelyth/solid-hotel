@@ -1,7 +1,7 @@
-import CustomProgressSnackbar from "../../../common/components/custom-progress-snackbar";
+import CustomProgressSnackbar from "../../components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import { CloseSnackbar } from "../../../common/components/snackbar";
-import { useGuest } from "../../../common/hooks/useGuest";
+import { CloseSnackbar } from "../../components/snackbar";
+import { useGuest } from "../../hooks/useGuest";
 import { ProfileCache } from "./profileCache";
 
 const TrackerSetupSnackbar = forwardRef<

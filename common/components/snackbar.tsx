@@ -10,7 +10,8 @@ export function CloseSnackbar(key: string | number): void {
 }
 
 export function ShowCustomSnackbar(
-  createSnackbarElement: (key: string | number) => JSX.Element
+  createSnackbarElement: (key: string | number) => JSX.Element,
+  hidden = false
 ): void {
   snackbarContext.enqueueSnackbar("asdf", {
     anchorOrigin: {
@@ -21,6 +22,7 @@ export function ShowCustomSnackbar(
       return createSnackbarElement(key);
     },
     persist: true,
+    hidden: hidden,
   });
 }
 
