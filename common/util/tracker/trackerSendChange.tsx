@@ -1,4 +1,10 @@
-import { Grid, Typography, Box, Card } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Box,
+  Card,
+  CircularProgress,
+} from "@material-ui/core";
 import { SnackbarContent } from "notistack";
 import { forwardRef, useEffect, useState } from "react";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
@@ -9,7 +15,7 @@ import { useCustomSnackbarStyles } from "../../components/custom-progress-snackb
 import { FieldValueChange } from "./util";
 import { ValueChangeComponent } from "./valueChangeComponent";
 import { ProfileChangeStrings } from "./profileChangeStrings";
-import DefineChangesElement from "./defineChanges";
+import { CalculateChanges } from "./defineChanges";
 
 export type ProfileUpdate = {
   [rdfName: string]: { status: boolean; newValue: string };
@@ -83,19 +89,21 @@ const SendChangeSnackbar = forwardRef<
 
   useEffect(() => {
     if (!changedFields) {
+      CalculateChanges(
+        props.profileUrl,
+        props.rdfFields,
+        setChangedFields,
+        setOldGuestFields,
+        props.oldFields ? props.oldFields() : undefined,
+        props.newValues
+      );
+
       setRetrievalElements([
         <Grid item key="loadingtag">
           <Typography>Loading results</Typography>
         </Grid>,
         <Grid item key="progress">
-          <DefineChangesElement
-            profileUrl={props.profileUrl}
-            rdfFields={props.rdfFields}
-            setChangedFields={setChangedFields}
-            setOldGuestFields={setOldGuestFields}
-            oldFields={props.oldFields ? props.oldFields() : undefined}
-            newChangeValues={props.newValues}
-          />
+          <CircularProgress />
         </Grid>,
       ]);
       return;

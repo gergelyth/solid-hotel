@@ -1,11 +1,10 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { GetGuestFieldValues } from "../../hooks/useGuest";
 import { Field } from "../../types/Field";
 import { FieldValueChange, FindChangedFields } from "./util";
-import { CircularProgress } from "@material-ui/core";
 import { GetProfileOf } from "../solid_profile";
 
-async function CalculateChanges(
+export async function CalculateChanges(
   profileUrl: string,
   rdfFields: string[],
   setChangedFields: Dispatch<SetStateAction<FieldValueChange[] | undefined>>,
@@ -48,41 +47,9 @@ async function CalculateChanges(
   console.log(previousFields);
   console.log(newValues);
 
+  //important that this is before the setChangedFields() because of rendering order
+  setOldGuestFields(guestFields);
+
   const changedFields = FindChangedFields(previousFields, newValues);
   setChangedFields(changedFields);
-  setOldGuestFields(guestFields);
 }
-
-function DefineChangesElement({
-  profileUrl,
-  rdfFields,
-  setChangedFields,
-  setOldGuestFields,
-  oldFields,
-  newChangeValues,
-}: {
-  profileUrl: string;
-  rdfFields: string[];
-  setChangedFields: Dispatch<SetStateAction<FieldValueChange[] | undefined>>;
-  setOldGuestFields: Dispatch<SetStateAction<Field[] | undefined>>;
-  //ProfileCache[props.profileUrl]
-  oldFields?: Field[];
-  newChangeValues?: {
-    [rdfName: string]: string;
-  };
-}): JSX.Element {
-  useEffect(() => {
-    CalculateChanges(
-      profileUrl,
-      rdfFields,
-      setChangedFields,
-      setOldGuestFields,
-      oldFields,
-      newChangeValues
-    );
-  });
-
-  return <CircularProgress />;
-}
-
-export default DefineChangesElement;

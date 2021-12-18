@@ -6,6 +6,7 @@ import {
 } from "../../../common/components/snackbar";
 import { ProfileUpdate } from "../../../common/util/tracker/trackerSendChange";
 import { SetMultipleFieldsInProfile } from "../../../common/util/solid_profile";
+import { UpdateProfileInMemory } from "../../../common/util/tracker/profileCache";
 
 async function ExecuteUpdateLocalProfile(
   profileUrl: string,
@@ -31,6 +32,7 @@ async function ExecuteUpdateLocalProfile(
   }
 
   await SetMultipleFieldsInProfile(profileUrl, approvedFields);
+  UpdateProfileInMemory(profileUrl, fieldOptions);
 
   console.log("local profile updated");
 }

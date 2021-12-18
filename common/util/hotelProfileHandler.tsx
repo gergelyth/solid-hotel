@@ -12,6 +12,7 @@ import { Field } from "../types/Field";
 import { GetDataSet, GetSession } from "./solid";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
+import { CacheProfileFields } from "./tracker/profileCache";
 
 const HotelProfileThingName = "hotelProfile";
 
@@ -47,7 +48,10 @@ export async function CreateHotelProfile(
     }
   );
 
-  return getSourceUrl(savedDataset) + `#${HotelProfileThingName}`;
+  const profileUrl = getSourceUrl(savedDataset) + `#${HotelProfileThingName}`;
+  await CacheProfileFields(profileUrl, fields);
+
+  return profileUrl;
 }
 
 export async function CreateDataProtectionProfile(

@@ -12,6 +12,7 @@ import { Field } from "../../../common/types/Field";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 import { deleteSolidDataset } from "@inrupt/solid-client";
 import { GetSession } from "../../../common/util/solid";
+import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
 
 async function ExecuteCheckOut(
   guestFields: Field[],
@@ -36,6 +37,7 @@ async function ExecuteCheckOut(
   await deleteSolidDataset(reservationOwner.split("#")[0], {
     fetch: session.fetch,
   });
+  DeleteFromCache(reservationOwner);
 
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,

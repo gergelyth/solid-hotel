@@ -28,7 +28,6 @@ async function SubscribeToProfileChanges(
       undefined;
     },
     onReceive: (url) => {
-      //TODO update cache with new values!
       ShowCustomSnackbar((key) => (
         <SendChangeSnackbar
           key={key}
@@ -36,15 +35,17 @@ async function SubscribeToProfileChanges(
           rdfFields={checkedRdfFields}
           requiresApproval={false}
           profileChangeStrings={OutgoingProfileChangeStrings(false)}
-          approveButtonFunction={(fieldOptions) =>
+          approveButtonFunction={(fieldOptions) => {
             ShowCustomSnackbar((key) => (
               <SendProfileModificationSnackbar
                 key={key}
                 fieldOptions={fieldOptions}
                 profileUrl={url}
               />
-            ))
-          }
+            ));
+            //update the in-memory cache
+            CacheProfile(url, checkedRdfFields);
+          }}
           oldFields={() => ProfileCache[url]}
         />
       ));
@@ -75,7 +76,7 @@ export async function CacheHotelProfiles(): Promise<void> {
       return;
     }
 
-    const rdfFields = getPropertyAll(profile?.profile);
+    const rdfFields = getPropertyAll(profile.profile);
     await CacheProfile(hotelProfileUrl, rdfFields);
 
     return SubscribeToProfileChanges(hotelProfileUrl, rdfFields);
