@@ -11,8 +11,11 @@ import {
 } from "@inrupt/solid-client";
 import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import { GetDataSet } from "../../common/util/solid";
-import { HotelProfilesUrl } from "../../common/consts/solidIdentifiers";
-import SendProfileModificationSnackbar from "../components/profile/send-profile-modification";
+import {
+  HotelProfilesUrl,
+  ReservationsUrl,
+} from "../../common/consts/solidIdentifiers";
+import SendProfileModificationSnackbar from "../../common/util/tracker/send-profile-modification";
 import {
   CacheProfile,
   ProfileCache,
@@ -40,7 +43,10 @@ async function SubscribeToProfileChanges(
               <SendProfileModificationSnackbar
                 key={key}
                 fieldOptions={fieldOptions}
-                profileUrl={url}
+                reservationsUrl={ReservationsUrl}
+                reservationFilter={(reservation) =>
+                  reservation !== null && reservation.owner === profileUrl
+                }
               />
             ));
             //update the in-memory cache

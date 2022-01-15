@@ -1,31 +1,23 @@
-import CustomProgressSnackbar from "../../../common/components/custom-progress-snackbar";
+import CustomProgressSnackbar from "../../components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import { ReservationsUrl } from "../../../common/consts/solidIdentifiers";
-import {
-  CloseSnackbar,
-  ShowWarningSnackbar,
-} from "../../../common/components/snackbar";
-import { useReservations } from "../../../common/hooks/useReservations";
-import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import { NotEmptyItem } from "../../../common/util/helpers";
-import { ProfileUpdate } from "../../../common/util/tracker/trackerSendChange";
-import { SendProfileModification } from "../../util/outgoingCommunications";
+import { CloseSnackbar, ShowWarningSnackbar } from "../../components/snackbar";
+import { useReservations } from "../../hooks/useReservations";
+import { ReservationAtHotel } from "../../types/ReservationAtHotel";
+import { NotEmptyItem } from "../helpers";
+import { ProfileUpdate } from "./trackerSendChange";
+import { SendProfileModification } from "../../../pms/util/outgoingCommunications";
 
 async function ExecuteSendProfileModification(
   reservations: (ReservationAtHotel | null)[],
-  profileUrl: string,
-  fieldOptions: ProfileUpdate
+  fieldOptions: ProfileUpdate,
+  reservationFilter: (reservation: ReservationAtHotel) => boolean
 ): Promise<void> {
   const reservationsWithProfile = reservations
     .filter(NotEmptyItem)
-    .filter(
-      (reservation) => reservation !== null && reservation.owner === profileUrl
-    );
+    .filter(reservationFilter);
 
   if (reservationsWithProfile.length === 0) {
-    ShowWarningSnackbar(
-      `No reservations found whose owner is the profile ${profileUrl}`
-    );
+    ShowWarningSnackbar("No reservations found matching filter");
     return;
   }
 
@@ -66,11 +58,14 @@ const SendProfileModificationSnackbar = forwardRef<
   HTMLDivElement,
   {
     key: string | number;
-    profileUrl: string;
     fieldOptions: ProfileUpdate;
+    reservationsUrl: string;
+    reservationFilter: (reservation: ReservationAtHotel) => boolean;
   }
 >((props, ref) => {
-  const { items: reservations, isError } = useReservations(ReservationsUrl);
+  const { items: reservations, isError } = useReservations(
+    props.reservationsUrl
+  );
 
   useEffect(() => {
     if (isError) {
@@ -88,8 +83,8 @@ const SendProfileModificationSnackbar = forwardRef<
       new Promise((res) => setTimeout(res, 2000)),
       ExecuteSendProfileModification(
         reservations,
-        props.profileUrl,
-        props.fieldOptions
+        props.fieldOptions,
+        props.reservationFilter
       ),
     ]).then(() => CloseSnackbar(props.key));
   }, [reservations, isError]);

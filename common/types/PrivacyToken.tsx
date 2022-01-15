@@ -1,3 +1,5 @@
+import { ReservationState } from "./ReservationState";
+
 export type PrivacyToken = {
   url: string | null;
   //TODO maybe NamedNode
@@ -11,5 +13,6 @@ export type PrivacyToken = {
   //TODO these probably not strings?
   fieldList: string[];
   reason: string;
+  forReservationState: ReservationState;
   expiry: Date;
 };

@@ -12,14 +12,22 @@ import Footer from "../../common/components/footer";
 import styles from "../../common/styles/styles";
 import { SnackbarProvider } from "notistack";
 import GlobalSnackbar from "../../common/components/snackbar";
+import { GetSession } from "../../common/util/solid";
+import { ProfileCache } from "../../common/util/tracker/profileCache";
+import { CacheUserProfile } from "../util/trackerInitializer";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+  const session = GetSession();
+
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement?.removeChild(jssStyles);
     }
-  }, []);
+    if (session.info.isLoggedIn && Object.keys(ProfileCache).length === 0) {
+      CacheUserProfile();
+    }
+  }, [session.info.isLoggedIn]);
 
   const additionalStyles = styles();
 

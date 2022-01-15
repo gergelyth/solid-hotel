@@ -14,6 +14,7 @@ import {
 } from "../../common/consts/solidIdentifiers";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
+import { ReservationState } from "../../common/types/ReservationState";
 import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetSession } from "../../common/util/solid";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
@@ -83,6 +84,7 @@ export async function CreateReservationPrivacyToken(
     guest: reservation.owner,
     fieldList: [reservationFieldToRdfMap.inbox, reservationFieldToRdfMap.owner],
     reason: "Basic information for a confirmed reservation",
+    forReservationState: ReservationState.CONFIRMED,
     expiry: reservation.dateTo,
   };
 
@@ -108,7 +110,8 @@ export async function CreateActiveProfilePrivacyToken(
     guestWebId,
     fields,
     expiryDate,
-    "Local profile copy made for an active reservation."
+    "Local profile copy made for an active reservation.",
+    ReservationState.ACTIVE
   );
 }
 
@@ -123,7 +126,8 @@ export async function CreateDataProtectionProfilePrivacyToken(
     guestWebId,
     fields,
     expiryDate,
-    "Local profile copy made for preserving data protection information."
+    "Local profile copy made for preserving data protection information.",
+    ReservationState.PAST
   );
 }
 
@@ -132,7 +136,8 @@ async function CreateProfilePrivacyToken(
   guestWebId: string,
   fields: string[],
   expiryDate: Date,
-  reason: string
+  reason: string,
+  forReservationState: ReservationState
 ): Promise<PrivacyToken> {
   const session = GetSession();
 
@@ -149,6 +154,7 @@ async function CreateProfilePrivacyToken(
     guest: guestWebId,
     fieldList: fields,
     reason: reason,
+    forReservationState: forReservationState,
     expiry: expiryDate,
   };
 

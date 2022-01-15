@@ -5,6 +5,7 @@ export const privacyTokenToRdfMap: Record<string, string> = {
   guest: "schema:guest",
   fieldList: "schema:fields",
   reason: "schema:reason",
+  forReservationState: "schema:forReservationState",
   expiry: "schema:expiry",
   url: "schema:hotelAddressUrl",
 };

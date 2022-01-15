@@ -110,6 +110,11 @@ export function CreatePrivacyTokenDataset(
     privacyTokenToRdfMap.reason,
     privacyToken.reason
   );
+  newPrivacyToken = addInteger(
+    newPrivacyToken,
+    privacyTokenToRdfMap.forReservationState,
+    privacyToken.forReservationState.valueOf()
+  );
   newPrivacyToken = addDatetime(
     newPrivacyToken,
     privacyTokenToRdfMap.expiry,
