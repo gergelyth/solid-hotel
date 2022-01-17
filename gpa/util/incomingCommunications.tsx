@@ -8,13 +8,20 @@ import { DeserializeReservationStateChange } from "../../common/notifications/Re
 import { DeserializeFailureReport } from "../../common/notifications/FailureReport";
 import { DeserializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
 import { DeserializePrivacyNotification } from "../../common/notifications/PrivacyNotification";
-import { ShowErrorSnackbar } from "../../common/components/snackbar";
+import {
+  ShowCustomSnackbar,
+  ShowErrorSnackbar,
+} from "../../common/components/snackbar";
 import {
   AddReservation,
   SetReservationStateAndInbox,
 } from "../../common/util/solid_reservations";
 import { SaveProfileThingToPod } from "../../common/util/solid_profile";
 import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
+import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
+import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
+import UpdateLocalProfileSnackbar from "../../common/components/profile/update-local-profile";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -131,6 +138,49 @@ export function ReceivePrivacyToken(
       fetch: session.fetch,
     });
   };
+
+  return { text, onClick, onReceive };
+}
+
+export function ReceiveProfileModification(
+  router: NextRouter,
+  reservationInboxUrl: string,
+  dataset: SolidDataset
+): {
+  text: string;
+  onClick: (event: React.MouseEvent<EventTarget>) => void;
+  onReceive: () => void;
+} {
+  const text = `A hotel changed a field in their local copy of your profile.\nClick here to review.`;
+  const onClick = async (): Promise<void> => {
+    const webId = GetSession().info.webId;
+    if (!webId) {
+      throw new Error("WebId null - this should never happen");
+    }
+
+    const fieldChanges = DeserializeProfileModification(dataset);
+
+    ShowCustomSnackbar((key) => (
+      <SendChangeSnackbar
+        key={key}
+        profileUrl={webId}
+        rdfFields={Object.keys(fieldChanges)}
+        requiresApproval={true}
+        profileChangeStrings={IncomingProfileChangeStrings()}
+        approveButtonFunction={(fieldOptions) =>
+          ShowCustomSnackbar((key) => (
+            <UpdateLocalProfileSnackbar
+              key={key}
+              profileUrl={webId}
+              fieldOptions={fieldOptions}
+            />
+          ))
+        }
+        newValues={fieldChanges}
+      />
+    ));
+  };
+  const onReceive = (): void => undefined;
 
   return { text, onClick, onReceive };
 }

@@ -21,6 +21,7 @@ import {
   ProfileCache,
 } from "../../common/util/tracker/profileCache";
 import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
+import { SendProfileModification } from "./outgoingCommunications";
 
 async function SubscribeToProfileChanges(
   profileUrl: string,
@@ -46,6 +47,9 @@ async function SubscribeToProfileChanges(
                 reservationsUrl={ReservationsUrl}
                 reservationFilter={(reservation) =>
                   reservation !== null && reservation.owner === profileUrl
+                }
+                sendModification={(approvedFields, inboxUrl) =>
+                  SendProfileModification(approvedFields, inboxUrl)
                 }
               />
             ));

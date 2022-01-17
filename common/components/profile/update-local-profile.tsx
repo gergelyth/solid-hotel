@@ -1,12 +1,9 @@
-import CustomProgressSnackbar from "../../../common/components/custom-progress-snackbar";
+import CustomProgressSnackbar from "../custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import {
-  CloseSnackbar,
-  ShowWarningSnackbar,
-} from "../../../common/components/snackbar";
-import { ProfileUpdate } from "../../../common/util/tracker/trackerSendChange";
-import { SetMultipleFieldsInProfile } from "../../../common/util/solid_profile";
-import { UpdateProfileInMemory } from "../../../common/util/tracker/profileCache";
+import { CloseSnackbar, ShowWarningSnackbar } from "../snackbar";
+import { ProfileUpdate } from "../../util/tracker/trackerSendChange";
+import { SetMultipleFieldsInProfile } from "../../util/solid_profile";
+import { UpdateProfileInMemory } from "../../util/tracker/profileCache";
 
 async function ExecuteUpdateLocalProfile(
   profileUrl: string,

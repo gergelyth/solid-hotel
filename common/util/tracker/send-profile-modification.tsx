@@ -5,12 +5,15 @@ import { useReservations } from "../../hooks/useReservations";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { NotEmptyItem } from "../helpers";
 import { ProfileUpdate } from "./trackerSendChange";
-import { SendProfileModification } from "../../../pms/util/outgoingCommunications";
 
 async function ExecuteSendProfileModification(
   reservations: (ReservationAtHotel | null)[],
   fieldOptions: ProfileUpdate,
-  reservationFilter: (reservation: ReservationAtHotel) => boolean
+  reservationFilter: (reservation: ReservationAtHotel) => boolean,
+  sendModification: (
+    approvedFields: ProfileUpdate,
+    inboxUrl: string
+  ) => Promise<void>
 ): Promise<void> {
   const reservationsWithProfile = reservations
     .filter(NotEmptyItem)
@@ -47,7 +50,7 @@ async function ExecuteSendProfileModification(
         );
         return;
       }
-      await SendProfileModification(approvedFields, reservation.inbox);
+      await sendModification(approvedFields, reservation.inbox);
     })
   );
 
@@ -61,6 +64,10 @@ const SendProfileModificationSnackbar = forwardRef<
     fieldOptions: ProfileUpdate;
     reservationsUrl: string;
     reservationFilter: (reservation: ReservationAtHotel) => boolean;
+    sendModification: (
+      approvedFields: ProfileUpdate,
+      inboxUrl: string
+    ) => Promise<void>;
   }
 >((props, ref) => {
   const { items: reservations, isError } = useReservations(
@@ -84,7 +91,8 @@ const SendProfileModificationSnackbar = forwardRef<
       ExecuteSendProfileModification(
         reservations,
         props.fieldOptions,
-        props.reservationFilter
+        props.reservationFilter,
+        props.sendModification
       ),
     ]).then(() => CloseSnackbar(props.key));
   }, [reservations, isError]);

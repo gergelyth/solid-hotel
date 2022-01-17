@@ -28,7 +28,8 @@ function GetChangeElements(
   fieldOptions: ProfileUpdate,
   changeOptionValue: (rdfName: string, newValue: boolean) => void,
   requiresApproval: boolean,
-  profileChangeStrings: ProfileChangeStrings
+  profileChangeStrings: ProfileChangeStrings,
+  hotelUrl: string | undefined
 ): JSX.Element[] {
   const changes = changedFields.map((changeField) => (
     <ValueChangeComponent
@@ -41,11 +42,13 @@ function GetChangeElements(
     />
   ));
 
+  const title = hotelUrl
+    ? `Hotel: ${hotelUrl}`
+    : `Profile of ${firstName?.fieldValue} ${lastName?.fieldValue}`;
+
   return [
     <Grid item key="name">
-      <Typography>
-        Profile of {firstName?.fieldValue} {lastName?.fieldValue}
-      </Typography>
+      <Typography>{title}</Typography>
     </Grid>,
 
     <Grid item key="instruction">
@@ -70,6 +73,7 @@ const SendChangeSnackbar = forwardRef<
       [rdfName: string]: string;
     };
     closeActionCallback?: () => void;
+    hotelUrl?: string;
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
@@ -138,7 +142,8 @@ const SendChangeSnackbar = forwardRef<
         fieldOptions,
         changeOptionValue,
         props.requiresApproval,
-        props.profileChangeStrings
+        props.profileChangeStrings,
+        props.hotelUrl
       )
     );
     setSendButtonDisabled(false);
@@ -168,7 +173,7 @@ const SendChangeSnackbar = forwardRef<
               }
               closeSnackbar={() => {
                 CloseSnackbar(props.key);
-                props.closeActionCallback();
+                if (props.closeActionCallback) props.closeActionCallback();
               }}
             />
           </Grid>

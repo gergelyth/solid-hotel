@@ -16,6 +16,7 @@ import { ReservationState } from "../../common/types/ReservationState";
 import TrackedRdfFieldCollector, {
   HotelToRdf,
 } from "./trackedRdfFieldCollector";
+import { SendProfileModification } from "./outgoingCommunications";
 
 function ShowApprovalDialogForHotel(
   webId: string,
@@ -42,6 +43,9 @@ function ShowApprovalDialogForHotel(
               reservation.state === ReservationState.ACTIVE &&
               reservation.hotel === hotelUrl
             }
+            sendModification={(approvedFields, inboxUrl) =>
+              SendProfileModification(approvedFields, inboxUrl)
+            }
           />
         ));
         //update the in-memory cache
@@ -49,6 +53,7 @@ function ShowApprovalDialogForHotel(
       }}
       oldFields={() => ProfileCache[webId]}
       closeActionCallback={closeFunction}
+      hotelUrl={hotelUrl}
     />
   ));
 }

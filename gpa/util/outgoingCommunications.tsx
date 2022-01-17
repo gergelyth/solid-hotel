@@ -10,6 +10,8 @@ import { SerializePrivacyInformationDeletion } from "../../common/notifications/
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { GetSession } from "../../common/util/solid";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
+import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
+import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
@@ -124,4 +126,16 @@ export async function SubmitPrivacyTokenDeletionRequest(
       fetch: session.fetch,
     }
   );
+}
+
+export async function SendProfileModification(
+  approvedFields: ProfileUpdate,
+  hotelInboxUrl: string,
+  session: Session = GetSession()
+): Promise<void> {
+  const profileModification = SerializeProfileModification(approvedFields);
+
+  await saveSolidDatasetInContainer(hotelInboxUrl, profileModification, {
+    fetch: session.fetch,
+  });
 }
