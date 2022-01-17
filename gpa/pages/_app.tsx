@@ -11,10 +11,12 @@ import NavigationBar from "../components/navbar";
 import Footer from "../../common/components/footer";
 import styles from "../../common/styles/styles";
 import { SnackbarProvider } from "notistack";
-import GlobalSnackbar from "../../common/components/snackbar";
+import GlobalSnackbar, {
+  ShowCustomSnackbar,
+} from "../../common/components/snackbar";
 import { GetSession } from "../../common/util/solid";
 import { ProfileCache } from "../../common/util/tracker/profileCache";
-import { CacheUserProfile } from "../util/trackerInitializer";
+import UserTrackerInitializerSnackbar from "../util/trackerInitializer";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const session = GetSession();
@@ -25,7 +27,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       jssStyles.parentElement?.removeChild(jssStyles);
     }
     if (session.info.isLoggedIn && Object.keys(ProfileCache).length === 0) {
-      CacheUserProfile();
+      ShowCustomSnackbar((key) => <UserTrackerInitializerSnackbar key={key} />);
     }
   }, [session.info.isLoggedIn]);
 

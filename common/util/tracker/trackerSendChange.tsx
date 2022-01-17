@@ -69,6 +69,7 @@ const SendChangeSnackbar = forwardRef<
     newValues?: {
       [rdfName: string]: string;
     };
+    closeActionCallback?: () => void;
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
@@ -165,7 +166,10 @@ const SendChangeSnackbar = forwardRef<
               approveButtonAction={() =>
                 props.approveButtonFunction(fieldOptions)
               }
-              closeSnackbar={() => CloseSnackbar(props.key)}
+              closeSnackbar={() => {
+                CloseSnackbar(props.key);
+                props.closeActionCallback();
+              }}
             />
           </Grid>
         </Box>

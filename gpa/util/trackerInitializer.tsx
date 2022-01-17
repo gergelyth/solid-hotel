@@ -3,38 +3,14 @@ import {
   ShowCustomSnackbar,
 } from "../../common/components/snackbar";
 import { Subscribe } from "../../common/util/tracker/tracker";
-import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
-import { GetProfile, GetProfileOf } from "../../common/util/solid_profile";
-import {
-  getContainedResourceUrlAll,
-  getPropertyAll,
-} from "@inrupt/solid-client";
-import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
-import {
-  GetDataSet,
-  GetSession,
-  GetUserPrivacyPodUrl,
-} from "../../common/util/solid";
-import {
-  HotelProfilesUrl,
-  ReservationsUrl,
-} from "../../common/consts/solidIdentifiers";
-import SendProfileModificationSnackbar from "../../common/util/tracker/send-profile-modification";
-import {
-  CacheProfile,
-  ProfileCache,
-} from "../../common/util/tracker/profileCache";
+import { GetSession } from "../../common/util/solid";
+import { CacheProfile } from "../../common/util/tracker/profileCache";
 import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
-import { usePrivacyTokens } from "../../common/hooks/usePrivacyTokens";
-import { PrivacyToken } from "../../common/types/PrivacyToken";
-import { useReservations } from "../../common/hooks/useReservations";
-import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
-import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../common/types/ReservationState";
 import TrackedRdfFieldCollector, {
   HotelToRdf,
 } from "./trackedRdfFieldCollector";
+import FieldChangeReceiverSnackbar from "./onFieldChangeReceived";
 
 async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
   return Subscribe(profileUrl, {
@@ -42,33 +18,10 @@ async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
       undefined;
     },
     onReceive: (url) => {
-      const reservationUrl = GetUserReservationsPodUrl();
-      if (!reservationUrl) {
-        console.log("Reservation url null");
-        return;
-      }
-      ShowCustomSnackbar((key) => (
-        <SendChangeSnackbar
-          key={key}
-          profileUrl={url}
-          rdfFields={checkedRdfFields}
-          requiresApproval={true}
-          profileChangeStrings={OutgoingProfileChangeStrings(true)}
-          approveButtonFunction={(fieldOptions) => {
-            ShowCustomSnackbar((key) => (
-              <SendProfileModificationSnackbar
-                key={key}
-                fieldOptions={fieldOptions}
-                reservationsUrl={reservationUrl}
-                reservationFilter={(reservation) =>
-                  reservation !== null && reservation.owner === profileUrl
-                }
-              />
-            ));
-            //update the in-memory cache
-            CacheProfile(url, checkedRdfFields);
-          }}
-          oldFields={() => ProfileCache[url]}
+      ShowCustomSnackbar(() => (
+        <FieldChangeReceiverSnackbar
+          key={"approvalNotificationCreator"}
+          url={url}
         />
       ));
     },
