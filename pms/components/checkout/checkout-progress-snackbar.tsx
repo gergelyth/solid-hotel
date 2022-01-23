@@ -13,6 +13,7 @@ import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval
 import { deleteSolidDataset } from "@inrupt/solid-client";
 import { GetSession } from "../../../common/util/solid";
 import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
+import { UnSubscribe } from "../../../common/util/tracker/tracker";
 
 async function ExecuteCheckOut(
   guestFields: Field[],
@@ -37,6 +38,9 @@ async function ExecuteCheckOut(
   await deleteSolidDataset(reservationOwner.split("#")[0], {
     fetch: session.fetch,
   });
+
+  //TODO should we unsubscribe? that would mean we don't notify the guest if there's a change here
+  UnSubscribe(reservationOwner);
   DeleteFromCache(reservationOwner);
 
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(

@@ -21,8 +21,20 @@ export async function Subscribe(
   await trackResource(url, subscriber);
 }
 
-export async function UnSubscribe(url: string): Promise<void> {
-  console.log(`Unsubscribe from ${url}`);
+export function UnSubscribe(url: string): void {
+  //TODO does this work?
+  const webSocketResource = webSockets[url];
+  if (!webSocketResource) {
+    console.log(
+      `Websocket [${url}] not found in websocket list. Can't unsubscribe`
+    );
+    return;
+  }
+
+  webSocketResource.webSocket.close();
+  delete webSockets[url];
+
+  console.log(`Unsubscribed from ${url}`);
 }
 
 export function IgnoreNextUpdate(url: string): void {

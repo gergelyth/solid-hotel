@@ -23,7 +23,7 @@ import {
 import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
 import { SendProfileModification } from "./outgoingCommunications";
 
-async function SubscribeToProfileChanges(
+export async function SubscribeToProfileChanges(
   profileUrl: string,
   checkedRdfFields: string[]
 ): Promise<void> {

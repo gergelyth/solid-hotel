@@ -11,6 +11,8 @@ import { CreateActiveProfilePrivacyToken } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { Field } from "../../../common/types/Field";
+import { SubscribeToProfileChanges } from "../../util/trackerInitializer";
+import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
 
 async function ExecuteCheckIn(
   reservationId: string,
@@ -24,6 +26,10 @@ async function ExecuteCheckIn(
     guestFields,
     HotelProfilesUrl
   );
+
+  await CacheProfileFields(hotelProfileWebId, guestFields);
+  await SubscribeToProfileChanges(hotelProfileWebId, requiredFields);
+
   //TODO are we allowed to do this? we probably won't need the guest WebId anymore
   const reservationThing = await SetReservationOwnerToHotelProfile(
     reservationId,
