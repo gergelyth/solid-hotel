@@ -9,6 +9,8 @@ import { GetSession } from "../solid";
 
 const webSockets: { [host: string]: WebSocketResource } = {};
 
+const oneTimeIgnoreSockets = new Set<string>();
+
 //TODO what happens to these subscribers if I close the app and come back to it? we need to persist this
 export async function Subscribe(
   url: string,
@@ -21,6 +23,10 @@ export async function Subscribe(
 
 export async function UnSubscribe(url: string): Promise<void> {
   console.log(`Unsubscribe from ${url}`);
+}
+
+export function IgnoreNextUpdate(url: string): void {
+  oneTimeIgnoreSockets.add(url);
 }
 
 /** Tracks updates to the given resource */
@@ -62,9 +68,8 @@ async function createWebSocket(
     subscribers: new Set(),
   };
 
-  //TODO this probably wont work
   webSocket.onmessage = (data) =>
-    processMessage(data, webSocketResource.subscribers);
+    processMessage(resourceUrl, data, webSocketResource.subscribers);
 
   return webSocketResource;
 }
@@ -80,9 +85,18 @@ async function getWebSocketUrl(resourceUrl: string): Promise<string> {
 
 /** Processes an update message from the WebSocket */
 function processMessage(
+  hostUrl: string,
   { data }: { data: string },
   subscribers: Set<Subscriber>
 ): void {
+  if (oneTimeIgnoreSockets.has(hostUrl)) {
+    console.log(
+      `Socket update for [${hostUrl}] ignored once. Removing from ignore list...`
+    );
+    oneTimeIgnoreSockets.delete(hostUrl);
+    return;
+  }
+
   console.log("Message received");
   console.log(data);
   // Verify the message is an update notification

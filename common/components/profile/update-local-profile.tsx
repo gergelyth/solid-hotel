@@ -4,6 +4,7 @@ import { CloseSnackbar, ShowWarningSnackbar } from "../snackbar";
 import { ProfileUpdate } from "../../util/tracker/trackerSendChange";
 import { SetMultipleFieldsInProfile } from "../../util/solid_profile";
 import { UpdateProfileInMemory } from "../../util/tracker/profileCache";
+import { IgnoreNextUpdate } from "../../util/tracker/tracker";
 
 async function ExecuteUpdateLocalProfile(
   profileUrl: string,
@@ -27,6 +28,9 @@ async function ExecuteUpdateLocalProfile(
     );
     return;
   }
+
+  //Ignore the next update so the profile update doesn't cause an unending loop
+  IgnoreNextUpdate(profileUrl);
 
   await SetMultipleFieldsInProfile(profileUrl, approvedFields);
   UpdateProfileInMemory(profileUrl, fieldOptions);
