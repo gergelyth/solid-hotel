@@ -9,7 +9,7 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
     <Button
       variant="contained"
       color="secondary"
-      disabled={token.expiry <= new Date()}
+      disabled={token.expiry >= new Date()}
       onClick={() => SubmitPrivacyTokenDeletionRequest(token)}
     >
       Send request to delete

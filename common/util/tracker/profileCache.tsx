@@ -17,6 +17,8 @@ export async function CacheProfile(
     return;
   }
 
+  console.log(`Caching ${profileUrl} for fields [${rdfFields}]`);
+
   CacheProfileFields(profileUrl, guestFields);
 }
 

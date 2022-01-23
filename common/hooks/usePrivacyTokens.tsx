@@ -8,7 +8,6 @@ import {
 } from "@inrupt/solid-client";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
-import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { FetchItems } from "./util/listThenItemsFetcher";
 
 const swrKey = "privacy";
@@ -24,7 +23,6 @@ export function ConvertToPrivacyToken(
 
   //TODO handle null values
   const token = {
-    url: getStringNoLocale(privacyThing, privacyTokenToRdfMap.url),
     hotelInboxForDeletion:
       getStringNoLocale(
         privacyThing,
@@ -41,9 +39,10 @@ export function ConvertToPrivacyToken(
     ),
     reason: getStringNoLocale(privacyThing, privacyTokenToRdfMap.reason) ?? "",
     forReservationState:
-      getInteger(privacyThing, reservationFieldToRdfMap.state) ?? 0,
+      getInteger(privacyThing, privacyTokenToRdfMap.forReservationState) ?? 0,
     expiry:
       getDatetime(privacyThing, privacyTokenToRdfMap.expiry) ?? new Date(),
+    url: getStringNoLocale(privacyThing, privacyTokenToRdfMap.url),
   };
 
   return token;

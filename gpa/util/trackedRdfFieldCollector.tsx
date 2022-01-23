@@ -59,7 +59,7 @@ const TrackedRdfFieldCollector = forwardRef<
   );
 
   useEffect(() => {
-    console.log("effect started");
+    console.log("tracked RDF field collector effect started");
     if (privacyTokensError || reservationsError) {
       CloseSnackbar(props.key);
       throw new Error(

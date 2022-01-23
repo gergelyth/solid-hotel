@@ -119,7 +119,7 @@ const FieldChangeReceiverSnackbar = forwardRef<
   const [hotelRdfMap, setHotelRdfMap] = useState<HotelToRdf>();
 
   useEffect(() => {
-    console.log("effect started");
+    console.log("field change receiver effect started");
     ShowCustomSnackbar(() => (
       <TrackedRdfFieldCollector
         key={"guestFieldCollector"}

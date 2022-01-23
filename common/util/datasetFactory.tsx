@@ -90,6 +90,18 @@ export function CreatePrivacyTokenDataset(
   let newPrivacyToken = createThing({ name: "privacy" });
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
+    privacyTokenToRdfMap.hotelInboxForDeletion,
+    privacyToken.hotelInboxForDeletion
+  );
+  if (privacyToken.datasetUrlTarget) {
+    newPrivacyToken = addStringNoLocale(
+      newPrivacyToken,
+      privacyTokenToRdfMap.datasetUrlTarget,
+      privacyToken.datasetUrlTarget
+    );
+  }
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
     privacyTokenToRdfMap.hotel,
     privacyToken.hotel
   );

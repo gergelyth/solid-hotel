@@ -55,16 +55,20 @@ const UserTrackerInitializerSnackbar = forwardRef<
   const [hotelRdfMap, setHotelRdfMap] = useState<HotelToRdf>();
 
   useEffect(() => {
-    console.log("effect started");
-    ShowCustomSnackbar(() => (
-      <TrackedRdfFieldCollector
-        key={"guestFieldCollector"}
-        setHotelToRdfMap={setHotelRdfMap}
-      />
-    ));
+    console.log("user tracker initialize effect started");
 
     if (!hotelRdfMap) {
-      console.log("Hotel to RDF fields map not yet set");
+      console.log(
+        "Hotel to RDF fields map not yet set - triggering collection"
+      );
+
+      ShowCustomSnackbar(() => (
+        <TrackedRdfFieldCollector
+          key={"guestFieldCollector"}
+          setHotelToRdfMap={setHotelRdfMap}
+        />
+      ));
+
       return;
     }
 
