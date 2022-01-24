@@ -25,7 +25,6 @@ export async function CalculateChanges(
   console.log(oldFields);
   console.log(newChangeValues);
 
-  //TODO default value only for debug
   const previousFields = oldFields ?? guestFields;
   const newValues =
     newChangeValues ??

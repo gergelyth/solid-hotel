@@ -42,9 +42,14 @@ function GetChangeElements(
     />
   ));
 
-  const title = hotelUrl
-    ? `Hotel: ${hotelUrl}`
-    : `Profile of ${firstName?.fieldValue} ${lastName?.fieldValue}`;
+  const profileName =
+    firstName?.fieldValue || lastName?.fieldValue
+      ? `Profile of ${firstName?.fieldValue ?? ""} ${
+          lastName?.fieldValue ?? ""
+        }`
+      : "";
+
+  const title = hotelUrl ? `Hotel: ${hotelUrl}` : profileName;
 
   return [
     <Grid item key="name">
@@ -115,24 +120,33 @@ const SendChangeSnackbar = forwardRef<
     }
 
     console.log("Logic entered");
+
+    if (isSendButtonDisabled === undefined) {
+      console.log("setting field options");
+      //TODO if no changedFields, display "No changes" and return (e.g. if the guest's profile was modified, it may not have a been a watched field)
+
+      const fieldOptionsTemp: ProfileUpdate = {};
+      changedFields.forEach(
+        (changedField) =>
+          (fieldOptionsTemp[changedField.rdfName] = {
+            status: true,
+            newValue: changedField.newValue,
+          })
+      );
+      setFieldOptions(fieldOptionsTemp);
+      setSendButtonDisabled(false);
+
+      return;
+    }
+
+    //It's possible to not have these, since we try to retrieve the minimal amount of information for the guest.
+    //If we don't, we don't display the name.
     const firstName = oldGuestFields?.find(
       (x) => x.rdfName == personFieldToRdfMap.firstName
     );
     const lastName = oldGuestFields?.find(
       (x) => x.rdfName == personFieldToRdfMap.lastName
     );
-
-    //TODO if no changedFields, display "No changes" and return (e.g. if the guest's profile was modified, it may not have a been a watched field)
-
-    const fieldOptionsTemp: ProfileUpdate = {};
-    changedFields.forEach(
-      (changedField) =>
-        (fieldOptionsTemp[changedField.rdfName] = {
-          status: true,
-          newValue: changedField.newValue,
-        })
-    );
-    setFieldOptions(fieldOptionsTemp);
 
     setRetrievalElements(
       GetChangeElements(
@@ -146,8 +160,12 @@ const SendChangeSnackbar = forwardRef<
         props.hotelUrl
       )
     );
-    setSendButtonDisabled(false);
-  }, [changedFields]);
+
+    if (!props.requiresApproval) {
+      console.log("Approval not required, executing action automatically");
+      props.approveButtonFunction(fieldOptions);
+    }
+  }, [changedFields, fieldOptions]);
 
   return (
     <SnackbarContent ref={ref} className={classes.root} key={props.key}>

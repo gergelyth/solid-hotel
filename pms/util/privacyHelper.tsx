@@ -159,9 +159,14 @@ async function CreateProfilePrivacyToken(
   };
 
   const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
-  await saveSolidDatasetInContainer(PrivacyTokensUrl, privacyTokenDataset, {
-    fetch: session.fetch,
-  });
+  const savedDataset = await saveSolidDatasetInContainer(
+    PrivacyTokensUrl,
+    privacyTokenDataset,
+    {
+      fetch: session.fetch,
+    }
+  );
 
+  privacyToken.url = getSourceUrl(savedDataset);
   return privacyToken;
 }
