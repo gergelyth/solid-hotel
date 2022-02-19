@@ -65,3 +65,15 @@ export function GetCurrentDatePushedBy(
   date.setFullYear(year, month, day);
   return date;
 }
+
+export function GetToday(): Date {
+  return new Date();
+}
+
+export function GetTomorrow(): Date {
+  return new Date(new Date().setDate(new Date().getDate() + 1));
+}
+
+export function GetDayAfterDate(date: Date): Date {
+  return new Date(new Date().setDate(date.getDate() + 1));
+}

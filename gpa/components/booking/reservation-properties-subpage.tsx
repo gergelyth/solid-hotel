@@ -10,10 +10,9 @@ import {
   RoomDefinitionsUrl,
 } from "../../../common/consts/solidIdentifiers";
 import { SubmitBookingRequest } from "../../util/outgoingCommunications";
-import { Subscribe } from "../../../common/util/tracker/tracker";
-import { Subscriber } from "../../../common/types/WebSocketResource";
 import { AddReservation } from "../../../common/util/solid_reservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { GetToday, GetTomorrow } from "../../../common/util/helpers";
 
 async function BookRoom(
   roomIdString: string | undefined,
@@ -47,16 +46,6 @@ async function BookRoom(
   reservation.inbox = await inboxUrl;
 
   SubmitBookingRequest(reservation, session);
-
-  //TODO subscribe to inbox - possibly wait for solid-client implementation
-  const subscriber: Subscriber = {
-    onReceive: () => {
-      //TODO check if denied or accepted
-      // SetReservationState(reservationId, ReservationState.CONFIRMED, session);
-    },
-    onClick: () => undefined,
-  };
-  // Subscribe(reservationInbox, subscriber);
 }
 
 function ReservationPropertiesPage({
@@ -69,8 +58,9 @@ function ReservationPropertiesPage({
   setConfirmReservation: Dispatch<SetStateAction<() => () => void>>;
 }): JSX.Element | null {
   const [selectedRoomId, setSelectedRoomId] = useState<string>("");
-  const [checkinDate, setCheckinDate] = useState<Date>();
-  const [checkoutDate, setCheckoutDate] = useState<Date>();
+
+  const [checkinDate, setCheckinDate] = useState<Date>(GetToday());
+  const [checkoutDate, setCheckoutDate] = useState<Date>(GetTomorrow());
 
   //TODO if there is an error in log then call useRooms() always here, but add a parameter condition in it to return null if false
   if (currentPage !== BookingPage.ReservationProperties) {
