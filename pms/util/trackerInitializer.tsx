@@ -27,38 +27,47 @@ export async function SubscribeToProfileChanges(
   profileUrl: string,
   checkedRdfFields: string[]
 ): Promise<void> {
+  const sendModificationId = "sendModification";
+  const infoPanelId = "infoPanel";
+
   return Subscribe(profileUrl, {
     onClick: () => {
       undefined;
     },
     onReceive: (url) => {
-      ShowCustomSnackbar((key) => (
-        <SendChangeSnackbar
-          key={key}
-          profileUrl={url}
-          rdfFields={checkedRdfFields}
-          requiresApproval={false}
-          profileChangeStrings={OutgoingProfileChangeStrings(false)}
-          approveButtonFunction={(fieldOptions) => {
-            ShowCustomSnackbar((key) => (
-              <SendProfileModificationSnackbar
-                key={key}
-                fieldOptions={fieldOptions}
-                reservationsUrl={ReservationsUrl}
-                reservationFilter={(reservation) =>
-                  reservation !== null && reservation.owner === profileUrl
-                }
-                sendModification={(approvedFields, inboxUrl) =>
-                  SendProfileModification(approvedFields, inboxUrl)
-                }
-              />
-            ));
-            //update the in-memory cache
-            CacheProfile(url, checkedRdfFields);
-          }}
-          oldFields={() => ProfileCache[url]}
-        />
-      ));
+      ShowCustomSnackbar(
+        () => (
+          <SendChangeSnackbar
+            snackbarId={infoPanelId}
+            profileUrl={url}
+            rdfFields={checkedRdfFields}
+            requiresApproval={false}
+            profileChangeStrings={OutgoingProfileChangeStrings(false)}
+            approveButtonFunction={(fieldOptions) => {
+              ShowCustomSnackbar(
+                () => (
+                  <SendProfileModificationSnackbar
+                    snackbarId={sendModificationId}
+                    fieldOptions={fieldOptions}
+                    reservationsUrl={ReservationsUrl}
+                    reservationFilter={(reservation) =>
+                      reservation !== null && reservation.owner === profileUrl
+                    }
+                    sendModification={(approvedFields, inboxUrl) =>
+                      SendProfileModification(approvedFields, inboxUrl)
+                    }
+                  />
+                ),
+                sendModificationId
+              );
+              //update the in-memory cache
+              CacheProfile(url, checkedRdfFields);
+            }}
+            oldFields={() => ProfileCache[url]}
+          />
+        ),
+        infoPanelId
+      );
     },
   });
 }
@@ -69,7 +78,6 @@ export async function CacheHotelProfiles(): Promise<void> {
 
   let snackbarKey: string | number;
   ShowCustomSnackbar((key) => {
-    snackbarKey = key;
     return (
       <CustomProgressSnackbar
         key={key}

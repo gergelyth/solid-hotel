@@ -27,7 +27,7 @@ function ShowApprovalDialogForHotel(
 ): void {
   ShowCustomSnackbar(() => (
     <SendChangeSnackbar
-      key={`hotelApproval${hotelUrl}`}
+      snackbarId={`hotelApproval${hotelUrl}`}
       profileUrl={webId}
       rdfFields={rdfFields}
       requiresApproval={true}
@@ -35,7 +35,7 @@ function ShowApprovalDialogForHotel(
       approveButtonFunction={(fieldOptions) => {
         ShowCustomSnackbar((key) => (
           <SendProfileModificationSnackbar
-            key={key}
+            snackbarId={key}
             fieldOptions={fieldOptions}
             reservationsUrl={reservationUrl}
             reservationFilter={(reservation) =>

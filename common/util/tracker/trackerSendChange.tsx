@@ -128,7 +128,7 @@ function ChangeElements(
 const SendChangeSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarId: string | number;
     profileUrl: string;
     rdfFields: string[];
     requiresApproval: boolean;
@@ -200,7 +200,7 @@ const SendChangeSnackbar = forwardRef<
   }, [changedFields, fieldOptions]);
 
   return (
-    <SnackbarContent ref={ref} className={classes.root} key={props.key}>
+    <SnackbarContent ref={ref} className={classes.root} key={props.snackbarId}>
       <Card className={classes.card} raised>
         <Box m={2} p={2}>
           <Grid
@@ -242,7 +242,7 @@ const SendChangeSnackbar = forwardRef<
                 props.approveButtonFunction(fieldOptions)
               }
               closeSnackbar={() => {
-                CloseSnackbar(props.key);
+                CloseSnackbar(props.snackbarId);
                 if (props.closeActionCallback) props.closeActionCallback();
               }}
             />

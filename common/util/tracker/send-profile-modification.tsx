@@ -60,7 +60,7 @@ async function ExecuteSendProfileModification(
 const SendProfileModificationSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarId: string | number;
     fieldOptions: ProfileUpdate;
     reservationsUrl: string;
     reservationFilter: (reservation: ReservationAtHotel) => boolean;
@@ -76,7 +76,7 @@ const SendProfileModificationSnackbar = forwardRef<
 
   useEffect(() => {
     if (isError) {
-      CloseSnackbar(props.key);
+      CloseSnackbar(props.snackbarId);
       throw new Error(
         "Error using the reservation hook during send profile modification operation."
       );
@@ -94,13 +94,13 @@ const SendProfileModificationSnackbar = forwardRef<
         props.reservationFilter,
         props.sendModification
       ),
-    ]).then(() => CloseSnackbar(props.key));
+    ]).then(() => CloseSnackbar(props.snackbarId));
   }, [reservations, isError]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      key={props.snackbarId}
       message={"Sending profile updates"}
     />
   );

@@ -162,7 +162,7 @@ export function ReceiveProfileModification(
 
     ShowCustomSnackbar((key) => (
       <SendChangeSnackbar
-        key={key}
+        snackbarId={key}
         profileUrl={webId}
         rdfFields={Object.keys(fieldChanges)}
         requiresApproval={true}
