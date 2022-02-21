@@ -123,25 +123,30 @@ export function ReceiveProfileModification(
 
     const fieldChanges = DeserializeProfileModification(dataset);
 
-    ShowCustomSnackbar((key) => (
-      <SendChangeSnackbar
-        snackbarId={key}
-        profileUrl={reservationOwner}
-        rdfFields={Object.keys(fieldChanges)}
-        requiresApproval={true}
-        profileChangeStrings={IncomingProfileChangeStrings()}
-        approveButtonFunction={(fieldOptions) =>
-          ShowCustomSnackbar((key) => (
-            <UpdateLocalProfileSnackbar
-              key={key}
-              profileUrl={reservationOwner}
-              fieldOptions={fieldOptions}
-            />
-          ))
-        }
-        newValues={fieldChanges}
-      />
-    ));
+    const approveSnackbarId = "approveSnackbar";
+
+    ShowCustomSnackbar(
+      () => (
+        <SendChangeSnackbar
+          snackbarId={approveSnackbarId}
+          profileUrl={reservationOwner}
+          rdfFields={Object.keys(fieldChanges)}
+          requiresApproval={true}
+          profileChangeStrings={IncomingProfileChangeStrings()}
+          approveButtonFunction={(fieldOptions) =>
+            ShowCustomSnackbar((key) => (
+              <UpdateLocalProfileSnackbar
+                key={key}
+                profileUrl={reservationOwner}
+                fieldOptions={fieldOptions}
+              />
+            ))
+          }
+          newValues={fieldChanges}
+        />
+      ),
+      approveSnackbarId
+    );
   };
   const onReceive = (): void => undefined;
 

@@ -18,12 +18,11 @@ async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
       undefined;
     },
     onReceive: (url) => {
-      ShowCustomSnackbar(() => (
-        <FieldChangeReceiverSnackbar
-          key={"approvalNotificationCreator"}
-          url={url}
-        />
-      ));
+      const snackbarId = "approvalNotificationCreator";
+      ShowCustomSnackbar(
+        () => <FieldChangeReceiverSnackbar snackbarId={snackbarId} url={url} />,
+        snackbarId
+      );
     },
   });
 }
@@ -49,7 +48,7 @@ async function CacheUserProfile(hotelRdfMap: HotelToRdf): Promise<void> {
 const UserTrackerInitializerSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarId: string | number;
   }
 >((props, ref) => {
   const [hotelRdfMap, setHotelRdfMap] = useState<HotelToRdf>();
@@ -62,23 +61,27 @@ const UserTrackerInitializerSnackbar = forwardRef<
         "Hotel to RDF fields map not yet set - triggering collection"
       );
 
-      ShowCustomSnackbar(() => (
-        <TrackedRdfFieldCollector
-          key={"guestFieldCollector"}
-          setHotelToRdfMap={setHotelRdfMap}
-        />
-      ));
+      const snackbarId = "guestFieldCollector";
+      ShowCustomSnackbar(
+        () => (
+          <TrackedRdfFieldCollector
+            snackbarId={snackbarId}
+            setHotelToRdfMap={setHotelRdfMap}
+          />
+        ),
+        snackbarId
+      );
 
       return;
     }
 
-    CacheUserProfile(hotelRdfMap).then(() => CloseSnackbar(props.key));
+    CacheUserProfile(hotelRdfMap).then(() => CloseSnackbar(props.snackbarId));
   }, [hotelRdfMap]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      key={props.snackbarId}
       message={"Caching user profile"}
     />
   );

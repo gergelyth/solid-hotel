@@ -48,7 +48,7 @@ function CollectRdfFields(
 const TrackedRdfFieldCollector = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarId: string | number;
     setHotelToRdfMap: Dispatch<SetStateAction<HotelToRdf | undefined>>;
   }
 >((props, ref) => {
@@ -61,7 +61,7 @@ const TrackedRdfFieldCollector = forwardRef<
   useEffect(() => {
     console.log("tracked RDF field collector effect started");
     if (privacyTokensError || reservationsError) {
-      CloseSnackbar(props.key);
+      CloseSnackbar(props.snackbarId);
       throw new Error(
         `Error using the privacy tokens hook [${privacyTokensError}] or the reservations hook [${reservationsError}] during RDF field collection`
       );
@@ -84,13 +84,13 @@ const TrackedRdfFieldCollector = forwardRef<
     );
 
     props.setHotelToRdfMap(hotelToRdfFieldMap);
-    CloseSnackbar(props.key);
+    CloseSnackbar(props.snackbarId);
   }, [privacyTokens, reservations, privacyTokensError, reservationsError]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      key={props.snackbarId}
       message={"Collecting tracked RDF fields"}
     />
   );

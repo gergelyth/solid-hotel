@@ -27,7 +27,11 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       jssStyles.parentElement?.removeChild(jssStyles);
     }
     if (session.info.isLoggedIn && Object.keys(ProfileCache).length === 0) {
-      ShowCustomSnackbar((key) => <UserTrackerInitializerSnackbar key={key} />);
+      const initSnackbarId = "initSnackbarId";
+      ShowCustomSnackbar(
+        () => <UserTrackerInitializerSnackbar snackbarId={initSnackbarId} />,
+        initSnackbarId
+      );
     }
   }, [session.info.isLoggedIn]);
 

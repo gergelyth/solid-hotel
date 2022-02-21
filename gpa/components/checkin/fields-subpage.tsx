@@ -14,6 +14,7 @@ import { CheckinPage } from "../../pages/reservations/[id]";
 import TocPopup from "./toc-popup";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
+import { CacheProfile } from "../../../common/util/tracker/profileCache";
 
 function RequiredFieldsAtCheckin({
   currentPage,
@@ -52,7 +53,13 @@ function RequiredFieldsAtCheckin({
     );
   }
 
-  function ProceedButtonClick(): void {
+  async function ProceedButtonClick(rdfFields: string[]): Promise<void> {
+    if (!webId) {
+      console.log("Null webId, can't cahe fields");
+      return;
+    }
+    await CacheProfile(webId, rdfFields);
+
     executeCheckin();
     setCurrentPage(currentPage + 1);
   }
@@ -89,7 +96,7 @@ function RequiredFieldsAtCheckin({
       </Grid>
       <Grid item>
         <ConfirmRequiredFieldsButton
-          onClickFunction={ProceedButtonClick}
+          onClickFunction={() => ProceedButtonClick(data)}
           rdfFields={data}
           webId={webId}
           onMount={() => undefined}

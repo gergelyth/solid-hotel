@@ -25,37 +25,45 @@ function ShowApprovalDialogForHotel(
   reservationUrl: string,
   closeFunction: () => void
 ): void {
-  ShowCustomSnackbar(() => (
-    <SendChangeSnackbar
-      snackbarId={`hotelApproval${hotelUrl}`}
-      profileUrl={webId}
-      rdfFields={rdfFields}
-      requiresApproval={true}
-      profileChangeStrings={OutgoingProfileChangeStrings(true)}
-      approveButtonFunction={(fieldOptions) => {
-        ShowCustomSnackbar((key) => (
-          <SendProfileModificationSnackbar
-            snackbarId={key}
-            fieldOptions={fieldOptions}
-            reservationsUrl={reservationUrl}
-            reservationFilter={(reservation) =>
-              reservation !== null &&
-              reservation.state === ReservationState.ACTIVE &&
-              reservation.hotel === hotelUrl
-            }
-            sendModification={(approvedFields, inboxUrl) =>
-              SendProfileModification(approvedFields, inboxUrl)
-            }
-          />
-        ));
-        //update the in-memory cache
-        CacheProfile(webId, rdfFields);
-      }}
-      oldFields={() => ProfileCache[webId]}
-      closeActionCallback={closeFunction}
-      hotelUrl={hotelUrl}
-    />
-  ));
+  const sendSnackbarId = `hotelApproval${hotelUrl}`;
+  const sendProfileId = `sendProfileId${hotelUrl}`;
+  ShowCustomSnackbar(
+    () => (
+      <SendChangeSnackbar
+        snackbarId={sendSnackbarId}
+        profileUrl={webId}
+        rdfFields={rdfFields}
+        requiresApproval={true}
+        profileChangeStrings={OutgoingProfileChangeStrings(true)}
+        approveButtonFunction={(fieldOptions) => {
+          ShowCustomSnackbar(
+            () => (
+              <SendProfileModificationSnackbar
+                snackbarId={sendProfileId}
+                fieldOptions={fieldOptions}
+                reservationsUrl={reservationUrl}
+                reservationFilter={(reservation) =>
+                  reservation !== null &&
+                  reservation.state === ReservationState.ACTIVE &&
+                  reservation.hotel === hotelUrl
+                }
+                sendModification={(approvedFields, inboxUrl) =>
+                  SendProfileModification(approvedFields, inboxUrl)
+                }
+              />
+            ),
+            sendProfileId
+          );
+          //update the in-memory cache
+          CacheProfile(webId, rdfFields);
+        }}
+        oldFields={() => ProfileCache[webId]}
+        closeActionCallback={closeFunction}
+        hotelUrl={hotelUrl}
+      />
+    ),
+    sendSnackbarId
+  );
 }
 
 function GetCloseFunctionForIndex(
@@ -65,12 +73,12 @@ function GetCloseFunctionForIndex(
   hotelKeys: string[],
   i: number
 ): () => void {
-  const hotel = hotelKeys[i];
-  const rdfFields = Array.from(hotelRdfMap[hotel]);
-
   if (i >= Object.keys(hotelRdfMap).length - 1) {
     return () => undefined;
   }
+
+  const hotel = hotelKeys[i];
+  const rdfFields = Array.from(hotelRdfMap[hotel]);
 
   return () =>
     ShowApprovalDialogForHotel(
@@ -112,7 +120,7 @@ function IterateHotelsAndCreateApprovalDialogs(
 const FieldChangeReceiverSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarId: string | number;
     url: string;
   }
 >((props, ref) => {
@@ -120,26 +128,34 @@ const FieldChangeReceiverSnackbar = forwardRef<
 
   useEffect(() => {
     console.log("field change receiver effect started");
-    ShowCustomSnackbar(() => (
-      <TrackedRdfFieldCollector
-        key={"guestFieldCollector"}
-        setHotelToRdfMap={setHotelRdfMap}
-      />
-    ));
 
     if (!hotelRdfMap) {
-      console.log("Hotel to RDF fields map not yet set");
+      console.log(
+        "Hotel to RDF fields map not yet set - triggering collection"
+      );
+
+      const guestFieldCollector = "guestFieldCollector";
+      ShowCustomSnackbar(
+        () => (
+          <TrackedRdfFieldCollector
+            snackbarId={guestFieldCollector}
+            setHotelToRdfMap={setHotelRdfMap}
+          />
+        ),
+        guestFieldCollector
+      );
+
       return;
     }
 
     IterateHotelsAndCreateApprovalDialogs(props.url, hotelRdfMap);
-    CloseSnackbar(props.key);
+    CloseSnackbar(props.snackbarId);
   }, [hotelRdfMap]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      key={props.snackbarId}
       message={"Creating field change notifications"}
     />
   );
