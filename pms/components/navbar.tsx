@@ -63,6 +63,13 @@ function NavigationBar(): JSX.Element {
                 </Link>
               </Grid>
               <Grid item>
+                <Link href="/booking">
+                  <Button variant="contained" color="primary">
+                    Book room
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid item>
                 <Link href="/reservations">
                   <Button variant="contained" color="primary">
                     Reservations
