@@ -22,7 +22,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", 
+    "**/*.tsx", "../common/components/booking/reservation-properties-subpage.tsx", "../common/components/booking/date-selector.tsx", 
 ],
   "exclude": [
     "node_modules",

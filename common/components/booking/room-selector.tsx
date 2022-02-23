@@ -1,6 +1,6 @@
-import { useRooms } from "../../../common/hooks/useRooms";
-import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
-import { RoomDefinition } from "../../../common/types/RoomDefinition";
+import { useRooms } from "../../hooks/useRooms";
+import { RoomDefinitionsUrl } from "../../consts/solidIdentifiers";
+import { RoomDefinition } from "../../types/RoomDefinition";
 import {
   CircularProgress,
   Container,
@@ -50,6 +50,7 @@ function RoomElements({
   selectedRoomId: string;
   setSelectedRoomId: Dispatch<SetStateAction<string>>;
 }): JSX.Element {
+  //TODO hardcoded room defition url here - is that an issue?
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
 
   if (isLoading) {

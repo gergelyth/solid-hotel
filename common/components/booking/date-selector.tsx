@@ -2,11 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Box } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import {
-  GetDayAfterDate,
-  GetToday,
-  GetTomorrow,
-} from "../../../common/util/helpers";
+import { GetDayAfterDate, GetToday, GetTomorrow } from "../../util/helpers";
 
 function DateSelector({
   checkinDate,
