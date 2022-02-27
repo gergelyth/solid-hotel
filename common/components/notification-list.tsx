@@ -60,6 +60,20 @@ function NotificationItem({
   );
 }
 
+function OrderNotificationsByDescending(
+  first: Notification | null,
+  second: Notification | null
+): number {
+  if (!first) {
+    return 1;
+  }
+  if (!second) {
+    return -1;
+  }
+
+  return first?.lastModTime > second?.lastModTime ? -1 : 1;
+}
+
 function NotificationList({
   notificationRetrieval,
   deleteNotification,
@@ -81,9 +95,13 @@ function NotificationList({
     return <CircularProgress />;
   }
 
+  const orderedNotifications = notificationRetrieval.items.sort(
+    OrderNotificationsByDescending
+  );
+
   return (
     <List>
-      {notificationRetrieval.items.map((notification, index) => (
+      {orderedNotifications.map((notification, index) => (
         <NotificationItem
           notification={notification}
           key={index}
