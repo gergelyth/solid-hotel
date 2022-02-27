@@ -1,4 +1,4 @@
-import { SuccessPage } from "../../common/components/verifying-page";
+import SuccessPage from "../../common/components/success-page";
 import { Box } from "@material-ui/core";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";

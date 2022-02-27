@@ -1,6 +1,4 @@
-import VerifyingComponent, {
-  VerifyingPage,
-} from "../../../common/components/verifying-page";
+import SuccessPage from "../../../common/components/success-page";
 import { Box } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -21,22 +19,12 @@ function FinishPage({
   currentPage: CheckinPage;
 }): JSX.Element | null {
   const router = useRouter();
-  const [currentFinishPage, setCurrentFinishPage] = useState(
-    VerifyingPage.Waiting
-  );
 
   if (currentPage !== CheckinPage.Finish) {
     return null;
   }
 
-  return (
-    <VerifyingComponent
-      successText={successText}
-      router={router}
-      currentPage={currentFinishPage}
-      setCurrentPage={setCurrentFinishPage}
-    />
-  );
+  return <SuccessPage successText={successText} router={router} />;
 }
 
 function ReservationDetail(): JSX.Element {
