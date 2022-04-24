@@ -145,7 +145,11 @@ function CollectModifyDates(
     }
 
     //TODO extract this into a const (not in our custom RDF maps, just here probably)
-    const mTime = getDecimal(itemThing, "stat:mtime");
+    //http://www.w3.org/ns/posix/stat#mtime
+    const mTime = getDecimal(
+      itemThing,
+      "http://www.w3.org/ns/posix/stat#mtime"
+    );
     if (!mTime) {
       throw new Error(
         "MTime in a notification item is null. That shouldn't be possible, right?"
