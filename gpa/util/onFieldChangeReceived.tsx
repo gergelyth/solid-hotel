@@ -58,7 +58,11 @@ function ShowApprovalDialogForHotel(
           CacheProfile(webId, rdfFields);
         }}
         oldFields={() => ProfileCache[webId]}
-        closeActionCallback={closeFunction}
+        closeActionCallback={() => {
+          closeFunction();
+          //we update the in-memory cache even if we decide not to send the update to the hotel
+          CacheProfile(webId, rdfFields);
+        }}
         hotelUrl={hotelUrl}
       />
     ),

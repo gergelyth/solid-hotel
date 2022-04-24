@@ -54,7 +54,7 @@ function NavigationBar(): JSX.Element {
             <Grid item xs={3}>
               <Typography variant="h6">Property Management System</Typography>
             </Grid>
-            <Grid item xs={6} container spacing={3}>
+            <Grid item xs={7} container spacing={1}>
               <Grid item>
                 <Link href="/rooms">
                   <Button variant="contained" color="primary">
@@ -84,7 +84,7 @@ function NavigationBar(): JSX.Element {
                 </Link>
               </Grid>
             </Grid>
-            <Grid item xs={2} container justify="flex-end">
+            <Grid item xs={1} container justify="flex-end">
               <DynamicLoginComponent />
             </Grid>
           </Grid>

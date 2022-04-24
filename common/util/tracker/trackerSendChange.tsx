@@ -165,6 +165,7 @@ const SendChangeSnackbar = forwardRef<
         props.rdfFields,
         setChangedFields,
         setOldGuestFields,
+        //TODO isn't this just null coalesce ??
         props.oldFields ? props.oldFields() : undefined,
         props.newValues
       );
@@ -238,9 +239,10 @@ const SendChangeSnackbar = forwardRef<
               isSendButtonDisabled={isSendButtonDisabled}
               requiresApproval={props.requiresApproval}
               label={props.profileChangeStrings.approveButtonText}
-              approveButtonAction={() =>
-                props.approveButtonFunction(fieldOptions)
-              }
+              approveButtonAction={() => {
+                props.approveButtonFunction(fieldOptions);
+                CloseSnackbar(props.snackbarId);
+              }}
               closeSnackbar={() => {
                 CloseSnackbar(props.snackbarId);
                 if (props.closeActionCallback) props.closeActionCallback();
