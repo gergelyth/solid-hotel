@@ -26,14 +26,17 @@ function AreDatesOnTheSameDay(d1: Date, d2: Date): boolean {
 
 function GetHighlightedOrNotEntry(
   text: string,
-  highlightValue: boolean
+  highlightValue: boolean,
+  noWrap: boolean
 ): JSX.Element {
   return (
-    <Typography>
+    <Typography noWrap={noWrap}>
       {highlightValue ? (
         <Box>{text}</Box>
       ) : (
-        <Box color="text.disabled">{text}</Box>
+        <Box color="text.disabled" fontSize="75%">
+          {text}
+        </Box>
       )}
     </Typography>
   );
@@ -62,19 +65,24 @@ function PrivacyField({
     <Grid
       item
       container
-      spacing={1}
+      xs={12}
+      spacing={2}
       alignItems="center"
       justify="center"
       direction="row"
     >
       <Grid item xs={3}>
-        <Typography>{showLabel ? field : ""}</Typography>
+        <Typography noWrap>{showLabel ? field : ""}</Typography>
       </Grid>
       <Grid item xs={5}>
-        {GetHighlightedOrNotEntry(token.reason, highlightValue)}
+        {GetHighlightedOrNotEntry(token.reason, highlightValue, false)}
       </Grid>
       <Grid item xs={2}>
-        {GetHighlightedOrNotEntry(token.expiry.toDateString(), highlightValue)}
+        {GetHighlightedOrNotEntry(
+          token.expiry.toDateString(),
+          highlightValue,
+          false
+        )}
       </Grid>
       {deleteButton}
     </Grid>
@@ -103,57 +111,46 @@ function HotelPrivacy({
   });
 
   return (
-    <Paper elevation={12}>
+    <Box>
       <Grid item>
-        <Typography variant="body1">
-          <Box fontWeight="fontWeightBold" textAlign="center" border={5}>
-            {counterparty}
-          </Box>
+        <Typography variant="h6">
+          <Box textAlign="center">{counterparty}</Box>
         </Typography>
       </Grid>
       <Grid item>
         <Box p={2}>
           <Grid container spacing={1} justify="center" direction="column">
-            <Box my={2}>
-              <Divider variant="middle" />
-            </Box>
+            <Divider variant="middle" />
             {Object.entries(groupByField).map(([field, tokens]) => {
               const latestExpiry = FindLatestExpiryDate(tokens);
-              console.log(latestExpiry);
               return (
-                <Box key={field}>
-                  {tokens.map((token, index) => {
-                    return (
-                      <Box key={index}>
-                        <PrivacyField
-                          key={field}
-                          field={field}
-                          token={token}
-                          deleteButtonFunction={deleteButton}
-                          showLabel={index === 0}
-                          highlightValue={AreDatesOnTheSameDay(
-                            token.expiry,
-                            latestExpiry
-                          )}
-                        />
-                        <Box>
-                          {index === tokens.length - 1 ? null : (
-                            <Divider variant="middle" />
-                          )}
+                <Paper elevation={6} key={field}>
+                  <Box m={2}>
+                    {tokens.map((token, index) => {
+                      return (
+                        <Box key={index}>
+                          <PrivacyField
+                            key={field}
+                            field={field}
+                            token={token}
+                            deleteButtonFunction={deleteButton}
+                            showLabel={index === 0}
+                            highlightValue={AreDatesOnTheSameDay(
+                              token.expiry,
+                              latestExpiry
+                            )}
+                          />
                         </Box>
-                      </Box>
-                    );
-                  })}
-                  <Box my={2}>
-                    <Divider variant="middle" />
+                      );
+                    })}
                   </Box>
-                </Box>
+                </Paper>
               );
             })}
           </Grid>
         </Box>
       </Grid>
-    </Paper>
+    </Box>
   );
 }
 
@@ -188,24 +185,26 @@ export function PrivacyDashboard({
   );
 
   return (
-    <Grid
-      container
-      item
-      spacing={3}
-      justify="center"
-      alignItems="stretch"
-      direction="column"
-    >
-      {Object.entries(groupByCounterparty).map(([counterparty, tokens]) => {
-        return (
-          <HotelPrivacy
-            key={counterparty}
-            counterparty={counterparty}
-            privacyTokens={tokens}
-            deleteButton={deleteButton}
-          />
-        );
-      })}
-    </Grid>
+    <Container>
+      <Grid
+        container
+        item
+        spacing={3}
+        justify="center"
+        alignItems="stretch"
+        direction="column"
+      >
+        {Object.entries(groupByCounterparty).map(([counterparty, tokens]) => {
+          return (
+            <HotelPrivacy
+              key={counterparty}
+              counterparty={counterparty}
+              privacyTokens={tokens}
+              deleteButton={deleteButton}
+            />
+          );
+        })}
+      </Grid>
+    </Container>
   );
 }

@@ -6,7 +6,7 @@ function PrivacyDashboardPage(): JSX.Element {
   return (
     <Grid
       container
-      spacing={5}
+      spacing={7}
       justify="center"
       alignItems="stretch"
       direction="column"
