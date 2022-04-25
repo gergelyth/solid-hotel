@@ -1,17 +1,11 @@
 import { PrivacyDashboard } from "../../common/components/privacy-dashboard";
 import { PrivacyTokensUrl } from "../../common/consts/solidIdentifiers";
-import { Grid, Typography, Box } from "@material-ui/core";
+import { Container, Typography, Box } from "@material-ui/core";
 
 function PrivacyDashboardPage(): JSX.Element {
   return (
-    <Grid
-      container
-      spacing={7}
-      justify="center"
-      alignItems="stretch"
-      direction="column"
-    >
-      <Grid item>
+    <Container maxWidth="lg">
+      <Box sx={{ mb: 4 }}>
         <Typography variant="h4">
           <Box textAlign="center">Privacy dashboard</Box>
         </Typography>
@@ -20,16 +14,14 @@ function PrivacyDashboardPage(): JSX.Element {
             Entries with the latest expiry date are highlighted
           </Box>
         </Typography>
-      </Grid>
+      </Box>
 
-      <Grid item>
-        <PrivacyDashboard
-          privacyTokenContainerUrl={PrivacyTokensUrl}
-          tokenGrouping={(token) => token.guest}
-          deleteButton={() => null}
-        />
-      </Grid>
-    </Grid>
+      <PrivacyDashboard
+        privacyTokenContainerUrl={PrivacyTokensUrl}
+        tokenGrouping={(token) => token.guest}
+        deleteButton={() => null}
+      />
+    </Container>
   );
 }
 

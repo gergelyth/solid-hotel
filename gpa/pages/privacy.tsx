@@ -1,4 +1,4 @@
-import { Button, Grid, Typography, Box } from "@material-ui/core";
+import { Button, Container, Typography, Box } from "@material-ui/core";
 import { PrivacyDashboard } from "../../common/components/privacy-dashboard";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { GetUserPrivacyPodUrl } from "../../common/util/solid";
@@ -20,14 +20,8 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
 
 function PrivacyDashboardPage(): JSX.Element {
   return (
-    <Grid
-      container
-      spacing={7}
-      justify="center"
-      alignItems="stretch"
-      direction="column"
-    >
-      <Grid item>
+    <Container maxWidth="lg">
+      <Box sx={{ mb: 4 }}>
         <Typography variant="h4">
           <Box textAlign="center">Privacy dashboard</Box>
         </Typography>
@@ -36,16 +30,14 @@ function PrivacyDashboardPage(): JSX.Element {
             Entries with the latest expiry date are highlighted
           </Box>
         </Typography>
-      </Grid>
+      </Box>
 
-      <Grid item>
-        <PrivacyDashboard
-          privacyTokenContainerUrl={GetUserPrivacyPodUrl()}
-          tokenGrouping={(token) => token.hotel}
-          deleteButton={CreateDeleteButton}
-        />
-      </Grid>
-    </Grid>
+      <PrivacyDashboard
+        privacyTokenContainerUrl={GetUserPrivacyPodUrl()}
+        tokenGrouping={(token) => token.hotel}
+        deleteButton={CreateDeleteButton}
+      />
+    </Container>
   );
 }
 

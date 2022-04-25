@@ -5,7 +5,6 @@ import {
   Grid,
   Typography,
   Paper,
-  Divider,
 } from "@material-ui/core";
 import _ from "lodash";
 import { usePrivacyTokens } from "../hooks/usePrivacyTokens";
@@ -26,11 +25,10 @@ function AreDatesOnTheSameDay(d1: Date, d2: Date): boolean {
 
 function GetHighlightedOrNotEntry(
   text: string,
-  highlightValue: boolean,
-  noWrap: boolean
+  highlightValue: boolean
 ): JSX.Element {
   return (
-    <Typography noWrap={noWrap}>
+    <Typography>
       {highlightValue ? (
         <Box>{text}</Box>
       ) : (
@@ -75,14 +73,10 @@ function PrivacyField({
         <Typography noWrap>{showLabel ? field : ""}</Typography>
       </Grid>
       <Grid item xs={5}>
-        {GetHighlightedOrNotEntry(token.reason, highlightValue, false)}
+        {GetHighlightedOrNotEntry(token.reason, highlightValue)}
       </Grid>
       <Grid item xs={2}>
-        {GetHighlightedOrNotEntry(
-          token.expiry.toDateString(),
-          highlightValue,
-          false
-        )}
+        {GetHighlightedOrNotEntry(token.expiry.toDateString(), highlightValue)}
       </Grid>
       {deleteButton}
     </Grid>
@@ -112,44 +106,37 @@ function HotelPrivacy({
 
   return (
     <Box>
-      <Grid item>
-        <Typography variant="h6">
-          <Box textAlign="center">{counterparty}</Box>
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Box p={2}>
-          <Grid container spacing={1} justify="center" direction="column">
-            <Divider variant="middle" />
-            {Object.entries(groupByField).map(([field, tokens]) => {
-              const latestExpiry = FindLatestExpiryDate(tokens);
-              return (
-                <Paper elevation={6} key={field}>
-                  <Box m={2}>
-                    {tokens.map((token, index) => {
-                      return (
-                        <Box key={index}>
-                          <PrivacyField
-                            key={field}
-                            field={field}
-                            token={token}
-                            deleteButtonFunction={deleteButton}
-                            showLabel={index === 0}
-                            highlightValue={AreDatesOnTheSameDay(
-                              token.expiry,
-                              latestExpiry
-                            )}
-                          />
-                        </Box>
-                      );
-                    })}
-                  </Box>
-                </Paper>
-              );
-            })}
-          </Grid>
-        </Box>
-      </Grid>
+      <Typography variant="h6">
+        <Box textAlign="center">{counterparty}</Box>
+      </Typography>
+      <Box p={2}>
+        {Object.entries(groupByField).map(([field, tokens]) => {
+          const latestExpiry = FindLatestExpiryDate(tokens);
+          return (
+            <Paper elevation={6} key={field}>
+              <Box m={2}>
+                {tokens.map((token, index) => {
+                  return (
+                    <Box key={index}>
+                      <PrivacyField
+                        key={field}
+                        field={field}
+                        token={token}
+                        deleteButtonFunction={deleteButton}
+                        showLabel={index === 0}
+                        highlightValue={AreDatesOnTheSameDay(
+                          token.expiry,
+                          latestExpiry
+                        )}
+                      />
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Paper>
+          );
+        })}
+      </Box>
     </Box>
   );
 }
@@ -186,25 +173,16 @@ export function PrivacyDashboard({
 
   return (
     <Container>
-      <Grid
-        container
-        item
-        spacing={3}
-        justify="center"
-        alignItems="stretch"
-        direction="column"
-      >
-        {Object.entries(groupByCounterparty).map(([counterparty, tokens]) => {
-          return (
-            <HotelPrivacy
-              key={counterparty}
-              counterparty={counterparty}
-              privacyTokens={tokens}
-              deleteButton={deleteButton}
-            />
-          );
-        })}
-      </Grid>
+      {Object.entries(groupByCounterparty).map(([counterparty, tokens]) => {
+        return (
+          <HotelPrivacy
+            key={counterparty}
+            counterparty={counterparty}
+            privacyTokens={tokens}
+            deleteButton={deleteButton}
+          />
+        );
+      })}
     </Container>
   );
 }
