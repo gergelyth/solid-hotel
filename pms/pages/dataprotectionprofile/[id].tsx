@@ -1,5 +1,10 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
-import { CircularProgress, Grid, Typography } from "@material-ui/core";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Typography,
+} from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
@@ -24,8 +29,10 @@ function GetDataRetentionPeriod({
   }
 
   return (
-    <Typography variant="body1">
-      Data protection length: {data.dataProtectionYears} years
+    <Typography variant="subtitle2">
+      <Box display="flex" justifyContent="flex-end" alignItems="center">
+        Data protection length: {data.dataProtectionYears} years
+      </Box>
     </Typography>
   );
 }
@@ -61,30 +68,20 @@ function DataProtectionProfileDetail(): JSX.Element | null {
   }
 
   return (
-    <Grid
-      container
-      spacing={3}
-      justify="center"
-      alignItems="stretch"
-      direction="column"
-    >
-      <Grid item container justify="center">
-        <GetDataRetentionPeriod
-          data={dataDetailsRetrieval.data}
-          isLoading={dataDetailsRetrieval.isLoading}
-          isError={dataDetailsRetrieval.isError}
-        />
-      </Grid>
-      <Grid item>
-        <ProfileMain
-          rdfFields={dataDetailsRetrieval.data.dataProtectionFields}
-          webId={guestWebId}
-          editable={false}
-          deletable={false}
-          centerJustify={true}
-        />
-      </Grid>
-    </Grid>
+    <Container>
+      <GetDataRetentionPeriod
+        data={dataDetailsRetrieval.data}
+        isLoading={dataDetailsRetrieval.isLoading}
+        isError={dataDetailsRetrieval.isError}
+      />
+      <ProfileMain
+        rdfFields={dataDetailsRetrieval.data.dataProtectionFields}
+        webId={guestWebId}
+        editable={false}
+        deletable={false}
+        centerJustify={true}
+      />
+    </Container>
   );
 }
 

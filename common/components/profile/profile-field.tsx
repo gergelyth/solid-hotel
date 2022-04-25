@@ -61,7 +61,7 @@ function EditElements({
   }
 
   return (
-    <Box>
+    <Box sx={{ mx: 1 }}>
       <Grid item xs={2}>
         <Button
           variant="contained"
@@ -112,7 +112,7 @@ function DeleteElements({
   }
 
   return (
-    <Box>
+    <Box sx={{ mx: 1 }}>
       <Grid item xs={2}>
         <Button
           variant="contained"

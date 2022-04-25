@@ -3,4 +3,5 @@
 export const PMSInboxList: string[] = [
   "/bookingrequests",
   "/reservations/*inbox",
+  "/privacy/inbox",
 ];

@@ -110,40 +110,26 @@ function ProfileMain({
     //   forceRender={forceRender}
     //   webId={webId}
     // />
-    <Grid
-      container
-      spacing={3}
-      justify="center"
-      alignItems="stretch"
-      direction="column"
-    >
-      <Grid
-        item
-        container
-        spacing={1}
-        justify="center"
+    <Container>
+      <Box
+        display="flex"
+        justifyContent="center"
         alignItems="center"
-        direction="row"
+        sx={{ mb: 3 }}
       >
-        <Grid item>
-          <AccountBoxIcon style={{ fontSize: 80 }} />
-        </Grid>
-        <Grid item>
-          <GuestFullName guestFields={guestFields} />
-        </Grid>
-      </Grid>
-      <Grid item>
-        {CreateFieldElements(
-          guestFields,
-          rdfFields,
-          editable,
-          deletable,
-          centerJustify,
-          forceRender,
-          webId
-        )}
-      </Grid>
-    </Grid>
+        <AccountBoxIcon style={{ fontSize: 80 }} />
+        <GuestFullName guestFields={guestFields} />
+      </Box>
+      {CreateFieldElements(
+        guestFields,
+        rdfFields,
+        editable,
+        deletable,
+        centerJustify,
+        forceRender,
+        webId
+      )}
+    </Container>
   );
 }
 
