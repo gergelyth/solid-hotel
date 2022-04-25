@@ -10,7 +10,7 @@ function Footer(): JSX.Element {
         <Typography variant="subtitle2">License: MIT</Typography>
       </Box>
       <Box>
-        <Typography variant="subtitle2">2020 - 2021</Typography>
+        <Typography variant="subtitle2">2020 - 2022</Typography>
       </Box>
     </Box>
   );
