@@ -34,14 +34,14 @@ async function ExecuteCheckOut(
     dataProtectionProfileWebId
   );
 
+  //TODO should we unsubscribe? that would mean we don't notify the guest if there's a change here
+  UnSubscribe(reservationOwner);
+  DeleteFromCache(reservationOwner);
+
   const session = GetSession();
   await deleteSolidDataset(reservationOwner.split("#")[0], {
     fetch: session.fetch,
   });
-
-  //TODO should we unsubscribe? that would mean we don't notify the guest if there's a change here
-  UnSubscribe(reservationOwner);
-  DeleteFromCache(reservationOwner);
 
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,

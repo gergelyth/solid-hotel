@@ -38,7 +38,7 @@ function Checkout(): JSX.Element {
       />
 
       <FinishPage
-        successText={"Check-out successful!"}
+        successText={"Check-out request sent!"}
         currentPage={currentPage}
       />
     </Box>

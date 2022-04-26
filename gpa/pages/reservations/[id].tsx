@@ -59,7 +59,7 @@ function ReservationDetail(): JSX.Element {
       />
 
       <FinishPage
-        successText={"Check-in successful!"}
+        successText={"Check-in request sent!"}
         currentPage={currentPage}
       />
     </Box>
