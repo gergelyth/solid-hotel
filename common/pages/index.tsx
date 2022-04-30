@@ -279,10 +279,7 @@ export default function Home(): JSX.Element {
               onClick={async () => {
                 ShowInfoSnackbar("Creating privacy folders...");
                 //TODO make this a variable
-                await CreatePrivacyFolders(
-                  GetPodOfSession() + "/privacy",
-                  GetPodOfSession() + "/privacy/inbox/"
-                );
+                await CreatePrivacyFolders(GetPodOfSession() + "/privacy");
                 ShowSuccessSnackbar("Privacy folders created");
               }}
             >
