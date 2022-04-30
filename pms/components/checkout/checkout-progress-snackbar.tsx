@@ -46,7 +46,6 @@ async function ExecuteCheckOut(
 
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,
-    reservationOwner,
     CreateReservationUrlFromReservationId(reservationId),
     dataProtectionInformation.dataProtectionFields,
     GetCurrentDatePushedBy(dataProtectionInformation.dataProtectionYears, 0, 0)

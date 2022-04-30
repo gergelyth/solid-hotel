@@ -81,9 +81,3 @@ export function GetIdFromDatasetUrl(
 
   return result;
 }
-
-export function GetWebIdFromReservationInbox(inboxUrl: string): string {
-  //TODO not very robust
-  const podUrl = inboxUrl.replace(new RegExp("/reservations/*"), "");
-  return `${podUrl}/profile/card#me`;
-}

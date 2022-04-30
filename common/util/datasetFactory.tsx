@@ -94,11 +94,6 @@ export function CreateHotelPrivacyTokenDataset(
     privacyTokenToRdfMap.datasetUrlTarget,
     privacyToken.datasetUrlTarget
   );
-  newPrivacyToken = addStringNoLocale(
-    newPrivacyToken,
-    privacyTokenToRdfMap.guest,
-    privacyToken.guest
-  );
   if (privacyToken.guestInbox) {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,

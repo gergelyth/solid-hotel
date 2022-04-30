@@ -17,7 +17,6 @@ import { CreateReservationUrlFromReservationId } from "../../../common/util/urlP
 
 async function ExecuteCheckIn(
   reservationId: string,
-  guestWebId: string,
   guestFields: Field[],
   requiredFields: string[],
   replyInbox: string
@@ -47,7 +46,6 @@ async function ExecuteCheckIn(
 
   const privacyToken = await CreateActiveProfilePrivacyToken(
     hotelProfileWebId,
-    guestWebId,
     replyInbox,
     CreateReservationUrlFromReservationId(reservationId),
     requiredFields,
@@ -98,7 +96,6 @@ const CheckinProgressSnackbar = forwardRef<
 
     ExecuteCheckIn(
       props.reservationId,
-      props.guestWebId,
       guestFields,
       requiredFields,
       props.replyInbox

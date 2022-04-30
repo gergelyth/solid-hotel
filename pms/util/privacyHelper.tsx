@@ -74,7 +74,6 @@ export async function CreateReservationPrivacyToken(
 ): Promise<GuestPrivacyToken> {
   return SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
-    reservation.owner,
     [reservationFieldToRdfMap.inbox, reservationFieldToRdfMap.owner],
     reservation.dateTo,
     "Basic information for a confirmed reservation",
@@ -86,7 +85,6 @@ export async function CreateReservationPrivacyToken(
 
 export async function CreateActiveProfilePrivacyToken(
   datasetUrlTarget: string,
-  guestWebId: string,
   guestInbox: string,
   reservationUrl: string,
   fields: string[],
@@ -94,7 +92,6 @@ export async function CreateActiveProfilePrivacyToken(
 ): Promise<GuestPrivacyToken> {
   return SaveHotelAndCreateGuestPrivacyToken(
     datasetUrlTarget,
-    guestWebId,
     fields,
     expiryDate,
     "Local profile copy made for an active reservation.",
@@ -106,14 +103,12 @@ export async function CreateActiveProfilePrivacyToken(
 
 export async function CreateDataProtectionProfilePrivacyToken(
   datasetUrlTarget: string,
-  guestWebId: string,
   reservationUrl: string,
   fields: string[],
   expiryDate: Date
 ): Promise<GuestPrivacyToken> {
   return SaveHotelAndCreateGuestPrivacyToken(
     datasetUrlTarget,
-    guestWebId,
     fields,
     expiryDate,
     "Local profile copy made for preserving data protection information.",
@@ -127,7 +122,6 @@ export async function CreateDataProtectionProfilePrivacyToken(
 
 async function SaveHotelAndCreateGuestPrivacyToken(
   datasetUrlTarget: string,
-  guestWebId: string,
   fields: string[],
   expiryDate: Date,
   reason: string,
@@ -153,7 +147,6 @@ async function SaveHotelAndCreateGuestPrivacyToken(
   const hotelPrivacyToken: HotelPrivacyToken = {
     ...privacyToken,
     datasetUrlTarget: datasetUrlTarget,
-    guest: guestWebId,
     guestInbox: guestInbox,
     reservation: reservationUrl,
   };

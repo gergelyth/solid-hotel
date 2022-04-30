@@ -20,7 +20,6 @@ import {
   CreateReservationPrivacyToken,
 } from "./privacyHelper";
 import { ParseReservation } from "../../common/hooks/useReservations";
-import { GetWebIdFromReservationInbox } from "../../common/util/urlParser";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
@@ -104,7 +103,6 @@ export async function SendPairingRequestWithInformation(
 
   const profilePrivacyTokenDataset = await CreateActiveProfilePrivacyToken(
     hotelProfileOwnerUrl,
-    GetWebIdFromReservationInbox(guestInboxUrl),
     guestInboxUrl,
     reservationUrl,
     getPropertyAll(hotelProfileThing),

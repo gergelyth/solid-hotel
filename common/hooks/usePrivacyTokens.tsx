@@ -51,7 +51,6 @@ export function ConvertToHotelPrivacyToken(
     datasetUrlTarget:
       getStringNoLocale(privacyThing, privacyTokenToRdfMap.datasetUrlTarget) ??
       "",
-    guest: getStringNoLocale(privacyThing, privacyTokenToRdfMap.guest) ?? "",
     guestInbox:
       getStringNoLocale(privacyThing, privacyTokenToRdfMap.guestInbox) ??
       undefined,
