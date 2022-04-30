@@ -22,6 +22,8 @@ import { DeserializeProfileModification } from "../../common/notifications/Profi
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import UpdateLocalProfileSnackbar from "../../common/components/profile/update-local-profile";
+import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import PrivacyTokenRemover from "./privacyTokenRemover";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -139,6 +141,31 @@ export function ReceivePrivacyToken(
     });
   };
 
+  return { text, onClick, onReceive };
+}
+
+export function ReceivePrivacyTokenDeletionNotice(
+  router: NextRouter,
+  reservationInboxUrl: string,
+  dataset: SolidDataset
+): {
+  text: string;
+  onClick: (event: React.MouseEvent<EventTarget>) => void;
+  onReceive: () => void;
+} {
+  const tokenHotelUrl = DeserializePrivacyInformationDeletion(dataset);
+
+  const text = `Privacy token at [${tokenHotelUrl}] was deleted at the hotel.\nDeleting the corresponding token.`;
+  const onClick = (): void => undefined;
+  const onReceive = async (): Promise<void> => {
+    const snackbarId = "privacyTokenRemover";
+    ShowCustomSnackbar(
+      () => (
+        <PrivacyTokenRemover snackbarId={snackbarId} hotelUrl={tokenHotelUrl} />
+      ),
+      snackbarId
+    );
+  };
   return { text, onClick, onReceive };
 }
 

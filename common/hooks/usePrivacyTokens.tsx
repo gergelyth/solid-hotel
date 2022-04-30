@@ -81,6 +81,7 @@ export function ConvertToGuestPrivacyToken(
         privacyTokenToRdfMap.hotelInboxForDeletion
       ) ?? "",
     hotel: getStringNoLocale(privacyThing, privacyTokenToRdfMap.hotel) ?? "",
+    urlAtGuest: url,
   };
 
   return guestPrivacytoken;

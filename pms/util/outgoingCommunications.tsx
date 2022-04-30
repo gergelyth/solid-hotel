@@ -23,6 +23,8 @@ import { ParseReservation } from "../../common/hooks/useReservations";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
+import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
+import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
@@ -123,6 +125,34 @@ export async function SendPrivacyToken(
   await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
     fetch: session.fetch,
   });
+}
+
+export async function SendPrivacyTokenDeletionNotice(
+  privacyToken: HotelPrivacyToken,
+  session: Session = GetSession()
+): Promise<void> {
+  if (!privacyToken.urlAtHotel) {
+    throw new Error(
+      "Token URL was annulled outside of the application. Cannot delete"
+    );
+  }
+  if (!privacyToken.guestInbox) {
+    throw new Error(
+      "Guest inbox is undefined in privacy token. That can only happen for data protection tokens. This is called by mistake."
+    );
+  }
+
+  const notificationDataset = SerializePrivacyInformationDeletion(
+    privacyToken.urlAtHotel
+  );
+
+  await saveSolidDatasetInContainer(
+    privacyToken.guestInbox,
+    notificationDataset,
+    {
+      fetch: session.fetch,
+    }
+  );
 }
 
 export async function SendProfileModification(

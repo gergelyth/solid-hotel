@@ -4,6 +4,7 @@ import {
   ReceiveFailureReport,
   ReceivePairingRequestWithInformation,
   ReceivePrivacyToken,
+  ReceivePrivacyTokenDeletionNotice,
   ReceiveProfileModification,
   ReceiveReservationStateChange,
 } from "../util/incomingCommunications";
@@ -14,5 +15,6 @@ export const GPAParsers: ParserList = {
   [NotificationType.PairingRequestWithInformation]:
     ReceivePairingRequestWithInformation,
   [NotificationType.PrivacyToken]: ReceivePrivacyToken,
+  [NotificationType.PrivacyTokenDeletion]: ReceivePrivacyTokenDeletionNotice,
   [NotificationType.ProfileModification]: ReceiveProfileModification,
 };

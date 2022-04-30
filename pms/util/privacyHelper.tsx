@@ -8,6 +8,7 @@ import {
   setStringNoLocale,
   setThing,
 } from "@inrupt/solid-client";
+import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import {
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
@@ -19,7 +20,9 @@ import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetSession } from "../../common/util/solid";
+import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
 
 async function AnonymizeFields(
   datasetUrlTarget: string,
@@ -56,15 +59,19 @@ export async function AnonymizeFieldsAndDeleteToken(
     throw new Error("Privacy token target URL is null");
   }
 
+  await AnonymizeFields(privacyToken.datasetUrlTarget, privacyToken.fieldList);
+  await DeletePrivacyToken(privacyToken);
+}
+
+async function DeletePrivacyToken(
+  privacyToken: HotelPrivacyToken
+): Promise<void> {
+  if (!privacyToken.urlAtHotel) {
+    throw new Error("Privacy token URL is null. Cannot process/delete");
+  }
   const session = GetSession();
-  AnonymizeFields(privacyToken.datasetUrlTarget, privacyToken.fieldList).then(
-    () => {
-      if (!privacyToken.urlAtHotel) {
-        throw new Error("Privacy token URL is null. Cannot process/delete");
-      }
-      deleteSolidDataset(privacyToken.urlAtHotel, { fetch: session.fetch });
-    }
-  );
+  await deleteSolidDataset(privacyToken.urlAtHotel, { fetch: session.fetch });
+  await SendPrivacyTokenDeletionNotice(privacyToken);
 }
 
 export async function CreateReservationPrivacyToken(
@@ -175,8 +182,36 @@ async function SaveHotelAndCreateGuestPrivacyToken(
     ...privacyToken,
     hotelInboxForDeletion: PrivacyTokensInboxUrl,
     hotel: hotelWebId,
+    urlAtGuest: undefined,
   };
   guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
 
   return guestPrivacyToken;
+}
+
+export async function FindWebIdTokenAndDeleteIt(
+  privacyTokens: (HotelPrivacyToken | null)[],
+  reservationId: string
+): Promise<void> {
+  console.log("Finding WebId token to send notice of deletion");
+
+  const reservationUrl = CreateReservationUrlFromReservationId(reservationId);
+  const webIdToken = privacyTokens.find(
+    (t) =>
+      t &&
+      t.reservation === reservationUrl &&
+      t.forReservationState === ReservationState.CONFIRMED &&
+      t.fieldList.includes(reservationFieldToRdfMap.owner)
+  );
+
+  if (!webIdToken) {
+    ShowWarningSnackbar(
+      "The WebId token was not found. There's no need to delete anything."
+    );
+    return;
+  }
+
+  console.log("WebId token found.");
+
+  await DeletePrivacyToken(webIdToken);
 }
