@@ -193,25 +193,60 @@ export async function FindWebIdTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
   reservationId: string
 ): Promise<void> {
-  console.log("Finding WebId token to send notice of deletion");
+  return FindTokenAndDeleteIt(
+    privacyTokens,
+    reservationId,
+    ReservationState.CONFIRMED,
+    reservationFieldToRdfMap.owner
+  );
+}
 
+export async function FindInboxTokenAndDeleteIt(
+  privacyTokens: (HotelPrivacyToken | null)[],
+  reservationId: string
+): Promise<void> {
+  return FindTokenAndDeleteIt(
+    privacyTokens,
+    reservationId,
+    ReservationState.CONFIRMED,
+    reservationFieldToRdfMap.inbox
+  );
+}
+
+export async function FindHotelProfileTokenAndDeleteIt(
+  privacyTokens: (HotelPrivacyToken | null)[],
+  reservationId: string
+): Promise<void> {
+  return FindTokenAndDeleteIt(
+    privacyTokens,
+    reservationId,
+    ReservationState.ACTIVE
+  );
+}
+
+async function FindTokenAndDeleteIt(
+  privacyTokens: (HotelPrivacyToken | null)[],
+  reservationId: string,
+  reservationState: ReservationState,
+  rdfFieldIncluded?: string
+): Promise<void> {
+  console.log("Finding privacy token to send notice of deletion");
   const reservationUrl = CreateReservationUrlFromReservationId(reservationId);
-  const webIdToken = privacyTokens.find(
+  const token = privacyTokens.find(
     (t) =>
       t &&
       t.reservation === reservationUrl &&
-      t.forReservationState === ReservationState.CONFIRMED &&
-      t.fieldList.includes(reservationFieldToRdfMap.owner)
+      t.forReservationState === reservationState &&
+      (!rdfFieldIncluded || t.fieldList.includes(rdfFieldIncluded))
   );
 
-  if (!webIdToken) {
+  if (!token) {
     ShowWarningSnackbar(
-      "The WebId token was not found. There's no need to delete anything."
+      "The sought token was not found. There's no need to delete anything."
     );
     return;
   }
 
-  console.log("WebId token found.");
-
-  await DeletePrivacyToken(webIdToken);
+  console.log("Sought token found.");
+  await DeletePrivacyToken(token);
 }

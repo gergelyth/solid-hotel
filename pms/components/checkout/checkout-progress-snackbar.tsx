@@ -3,7 +3,11 @@ import { forwardRef, useEffect } from "react";
 import { SetReservationOwnerToHotelProfile } from "../../../common/util/solid_reservations";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { CreateDataProtectionProfile } from "../../../common/util/hotelProfileHandler";
-import { CreateDataProtectionProfilePrivacyToken } from "../../util/privacyHelper";
+import {
+  CreateDataProtectionProfilePrivacyToken,
+  FindHotelProfileTokenAndDeleteIt,
+  FindInboxTokenAndDeleteIt,
+} from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { GetCurrentDatePushedBy } from "../../../common/util/helpers";
@@ -15,13 +19,17 @@ import { GetSession } from "../../../common/util/solid";
 import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
+import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
+import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
+import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 
 async function ExecuteCheckOut(
   guestFields: Field[],
   dataProtectionInformation: DataProtectionInformation,
   reservationId: string,
   reservationOwner: string,
-  replyInbox: string
+  replyInbox: string,
+  privacyTokens: (HotelPrivacyToken | null)[]
 ): Promise<void> {
   console.log("execute check-out started");
 
@@ -29,7 +37,6 @@ async function ExecuteCheckOut(
     guestFields
   );
 
-  //TODO are we allowed to do this? we probably won't need the guest WebId anymore
   await SetReservationOwnerToHotelProfile(
     reservationId,
     dataProtectionProfileWebId
@@ -43,6 +50,7 @@ async function ExecuteCheckOut(
   await deleteSolidDataset(reservationOwner.split("#")[0], {
     fetch: session.fetch,
   });
+  await FindHotelProfileTokenAndDeleteIt(privacyTokens, reservationId);
 
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,
@@ -54,7 +62,8 @@ async function ExecuteCheckOut(
   await SendPrivacyToken(replyInbox, privacyToken);
   console.log("privacy token sent");
 
-  //TODO I think delete inbox?
+  await FindInboxTokenAndDeleteIt(privacyTokens, reservationId);
+  //TODO I think delete inbox? - I think this means the reservation inbox?
 }
 
 const CheckoutProgressSnackbar = forwardRef<
@@ -72,18 +81,24 @@ const CheckoutProgressSnackbar = forwardRef<
     dataProtection?.dataProtectionFields,
     props.reservationOwner
   );
+  const { items: privacyTokens, isError: tokenError } =
+    useHotelPrivacyTokens(PrivacyTokensUrl);
 
   useEffect(() => {
     console.log("effect started");
-    if (apiError || guestError) {
+    if (apiError || guestError || tokenError) {
       CloseSnackbar(props.key);
       throw new Error(
-        `Failed to retrieve data protection information from the mock API or user information from ${props.reservationOwner}`
+        `Failed to retrieve data protection information from the mock API, privacy tokens, or user information from ${props.reservationOwner}`
       );
     }
 
     if (!guestFields) {
       console.log("Guest field information null");
+      return;
+    }
+    if (!privacyTokens) {
+      console.log("privacy tokens undefined");
       return;
     }
     if (!dataProtection) {
@@ -97,9 +112,10 @@ const CheckoutProgressSnackbar = forwardRef<
       dataProtection,
       props.reservationId,
       props.reservationOwner,
-      props.replyInbox
+      props.replyInbox,
+      privacyTokens
     ).then(() => CloseSnackbar(props.key));
-  }, [guestFields, apiError, guestError]);
+  }, [guestFields, privacyTokens, apiError, guestError, tokenError]);
 
   return (
     <CustomProgressSnackbar

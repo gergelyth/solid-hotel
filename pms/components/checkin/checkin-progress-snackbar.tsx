@@ -4,22 +4,31 @@ import { SetReservationOwnerToHotelProfile } from "../../../common/util/solid_re
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { useGuest } from "../../../common/hooks/useGuest";
 import { CreateHotelProfile } from "../../../common/util/hotelProfileHandler";
-import { HotelProfilesUrl } from "../../../common/consts/solidIdentifiers";
+import {
+  HotelProfilesUrl,
+  PrivacyTokensUrl,
+} from "../../../common/consts/solidIdentifiers";
 import { getDatetime } from "@inrupt/solid-client";
 import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reservation";
-import { CreateActiveProfilePrivacyToken } from "../../util/privacyHelper";
+import {
+  CreateActiveProfilePrivacyToken,
+  FindWebIdTokenAndDeleteIt,
+} from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { Field } from "../../../common/types/Field";
 import { SubscribeToProfileChanges } from "../../util/trackerInitializer";
 import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
+import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
+import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 
 async function ExecuteCheckIn(
   reservationId: string,
   guestFields: Field[],
   requiredFields: string[],
-  replyInbox: string
+  replyInbox: string,
+  privacyTokens: (HotelPrivacyToken | null)[]
 ): Promise<void> {
   console.log("execute check-in started");
   const hotelProfileWebId = await CreateHotelProfile(
@@ -30,11 +39,12 @@ async function ExecuteCheckIn(
   await CacheProfileFields(hotelProfileWebId, guestFields);
   await SubscribeToProfileChanges(hotelProfileWebId, requiredFields);
 
-  //TODO are we allowed to do this? we probably won't need the guest WebId anymore
+  //Deleting the mention of WebId and deleting the corresponding privacy token
   const reservationThing = await SetReservationOwnerToHotelProfile(
     reservationId,
     hotelProfileWebId
   );
+  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId);
 
   const checkoutDate = getDatetime(
     reservationThing,
@@ -73,10 +83,12 @@ const CheckinProgressSnackbar = forwardRef<
     requiredFields,
     props.guestWebId
   );
+  const { items: privacyTokens, isError: tokenError } =
+    useHotelPrivacyTokens(PrivacyTokensUrl);
 
   useEffect(() => {
     console.log("effect started");
-    if (apiError || guestError) {
+    if (apiError || guestError || tokenError) {
       CloseSnackbar(props.key);
       throw new Error(
         "Error using the hooks during check-in (potentially failed to retrieve fields from user's Pod)."
@@ -85,6 +97,11 @@ const CheckinProgressSnackbar = forwardRef<
 
     if (!guestFields) {
       console.log("guest fields null");
+      return;
+    }
+
+    if (!privacyTokens) {
+      console.log("privacy tokens undefined");
       return;
     }
 
@@ -98,9 +115,10 @@ const CheckinProgressSnackbar = forwardRef<
       props.reservationId,
       guestFields,
       requiredFields,
-      props.replyInbox
+      props.replyInbox,
+      privacyTokens
     ).then(() => CloseSnackbar(props.key));
-  }, [guestFields, apiError, guestError]);
+  }, [guestFields, privacyTokens, apiError, guestError, tokenError]);
 
   return (
     <CustomProgressSnackbar
