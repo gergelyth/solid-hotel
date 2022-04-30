@@ -13,6 +13,7 @@ import { CloseSnackbar } from "../../../common/components/snackbar";
 import { Field } from "../../../common/types/Field";
 import { SubscribeToProfileChanges } from "../../util/trackerInitializer";
 import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
+import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 
 async function ExecuteCheckIn(
   reservationId: string,
@@ -47,6 +48,8 @@ async function ExecuteCheckIn(
   const privacyToken = await CreateActiveProfilePrivacyToken(
     hotelProfileWebId,
     guestWebId,
+    replyInbox,
+    CreateReservationUrlFromReservationId(reservationId),
     requiredFields,
     checkoutDate
   );

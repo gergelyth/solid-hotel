@@ -14,6 +14,7 @@ import { deleteSolidDataset } from "@inrupt/solid-client";
 import { GetSession } from "../../../common/util/solid";
 import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
+import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 
 async function ExecuteCheckOut(
   guestFields: Field[],
@@ -46,6 +47,7 @@ async function ExecuteCheckOut(
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
     dataProtectionProfileWebId,
     reservationOwner,
+    CreateReservationUrlFromReservationId(reservationId),
     dataProtectionInformation.dataProtectionFields,
     GetCurrentDatePushedBy(dataProtectionInformation.dataProtectionYears, 0, 0)
   );

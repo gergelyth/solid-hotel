@@ -27,7 +27,7 @@ import {
   AddReservation,
   GetOwnerFromReservation,
 } from "../../common/util/solid_reservations";
-import { ConvertToPrivacyToken } from "../../common/hooks/usePrivacyTokens";
+import { ConvertToHotelPrivacyToken } from "../../common/hooks/usePrivacyTokens";
 import { GetSession } from "../../common/util/solid";
 import {
   AnonymizeFieldsAndDeleteToken,
@@ -94,6 +94,7 @@ export function ReceiveBookingRequest(
 
     const privacyToken = await CreateReservationPrivacyToken(
       GetReservationUrlFromInboxUrl(hotelInboxUrl),
+      reservation.inbox,
       reservation
     );
     SendPrivacyToken(reservation.inbox, privacyToken);
@@ -222,7 +223,7 @@ export function ReceivePrivacyTokenDeletionRequest(
       fetch: session.fetch,
     });
 
-    const privacyToken = ConvertToPrivacyToken(tokenDataset, tokenUrl);
+    const privacyToken = ConvertToHotelPrivacyToken(tokenDataset, tokenUrl);
     if (!privacyToken) {
       throw new Error(`Parsing of privacy token ${tokenUrl} failed`);
     }

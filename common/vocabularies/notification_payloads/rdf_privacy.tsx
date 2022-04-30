@@ -3,6 +3,8 @@ export const privacyTokenToRdfMap: Record<string, string> = {
   datasetUrlTarget: "schema:datasetUrlTarget",
   hotel: "schema:hotel",
   guest: "schema:guest",
+  guestInbox: "schema:guestInbox",
+  reservation: "schema:reservation",
   fieldList: "schema:fields",
   reason: "schema:reason",
   forReservationState: "schema:forReservationState",

@@ -2,11 +2,11 @@ import { CloseSnackbar } from "../../common/components/snackbar";
 import { GetUserPrivacyPodUrl } from "../../common/util/solid";
 import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
 import { Dispatch, forwardRef, SetStateAction, useEffect } from "react";
-import { usePrivacyTokens } from "../../common/hooks/usePrivacyTokens";
-import { PrivacyToken } from "../../common/types/PrivacyToken";
+import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { useReservations } from "../../common/hooks/useReservations";
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
+import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 
 //we cant use the mockAPI to get the required RDF fields, because what if the nationality
 //changed between the current moment and the moment the hotel profile was submitted and saved on the hotel side
@@ -17,7 +17,7 @@ export type HotelToRdf = {
 
 function CollectRdfFields(
   hotelsWithActiveReservation: string[],
-  privacyTokens: (PrivacyToken | null)[]
+  privacyTokens: (GuestPrivacyToken | null)[]
 ): HotelToRdf {
   const hotelToRdfFieldMap: { [hotel: string]: Set<string> } =
     hotelsWithActiveReservation.reduce(
@@ -53,7 +53,7 @@ const TrackedRdfFieldCollector = forwardRef<
   }
 >((props, ref) => {
   const { items: privacyTokens, isError: privacyTokensError } =
-    usePrivacyTokens(GetUserPrivacyPodUrl());
+    useGuestPrivacyTokens(GetUserPrivacyPodUrl());
   const { items: reservations, isError: reservationsError } = useReservations(
     GetUserReservationsPodUrl()
   );

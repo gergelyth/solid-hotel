@@ -1,32 +1,65 @@
 import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
 import {
   AddNotificationThingToDataset,
-  CreatePrivacyTokenDataset,
+  CreateGuestPrivacyTokenDataset,
+  CreateHotelPrivacyTokenDataset,
 } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
-import { PrivacyToken } from "../types/PrivacyToken";
-import { ConvertToPrivacyToken } from "../hooks/usePrivacyTokens";
+import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
+import { ConvertToHotelPrivacyToken } from "../hooks/usePrivacyTokens";
+import { ConvertToGuestPrivacyToken } from "../hooks/usePrivacyTokens";
+import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 
-export function DeserializePrivacyNotification(
+//TODO can we improve the methods with generics to avoid duplication?
+export function DeserializeHotelPrivacyNotification(
   dataset: SolidDataset
-): PrivacyToken {
+): HotelPrivacyToken {
   const datasetUrl = getSourceUrl(dataset);
   if (!datasetUrl) {
     throw new Error("Dataset URL is null");
   }
 
-  const privacyToken = ConvertToPrivacyToken(dataset, datasetUrl);
-  if (!privacyToken) {
-    throw new Error("Privacy token cannot be null");
+  const hotelPrivacyToken = ConvertToHotelPrivacyToken(dataset, datasetUrl);
+  if (!hotelPrivacyToken) {
+    throw new Error("Hotel privacy token cannot be null");
   }
 
-  return privacyToken;
+  return hotelPrivacyToken;
 }
 
-export function SerializePrivacyNotification(
-  privacyToken: PrivacyToken
+export function DeserializeGuestPrivacyNotification(
+  dataset: SolidDataset
+): GuestPrivacyToken {
+  const datasetUrl = getSourceUrl(dataset);
+  if (!datasetUrl) {
+    throw new Error("Dataset URL is null");
+  }
+
+  const guestPrivacyToken = ConvertToGuestPrivacyToken(dataset, datasetUrl);
+  if (!guestPrivacyToken) {
+    throw new Error("Guest privacy token cannot be null");
+  }
+
+  return guestPrivacyToken;
+}
+
+export function SerializeHotelPrivacyNotification(
+  privacyToken: HotelPrivacyToken
 ): SolidDataset {
-  const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
+  const privacyTokenDataset = CreateHotelPrivacyTokenDataset(privacyToken);
+
+  const notificationDataset = AddNotificationThingToDataset(
+    privacyTokenDataset,
+    NotificationType.PrivacyToken
+  );
+
+  return notificationDataset;
+}
+
+export function SerializeGuestPrivacyNotification(
+  privacyToken: GuestPrivacyToken
+): SolidDataset {
+  const privacyTokenDataset = CreateGuestPrivacyTokenDataset(privacyToken);
 
   const notificationDataset = AddNotificationThingToDataset(
     privacyTokenDataset,

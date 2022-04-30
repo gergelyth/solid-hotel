@@ -6,6 +6,7 @@ import {
   createSolidDataset,
   createThing,
   setThing,
+  Thing,
 } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
@@ -14,6 +15,8 @@ import { notificationToRdfMap } from "../vocabularies/rdf_notification";
 import { NotificationType } from "../types/NotificationsType";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
+import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
+import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 
 export function CreateReservationDataset(
   reservation: ReservationAtHotel
@@ -82,34 +85,60 @@ export function AddNotificationThingToDataset(
   return setThing(dataset, notification);
 }
 
-export function CreatePrivacyTokenDataset(
-  privacyToken: PrivacyToken
+export function CreateHotelPrivacyTokenDataset(
+  privacyToken: HotelPrivacyToken
 ): SolidDataset {
-  let privacyTokenDataset = createSolidDataset();
-
-  let newPrivacyToken = createThing({ name: "privacy" });
+  let newPrivacyToken = CreateCorePrivacyTokenDataset(privacyToken);
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
-    privacyTokenToRdfMap.hotelInboxForDeletion,
-    privacyToken.hotelInboxForDeletion
-  );
-  if (privacyToken.datasetUrlTarget) {
-    newPrivacyToken = addStringNoLocale(
-      newPrivacyToken,
-      privacyTokenToRdfMap.datasetUrlTarget,
-      privacyToken.datasetUrlTarget
-    );
-  }
-  newPrivacyToken = addStringNoLocale(
-    newPrivacyToken,
-    privacyTokenToRdfMap.hotel,
-    privacyToken.hotel
+    privacyTokenToRdfMap.datasetUrlTarget,
+    privacyToken.datasetUrlTarget
   );
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
     privacyTokenToRdfMap.guest,
     privacyToken.guest
   );
+  if (privacyToken.guestInbox) {
+    newPrivacyToken = addStringNoLocale(
+      newPrivacyToken,
+      privacyTokenToRdfMap.guestInbox,
+      privacyToken.guestInbox
+    );
+  }
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
+    privacyTokenToRdfMap.reservation,
+    privacyToken.reservation
+  );
+
+  let privacyTokenDataset = createSolidDataset();
+  privacyTokenDataset = setThing(privacyTokenDataset, newPrivacyToken);
+  return privacyTokenDataset;
+}
+
+export function CreateGuestPrivacyTokenDataset(
+  privacyToken: GuestPrivacyToken
+): SolidDataset {
+  let newPrivacyToken = CreateCorePrivacyTokenDataset(privacyToken);
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
+    privacyTokenToRdfMap.hotelInboxForDeletion,
+    privacyToken.hotelInboxForDeletion
+  );
+  newPrivacyToken = addStringNoLocale(
+    newPrivacyToken,
+    privacyTokenToRdfMap.hotel,
+    privacyToken.hotel
+  );
+
+  let privacyTokenDataset = createSolidDataset();
+  privacyTokenDataset = setThing(privacyTokenDataset, newPrivacyToken);
+  return privacyTokenDataset;
+}
+
+function CreateCorePrivacyTokenDataset(privacyToken: PrivacyToken): Thing {
+  let newPrivacyToken = createThing({ name: "privacy" });
   privacyToken.fieldList.forEach((field) => {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,
@@ -133,14 +162,13 @@ export function CreatePrivacyTokenDataset(
     privacyToken.expiry
   );
 
-  if (privacyToken.url) {
+  if (privacyToken.urlAtHotel) {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,
       privacyTokenToRdfMap.url,
-      privacyToken.url
+      privacyToken.urlAtHotel
     );
   }
 
-  privacyTokenDataset = setThing(privacyTokenDataset, newPrivacyToken);
-  return privacyTokenDataset;
+  return newPrivacyToken;
 }

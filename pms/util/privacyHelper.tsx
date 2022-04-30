@@ -12,10 +12,12 @@ import {
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
 } from "../../common/consts/solidIdentifiers";
+import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
+import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
-import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
+import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetSession } from "../../common/util/solid";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 
@@ -48,7 +50,7 @@ async function AnonymizeFields(
 }
 
 export async function AnonymizeFieldsAndDeleteToken(
-  privacyToken: PrivacyToken
+  privacyToken: HotelPrivacyToken
 ): Promise<void> {
   if (!privacyToken.datasetUrlTarget) {
     throw new Error("Privacy token target URL is null");
@@ -57,88 +59,82 @@ export async function AnonymizeFieldsAndDeleteToken(
   const session = GetSession();
   AnonymizeFields(privacyToken.datasetUrlTarget, privacyToken.fieldList).then(
     () => {
-      if (!privacyToken.url) {
+      if (!privacyToken.urlAtHotel) {
         throw new Error("Privacy token URL is null. Cannot process/delete");
       }
-      deleteSolidDataset(privacyToken.url, { fetch: session.fetch });
+      deleteSolidDataset(privacyToken.urlAtHotel, { fetch: session.fetch });
     }
   );
 }
 
 export async function CreateReservationPrivacyToken(
-  datasetUrlTarget: string,
+  reservationUrl: string,
+  guestInbox: string,
   reservation: ReservationAtHotel
-): Promise<PrivacyToken> {
-  const session = GetSession();
-
-  const hotelWebId = session.info.webId;
-  if (!hotelWebId) {
-    throw new Error("Hotel not logged in. This should never happen");
-  }
-
-  const privacyToken: PrivacyToken = {
-    url: null,
-    hotelInboxForDeletion: PrivacyTokensInboxUrl,
-    datasetUrlTarget: datasetUrlTarget,
-    hotel: hotelWebId,
-    guest: reservation.owner,
-    fieldList: [reservationFieldToRdfMap.inbox, reservationFieldToRdfMap.owner],
-    reason: "Basic information for a confirmed reservation",
-    forReservationState: ReservationState.CONFIRMED,
-    expiry: reservation.dateTo,
-  };
-
-  const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
-  const savedDataset = await saveSolidDatasetInContainer(
-    PrivacyTokensUrl,
-    privacyTokenDataset,
-    { fetch: session.fetch }
+): Promise<GuestPrivacyToken> {
+  return SaveHotelAndCreateGuestPrivacyToken(
+    reservationUrl,
+    reservation.owner,
+    [reservationFieldToRdfMap.inbox, reservationFieldToRdfMap.owner],
+    reservation.dateTo,
+    "Basic information for a confirmed reservation",
+    ReservationState.CONFIRMED,
+    guestInbox,
+    reservationUrl
   );
-
-  privacyToken.url = getSourceUrl(savedDataset);
-  return privacyToken;
 }
 
 export async function CreateActiveProfilePrivacyToken(
   datasetUrlTarget: string,
   guestWebId: string,
+  guestInbox: string,
+  reservationUrl: string,
   fields: string[],
   expiryDate: Date
-): Promise<PrivacyToken> {
-  return CreateProfilePrivacyToken(
+): Promise<GuestPrivacyToken> {
+  return SaveHotelAndCreateGuestPrivacyToken(
     datasetUrlTarget,
     guestWebId,
     fields,
     expiryDate,
     "Local profile copy made for an active reservation.",
-    ReservationState.ACTIVE
+    ReservationState.ACTIVE,
+    guestInbox,
+    reservationUrl
   );
 }
 
 export async function CreateDataProtectionProfilePrivacyToken(
   datasetUrlTarget: string,
   guestWebId: string,
+  reservationUrl: string,
   fields: string[],
   expiryDate: Date
-): Promise<PrivacyToken> {
-  return CreateProfilePrivacyToken(
+): Promise<GuestPrivacyToken> {
+  return SaveHotelAndCreateGuestPrivacyToken(
     datasetUrlTarget,
     guestWebId,
     fields,
     expiryDate,
     "Local profile copy made for preserving data protection information.",
-    ReservationState.PAST
+    ReservationState.PAST,
+    //we're not saving the inbox anymore in the privacy token, because we don't need it
+    //the hotel will no longer manipulate with this on its own volition
+    undefined,
+    reservationUrl
   );
 }
 
-async function CreateProfilePrivacyToken(
+async function SaveHotelAndCreateGuestPrivacyToken(
   datasetUrlTarget: string,
   guestWebId: string,
   fields: string[],
   expiryDate: Date,
   reason: string,
-  forReservationState: ReservationState
-): Promise<PrivacyToken> {
+  forReservationState: ReservationState,
+  guestInbox: string | undefined,
+  reservationUrl: string
+): Promise<GuestPrivacyToken> {
   const session = GetSession();
 
   const hotelWebId = session.info.webId;
@@ -147,26 +143,35 @@ async function CreateProfilePrivacyToken(
   }
 
   const privacyToken: PrivacyToken = {
-    url: null,
-    hotelInboxForDeletion: PrivacyTokensInboxUrl,
-    datasetUrlTarget: datasetUrlTarget,
-    hotel: hotelWebId,
-    guest: guestWebId,
+    urlAtHotel: null,
     fieldList: fields,
     reason: reason,
     forReservationState: forReservationState,
     expiry: expiryDate,
   };
 
-  const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
+  const hotelPrivacyToken: HotelPrivacyToken = {
+    ...privacyToken,
+    datasetUrlTarget: datasetUrlTarget,
+    guest: guestWebId,
+    guestInbox: guestInbox,
+    reservation: reservationUrl,
+  };
+
+  const hotelPrivacyTokenDataset =
+    CreateHotelPrivacyTokenDataset(hotelPrivacyToken);
   const savedDataset = await saveSolidDatasetInContainer(
     PrivacyTokensUrl,
-    privacyTokenDataset,
-    {
-      fetch: session.fetch,
-    }
+    hotelPrivacyTokenDataset,
+    { fetch: session.fetch }
   );
 
-  privacyToken.url = getSourceUrl(savedDataset);
-  return privacyToken;
+  const guestPrivacyToken: GuestPrivacyToken = {
+    ...privacyToken,
+    hotelInboxForDeletion: PrivacyTokensInboxUrl,
+    hotel: hotelWebId,
+  };
+  guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
+
+  return guestPrivacyToken;
 }

@@ -6,7 +6,7 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { SerializeFailureReport } from "../../common/notifications/FailureReport";
 import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { SerializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
-import { SerializePrivacyNotification } from "../../common/notifications/PrivacyNotification";
+import { SerializeGuestPrivacyNotification } from "../../common/notifications/PrivacyNotification";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetSession } from "../../common/util/solid";
 import { GetHotelProfileThing } from "../../common/util/hotelProfileHandler";
@@ -21,9 +21,9 @@ import {
 } from "./privacyHelper";
 import { ParseReservation } from "../../common/hooks/useReservations";
 import { GetWebIdFromReservationInbox } from "../../common/util/urlParser";
-import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
+import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
@@ -97,6 +97,7 @@ export async function SendPairingRequestWithInformation(
   );
   const reservationPrivacyTokenDataset = await CreateReservationPrivacyToken(
     reservationUrl,
+    guestInboxUrl,
     parsedReservation
   );
   SendPrivacyToken(guestInboxUrl, reservationPrivacyTokenDataset);
@@ -104,6 +105,8 @@ export async function SendPairingRequestWithInformation(
   const profilePrivacyTokenDataset = await CreateActiveProfilePrivacyToken(
     hotelProfileOwnerUrl,
     GetWebIdFromReservationInbox(guestInboxUrl),
+    guestInboxUrl,
+    reservationUrl,
     getPropertyAll(hotelProfileThing),
     parsedReservation.dateTo
   );
@@ -112,10 +115,10 @@ export async function SendPairingRequestWithInformation(
 
 export async function SendPrivacyToken(
   guestInboxUrl: string,
-  privacyToken: PrivacyToken,
+  privacyToken: GuestPrivacyToken,
   session: Session = GetSession()
 ): Promise<void> {
-  const notificationDataset = SerializePrivacyNotification(privacyToken);
+  const notificationDataset = SerializeGuestPrivacyNotification(privacyToken);
 
   await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
     fetch: session.fetch,

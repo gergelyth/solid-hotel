@@ -7,11 +7,11 @@ import { SerializeReservationStateChange } from "../../common/notifications/Rese
 import { SerializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { SerializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
-import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { GetSession } from "../../common/util/solid";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
+import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
@@ -106,17 +106,17 @@ export async function SubmitInitialPairingRequest(
 }
 
 export async function SubmitPrivacyTokenDeletionRequest(
-  privacyToken: PrivacyToken,
+  privacyToken: GuestPrivacyToken,
   session = GetSession()
 ): Promise<void> {
-  if (!privacyToken.url) {
+  if (!privacyToken.urlAtHotel) {
     throw new Error(
       "Token URL was annulled outside of the application. Cannot delete"
     );
   }
 
   const notificationDataset = SerializePrivacyInformationDeletion(
-    privacyToken.url
+    privacyToken.urlAtHotel
   );
 
   await saveSolidDatasetInContainer(

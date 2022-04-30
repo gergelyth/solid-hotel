@@ -7,7 +7,6 @@ import {
   Paper,
 } from "@material-ui/core";
 import _ from "lodash";
-import { usePrivacyTokens } from "../hooks/usePrivacyTokens";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { NotEmptyItem } from "../util/helpers";
 
@@ -141,23 +140,23 @@ function HotelPrivacy({
   );
 }
 
-export function PrivacyDashboard({
-  privacyTokenContainerUrl,
+export function PrivacyDashboard<T extends PrivacyToken>({
+  retrieval,
   tokenGrouping,
   deleteButton,
 }: {
-  privacyTokenContainerUrl: string | null;
-  tokenGrouping: (token: PrivacyToken) => string;
+  retrieval: {
+    items: (T | null)[] | undefined;
+    isLoading: boolean;
+    isError: boolean;
+  };
+  tokenGrouping: (token: T) => string;
   deleteButton: (token: PrivacyToken) => JSX.Element | null;
 }): JSX.Element {
-  const { items, isLoading, isError } = usePrivacyTokens(
-    privacyTokenContainerUrl
-  );
-
-  if (isLoading) {
+  if (retrieval.isLoading) {
     return <CircularProgress />;
   }
-  if (isError || !items) {
+  if (retrieval.isError || !retrieval.items) {
     return (
       <Container maxWidth="sm">
         <Typography>An error occurred.</Typography>
@@ -165,11 +164,8 @@ export function PrivacyDashboard({
     );
   }
 
-  const filteredTokens = items.filter(NotEmptyItem);
-  const groupByCounterparty = _.groupBy<PrivacyToken>(
-    filteredTokens,
-    tokenGrouping
-  );
+  const filteredTokens = retrieval.items.filter(NotEmptyItem);
+  const groupByCounterparty = _.groupBy<T>(filteredTokens, tokenGrouping);
 
   return (
     <Container>

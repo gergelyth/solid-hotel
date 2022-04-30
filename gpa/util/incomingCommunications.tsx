@@ -7,7 +7,7 @@ import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { DeserializeFailureReport } from "../../common/notifications/FailureReport";
 import { DeserializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
-import { DeserializePrivacyNotification } from "../../common/notifications/PrivacyNotification";
+import { DeserializeGuestPrivacyNotification } from "../../common/notifications/PrivacyNotification";
 import {
   ShowCustomSnackbar,
   ShowErrorSnackbar,
@@ -17,7 +17,7 @@ import {
   SetReservationStateAndInbox,
 } from "../../common/util/solid_reservations";
 import { SaveProfileThingToPod } from "../../common/util/solid_profile";
-import { CreatePrivacyTokenDataset } from "../../common/util/datasetFactory";
+import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
@@ -118,7 +118,7 @@ export function ReceivePrivacyToken(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const privacyToken = DeserializePrivacyNotification(dataset);
+  const privacyToken = DeserializeGuestPrivacyNotification(dataset);
   const text = `Privacy token received from ${privacyToken.hotel}`;
   const onClick = (): void => {
     router.push("/privacy");
@@ -132,7 +132,7 @@ export function ReceivePrivacyToken(
     }
 
     //we need this workaround, otherwise we would save the Thing with the inbox url (we also delete the notification Thing this way)
-    const privacyTokenDataset = CreatePrivacyTokenDataset(privacyToken);
+    const privacyTokenDataset = CreateGuestPrivacyTokenDataset(privacyToken);
 
     await saveSolidDatasetInContainer(privacyPodUrl, privacyTokenDataset, {
       fetch: session.fetch,

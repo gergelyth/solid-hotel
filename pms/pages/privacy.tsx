@@ -1,6 +1,7 @@
 import { PrivacyDashboard } from "../../common/components/privacy-dashboard";
 import { PrivacyTokensUrl } from "../../common/consts/solidIdentifiers";
 import { Container, Typography, Box } from "@material-ui/core";
+import { useHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 
 function PrivacyDashboardPage(): JSX.Element {
   return (
@@ -17,8 +18,8 @@ function PrivacyDashboardPage(): JSX.Element {
       </Box>
 
       <PrivacyDashboard
-        privacyTokenContainerUrl={PrivacyTokensUrl}
-        tokenGrouping={(token) => token.guest}
+        retrieval={useHotelPrivacyTokens(PrivacyTokensUrl)}
+        tokenGrouping={(token) => token.reservation}
         deleteButton={() => null}
       />
     </Container>
