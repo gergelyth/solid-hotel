@@ -79,7 +79,8 @@ export function ReceiveBookingRequest(
     router.push("/reservations");
   };
   const onReceive = async (): Promise<void> => {
-    if (!reservation.inbox) {
+    const reservationInbox = reservation.inbox;
+    if (!reservationInbox) {
       ShowErrorSnackbar("Inbox is null in received reservation request");
       return;
     }
@@ -88,16 +89,18 @@ export function ReceiveBookingRequest(
     const hotelInboxUrl = await AddReservation(reservation);
     ConfirmReservationStateRequest(
       ReservationState.CONFIRMED,
-      reservation.inbox,
+      reservationInbox,
       hotelInboxUrl
     );
 
-    const privacyToken = await CreateReservationPrivacyToken(
+    const privacyTokens = await CreateReservationPrivacyToken(
       GetReservationUrlFromInboxUrl(hotelInboxUrl),
-      reservation.inbox,
+      reservationInbox,
       reservation
     );
-    SendPrivacyToken(reservation.inbox, privacyToken);
+    privacyTokens.forEach((tokenDataset) => {
+      SendPrivacyToken(reservationInbox, tokenDataset);
+    });
   };
 
   return { text, onClick, onReceive };

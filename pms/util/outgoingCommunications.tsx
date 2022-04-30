@@ -94,12 +94,14 @@ export async function SendPairingRequestWithInformation(
     finalReservationThing,
     reservationUrl
   );
-  const reservationPrivacyTokenDataset = await CreateReservationPrivacyToken(
+  const reservationPrivacyTokens = await CreateReservationPrivacyToken(
     reservationUrl,
     guestInboxUrl,
     parsedReservation
   );
-  SendPrivacyToken(guestInboxUrl, reservationPrivacyTokenDataset);
+  reservationPrivacyTokens.forEach((tokenDataset) => {
+    SendPrivacyToken(guestInboxUrl, tokenDataset);
+  });
 
   const profilePrivacyTokenDataset = await CreateActiveProfilePrivacyToken(
     hotelProfileOwnerUrl,

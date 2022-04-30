@@ -71,16 +71,28 @@ export async function CreateReservationPrivacyToken(
   reservationUrl: string,
   guestInbox: string,
   reservation: ReservationAtHotel
-): Promise<GuestPrivacyToken> {
-  return SaveHotelAndCreateGuestPrivacyToken(
+): Promise<GuestPrivacyToken[]> {
+  const webIdToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
-    [reservationFieldToRdfMap.inbox, reservationFieldToRdfMap.owner],
-    reservation.dateTo,
+    [reservationFieldToRdfMap.owner],
+    reservation.dateFrom,
     "Basic information for a confirmed reservation",
     ReservationState.CONFIRMED,
     guestInbox,
     reservationUrl
   );
+
+  const inboxToken = SaveHotelAndCreateGuestPrivacyToken(
+    reservationUrl,
+    [reservationFieldToRdfMap.inbox],
+    reservation.dateTo,
+    "Reservation inbox used for communication with the hotel",
+    ReservationState.CONFIRMED,
+    guestInbox,
+    reservationUrl
+  );
+
+  return Promise.all([webIdToken, inboxToken]);
 }
 
 export async function CreateActiveProfilePrivacyToken(
