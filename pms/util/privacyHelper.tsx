@@ -2,12 +2,15 @@ import {
   deleteSolidDataset,
   getSolidDataset,
   getSourceUrl,
+  getThing,
   getThingAll,
   saveSolidDatasetAt,
   saveSolidDatasetInContainer,
   setStringNoLocale,
   setThing,
+  SolidDataset,
 } from "@inrupt/solid-client";
+import { Session } from "@inrupt/solid-client-authn-browser";
 import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import {
   PrivacyTokensInboxUrl,
@@ -21,6 +24,7 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetSession } from "../../common/util/solid";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
+import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
 
@@ -73,7 +77,7 @@ async function DeletePrivacyToken(
   }
   const session = GetSession();
   await deleteSolidDataset(privacyToken.urlAtHotel, { fetch: session.fetch });
-  await SendPrivacyTokenDeletionNotice(privacyToken);
+  await SendPrivacyTokenDeletionNotice(privacyToken, guestInboxUrl);
 }
 
 export async function CreateReservationPrivacyToken(
@@ -252,4 +256,30 @@ async function FindTokenAndDeleteIt(
 
   console.log("Sought token found.");
   await DeletePrivacyToken(token);
+}
+
+export async function AnonymizeInboxInNotification(
+  dataset: SolidDataset,
+  session: Session = GetSession()
+): Promise<void> {
+  const datasetUrl = getSourceUrl(dataset);
+  if (!datasetUrl) {
+    throw new Error("Dataset URL is null");
+  }
+
+  let deletionThing = getThing(dataset, datasetUrl + "#privacyTokenDeletion");
+  if (!deletionThing) {
+    throw new Error("Deletion thing is null");
+  }
+
+  deletionThing = setStringNoLocale(
+    deletionThing,
+    privacyDeletionToRdfMap.guestInboxUrl,
+    "Anonymized"
+  );
+  const updatedDataSet = setThing(dataset, deletionThing);
+
+  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
+    fetch: session.fetch,
+  });
 }

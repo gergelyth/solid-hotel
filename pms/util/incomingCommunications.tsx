@@ -31,6 +31,7 @@ import { ConvertToHotelPrivacyToken } from "../../common/hooks/usePrivacyTokens"
 import { GetSession } from "../../common/util/solid";
 import {
   AnonymizeFieldsAndDeleteToken,
+  AnonymizeInboxInNotification,
   CreateReservationPrivacyToken,
 } from "./privacyHelper";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
@@ -239,7 +240,15 @@ export function ReceivePrivacyTokenDeletionRequest(
       return;
     }
 
-    AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl);
+    //fake promise that resolves instantly
+    let previousPromise = Promise.resolve();
+    if (guestInboxUrl) {
+      previousPromise = AnonymizeInboxInNotification(dataset);
+    }
+
+    previousPromise.then(() =>
+      AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl)
+    );
   };
 
   return { text, onClick, onReceive };

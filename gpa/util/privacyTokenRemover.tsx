@@ -7,6 +7,7 @@ import CustomProgressSnackbar from "../../common/components/custom-progress-snac
 import { forwardRef, useEffect } from "react";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { deleteSolidDataset } from "@inrupt/solid-client";
+import { NotEmptyItem } from "../../common/util/helpers";
 
 const PrivacyTokenRemover = forwardRef<
   HTMLDivElement,
@@ -32,27 +33,27 @@ const PrivacyTokenRemover = forwardRef<
       return;
     }
 
-    const privacyToken = privacyTokens.find(
-      (t) => t && t.urlAtHotel === props.hotelUrl
-    );
-    if (!privacyToken) {
+    const filteredPrivacyTokens = privacyTokens
+      .filter(NotEmptyItem)
+      .filter((t) => t.urlAtHotel === props.hotelUrl);
+    if (filteredPrivacyTokens.length == 0) {
       ShowWarningSnackbar(
-        "Sought privacy token for removal not found. Deleting nothing."
+        "Sought privacy token(s) for removal not found. Deleting nothing."
       );
       CloseSnackbar(props.snackbarId);
       return;
     }
 
-    if (!privacyToken.urlAtGuest) {
-      throw new Error(
-        "GuestPrivacyToken URL is null during token removal process."
-      );
-    }
-
     const session = GetSession();
-    deleteSolidDataset(privacyToken.urlAtGuest, { fetch: session.fetch }).then(
-      () => CloseSnackbar(props.snackbarId)
-    );
+    const deletionPromises = filteredPrivacyTokens.map((token) => {
+      if (!token.urlAtGuest) {
+        throw new Error(
+          "GuestPrivacyToken URL is null during token removal process."
+        );
+      }
+      return deleteSolidDataset(token.urlAtGuest, { fetch: session.fetch });
+    });
+    Promise.all(deletionPromises).then(() => CloseSnackbar(props.snackbarId));
   }, [privacyTokens, privacyTokensError]);
 
   return (

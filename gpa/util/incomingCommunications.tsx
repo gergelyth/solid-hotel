@@ -156,15 +156,18 @@ export function ReceivePrivacyTokenDeletionNotice(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const tokenHotelUrl = DeserializePrivacyInformationDeletion(dataset);
+  const tokenDeletion = DeserializePrivacyInformationDeletion(dataset);
 
-  const text = `Privacy token at [${tokenHotelUrl}] was deleted at the hotel.\nDeleting the corresponding token.`;
+  const text = `Privacy token at [${tokenDeletion.tokenUrl}] was deleted at the hotel.\nDeleting the corresponding token.`;
   const onClick = (): void => undefined;
   const onReceive = async (): Promise<void> => {
     const snackbarId = "privacyTokenRemover";
     ShowCustomSnackbar(
       () => (
-        <PrivacyTokenRemover snackbarId={snackbarId} hotelUrl={tokenHotelUrl} />
+        <PrivacyTokenRemover
+          snackbarId={snackbarId}
+          hotelUrl={tokenDeletion.tokenUrl}
+        />
       ),
       snackbarId
     );
