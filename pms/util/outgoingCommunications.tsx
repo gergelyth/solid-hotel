@@ -129,6 +129,7 @@ export async function SendPrivacyToken(
 
 export async function SendPrivacyTokenDeletionNotice(
   privacyToken: HotelPrivacyToken,
+  guestInboxUrl?: string,
   session: Session = GetSession()
 ): Promise<void> {
   if (!privacyToken.urlAtHotel) {
@@ -136,9 +137,10 @@ export async function SendPrivacyTokenDeletionNotice(
       "Token URL was annulled outside of the application. Cannot delete"
     );
   }
-  if (!privacyToken.guestInbox) {
+  const guestInbox = privacyToken.guestInbox ?? guestInboxUrl;
+  if (!guestInbox) {
     throw new Error(
-      "Guest inbox is undefined in privacy token. That can only happen for data protection tokens. This is called by mistake."
+      "Guest inbox is undefined in privacy token or in supplied argument. That can only happen for data protection tokens. This is called by mistake."
     );
   }
 
@@ -146,13 +148,9 @@ export async function SendPrivacyTokenDeletionNotice(
     privacyToken.urlAtHotel
   );
 
-  await saveSolidDatasetInContainer(
-    privacyToken.guestInbox,
-    notificationDataset,
-    {
-      fetch: session.fetch,
-    }
-  );
+  await saveSolidDatasetInContainer(guestInbox, notificationDataset, {
+    fetch: session.fetch,
+  });
 }
 
 export async function SendProfileModification(

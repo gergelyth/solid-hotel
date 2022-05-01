@@ -107,6 +107,7 @@ export async function SubmitInitialPairingRequest(
 
 export async function SubmitPrivacyTokenDeletionRequest(
   privacyToken: GuestPrivacyToken,
+  guestInboxUrl?: string,
   session = GetSession()
 ): Promise<void> {
   if (!privacyToken.urlAtHotel) {
@@ -116,7 +117,8 @@ export async function SubmitPrivacyTokenDeletionRequest(
   }
 
   const notificationDataset = SerializePrivacyInformationDeletion(
-    privacyToken.urlAtHotel
+    privacyToken.urlAtHotel,
+    guestInboxUrl
   );
 
   await saveSolidDatasetInContainer(

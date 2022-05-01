@@ -12,9 +12,10 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { privacyDeletionToRdfMap } from "../vocabularies/notification_payloads/rdf_privacyDeletion";
 
-export function DeserializePrivacyInformationDeletion(
-  dataset: SolidDataset
-): string {
+export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
+  tokenUrl: string;
+  guestInboxUrl: string | undefined;
+} {
   const datasetUrl = getSourceUrl(dataset);
   if (!datasetUrl) {
     throw new Error("Dataset URL is null");
@@ -27,16 +28,20 @@ export function DeserializePrivacyInformationDeletion(
 
   const tokenUrl =
     getStringNoLocale(deletionThing, privacyDeletionToRdfMap.tokenUrl) ?? null;
+  const guestInboxUrl =
+    getStringNoLocale(deletionThing, privacyDeletionToRdfMap.guestInboxUrl) ??
+    undefined;
 
   if (!tokenUrl) {
     throw new Error("Privacy token URL link cannot be null");
   }
 
-  return tokenUrl;
+  return { tokenUrl, guestInboxUrl };
 }
 
 export function SerializePrivacyInformationDeletion(
-  tokenUrl: string
+  tokenUrl: string,
+  guestInboxUrl?: string
 ): SolidDataset {
   let deletionDataset = createSolidDataset();
 
@@ -46,6 +51,13 @@ export function SerializePrivacyInformationDeletion(
     privacyDeletionToRdfMap.tokenUrl,
     tokenUrl
   );
+  if (guestInboxUrl) {
+    deletionThing = addStringNoLocale(
+      deletionThing,
+      privacyDeletionToRdfMap.guestInboxUrl,
+      guestInboxUrl
+    );
+  }
 
   deletionDataset = setThing(deletionDataset, deletionThing);
   const notificationDataset = AddNotificationThingToDataset(

@@ -214,7 +214,8 @@ export function ReceivePrivacyTokenDeletionRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const tokenUrl = DeserializePrivacyInformationDeletion(dataset);
+  const { tokenUrl, guestInboxUrl } =
+    DeserializePrivacyInformationDeletion(dataset);
 
   const text = `Privacy token at [${tokenUrl}] was requested to be deleted.`;
   const onClick = (): void => undefined;
@@ -238,7 +239,7 @@ export function ReceivePrivacyTokenDeletionRequest(
       return;
     }
 
-    AnonymizeFieldsAndDeleteToken(privacyToken);
+    AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl);
   };
 
   return { text, onClick, onReceive };

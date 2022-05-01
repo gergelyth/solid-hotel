@@ -53,18 +53,20 @@ async function AnonymizeFields(
 }
 
 export async function AnonymizeFieldsAndDeleteToken(
-  privacyToken: HotelPrivacyToken
+  privacyToken: HotelPrivacyToken,
+  guestInboxUrl?: string
 ): Promise<void> {
   if (!privacyToken.datasetUrlTarget) {
     throw new Error("Privacy token target URL is null");
   }
 
   await AnonymizeFields(privacyToken.datasetUrlTarget, privacyToken.fieldList);
-  await DeletePrivacyToken(privacyToken);
+  await DeletePrivacyToken(privacyToken, guestInboxUrl);
 }
 
 async function DeletePrivacyToken(
-  privacyToken: HotelPrivacyToken
+  privacyToken: HotelPrivacyToken,
+  guestInboxUrl?: string
 ): Promise<void> {
   if (!privacyToken.urlAtHotel) {
     throw new Error("Privacy token URL is null. Cannot process/delete");
