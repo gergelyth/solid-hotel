@@ -183,6 +183,7 @@ async function SaveHotelAndCreateGuestPrivacyToken(
     hotelInboxForDeletion: PrivacyTokensInboxUrl,
     hotel: hotelWebId,
     urlAtGuest: undefined,
+    reservation: undefined,
   };
   guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
 

@@ -126,6 +126,13 @@ export function CreateGuestPrivacyTokenDataset(
     privacyTokenToRdfMap.hotel,
     privacyToken.hotel
   );
+  if (privacyToken.reservation) {
+    newPrivacyToken = addStringNoLocale(
+      newPrivacyToken,
+      privacyTokenToRdfMap.reservation,
+      privacyToken.reservation
+    );
+  }
 
   let privacyTokenDataset = createSolidDataset();
   privacyTokenDataset = setThing(privacyTokenDataset, newPrivacyToken);

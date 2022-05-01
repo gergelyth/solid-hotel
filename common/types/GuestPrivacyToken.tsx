@@ -6,4 +6,6 @@ export type GuestPrivacyToken = PrivacyToken & {
   //TODO maybe NamedNode
   hotel: string;
   urlAtGuest: string | undefined;
+  //TODO probably NamedNode url
+  reservation: string | undefined;
 };

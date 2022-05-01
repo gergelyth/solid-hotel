@@ -24,6 +24,7 @@ import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import UpdateLocalProfileSnackbar from "../../common/components/profile/update-local-profile";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import PrivacyTokenRemover from "./privacyTokenRemover";
+import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -132,6 +133,8 @@ export function ReceivePrivacyToken(
       ShowErrorSnackbar("User not logged in");
       return;
     }
+
+    privacyToken.reservation = GetReservationUrlFromInboxUrl(url);
 
     //we need this workaround, otherwise we would save the Thing with the inbox url (we also delete the notification Thing this way)
     const privacyTokenDataset = CreateGuestPrivacyTokenDataset(privacyToken);

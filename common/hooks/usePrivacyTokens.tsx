@@ -82,6 +82,9 @@ export function ConvertToGuestPrivacyToken(
       ) ?? "",
     hotel: getStringNoLocale(privacyThing, privacyTokenToRdfMap.hotel) ?? "",
     urlAtGuest: url,
+    reservation:
+      getStringNoLocale(privacyThing, privacyTokenToRdfMap.reservation) ??
+      undefined,
   };
 
   return guestPrivacytoken;

@@ -6,6 +6,9 @@ import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { SubmitPrivacyTokenDeletionRequest } from "../util/outgoingCommunications";
 
+//send the inbox along to which GPA is expecting an answer and create a GuestPrivacyToken just for the GPA with the inbox in it,
+//with the same datatargeturl as the data protection profile token is. The PMS, are sending the reply, doesnt delete the notification,
+//but anonymizes the inbox URL. The GPA when gets the answer about the deletion, deletes both privacy tokens.
 function CreateDeleteButton(token: PrivacyToken): JSX.Element {
   return (
     <Button
