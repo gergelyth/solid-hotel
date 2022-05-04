@@ -25,6 +25,7 @@ import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import { GetStartOfNextDay } from "../../common/util/helpers";
 
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
@@ -110,7 +111,7 @@ export async function SendPairingRequestWithInformation(
     guestInboxUrl,
     reservationUrl,
     getPropertyAll(hotelProfileThing),
-    parsedReservation.dateTo
+    GetStartOfNextDay(parsedReservation.dateTo)
   );
   SendPrivacyToken(guestInboxUrl, profilePrivacyTokenDataset);
 }

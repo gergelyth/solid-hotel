@@ -10,7 +10,10 @@ import {
 } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
-import { GetCurrentDatePushedBy } from "../../../common/util/helpers";
+import {
+  GetCurrentDatePushedBy,
+  GetStartOfNextDay,
+} from "../../../common/util/helpers";
 import { useGuest } from "../../../common/hooks/useGuest";
 import { Field } from "../../../common/types/Field";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
@@ -56,7 +59,13 @@ async function ExecuteCheckOut(
     dataProtectionProfileWebId,
     CreateReservationUrlFromReservationId(reservationId),
     dataProtectionInformation.dataProtectionFields,
-    GetCurrentDatePushedBy(dataProtectionInformation.dataProtectionYears, 0, 0)
+    GetStartOfNextDay(
+      GetCurrentDatePushedBy(
+        dataProtectionInformation.dataProtectionYears,
+        0,
+        0
+      )
+    )
   );
 
   await SendPrivacyToken(replyInbox, privacyToken);

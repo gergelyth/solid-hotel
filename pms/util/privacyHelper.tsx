@@ -22,6 +22,7 @@ import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
+import { GetStartOfNextDay } from "../../common/util/helpers";
 import { GetSession } from "../../common/util/solid";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
@@ -88,7 +89,7 @@ export async function CreateReservationPrivacyToken(
   const webIdToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
     [reservationFieldToRdfMap.owner],
-    reservation.dateFrom,
+    GetStartOfNextDay(reservation.dateFrom),
     "Basic information for a confirmed reservation",
     ReservationState.CONFIRMED,
     guestInbox,
@@ -98,7 +99,7 @@ export async function CreateReservationPrivacyToken(
   const inboxToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
     [reservationFieldToRdfMap.inbox],
-    reservation.dateTo,
+    GetStartOfNextDay(reservation.dateTo),
     "Reservation inbox used for communication with the hotel",
     ReservationState.CONFIRMED,
     guestInbox,

@@ -3,6 +3,7 @@ import {
   getSolidDataset,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import { addDays, startOfDay, startOfTomorrow } from "date-fns";
 import { NotFoundError } from "./errors";
 import { GetSession } from "./solid";
 
@@ -71,9 +72,13 @@ export function GetToday(): Date {
 }
 
 export function GetTomorrow(): Date {
-  return new Date(new Date().setDate(new Date().getDate() + 1));
+  return startOfTomorrow();
 }
 
 export function GetDayAfterDate(date: Date): Date {
-  return new Date(new Date().setDate(date.getDate() + 1));
+  return addDays(date, 1);
+}
+
+export function GetStartOfNextDay(date: Date): Date {
+  return startOfDay(addDays(date, 1));
 }

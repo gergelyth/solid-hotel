@@ -22,6 +22,7 @@ import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
+import { GetStartOfNextDay } from "../../../common/util/helpers";
 
 async function ExecuteCheckIn(
   reservationId: string,
@@ -59,7 +60,7 @@ async function ExecuteCheckIn(
     replyInbox,
     CreateReservationUrlFromReservationId(reservationId),
     requiredFields,
-    checkoutDate
+    GetStartOfNextDay(checkoutDate)
   );
 
   await SendPrivacyToken(replyInbox, privacyToken);
