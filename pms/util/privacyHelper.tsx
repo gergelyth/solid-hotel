@@ -11,7 +11,10 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { ShowWarningSnackbar } from "../../common/components/snackbar";
+import {
+  ShowCustomSnackbar,
+  ShowWarningSnackbar,
+} from "../../common/components/snackbar";
 import {
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
@@ -24,9 +27,12 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetStartOfNextDay } from "../../common/util/helpers";
 import { GetSession } from "../../common/util/solid";
+import { GetParsedReservationFromUrl } from "../../common/util/solid_reservations";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-snackbar";
+import { ConfirmCancellation } from "../components/reservations/reservation-element";
 import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
 
 async function AnonymizeFields(
@@ -283,4 +289,125 @@ export async function AnonymizeInboxInNotification(
   await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
     fetch: session.fetch,
   });
+}
+
+//TODO There's a case by case study for this in my notebook. Prepare it nicely and put it somewhere
+export async function HandleIrregularTokenDeletion(
+  privacyToken: HotelPrivacyToken
+): Promise<boolean> {
+  const reservation = await GetParsedReservationFromUrl(
+    privacyToken.reservation
+  );
+
+  switch (privacyToken.forReservationState) {
+    case ReservationState.REQUESTED:
+    case ReservationState.CONFIRMED:
+      switch (reservation.state) {
+        case ReservationState.REQUESTED:
+        case ReservationState.CONFIRMED:
+          //the guest didn't check-in
+          ConfirmCancellation(reservation);
+          return true;
+
+        case ReservationState.ACTIVE:
+          if (privacyToken.expiry >= reservation.dateTo) {
+            //the guest didn't check-out when they needed to
+            //we force check-out
+            ForceCheckout(reservation);
+            return true;
+          } else {
+            //for some reason auto-removal failed, but we can recover from that
+            return false;
+          }
+
+        case ReservationState.PAST:
+        case ReservationState.CANCELLED:
+          //for some reason auto-removal failed, but we can recover from that
+          return false;
+
+        default:
+          throw new Error(
+            `Reservation state ${reservation.state} is unrecognized when handling irregular token deletions.`
+          );
+      }
+
+    case ReservationState.ACTIVE:
+      //this means the local profile
+      switch (reservation.state) {
+        case ReservationState.REQUESTED:
+        case ReservationState.CONFIRMED:
+          //something seriously went wrong
+          throw new Error(
+            "Privacy tokens were created for active state but the reservation state didn't get moved to active."
+          );
+
+        case ReservationState.ACTIVE:
+          //the guest didn't check-out when they needed to, we force check-out
+          ForceCheckout(reservation);
+          return true;
+
+        case ReservationState.PAST:
+          //for some reason auto-removal failed, but we can recover from that
+          return false;
+
+        case ReservationState.CANCELLED:
+          throw new Error(
+            `The reservation ${reservation.id} was cancelled, after being active?`
+          );
+
+        default:
+          throw new Error(
+            `Reservation state ${reservation.state} is unrecognized when handling irregular token deletions.`
+          );
+      }
+
+    case ReservationState.PAST:
+      //this means the data protection profile
+      switch (reservation.state) {
+        case ReservationState.REQUESTED:
+        case ReservationState.CONFIRMED:
+        case ReservationState.ACTIVE:
+          //something seriously went wrong
+          throw new Error(
+            "Privacy tokens were created for past state but the reservation state didn't get moved to past."
+          );
+
+        case ReservationState.PAST:
+          return false;
+
+        case ReservationState.CANCELLED:
+          throw new Error(
+            `Privacy tokens were created for past state, but the reservation ${reservation.id} was cancelled?`
+          );
+
+        default:
+          throw new Error(
+            `Reservation state ${reservation.state} is unrecognized when handling irregular token deletions.`
+          );
+      }
+
+    default:
+      throw new Error(
+        `Privacy token for reservation state ${privacyToken.forReservationState} is unrecognized when handling irregular token deletions.`
+      );
+  }
+}
+
+function ForceCheckout(reservation: ReservationAtHotel): void {
+  const reservationId = reservation.id;
+  const inbox = reservation.inbox;
+  if (!reservationId || !inbox) {
+    throw new Error(
+      "Reservation ID or inbox is null while trying to force checkout during irregular privacy token deletion handling"
+    );
+  }
+
+  ShowCustomSnackbar((key) => (
+    <CheckoutProgressSnackbar
+      key={key}
+      reservationId={reservationId}
+      reservationOwner={reservation.owner}
+      replyInbox={inbox}
+    />
+  ));
 }

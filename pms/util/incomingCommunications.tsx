@@ -33,6 +33,7 @@ import {
   AnonymizeFieldsAndDeleteToken,
   AnonymizeInboxInNotification,
   CreateReservationPrivacyToken,
+  HandleIrregularTokenDeletion,
 } from "./privacyHelper";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
@@ -237,6 +238,12 @@ export function ReceivePrivacyTokenDeletionRequest(
       ShowErrorSnackbar(
         "Privacy token have not expired yet. Deletion request denied."
       );
+      return;
+    }
+
+    //We check if this is an "irregular" request, i.e. the reservation didn't go through the
+    //standard workflow when this request was made and allowed
+    if (await HandleIrregularTokenDeletion(privacyToken)) {
       return;
     }
 

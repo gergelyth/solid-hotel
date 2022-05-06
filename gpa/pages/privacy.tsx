@@ -5,6 +5,7 @@ import { ShowErrorSnackbar } from "../../common/components/snackbar";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
+import { ReservationState } from "../../common/types/ReservationState";
 import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { GetInboxUrlFromReservationUrl } from "../../common/util/urlParser";
@@ -55,11 +56,16 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
             "The reservation is undefined in the guestPrivacyToken. That shouldn't happen"
           );
         }
-        const guestInboxUrl = GetInboxUrlFromReservationUrl(
-          guestPrivacyToken.reservation
-        );
-        SubmitPrivacyTokenDeletionRequest(guestPrivacyToken, guestInboxUrl);
-        CreateInboxTokenUntilConfirmation(guestPrivacyToken);
+
+        if (guestPrivacyToken.forReservationState === ReservationState.PAST) {
+          const guestInboxUrl = GetInboxUrlFromReservationUrl(
+            guestPrivacyToken.reservation
+          );
+          SubmitPrivacyTokenDeletionRequest(guestPrivacyToken, guestInboxUrl);
+          CreateInboxTokenUntilConfirmation(guestPrivacyToken);
+        } else {
+          SubmitPrivacyTokenDeletionRequest(guestPrivacyToken);
+        }
       }}
     >
       Request delete

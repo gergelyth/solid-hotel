@@ -19,6 +19,7 @@ import { GetDataSet, GetPodOfSession, GetSession } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
 import { SetSubmitterAccessToEveryone } from "./solid_access";
 import { GetGuestReservationUrlFromReservationId } from "./urlParser";
+import { ParseReservation } from "../hooks/useReservations";
 
 const reservationAddress = "reservations/";
 
@@ -192,4 +193,19 @@ export async function GetOwnerFromReservation(
   );
 
   return ownerWebId;
+}
+
+export async function GetParsedReservationFromUrl(
+  reservationUrl: string,
+  session = GetSession()
+): Promise<ReservationAtHotel> {
+  //TODO duplicating this
+  const dataset = await GetDataSet(reservationUrl, session);
+  const reservationThing = getThing(dataset, reservationUrl + "#reservation");
+  if (!reservationThing) {
+    throw new Error("Reservation cannot be null");
+  }
+
+  const reservation = ParseReservation(reservationThing, reservationUrl);
+  return reservation;
 }

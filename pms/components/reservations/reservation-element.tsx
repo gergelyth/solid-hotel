@@ -7,7 +7,7 @@ import OfflineCheckinButton from "../checkin/offline-checkin-button";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { DoOnStateChange } from "../../util/actionOnNewReservationState";
 
-function ConfirmCancellation(reservation: ReservationAtHotel): void {
+export function ConfirmCancellation(reservation: ReservationAtHotel): void {
   if (!reservation.id) {
     throw new Error("Reservation ID is null");
   }
