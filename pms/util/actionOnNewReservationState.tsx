@@ -11,6 +11,7 @@ import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 import { ShowCustomSnackbar } from "../../common/components/snackbar";
 import CheckinProgressSnackbar from "../components/checkin/checkin-progress-snackbar";
 import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-snackbar";
+import CancelProgressSnackbar from "../components/cancelation/cancel-progress-snackbar";
 
 export function DoOnStateChange(
   reservationId: string,
@@ -19,8 +20,9 @@ export function DoOnStateChange(
 ): void {
   switch (newState) {
     case ReservationState.CANCELLED:
-      //no special activity required for cancellation
-      //TODO potentially delete the PI?
+      ShowCustomSnackbar((key) => (
+        <CancelProgressSnackbar key={key} reservationId={reservationId} />
+      ));
       break;
 
     case ReservationState.ACTIVE:
