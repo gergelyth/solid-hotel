@@ -17,7 +17,7 @@ import {
 } from "./pairingRequestUtil";
 import {
   CreateActiveProfilePrivacyToken,
-  CreateReservationPrivacyToken,
+  CreateInboxPrivacyToken,
 } from "./privacyHelper";
 import { ParseReservation } from "../../common/hooks/useReservations";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
@@ -97,14 +97,13 @@ export async function SendPairingRequestWithInformation(
     finalReservationThing,
     reservationUrl
   );
-  const reservationPrivacyTokens = await CreateReservationPrivacyToken(
+
+  const inboxPrivacyToken = await CreateInboxPrivacyToken(
     reservationUrl,
     guestInboxUrl,
     parsedReservation
   );
-  reservationPrivacyTokens.forEach((tokenDataset) => {
-    SendPrivacyToken(guestInboxUrl, tokenDataset);
-  });
+  SendPrivacyToken(guestInboxUrl, inboxPrivacyToken);
 
   const profilePrivacyTokenDataset = await CreateActiveProfilePrivacyToken(
     hotelProfileOwnerUrl,
