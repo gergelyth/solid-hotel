@@ -15,9 +15,9 @@ async function ExecuteCancel(
 ): Promise<void> {
   console.log("execute cancel started");
 
-  //TODO Deleting the mention of WebId and deleting the corresponding privacy token
-  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId);
-  await FindInboxTokenAndDeleteIt(privacyTokens, reservationId);
+  //Deleting the mention of WebId and deleting the corresponding privacy token
+  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, true);
+  await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
 }
 
 const CancelProgressSnackbar = forwardRef<

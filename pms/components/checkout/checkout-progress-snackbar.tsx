@@ -71,8 +71,7 @@ async function ExecuteCheckOut(
   await SendPrivacyToken(replyInbox, privacyToken);
   console.log("privacy token sent");
 
-  await FindInboxTokenAndDeleteIt(privacyTokens, reservationId);
-  //TODO I think delete inbox? - I think this means the reservation inbox?
+  await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
 }
 
 const CheckoutProgressSnackbar = forwardRef<

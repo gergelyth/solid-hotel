@@ -45,7 +45,7 @@ async function ExecuteCheckIn(
     reservationId,
     hotelProfileWebId
   );
-  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId);
+  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, false);
 
   const checkoutDate = getDatetime(
     reservationThing,

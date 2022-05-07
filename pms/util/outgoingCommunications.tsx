@@ -138,7 +138,7 @@ export async function SendPrivacyTokenDeletionNotice(
       "Token URL was annulled outside of the application. Cannot delete"
     );
   }
-  const guestInbox = privacyToken.guestInbox ?? guestInboxUrl;
+  const guestInbox = guestInboxUrl ?? privacyToken.guestInbox;
   if (!guestInbox) {
     throw new Error(
       "Guest inbox is undefined in privacy token or in supplied argument. That can only happen for data protection tokens. This is called by mistake."

@@ -205,24 +205,28 @@ async function SaveHotelAndCreateGuestPrivacyToken(
 
 export async function FindWebIdTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
-  reservationId: string
+  reservationId: string,
+  anonymize: boolean
 ): Promise<void> {
   return FindTokenAndDeleteIt(
     privacyTokens,
     reservationId,
     ReservationState.CONFIRMED,
+    anonymize,
     reservationFieldToRdfMap.owner
   );
 }
 
 export async function FindInboxTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
-  reservationId: string
+  reservationId: string,
+  anonymize: boolean
 ): Promise<void> {
   return FindTokenAndDeleteIt(
     privacyTokens,
     reservationId,
     ReservationState.CONFIRMED,
+    anonymize,
     reservationFieldToRdfMap.inbox
   );
 }
@@ -234,7 +238,8 @@ export async function FindHotelProfileTokenAndDeleteIt(
   return FindTokenAndDeleteIt(
     privacyTokens,
     reservationId,
-    ReservationState.ACTIVE
+    ReservationState.ACTIVE,
+    false
   );
 }
 
@@ -242,6 +247,7 @@ async function FindTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
   reservationId: string,
   reservationState: ReservationState,
+  anonymize: boolean,
   rdfFieldIncluded?: string
 ): Promise<void> {
   console.log("Finding privacy token to send notice of deletion");
@@ -262,7 +268,12 @@ async function FindTokenAndDeleteIt(
   }
 
   console.log("Sought token found.");
-  await DeletePrivacyToken(token);
+  if (anonymize) {
+    //We need to supply the inbox separately, because when we're deleting the inbox token itself, we would anonymize that
+    await AnonymizeFieldsAndDeleteToken(token, token.guestInbox);
+  } else {
+    await DeletePrivacyToken(token);
+  }
 }
 
 export async function AnonymizeInboxInNotification(
@@ -314,16 +325,15 @@ export async function HandleIrregularTokenDeletion(
             //the guest didn't check-out when they needed to
             //we force check-out
             ForceCheckout(reservation);
-            return true;
           } else {
-            //for some reason auto-removal failed, but we can recover from that
-            return false;
+            HandleCaseWhenAutoDeletionFailed(privacyToken);
           }
+          return true;
 
         case ReservationState.PAST:
         case ReservationState.CANCELLED:
-          //for some reason auto-removal failed, but we can recover from that
-          return false;
+          HandleCaseWhenAutoDeletionFailed(privacyToken);
+          return true;
 
         default:
           throw new Error(
@@ -347,8 +357,8 @@ export async function HandleIrregularTokenDeletion(
           return true;
 
         case ReservationState.PAST:
-          //for some reason auto-removal failed, but we can recover from that
-          return false;
+          HandleCaseWhenAutoDeletionFailed(privacyToken);
+          return true;
 
         case ReservationState.CANCELLED:
           throw new Error(
@@ -410,4 +420,12 @@ function ForceCheckout(reservation: ReservationAtHotel): void {
       replyInbox={inbox}
     />
   ));
+}
+
+function HandleCaseWhenAutoDeletionFailed(
+  privacyToken: HotelPrivacyToken
+): void {
+  throw new Error(
+    `Auto deletion failed for a privacy token and that was now requested to be deleted. However, there may be some side effects, so manual cleanup is needed: ${privacyToken}`
+  );
 }
