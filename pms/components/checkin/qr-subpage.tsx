@@ -68,7 +68,43 @@ function QrCodeElement({
         </Typography>
       </Grid>
       <Grid item>
-        <QRCode value={targetUrl} size={512} />;
+        <QRCode value={targetUrl} />;
+      </Grid>
+    </Grid>
+  );
+}
+
+export function QrElementWithHeadings({
+  reservationId,
+}: {
+  reservationId: string;
+}): JSX.Element {
+  const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
+  const reservationFolder = GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
+
+  return (
+    <Grid
+      item
+      container
+      spacing={7}
+      justify="center"
+      alignItems="center"
+      direction="column"
+    >
+      <Grid item>
+        <Typography variant="h4">Pairing request</Typography>
+      </Grid>
+      <Grid item>
+        <Typography align="center">
+          Please scan this barcode on the guest&apos;s device to open the Guest
+          Portal Application and pair this profile.
+        </Typography>
+      </Grid>
+      <Grid item>
+        <QrCodeElement
+          hotelInboxUrl={hotelInboxUrl}
+          reservationFolder={reservationFolder}
+        />
       </Grid>
     </Grid>
   );
@@ -87,9 +123,6 @@ function QrComponent({
     return null;
   }
 
-  const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
-  const reservationFolder = GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
-
   return (
     <Grid
       container
@@ -98,21 +131,7 @@ function QrComponent({
       alignItems="center"
       direction="column"
     >
-      <Grid item>
-        <Typography variant="h4">Pairing request</Typography>
-      </Grid>
-      <Grid item>
-        <Typography>
-          Please scan this barcode on the guest&apos;s device to open the Guest
-          Portal Application and pair this profile.
-        </Typography>
-      </Grid>
-      <Grid item>
-        <QrCodeElement
-          hotelInboxUrl={hotelInboxUrl}
-          reservationFolder={reservationFolder}
-        />
-      </Grid>
+      <QrElementWithHeadings reservationId={reservationId} />
       <Grid item>
         <Box>
           <Button

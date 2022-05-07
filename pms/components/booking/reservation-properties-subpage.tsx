@@ -13,6 +13,8 @@ import {
   ShowInfoSnackbar,
   ShowSuccessSnackbar,
 } from "../../../common/components/snackbar";
+import { GetCoreReservationFolderFromInboxUrl } from "../../../common/util/urlParser";
+import { CreateAndSavePairingToken } from "../../../common/util/pairingTokenHandler";
 
 async function BookRoom(
   roomIdString: string | undefined,
@@ -38,7 +40,10 @@ async function BookRoom(
     dateTo: checkoutDate,
   };
 
-  await AddReservation(reservation, session);
+  const reservationInboxUrl = await AddReservation(reservation, session);
+  const reservationFolder =
+    GetCoreReservationFolderFromInboxUrl(reservationInboxUrl);
+  await CreateAndSavePairingToken(reservationFolder);
 }
 
 function ReservationPropertiesPage({
