@@ -31,8 +31,6 @@ export async function Serialize(): Promise<string> {
   const rdfJsDataset = toRdfJsDataset(dataSet);
   const quadArray = Array.from(rdfJsDataset);
 
-  console.log(quadArray);
-
   const writer = new Writer({
     prefixes: { "": "#", xsd: "http://www.w3.org/2001/XMLSchema#" },
   });
@@ -53,16 +51,24 @@ export async function Serialize(): Promise<string> {
 export async function Deserialize(): Promise<void> {
   const session = GetSession();
 
-  const file;
+  const file = await fetch("../serialized.txt").then((r) => r.text());
 
+  console.log(file);
   const parser = new Parser();
-  const quadStore = new Store();
-  parser.parse(file, (error, quad, pref) => {
-    if (quad) quadStore.addQuad(ParseDateOffsetIfRequired(quad));
-    else console.log("Do something with prefixes", pref);
+
+  //TODO do something with prefixes
+  const quads = parser.parse(file, undefined, (prefix, prefixNode) => {
+    console.log(prefix, prefixNode);
   });
 
+  const quadStore = new Store();
+  for (const quad of quads) {
+    const processedQuad = ParseDateOffsetIfRequired(quad as Quad);
+    quadStore.addQuad(processedQuad);
+  }
+
   const resultSolidDataset = fromRdfJsDataset(quadStore);
+  console.log(resultSolidDataset);
   await saveSolidDatasetAt(
     "https://solidhotel.inrupt.net/bookingrequests/result.ttl",
     resultSolidDataset,

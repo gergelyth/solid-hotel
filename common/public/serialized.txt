@@ -1,0 +1,12 @@
+@prefix : <#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<https://solidhotel.inrupt.net/bookingrequests/3e0ea330-c405-11ec-b900-d16eff8d0682.ttl#notification> <something:notificationType> 0;
+    <something:processed> true.
+<https://solidhotel.inrupt.net/bookingrequests/3e0ea330-c405-11ec-b900-d16eff8d0682.ttl#reservation> <ldp:inbox> "https://gergelyth.inrupt.net/reservations/3a7aa700-c405-11ec-b900-d16eff8d0682/inbox";
+    <schema:checkinTime> "1969-12-17T03:40:45.000Z"^^xsd:dateTime;
+    <schema:checkoutTime> "1969-12-18T03:40:45.000Z"^^xsd:dateTime;
+    <schema:owner> "https://gergelyth.inrupt.net/profile/card#me";
+    <schema:reservationAt> "https://solidhotel.inrupt.net/profile/card#me";
+    <schema:reservationFor> "https://solidhotel.inrupt.net/rooms/046f8db0-c3fb-11ec-b900-d16eff8d0682.ttl";
+    <schema:state> 0.
