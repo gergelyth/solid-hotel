@@ -18,7 +18,9 @@ import {
 import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
 
-export async function Serialize(): Promise<void> {
+const baseDate = new Date(Date.UTC(1970, 0, 1));
+
+export async function Serialize(): Promise<string> {
   const session = GetSession();
 
   const datasetUrl =
@@ -34,46 +36,29 @@ export async function Serialize(): Promise<void> {
   const writer = new Writer({
     prefixes: { "": "#", xsd: "http://www.w3.org/2001/XMLSchema#" },
   });
-  const baseDate = new Date(Date.UTC(1970, 0, 1));
-  for (let quad of quadArray) {
-    const literal = quad.object as Literal;
-    if (literal !== null && xmlSchemaTypes.dateTime.equals(literal.datatype)) {
-      const realDate = Date.parse(literal.value);
-      console.log(realDate);
-      const secondsBetweenThenAndNow = differenceInSeconds(
-        realDate,
-        Date.now()
-      );
-      console.log(secondsBetweenThenAndNow);
-      const serializedDate = addSeconds(baseDate, secondsBetweenThenAndNow);
-      console.log(serializedDate);
-      const parsedSeconds = differenceInSeconds(serializedDate, baseDate);
-      const parsedDate = addSeconds(new Date(), parsedSeconds);
-
-      const newLiteral = DataFactory.literal(
-        serializedDate.toISOString(),
-        literal.datatype
-      );
-      quad = new Quad(
-        quad.subject as NamedNode,
-        quad.predicate as NamedNode,
-        newLiteral,
-        quad.graph as DefaultGraph
-      );
-    }
-
-    writer.addQuad(quad);
+  for (const quad of quadArray) {
+    const processedQuad = CreateDateOffsetIfRequired(quad as Quad);
+    writer.addQuad(processedQuad);
   }
+
   let result = "";
   writer.end((error, r) => {
+    console.log(r);
     result = r;
-    console.log(result);
   });
+
+  return result;
+}
+
+export async function Deserialize(): Promise<void> {
+  const session = GetSession();
+
+  const file;
 
   const parser = new Parser();
   const quadStore = new Store();
-  parser.parse(result, (error, quad, pref) => {
-    if (quad) quadStore.addQuad(quad);
+  parser.parse(file, (error, quad, pref) => {
+    if (quad) quadStore.addQuad(ParseDateOffsetIfRequired(quad));
     else console.log("Do something with prefixes", pref);
   });
 
@@ -84,5 +69,49 @@ export async function Serialize(): Promise<void> {
     {
       fetch: session.fetch,
     }
+  );
+}
+
+function CreateDateOffsetIfRequired(quad: Quad): Quad {
+  const literal = quad.object as Literal;
+  if (literal === null || !xmlSchemaTypes.dateTime.equals(literal.datatype)) {
+    return quad;
+  }
+
+  const realDate = Date.parse(literal.value);
+  const secondsBetweenThenAndNow = differenceInSeconds(realDate, Date.now());
+  const serializedDate = addSeconds(baseDate, secondsBetweenThenAndNow);
+
+  const newLiteral = DataFactory.literal(
+    serializedDate.toISOString(),
+    literal.datatype
+  );
+  return new Quad(
+    quad.subject as NamedNode,
+    quad.predicate as NamedNode,
+    newLiteral,
+    quad.graph as DefaultGraph
+  );
+}
+
+function ParseDateOffsetIfRequired(quad: Quad): Quad {
+  const literal = quad.object as Literal;
+  if (literal === null || !xmlSchemaTypes.dateTime.equals(literal.datatype)) {
+    return quad;
+  }
+
+  const parsedDate = Date.parse(literal.value);
+  const parsedSeconds = differenceInSeconds(parsedDate, baseDate);
+  const realDate = addSeconds(new Date(), parsedSeconds);
+
+  const newLiteral = DataFactory.literal(
+    realDate.toISOString(),
+    literal.datatype
+  );
+  return new Quad(
+    quad.subject as NamedNode,
+    quad.predicate as NamedNode,
+    newLiteral,
+    quad.graph as DefaultGraph
   );
 }

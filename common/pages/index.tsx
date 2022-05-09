@@ -34,7 +34,18 @@ import {
 import { CreatePrivacyFolders } from "../setup/shared";
 import { createContainerAt } from "@inrupt/solid-client";
 import { GetUserReservationsPodUrl } from "../util/solid_reservations";
-import { Serialize } from "../setup/testData";
+import { Deserialize, Serialize } from "../setup/testData";
+
+function DownloadSerializedData(data: string): void {
+  const element = document.createElement("a");
+  const file = new Blob([data], {
+    type: "text/plain",
+  });
+  element.href = URL.createObjectURL(file);
+  element.download = "serialized.txt";
+  document.body.appendChild(element);
+  element.click();
+}
 
 export default function Home(): JSX.Element {
   return (
@@ -212,11 +223,20 @@ export default function Home(): JSX.Element {
             <Button
               onClick={async () => {
                 ShowInfoSnackbar("Serializing pod...");
-                await Serialize();
-                ShowSuccessSnackbar("Pod serialized");
+                const data = await Serialize();
+                DownloadSerializedData(data);
               }}
             >
               Serialize
+            </Button>
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Deserializing file...");
+                await Deserialize();
+                ShowSuccessSnackbar("Pod populated");
+              }}
+            >
+              Deserialize
             </Button>
           </ButtonGroup>
         </Grid>
