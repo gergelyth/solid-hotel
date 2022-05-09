@@ -34,6 +34,7 @@ import {
 import { CreatePrivacyFolders } from "../setup/shared";
 import { createContainerAt } from "@inrupt/solid-client";
 import { GetUserReservationsPodUrl } from "../util/solid_reservations";
+import { Serialize } from "../setup/testData";
 
 export default function Home(): JSX.Element {
   return (
@@ -207,6 +208,15 @@ export default function Home(): JSX.Element {
               }}
             >
               Create privacy folders
+            </Button>
+            <Button
+              onClick={async () => {
+                ShowInfoSnackbar("Serializing pod...");
+                await Serialize();
+                ShowSuccessSnackbar("Pod serialized");
+              }}
+            >
+              Serialize
             </Button>
           </ButtonGroup>
         </Grid>
