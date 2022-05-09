@@ -34,7 +34,8 @@ import {
 import { CreatePrivacyFolders } from "../setup/shared";
 import { createContainerAt } from "@inrupt/solid-client";
 import { GetUserReservationsPodUrl } from "../util/solid_reservations";
-import { Deserialize, Serialize } from "../setup/testData";
+import { Deserialize } from "../setup/testDataDeserializer";
+import { Serialize } from "../setup/testDataSerializer";
 
 function DownloadSerializedData(data: string): void {
   const element = document.createElement("a");

@@ -81,3 +81,7 @@ export function GetIdFromDatasetUrl(
 
   return result;
 }
+
+export function GetCoreFolderFromWebId(webId: string): string {
+  return webId.replace("profile/card#me", "");
+}
