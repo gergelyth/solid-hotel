@@ -5,6 +5,7 @@ import {
   HotelWebId,
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
+  RoomDefinitionsUrl,
 } from "../consts/solidIdentifiers";
 import { HotelName, HotelLocation } from "../consts/hotelConsts";
 import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
@@ -37,7 +38,7 @@ import { GetUserReservationsPodUrl } from "../util/solid_reservations";
 import { Deserialize } from "../setup/testDataDeserializer";
 import { Serialize } from "../setup/testDataSerializer";
 
-function DownloadSerializedData(data: Blob | null): void {
+function DownloadSerializedData(data: Blob | undefined): void {
   if (!data) {
     return;
   }
@@ -152,6 +153,9 @@ export default function Home(): JSX.Element {
                   createContainerAt(DataProtectionProfilesUrl, {
                     fetch: session.fetch,
                   }),
+                  createContainerAt(RoomDefinitionsUrl, {
+                    fetch: session.fetch,
+                  }),
                   createContainerAt(GetUserReservationsPodUrl() ?? "", {
                     fetch: session.fetch,
                   }),
@@ -225,6 +229,7 @@ export default function Home(): JSX.Element {
               onClick={async () => {
                 ShowInfoSnackbar("Serializing pod...");
                 const data = await Serialize();
+                ShowSuccessSnackbar("Pod serialized");
                 DownloadSerializedData(data);
               }}
             >

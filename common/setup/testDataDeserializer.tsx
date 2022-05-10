@@ -12,21 +12,48 @@ import {
 import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
 import JSZip from "jszip";
+import { Session } from "@inrupt/solid-client-authn-browser";
+import { BaseDate, GetBaseUrl } from "./serializationUtil";
 
-//TODO unify basedate to one place
-const baseDate = new Date(Date.UTC(1970, 0, 1));
-
-export async function Deserialize(): Promise<void> {
+export async function Deserialize(): Promise<void[]> {
   const session = GetSession();
+  const baseUrl = GetBaseUrl(session);
+  if (!baseUrl) {
+    return [];
+  }
 
   const zipFile = await fetch("../serialized.zip");
   const zip = await JSZip.loadAsync(zipFile.blob());
 
+  const promises: Promise<void>[] = [];
+  for (const filename in zip.files) {
+    const fileObject = zip.files[filename];
+    if (fileObject.dir) {
+      continue;
+    }
+
+    const resultPromise = fileObject
+      .async("string")
+      .then((content) =>
+        DeserializeAndSaveDataset(session, baseUrl, filename, content)
+      );
+
+    promises.push(resultPromise);
+  }
+
+  return Promise.all(promises);
+}
+
+async function DeserializeAndSaveDataset(
+  session: Session,
+  baseUrl: string,
+  name: string,
+  content: string
+): Promise<void> {
   //We can't do anything with prefixes as that's not supported (which is not an issue, it's just ugly when you check the text representation in the Solid Pod UI)
   const parser = new Parser();
-
   //We can't use the quad parsing overload here for some reason because that results in an empty SolidDataSet
-  const quads = parser.parse("");
+  const quads = parser.parse(content);
 
   const quadStore = new Store();
   for (const quad of quads) {
@@ -35,13 +62,11 @@ export async function Deserialize(): Promise<void> {
   }
 
   const resultSolidDataset = fromRdfJsDataset(quadStore);
-  await saveSolidDatasetAt(
-    "https://solidhotel.inrupt.net/bookingrequests/result.ttl",
-    resultSolidDataset,
-    {
-      fetch: session.fetch,
-    }
-  );
+
+  const url = baseUrl + name;
+  await saveSolidDatasetAt(url, resultSolidDataset, {
+    fetch: session.fetch,
+  });
 }
 
 function ParseDateOffsetIfRequired(quad: Quad): Quad {
@@ -51,7 +76,7 @@ function ParseDateOffsetIfRequired(quad: Quad): Quad {
   }
 
   const parsedDate = Date.parse(literal.value);
-  const parsedSeconds = differenceInSeconds(parsedDate, baseDate);
+  const parsedSeconds = differenceInSeconds(parsedDate, BaseDate);
   const realDate = addSeconds(new Date(), parsedSeconds);
 
   const newLiteral = DataFactory.literal(

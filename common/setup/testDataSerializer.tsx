@@ -15,28 +15,23 @@ import {
 } from "n3";
 import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
-import { ShowErrorSnackbar } from "../components/snackbar";
-import { GetCoreFolderFromWebId } from "../util/urlParser";
 import { SafeGetDataset } from "../util/solid_wrapper";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import JSZip from "jszip";
+import { BaseDate, GetBaseUrl } from "./serializationUtil";
 
 type SerializedDataset = {
   name: string;
   content: string;
 };
 
-const baseDate = new Date(Date.UTC(1970, 0, 1));
-
-export async function Serialize(): Promise<Blob | null> {
+export async function Serialize(): Promise<Blob | undefined> {
   const session = GetSession();
-  const webId = session.info.webId;
-  if (!webId) {
-    ShowErrorSnackbar("The user is not logged in!");
-    return null;
+  const baseUrl = GetBaseUrl(session);
+  if (!baseUrl) {
+    return;
   }
 
-  const baseUrl = GetCoreFolderFromWebId(webId);
   const foldersOfInterest = [
     "bookingrequests/",
     "dataprotection/",
@@ -53,8 +48,11 @@ export async function Serialize(): Promise<Blob | null> {
     })
   );
   const flatResults = results.flat(2);
+
   const zip = new JSZip();
-  zip.file("asd/Hello.txt", "Hello World\n");
+  for (const file of flatResults) {
+    zip.file(file.name, file.content);
+  }
 
   const content = await zip.generateAsync({ type: "blob" });
   return content;
@@ -131,7 +129,7 @@ function CreateDateOffsetIfRequired(quad: Quad): Quad {
 
   const realDate = Date.parse(literal.value);
   const secondsBetweenThenAndNow = differenceInSeconds(realDate, Date.now());
-  const serializedDate = addSeconds(baseDate, secondsBetweenThenAndNow);
+  const serializedDate = addSeconds(BaseDate, secondsBetweenThenAndNow);
 
   const newLiteral = DataFactory.literal(
     serializedDate.toISOString(),
