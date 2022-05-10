@@ -37,13 +37,13 @@ import { GetUserReservationsPodUrl } from "../util/solid_reservations";
 import { Deserialize } from "../setup/testDataDeserializer";
 import { Serialize } from "../setup/testDataSerializer";
 
-function DownloadSerializedData(data: string): void {
+function DownloadSerializedData(data: Blob | null): void {
+  if (!data) {
+    return;
+  }
   const element = document.createElement("a");
-  const file = new Blob([data], {
-    type: "text/plain",
-  });
-  element.href = URL.createObjectURL(file);
-  element.download = "serialized.txt";
+  element.href = URL.createObjectURL(data);
+  element.download = "serialized.zip";
   document.body.appendChild(element);
   element.click();
 }

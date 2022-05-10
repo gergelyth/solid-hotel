@@ -19,6 +19,7 @@ import { ShowErrorSnackbar } from "../components/snackbar";
 import { GetCoreFolderFromWebId } from "../util/urlParser";
 import { SafeGetDataset } from "../util/solid_wrapper";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import JSZip from "jszip";
 
 type SerializedDataset = {
   name: string;
@@ -27,15 +28,15 @@ type SerializedDataset = {
 
 const baseDate = new Date(Date.UTC(1970, 0, 1));
 
-export async function Serialize(): Promise<string> {
+export async function Serialize(): Promise<Blob | null> {
   const session = GetSession();
   const webId = session.info.webId;
   if (!webId) {
     ShowErrorSnackbar("The user is not logged in!");
-    return "";
+    return null;
   }
 
-  const coreFolder = GetCoreFolderFromWebId(webId);
+  const baseUrl = GetCoreFolderFromWebId(webId);
   const foldersOfInterest = [
     "bookingrequests/",
     "dataprotection/",
@@ -47,17 +48,21 @@ export async function Serialize(): Promise<string> {
 
   const results = await Promise.all(
     foldersOfInterest.map((folder) => {
-      const url = coreFolder + folder;
-      return RecursivelySerializeDatasets(url, coreFolder, session);
+      const url = baseUrl + folder;
+      return RecursivelySerializeDatasets(url, baseUrl, session);
     })
   );
   const flatResults = results.flat(2);
-  return "";
+  const zip = new JSZip();
+  zip.file("asd/Hello.txt", "Hello World\n");
+
+  const content = await zip.generateAsync({ type: "blob" });
+  return content;
 }
 
 export async function RecursivelySerializeDatasets(
   currentUrl: string,
-  parentUrl: string,
+  baseUrl: string,
   session: Session
 ): Promise<SerializedDataset[]> {
   const dataSet = await SafeGetDataset(currentUrl);
@@ -69,15 +74,18 @@ export async function RecursivelySerializeDatasets(
   const urls = getContainedResourceUrlAll(dataSet);
   const childResults = await Promise.all(
     urls.map((childUrl) =>
-      RecursivelySerializeDatasets(childUrl, currentUrl, session)
+      RecursivelySerializeDatasets(childUrl, baseUrl, session)
     )
   );
   const results = childResults.flat(5);
+  if (isContainer(dataSet)) {
+    return results;
+  }
 
   const resultContent = await SerializeDataset(currentUrl, session);
   const result: SerializedDataset = {
-    //Return name without the parentUrl and the trailing slash
-    name: currentUrl.replace(`${parentUrl}`, "").replace(/\/$/, ""),
+    //Return name without the baseUrl
+    name: currentUrl.replace(`${baseUrl}`, ""),
     content: resultContent,
   };
 

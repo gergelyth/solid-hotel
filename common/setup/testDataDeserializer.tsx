@@ -11,6 +11,7 @@ import {
 } from "n3";
 import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
+import JSZip from "jszip";
 
 //TODO unify basedate to one place
 const baseDate = new Date(Date.UTC(1970, 0, 1));
@@ -18,13 +19,14 @@ const baseDate = new Date(Date.UTC(1970, 0, 1));
 export async function Deserialize(): Promise<void> {
   const session = GetSession();
 
-  const file = await fetch("../serialized.txt").then((r) => r.text());
+  const zipFile = await fetch("../serialized.zip");
+  const zip = await JSZip.loadAsync(zipFile.blob());
 
   //We can't do anything with prefixes as that's not supported (which is not an issue, it's just ugly when you check the text representation in the Solid Pod UI)
   const parser = new Parser();
 
   //We can't use the quad parsing overload here for some reason because that results in an empty SolidDataSet
-  const quads = parser.parse(file);
+  const quads = parser.parse("");
 
   const quadStore = new Store();
   for (const quad of quads) {
