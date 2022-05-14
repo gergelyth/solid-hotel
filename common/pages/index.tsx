@@ -1,4 +1,12 @@
-import { Badge, Box, Button, Grid, Typography } from "@material-ui/core";
+import {
+  Badge,
+  Box,
+  Button,
+  Grid,
+  Tooltip,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { HotelWebId } from "../consts/solidIdentifiers";
 import { HotelName, HotelLocation } from "../consts/hotelConsts";
 import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
@@ -25,6 +33,7 @@ import {
   DeleteForever,
   FolderOpen,
   Person,
+  Info,
 } from "@material-ui/icons";
 import HomeIcon from "@material-ui/icons/Home";
 
@@ -32,6 +41,7 @@ type SetupButton = {
   buttonText: string;
   onClick: () => void;
   icon?: ReactNode;
+  info?: JSX.Element;
 };
 
 function SetupButtonGroup({
@@ -72,12 +82,32 @@ function SetupButtonGroup({
                 >
                   {setupButton.buttonText}
                 </Button>
+                {setupButton.info ? (
+                  <InfoPopover content={setupButton.info} />
+                ) : null}
               </Grid>
             ))}
           </Grid>
         </Box>
       </Badge>
     </Grid>
+  );
+}
+
+const CustomTooltip = withStyles(() => ({
+  tooltip: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    border: "1px solid #dadde9",
+    maxWidth: "100%",
+  },
+}))(Tooltip);
+
+function InfoPopover({ content }: { content: JSX.Element }): JSX.Element {
+  return (
+    <CustomTooltip title={content}>
+      <Badge badgeContent={<Info color={"primary"} />} />
+    </CustomTooltip>
   );
 }
 
@@ -116,14 +146,6 @@ export default function Home(): JSX.Element {
         <Typography variant="h6">Hotel Pod setup</Typography>
       </Grid>
 
-      <Grid item>
-        <Typography variant="subtitle1">Hotel WebId: {HotelWebId}</Typography>
-        <Typography variant="subtitle1">Hotel name: {HotelName}</Typography>
-        <Typography variant="subtitle1">
-          Hotel location: {HotelLocation}
-        </Typography>
-      </Grid>
-
       <Grid
         container
         spacing={3}
@@ -159,6 +181,19 @@ export default function Home(): JSX.Element {
               buttonText: "Setup hotel profile",
               onClick: GetSetupHotelProfileFunction(),
               icon: <Person />,
+              info: (
+                <Box>
+                  <Typography variant="subtitle2">
+                    Hotel WebId: {HotelWebId}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    Hotel name: {HotelName}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    Hotel location: {HotelLocation}
+                  </Typography>
+                </Box>
+              ),
             },
             {
               buttonText: "Add rooms",
