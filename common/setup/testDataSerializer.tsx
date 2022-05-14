@@ -25,21 +25,14 @@ type SerializedDataset = {
   content: string;
 };
 
-export async function Serialize(): Promise<Blob | undefined> {
+export async function Serialize(
+  foldersOfInterest: string[]
+): Promise<Blob | undefined> {
   const session = GetSession();
   const baseUrl = GetPodBaseUrl(session);
   if (!baseUrl) {
     return;
   }
-
-  const foldersOfInterest = [
-    "bookingrequests/",
-    "dataprotection/",
-    "hotelprofiles/",
-    "privacy/",
-    "reservations/",
-    "rooms/",
-  ];
 
   const results = await Promise.all(
     foldersOfInterest.map((folder) => {

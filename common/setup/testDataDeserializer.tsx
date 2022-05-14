@@ -15,14 +15,14 @@ import JSZip from "jszip";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { SerializationBaseDate, GetPodBaseUrl } from "./setupUtil";
 
-export async function Deserialize(): Promise<void[]> {
+export async function Deserialize(filename: string): Promise<void[]> {
   const session = GetSession();
   const baseUrl = GetPodBaseUrl(session);
   if (!baseUrl) {
     return [];
   }
 
-  const zipFile = await fetch("../serialized.zip");
+  const zipFile = await fetch(`../${filename}`);
   const zip = await JSZip.loadAsync(zipFile.blob());
 
   const promises: Promise<void>[] = [];
