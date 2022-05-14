@@ -1,52 +1,86 @@
-import { Button, ButtonGroup, Grid, Typography } from "@material-ui/core";
-import {
-  DataProtectionProfilesUrl,
-  HotelProfilesUrl,
-  HotelWebId,
-  PrivacyTokensInboxUrl,
-  PrivacyTokensUrl,
-  RoomDefinitionsUrl,
-} from "../consts/solidIdentifiers";
+import { Badge, Box, Button, Grid, Typography } from "@material-ui/core";
+import { HotelWebId } from "../consts/solidIdentifiers";
 import { HotelName, HotelLocation } from "../consts/hotelConsts";
 import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
-import SetupHotelProfile from "../setup/populateHotelPod/hotelProfile";
+import { GetSession } from "../util/solid";
 import {
-  PopulateHotelPodWithReservations,
-  CreateBookingInbox,
-} from "../setup/populateHotelPod/withReservations";
-import PopulateHotelPodWithRooms from "../setup/populateHotelPod/withRooms";
+  GetAddReservationsFunction,
+  GetAddRoomsFunction,
+  GetClearAllButRoomsFunction,
+  GetClearAllRoomsFunction,
+  GetCreateEmptySetupFunction,
+  GetSetupHotelProfileFunction,
+} from "../setup/hotelSetupButtons";
 import {
-  DeleteAllHotelRooms,
-  DeleteAllHotelReservations,
-  DeleteAllProfiles,
-  DeletePrivacyFolders,
-} from "../setup/populateHotelPod/util";
+  GetDeserializeFunction,
+  GetSerializeFunction,
+} from "../setup/testDataButtons";
 import {
-  DeleteAllUserReservations,
-  DeleteUserPrivacyFolders,
-} from "../setup/populateUserPod/util";
-import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
-import { GetPodOfSession, GetSession } from "../util/solid";
-import { ShowInfoSnackbar, ShowSuccessSnackbar } from "../components/snackbar";
+  GetGuestAddReservationsFunction,
+  GetGuestClearEverythingFunction,
+  GetGuestEmptySetupFunction,
+} from "../setup/guestSetupButtons";
+import { ReactNode } from "react";
 import {
-  PopulateHotelPodWithActiveProfiles,
-  PopulateHotelPodWithDataProtectionProfiles,
-} from "../setup/populateHotelPod/withProfiles";
-import { CreatePrivacyFolders } from "../setup/shared";
-import { createContainerAt } from "@inrupt/solid-client";
-import { GetUserReservationsPodUrl } from "../util/solid_reservations";
-import { Deserialize } from "../setup/testDataDeserializer";
-import { Serialize } from "../setup/testDataSerializer";
+  Backup,
+  Save,
+  DeleteForever,
+  FolderOpen,
+  Person,
+} from "@material-ui/icons";
+import HomeIcon from "@material-ui/icons/Home";
 
-function DownloadSerializedData(data: Blob | undefined): void {
-  if (!data) {
-    return;
-  }
-  const element = document.createElement("a");
-  element.href = URL.createObjectURL(data);
-  element.download = "serialized.zip";
-  document.body.appendChild(element);
-  element.click();
+type SetupButton = {
+  buttonText: string;
+  onClick: () => void;
+  icon?: ReactNode;
+};
+
+function SetupButtonGroup({
+  title,
+  buttons,
+  isClearGroup,
+}: {
+  title: string;
+  buttons: SetupButton[];
+  isClearGroup?: boolean;
+}): JSX.Element {
+  return (
+    <Grid item>
+      <Badge
+        badgeContent={title}
+        color={isClearGroup ? "secondary" : "primary"}
+      >
+        <Box
+          border={1}
+          p={3}
+          borderRadius={16}
+          // borderColor={isClearGroup ? "secondary.main" : "primary.main"}
+        >
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="center"
+            direction="row"
+          >
+            {buttons.map((setupButton) => (
+              <Grid item key={setupButton.buttonText}>
+                <Button
+                  variant="outlined"
+                  color={isClearGroup ? "secondary" : "primary"}
+                  startIcon={setupButton.icon}
+                  onClick={setupButton.onClick}
+                >
+                  {setupButton.buttonText}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Badge>
+    </Grid>
+  );
 }
 
 export default function Home(): JSX.Element {
@@ -92,237 +126,121 @@ export default function Home(): JSX.Element {
         </Typography>
       </Grid>
 
-      <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid item>
-          <ButtonGroup
-            orientation="vertical"
-            color="primary"
-            variant="contained"
-          >
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Deleting privacy folders...");
-                await DeletePrivacyFolders();
-                ShowSuccessSnackbar("All privacy folders deleted");
-              }}
-            >
-              Delete privacy folders
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar(
-                  "Deleting hotel and data protection profiles..."
-                );
-                await DeleteAllProfiles();
-                ShowSuccessSnackbar(
-                  "All hotel and data protection profiles deleted"
-                );
-                ShowInfoSnackbar("Deleting hotel reservations...");
-                await DeleteAllHotelReservations();
-                ShowSuccessSnackbar("All hotel reservations deleted");
-              }}
-            >
-              Clear reservations
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Deleting hotel rooms...");
-                await DeleteAllHotelRooms();
-                ShowSuccessSnackbar("All hotel rooms deleted");
-              }}
-            >
-              Clear rooms
-            </Button>
-          </ButtonGroup>
-        </Grid>
-        <Grid item>
-          <ButtonGroup
-            orientation="vertical"
-            color="primary"
-            variant="contained"
-          >
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Creating only the folders...");
-                const session = GetSession();
-                await Promise.all([
-                  CreateBookingInbox(),
-                  createContainerAt(HotelProfilesUrl, {
-                    fetch: session.fetch,
-                  }),
-                  createContainerAt(DataProtectionProfilesUrl, {
-                    fetch: session.fetch,
-                  }),
-                  createContainerAt(RoomDefinitionsUrl, {
-                    fetch: session.fetch,
-                  }),
-                  createContainerAt(GetUserReservationsPodUrl() ?? "", {
-                    fetch: session.fetch,
-                  }),
-                ]);
-                ShowSuccessSnackbar("Folders created");
-              }}
-            >
-              Empty setup
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Adding information to the hotel profile...");
-                await SetupHotelProfile();
-                ShowSuccessSnackbar("Hotel profile setup successful");
-              }}
-            >
-              Setup hotel profile
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar(
-                  "Populating hotel Pod with active and data protection profiles..."
-                );
-                Promise.all([
-                  PopulateHotelPodWithActiveProfiles(),
-                  PopulateHotelPodWithDataProtectionProfiles(),
-                ]).then(async ([activeProfiles, dataProtectionProfiles]) => {
-                  ShowSuccessSnackbar(
-                    "Hotel Pod populated with active and data protection profiles"
-                  );
-                  ShowInfoSnackbar(
-                    "Populating hotel Pod with reservations and creating booking inbox..."
-                  );
-                  await Promise.all([
-                    //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-                    PopulateHotelPodWithReservations(
-                      "https://gergelyth.inrupt.net/profile/card#me",
-                      activeProfiles,
-                      dataProtectionProfiles
-                    ),
-                    await CreateBookingInbox(),
-                  ]);
-                  ShowSuccessSnackbar("Hotel Pod populated with reservations");
-                });
-              }}
-            >
-              Add reservations
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Populating hotel Pod with rooms...");
-                await PopulateHotelPodWithRooms();
-                ShowSuccessSnackbar("Hotel Pod populated with rooms");
-              }}
-            >
-              Add rooms
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Creating privacy folders...");
-                await CreatePrivacyFolders(
-                  PrivacyTokensUrl,
-                  PrivacyTokensInboxUrl
-                );
-                ShowSuccessSnackbar("Privacy folders created");
-              }}
-            >
-              Create privacy folders
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Serializing pod...");
-                const data = await Serialize();
-                ShowSuccessSnackbar("Pod serialized");
-                DownloadSerializedData(data);
-              }}
-            >
-              Serialize
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Deserializing file...");
-                await Deserialize();
-                ShowSuccessSnackbar("Pod populated");
-              }}
-            >
-              Deserialize
-            </Button>
-          </ButtonGroup>
-        </Grid>
+      <Grid
+        container
+        spacing={3}
+        alignItems="center"
+        justify="center"
+        direction="column"
+      >
+        <SetupButtonGroup
+          title={"Clear"}
+          buttons={[
+            {
+              buttonText: "Clear all but rooms",
+              onClick: GetClearAllButRoomsFunction(),
+              icon: <DeleteForever />,
+            },
+            {
+              buttonText: "Clear",
+              onClick: GetClearAllRoomsFunction(),
+              icon: <DeleteForever />,
+            },
+          ]}
+          isClearGroup
+        />
+        <SetupButtonGroup
+          title={"Manual setup"}
+          buttons={[
+            {
+              buttonText: "Empty setup",
+              onClick: GetCreateEmptySetupFunction(),
+              icon: <FolderOpen />,
+            },
+            {
+              buttonText: "Setup hotel profile",
+              onClick: GetSetupHotelProfileFunction(),
+              icon: <Person />,
+            },
+            {
+              buttonText: "Add reservations",
+              onClick: GetAddReservationsFunction(),
+            },
+            {
+              buttonText: "Add rooms",
+              onClick: GetAddRoomsFunction(),
+              icon: <HomeIcon />,
+            },
+          ]}
+        />
+        <SetupButtonGroup
+          title={"TestData"}
+          buttons={[
+            {
+              buttonText: "Serialize Pod",
+              onClick: GetSerializeFunction(),
+              icon: <Save />,
+            },
+            {
+              buttonText: "Load TestData",
+              onClick: GetDeserializeFunction(),
+              icon: <Backup />,
+            },
+          ]}
+        />
       </Grid>
 
       <Grid item>
         <Typography variant="h6">Guest Pod setup</Typography>
       </Grid>
 
-      <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid item>
-          <ButtonGroup
-            orientation="vertical"
-            color="primary"
-            variant="contained"
-          >
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Deleting user privacy folders...");
-                await DeleteUserPrivacyFolders();
-                ShowSuccessSnackbar(
-                  "All user privacy folders have been deleted"
-                );
-              }}
-            >
-              Delete privacy folders
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Deleting user reservations...");
-                await DeleteAllUserReservations();
-                ShowSuccessSnackbar("All user reservations have been deleted");
-              }}
-            >
-              Clear reservations
-            </Button>
-          </ButtonGroup>
-        </Grid>
-        <Grid item>
-          <ButtonGroup
-            orientation="vertical"
-            color="primary"
-            variant="contained"
-          >
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Creating only the folders...");
-                const session = GetSession();
-                await createContainerAt(GetUserReservationsPodUrl() ?? "", {
-                  fetch: session.fetch,
-                });
-                ShowSuccessSnackbar("Folders created");
-              }}
-            >
-              Empty setup
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Populating user Pod with reservations...");
-                //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-                await PopulateUserPodWithReservations(
-                  "https://gergelyth.inrupt.net/profile/card#me"
-                );
-                ShowSuccessSnackbar("Reservations added to user pod");
-              }}
-            >
-              Add reservations
-            </Button>
-            <Button
-              onClick={async () => {
-                ShowInfoSnackbar("Creating privacy folders...");
-                //TODO make this a variable
-                await CreatePrivacyFolders(GetPodOfSession() + "/privacy");
-                ShowSuccessSnackbar("Privacy folders created");
-              }}
-            >
-              Create privacy folders
-            </Button>
-          </ButtonGroup>
-        </Grid>
+      <Grid
+        container
+        spacing={3}
+        alignItems="center"
+        justify="center"
+        direction="column"
+      >
+        <SetupButtonGroup
+          title={"Clear"}
+          buttons={[
+            {
+              buttonText: "Clear everything",
+              onClick: GetGuestClearEverythingFunction(),
+              icon: <DeleteForever />,
+            },
+          ]}
+          isClearGroup
+        />
+        <SetupButtonGroup
+          title={"Manual setup"}
+          buttons={[
+            {
+              buttonText: "Empty setup",
+              onClick: GetGuestEmptySetupFunction(),
+              icon: <FolderOpen />,
+            },
+            {
+              buttonText: "Add reservations",
+              onClick: GetGuestAddReservationsFunction(),
+            },
+          ]}
+        />
+        <SetupButtonGroup
+          title={"TestData"}
+          buttons={[
+            {
+              buttonText: "Serialize Pod",
+              onClick: GetSerializeFunction(),
+              icon: <Save />,
+            },
+            {
+              buttonText: "Load TestData",
+              onClick: GetDeserializeFunction(),
+              icon: <Backup />,
+            },
+          ]}
+        />
       </Grid>
     </Grid>
   );
