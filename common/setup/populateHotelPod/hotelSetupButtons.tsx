@@ -1,31 +1,29 @@
-import { ShowInfoSnackbar, ShowSuccessSnackbar } from "../components/snackbar";
+import {
+  ShowInfoSnackbar,
+  ShowSuccessSnackbar,
+} from "../../components/snackbar";
 import {
   DeleteAllHotelReservations,
   DeleteAllHotelRooms,
   DeleteAllProfiles,
   DeletePrivacyFolders,
-} from "./populateHotelPod/util";
+} from "./hotelSetupUtil";
 import {
   DataProtectionProfilesUrl,
   HotelProfilesUrl,
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
   RoomDefinitionsUrl,
-} from "../consts/solidIdentifiers";
-import SetupHotelProfile from "./populateHotelPod/hotelProfile";
+} from "../../consts/solidIdentifiers";
 import {
-  PopulateHotelPodWithReservations,
+  PopulateHotelPodWithRooms,
   CreateBookingInbox,
-} from "./populateHotelPod/withReservations";
-import PopulateHotelPodWithRooms from "./populateHotelPod/withRooms";
-import { GetSession } from "../util/solid";
-import {
-  PopulateHotelPodWithActiveProfiles,
-  PopulateHotelPodWithDataProtectionProfiles,
-} from "./populateHotelPod/withProfiles";
-import { CreatePrivacyFolders } from "./shared";
+  SetupHotelProfile,
+} from "./hotelSetupUtil";
+import { GetSession } from "../../util/solid";
+import { CreatePrivacyFolders } from "../setupUtil";
 import { createContainerAt } from "@inrupt/solid-client";
-import { GetUserReservationsPodUrl } from "../util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 
 export function GetClearAllButRoomsFunction(): () => void {
   return async () => {
@@ -80,35 +78,6 @@ export function GetSetupHotelProfileFunction(): () => void {
     ShowInfoSnackbar("Adding information to the hotel profile...");
     await SetupHotelProfile();
     ShowSuccessSnackbar("Hotel profile setup successful");
-  };
-}
-
-export function GetAddReservationsFunction(): () => void {
-  return async () => {
-    ShowInfoSnackbar(
-      "Populating hotel Pod with active and data protection profiles..."
-    );
-    Promise.all([
-      PopulateHotelPodWithActiveProfiles(),
-      PopulateHotelPodWithDataProtectionProfiles(),
-    ]).then(async ([activeProfiles, dataProtectionProfiles]) => {
-      ShowSuccessSnackbar(
-        "Hotel Pod populated with active and data protection profiles"
-      );
-      ShowInfoSnackbar(
-        "Populating hotel Pod with reservations and creating booking inbox..."
-      );
-      await Promise.all([
-        //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-        PopulateHotelPodWithReservations(
-          "https://gergelyth.inrupt.net/profile/card#me",
-          activeProfiles,
-          dataProtectionProfiles
-        ),
-        await CreateBookingInbox(),
-      ]);
-      ShowSuccessSnackbar("Hotel Pod populated with reservations");
-    });
   };
 }
 

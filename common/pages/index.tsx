@@ -4,22 +4,20 @@ import { HotelName, HotelLocation } from "../consts/hotelConsts";
 import { DynamicLoginComponent } from "../components/auth/dynamic-login-component";
 import { GetSession } from "../util/solid";
 import {
-  GetAddReservationsFunction,
   GetAddRoomsFunction,
   GetClearAllButRoomsFunction,
   GetClearAllRoomsFunction,
   GetCreateEmptySetupFunction,
   GetSetupHotelProfileFunction,
-} from "../setup/hotelSetupButtons";
+} from "../setup/populateHotelPod/hotelSetupButtons";
 import {
   GetDeserializeFunction,
   GetSerializeFunction,
 } from "../setup/testDataButtons";
 import {
-  GetGuestAddReservationsFunction,
   GetGuestClearEverythingFunction,
   GetGuestEmptySetupFunction,
-} from "../setup/guestSetupButtons";
+} from "../setup/populateUserPod/guestSetupButtons";
 import { ReactNode } from "react";
 import {
   Backup,
@@ -142,7 +140,7 @@ export default function Home(): JSX.Element {
               icon: <DeleteForever />,
             },
             {
-              buttonText: "Clear",
+              buttonText: "Clear rooms",
               onClick: GetClearAllRoomsFunction(),
               icon: <DeleteForever />,
             },
@@ -161,10 +159,6 @@ export default function Home(): JSX.Element {
               buttonText: "Setup hotel profile",
               onClick: GetSetupHotelProfileFunction(),
               icon: <Person />,
-            },
-            {
-              buttonText: "Add reservations",
-              onClick: GetAddReservationsFunction(),
             },
             {
               buttonText: "Add rooms",
@@ -219,10 +213,6 @@ export default function Home(): JSX.Element {
               buttonText: "Empty setup",
               onClick: GetGuestEmptySetupFunction(),
               icon: <FolderOpen />,
-            },
-            {
-              buttonText: "Add reservations",
-              onClick: GetGuestAddReservationsFunction(),
             },
           ]}
         />

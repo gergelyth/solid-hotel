@@ -13,11 +13,11 @@ import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
 import JSZip from "jszip";
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { BaseDate, GetBaseUrl } from "./serializationUtil";
+import { SerializationBaseDate, GetPodBaseUrl } from "./setupUtil";
 
 export async function Deserialize(): Promise<void[]> {
   const session = GetSession();
-  const baseUrl = GetBaseUrl(session);
+  const baseUrl = GetPodBaseUrl(session);
   if (!baseUrl) {
     return [];
   }
@@ -76,7 +76,7 @@ function ParseDateOffsetIfRequired(quad: Quad): Quad {
   }
 
   const parsedDate = Date.parse(literal.value);
-  const parsedSeconds = differenceInSeconds(parsedDate, BaseDate);
+  const parsedSeconds = differenceInSeconds(parsedDate, SerializationBaseDate);
   const realDate = addSeconds(new Date(), parsedSeconds);
 
   const newLiteral = DataFactory.literal(

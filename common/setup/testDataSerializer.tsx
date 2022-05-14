@@ -18,7 +18,7 @@ import { addSeconds, differenceInSeconds } from "date-fns";
 import { SafeGetDataset } from "../util/solid_wrapper";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import JSZip from "jszip";
-import { BaseDate, GetBaseUrl } from "./serializationUtil";
+import { SerializationBaseDate, GetPodBaseUrl } from "./setupUtil";
 
 type SerializedDataset = {
   name: string;
@@ -27,7 +27,7 @@ type SerializedDataset = {
 
 export async function Serialize(): Promise<Blob | undefined> {
   const session = GetSession();
-  const baseUrl = GetBaseUrl(session);
+  const baseUrl = GetPodBaseUrl(session);
   if (!baseUrl) {
     return;
   }
@@ -129,7 +129,10 @@ function CreateDateOffsetIfRequired(quad: Quad): Quad {
 
   const realDate = Date.parse(literal.value);
   const secondsBetweenThenAndNow = differenceInSeconds(realDate, Date.now());
-  const serializedDate = addSeconds(BaseDate, secondsBetweenThenAndNow);
+  const serializedDate = addSeconds(
+    SerializationBaseDate,
+    secondsBetweenThenAndNow
+  );
 
   const newLiteral = DataFactory.literal(
     serializedDate.toISOString(),

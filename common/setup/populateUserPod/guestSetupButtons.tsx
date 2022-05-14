@@ -1,13 +1,15 @@
 import {
   DeleteAllUserReservations,
   DeleteUserPrivacyFolders,
-} from "../setup/populateUserPod/util";
-import PopulateUserPodWithReservations from "../setup/populateUserPod/withReservations";
-import { GetPodOfSession, GetSession } from "../util/solid";
-import { ShowInfoSnackbar, ShowSuccessSnackbar } from "../components/snackbar";
-import { CreatePrivacyFolders } from "../setup/shared";
+} from "./guestSetupUtil";
+import { GetPodOfSession, GetSession } from "../../util/solid";
+import {
+  ShowInfoSnackbar,
+  ShowSuccessSnackbar,
+} from "../../components/snackbar";
+import { CreatePrivacyFolders } from "../setupUtil";
 import { createContainerAt } from "@inrupt/solid-client";
-import { GetUserReservationsPodUrl } from "../util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 
 export function GetGuestClearEverythingFunction(): () => void {
   return async () => {
@@ -32,16 +34,5 @@ export function GetGuestEmptySetupFunction(): () => void {
     //TODO make this a variable
     await CreatePrivacyFolders(GetPodOfSession() + "/privacy");
     ShowSuccessSnackbar("Privacy folders created");
-  };
-}
-
-export function GetGuestAddReservationsFunction(): () => void {
-  return async () => {
-    ShowInfoSnackbar("Populating user Pod with reservations...");
-    //TODO hardcoded - should be the WebId of the currently logged in user when the hotel operations work with the secrets
-    await PopulateUserPodWithReservations(
-      "https://gergelyth.inrupt.net/profile/card#me"
-    );
-    ShowSuccessSnackbar("Reservations added to user pod");
   };
 }
