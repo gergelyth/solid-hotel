@@ -8,6 +8,7 @@ import {
   CardContent,
   CircularProgress,
 } from "@material-ui/core";
+import { compareDesc } from "date-fns";
 import { Notification } from "../types/Notification";
 
 function NotificationItem({
@@ -71,7 +72,7 @@ function OrderNotificationsByDescending(
     return -1;
   }
 
-  return first?.lastModTime > second?.lastModTime ? -1 : 1;
+  return compareDesc(first.createdAt, second.createdAt);
 }
 
 function NotificationList({

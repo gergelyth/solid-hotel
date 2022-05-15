@@ -81,6 +81,11 @@ export function AddNotificationThingToDataset(
     notificationToRdfMap.notificationType,
     notificationType.valueOf()
   );
+  notification = addDatetime(
+    notification,
+    notificationToRdfMap.createdAt,
+    new Date()
+  );
 
   return setThing(dataset, notification);
 }

@@ -1,7 +1,7 @@
 import {
   getBoolean,
   getContainedResourceUrlAll,
-  getDecimal,
+  getDatetime,
   getInteger,
   getThing,
   SolidDataset,
@@ -24,7 +24,6 @@ const swrKey = "notifications";
 function BuildNotificationBasedOnType(
   url: string,
   dataset: SolidDataset,
-  modTime: number,
   notificationThing: Thing,
   parser: NotificationParser,
   router: NextRouter
@@ -33,8 +32,16 @@ function BuildNotificationBasedOnType(
     notificationThing,
     notificationToRdfMap.isProcessed
   );
-  if (isProcessed == null) {
+  if (!isProcessed) {
     throw new Error("IsProcessed field is null in notification");
+  }
+
+  const createdAt = getDatetime(
+    notificationThing,
+    notificationToRdfMap.createdAt
+  );
+  if (!createdAt) {
+    throw new Error("CreatedAt field is null in notification");
   }
 
   const { text, onClick, onReceive } = parser(router, url, dataset);
@@ -43,7 +50,7 @@ function BuildNotificationBasedOnType(
     notificationUrl: url,
     isProcessed: isProcessed,
     text: text,
-    lastModTime: modTime,
+    createdAt: createdAt,
     onClick: onClick,
     onReceive: onReceive,
   };
@@ -63,7 +70,6 @@ function BuildNotificationBasedOnType(
 function ConvertToNotification(
   dataset: SolidDataset,
   url: string,
-  modTime: number,
   parsers: ParserList,
   router: NextRouter
 ): Notification | null {
@@ -85,7 +91,6 @@ function ConvertToNotification(
   return BuildNotificationBasedOnType(
     url,
     dataset,
-    modTime,
     notificationThing,
     parser,
     router
@@ -94,15 +99,10 @@ function ConvertToNotification(
 
 function ProcessItem<T>(
   url: UrlString,
-  modTime: number,
-  convertToType: (
-    dataset: SolidDataset,
-    modTime: number,
-    url: string
-  ) => T | null
+  convertToType: (dataset: SolidDataset, url: string) => T | null
 ): Promise<T | null> {
   return GetDataSet(url).then((dataset) => {
-    return convertToType(dataset, modTime, url);
+    return convertToType(dataset, url);
   });
 }
 
@@ -131,49 +131,14 @@ async function GetUrlPaths(
   return Promise.all(promises).then(() => urlPaths);
 }
 
-function CollectModifyDates(
-  dataset: SolidDataset,
-  urls: string[]
-): [string, number][] {
-  const result: [string, number][] = [];
-  urls.forEach((url) => {
-    const itemThing = getThing(dataset, url);
-    if (!itemThing) {
-      throw new Error(
-        "Supposedly contained item not found in the Solid folder"
-      );
-    }
-
-    //TODO extract this into a const (not in our custom RDF maps, just here probably)
-    //http://www.w3.org/ns/posix/stat#mtime
-    const mTime = getDecimal(
-      itemThing,
-      "http://www.w3.org/ns/posix/stat#mtime"
-    );
-    if (!mTime) {
-      throw new Error(
-        "MTime in a notification item is null. That shouldn't be possible, right?"
-      );
-    }
-    result.push([url, mTime]);
-  });
-
-  return result;
-}
-
 function GetNotificationsForSpecificUrl<T>(
   url: string,
-  convertToType: (
-    dataset: SolidDataset,
-    modTime: number,
-    url: string
-  ) => T | null
+  convertToType: (dataset: SolidDataset, url: string) => T | null
 ): Promise<(T | null)[]> {
   return GetDataSet(url).then((dataset) => {
     const urls = getContainedResourceUrlAll(dataset);
-    const urlToModTime = CollectModifyDates(dataset, urls);
-    const items = urlToModTime.map(([itemUrl, modTime]) => {
-      return ProcessItem<T>(itemUrl, modTime, convertToType);
+    const items = urls.map((itemUrl) => {
+      return ProcessItem<T>(itemUrl, convertToType);
     });
     return Promise.all(items);
   });
@@ -184,11 +149,7 @@ function FetchItemsArray<T>(
   swrKey: string,
   coreUrl: string | null,
   inboxRegexList: string[],
-  convertToType: (
-    dataset: SolidDataset,
-    modTime: number,
-    url: string
-  ) => T | null
+  convertToType: (dataset: SolidDataset, url: string) => T | null
 ): {
   items: (T | null)[] | undefined;
   isLoading: boolean;
@@ -247,8 +208,7 @@ export function useNotifications(
     swrKey,
     podUrl,
     inboxRegexList,
-    (dataset, modTime, url) =>
-      ConvertToNotification(dataset, url, modTime, parsers, router)
+    (dataset, url) => ConvertToNotification(dataset, url, parsers, router)
   );
 
   return {
