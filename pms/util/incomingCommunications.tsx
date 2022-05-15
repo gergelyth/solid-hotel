@@ -74,9 +74,7 @@ export function ReceiveBookingRequest(
 } {
   const reservation = DeserializeBookingRequest(dataset);
 
-  const text = `Reservation requested for [${
-    reservation.owner
-  }] for dates [${reservation.dateFrom.toDateString()}]-[${reservation.dateTo.toDateString()}].\nRequest was automatically confirmed.`;
+  const text = `Reservation requested for dates [${reservation.dateFrom.toDateString()}]-[${reservation.dateTo.toDateString()}].\nRequest was automatically confirmed.`;
   const onClick = (): void => {
     router.push("/reservations");
   };
