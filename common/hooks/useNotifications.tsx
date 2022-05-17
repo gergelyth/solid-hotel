@@ -25,6 +25,7 @@ function BuildNotificationBasedOnType(
   url: string,
   dataset: SolidDataset,
   notificationThing: Thing,
+  notificationType: NotificationType,
   parser: NotificationParser,
   router: NextRouter
 ): Notification {
@@ -49,6 +50,7 @@ function BuildNotificationBasedOnType(
   const notification: Notification = {
     notificationUrl: url,
     isProcessed: isProcessed,
+    type: notificationType,
     text: text,
     createdAt: createdAt,
     onClick: onClick,
@@ -92,6 +94,7 @@ function ConvertToNotification(
     url,
     dataset,
     notificationThing,
+    notificationType,
     parser,
     router
   );

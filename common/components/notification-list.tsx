@@ -1,4 +1,5 @@
 import {
+  Box,
   List,
   Grid,
   Button,
@@ -10,6 +11,10 @@ import {
 } from "@material-ui/core";
 import { compareDesc } from "date-fns";
 import { Notification } from "../types/Notification";
+import {
+  NotificationCreatedAtChip,
+  NotificationTypeChip,
+} from "./notification-chips";
 
 function NotificationItem({
   notification,
@@ -34,14 +39,33 @@ function NotificationItem({
     >
       <CardActionArea>
         <CardContent>
-          <Grid container spacing={4} justify="center" alignItems="center">
-            <Grid item>
-              <Typography variant="caption" align="center">
-                {/* PRE style to preserve line breaks */}
-                <pre style={{ fontFamily: "inherit" }}>{notification.text}</pre>
+          <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid
+              item
+              xs={2}
+              container
+              spacing={2}
+              justify="center"
+              alignItems="center"
+              direction="column"
+            >
+              <Grid item>
+                <NotificationTypeChip notification={notification} />
+              </Grid>
+              <Grid item>
+                <NotificationCreatedAtChip notification={notification} />
+              </Grid>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography
+                variant="body2"
+                align="center"
+                style={{ whiteSpace: "pre-line" }}
+              >
+                <Box fontSize={"85%"}>{notification.text}</Box>
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item xs={2}>
               <Button
                 variant="contained"
                 color="primary"
