@@ -27,29 +27,45 @@ import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 
 export function GetClearAllButRoomsFunction(): () => void {
   return async () => {
-    ShowInfoSnackbar("Deleting privacy folders...");
+    let closeInfoSnackbar = ShowInfoSnackbar(
+      "Deleting privacy folders...",
+      true
+    );
     await DeletePrivacyFolders();
-    ShowSuccessSnackbar("All privacy folders deleted");
-    ShowInfoSnackbar("Deleting hotel and data protection profiles...");
+    ShowSuccessSnackbar("All privacy folders deleted", closeInfoSnackbar);
+    closeInfoSnackbar = ShowInfoSnackbar(
+      "Deleting hotel and data protection profiles...",
+      true
+    );
     await DeleteAllProfiles();
-    ShowSuccessSnackbar("All hotel and data protection profiles deleted");
-    ShowInfoSnackbar("Deleting hotel reservations...");
+    ShowSuccessSnackbar(
+      "All hotel and data protection profiles deleted",
+      closeInfoSnackbar
+    );
+    closeInfoSnackbar = ShowInfoSnackbar(
+      "Deleting hotel reservations...",
+      true
+    );
     await DeleteAllHotelReservations();
-    ShowSuccessSnackbar("All hotel reservations deleted");
+    ShowSuccessSnackbar("All hotel reservations deleted", closeInfoSnackbar);
+    ShowSuccessSnackbar("Clear all but rooms function finished!");
   };
 }
 
 export function GetClearAllRoomsFunction(): () => void {
   return async () => {
-    ShowInfoSnackbar("Deleting hotel rooms...");
+    const closeInfoSnackbar = ShowInfoSnackbar("Deleting hotel rooms...", true);
     await DeleteAllHotelRooms();
-    ShowSuccessSnackbar("All hotel rooms deleted");
+    ShowSuccessSnackbar("All hotel rooms deleted", closeInfoSnackbar);
   };
 }
 
 export function GetCreateEmptySetupFunction(): () => void {
   return async () => {
-    ShowInfoSnackbar("Creating only the folders...");
+    let closeInfoSnackbar = ShowInfoSnackbar(
+      "Creating only the folders...",
+      true
+    );
     const session = GetSession();
     await Promise.all([
       CreateBookingInbox(),
@@ -66,25 +82,32 @@ export function GetCreateEmptySetupFunction(): () => void {
         fetch: session.fetch,
       }),
     ]);
-    ShowSuccessSnackbar("Folders created");
-    ShowInfoSnackbar("Creating privacy folders...");
+    ShowSuccessSnackbar("Folders created", closeInfoSnackbar);
+    closeInfoSnackbar = ShowInfoSnackbar("Creating privacy folders...", true);
     await CreatePrivacyFolders(PrivacyTokensUrl, PrivacyTokensInboxUrl);
-    ShowSuccessSnackbar("Privacy folders created");
+    ShowSuccessSnackbar("Privacy folders created", closeInfoSnackbar);
+    ShowSuccessSnackbar("Empty setup function finished!");
   };
 }
 
 export function GetSetupHotelProfileFunction(): () => void {
   return async () => {
-    ShowInfoSnackbar("Adding information to the hotel profile...");
+    const closeInfoSnackbar = ShowInfoSnackbar(
+      "Adding information to the hotel profile...",
+      true
+    );
     await SetupHotelProfile();
-    ShowSuccessSnackbar("Hotel profile setup successful");
+    ShowSuccessSnackbar("Hotel profile setup successful", closeInfoSnackbar);
   };
 }
 
 export function GetAddRoomsFunction(): () => void {
   return async () => {
-    ShowInfoSnackbar("Populating hotel Pod with rooms...");
+    const closeInfoSnackbar = ShowInfoSnackbar(
+      "Populating hotel Pod with rooms...",
+      true
+    );
     await PopulateHotelPodWithRooms();
-    ShowSuccessSnackbar("Hotel Pod populated with rooms");
+    ShowSuccessSnackbar("Hotel Pod populated with rooms", closeInfoSnackbar);
   };
 }

@@ -29,17 +29,17 @@ export function GetSerializeFunction(
   foldersOfInterest: string[]
 ): () => void {
   return async () => {
-    ShowInfoSnackbar("Serializing pod...");
+    const closeInfoSnackbar = ShowInfoSnackbar("Serializing pod...", true);
     const data = await Serialize(foldersOfInterest);
-    ShowSuccessSnackbar("Pod serialized");
+    ShowSuccessSnackbar("Pod serialized", closeInfoSnackbar);
     DownloadSerializedData(zipName, data);
   };
 }
 
 export function GetDeserializeFunction(filename: string): () => void {
   return async () => {
-    ShowInfoSnackbar("Deserializing file...");
+    const closeInfoSnackbar = ShowInfoSnackbar("Deserializing file...", true);
     await Deserialize(filename);
-    ShowSuccessSnackbar("Pod populated");
+    ShowSuccessSnackbar("Pod populated", closeInfoSnackbar);
   };
 }

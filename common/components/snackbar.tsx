@@ -1,8 +1,17 @@
 import { Box } from "@material-ui/core";
 import { useSnackbar, ProviderContext, VariantType } from "notistack";
 
-function ShowSnackbar(variant: VariantType, message: string): void {
-  snackbarContext.enqueueSnackbar(message, { variant });
+function ShowSnackbar(
+  variant: VariantType,
+  message: string,
+  persist = false,
+  key?: string
+): void {
+  snackbarContext.enqueueSnackbar(message, {
+    variant,
+    persist: persist,
+    key: key,
+  });
 }
 
 export function CloseSnackbar(key: string | number): void {
@@ -13,7 +22,7 @@ export function ShowCustomSnackbar(
   createSnackbarElement: (key: string | number) => JSX.Element,
   key?: string | number
 ): void {
-  snackbarContext.enqueueSnackbar("asdf", {
+  snackbarContext.enqueueSnackbar("NoMessage", {
     anchorOrigin: {
       vertical: "bottom",
       horizontal: "right",
@@ -26,7 +35,13 @@ export function ShowCustomSnackbar(
   });
 }
 
-export function ShowSuccessSnackbar(message: string): void {
+export function ShowSuccessSnackbar(
+  message: string,
+  closeInfoSnackbar?: () => void
+): void {
+  if (closeInfoSnackbar) {
+    closeInfoSnackbar();
+  }
   ShowSnackbar("success", message);
 }
 
@@ -38,8 +53,9 @@ export function ShowErrorSnackbar(message: string): void {
   ShowSnackbar("error", message);
 }
 
-export function ShowInfoSnackbar(message: string): void {
-  ShowSnackbar("info", message);
+export function ShowInfoSnackbar(message: string, persist = false): () => void {
+  ShowSnackbar("info", message, persist, message);
+  return () => CloseSnackbar(message);
 }
 
 let snackbarContext: ProviderContext;
