@@ -24,6 +24,7 @@ import { GetSession } from "../../util/solid";
 import { CreatePrivacyFolders } from "../setupUtil";
 import { createContainerAt } from "@inrupt/solid-client";
 import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
+import { SetReadAccessToEveryone } from "../../util/solid_access";
 
 export function GetClearAllButRoomsFunction(): () => void {
   return async () => {
@@ -82,10 +83,13 @@ export function GetCreateEmptySetupFunction(): () => void {
         fetch: session.fetch,
       }),
     ]);
+    await SetReadAccessToEveryone(RoomDefinitionsUrl);
     ShowSuccessSnackbar("Folders created", closeInfoSnackbar);
+
     closeInfoSnackbar = ShowInfoSnackbar("Creating privacy folders...", true);
     await CreatePrivacyFolders(PrivacyTokensUrl, PrivacyTokensInboxUrl);
     ShowSuccessSnackbar("Privacy folders created", closeInfoSnackbar);
+
     ShowSuccessSnackbar("Empty setup function finished!");
   };
 }

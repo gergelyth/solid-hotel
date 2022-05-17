@@ -32,7 +32,7 @@ function BuildNotificationBasedOnType(
     notificationThing,
     notificationToRdfMap.isProcessed
   );
-  if (!isProcessed) {
+  if (isProcessed == null) {
     throw new Error("IsProcessed field is null in notification");
   }
 
@@ -40,7 +40,7 @@ function BuildNotificationBasedOnType(
     notificationThing,
     notificationToRdfMap.createdAt
   );
-  if (!createdAt) {
+  if (createdAt == null) {
     throw new Error("CreatedAt field is null in notification");
   }
 
