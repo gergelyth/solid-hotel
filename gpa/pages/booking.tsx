@@ -57,7 +57,7 @@ function Booking(): JSX.Element {
       />
 
       <FinishPage
-        successText={"Reservation successful!"}
+        successText={"Booking request sent!"}
         currentPage={currentPage}
       />
 

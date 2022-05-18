@@ -42,7 +42,7 @@ function Booking(): JSX.Element {
       />
 
       <FinishPage
-        successText={"Reservation successful!"}
+        successText={"Reservation created!"}
         currentPage={currentPage}
       />
 
