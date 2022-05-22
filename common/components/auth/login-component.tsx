@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   getDefaultSession,
   handleIncomingRedirect,
+  onLogin,
   onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 import { SolidLogout } from "../../util/solid";
@@ -15,6 +16,9 @@ import {
 } from "@material-ui/core";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { CloseSnackbar, ShowSuccessSnackbar } from "../snackbar";
+
+export const NotLoggedInSnackbarKey = "NotLoggedInSnackbar";
 
 function GetLoginComponent(): JSX.Element {
   return (
@@ -69,18 +73,24 @@ function GetLogoutComponent(): JSX.Element {
 function LoginButtonComponent(): JSX.Element {
   const router = useRouter();
 
-  onSessionRestore((url) => {
-    router.push(url);
-  });
-
   useEffect(() => {
+    onSessionRestore((url) => {
+      CloseSnackbar(NotLoggedInSnackbarKey);
+      ShowSuccessSnackbar("User session successfully restored!");
+      router.push(url);
+    });
+
+    onLogin(() => {
+      CloseSnackbar(NotLoggedInSnackbarKey);
+      ShowSuccessSnackbar("User logged in!");
+    });
+
     handleIncomingRedirect({
       restorePreviousSession: true,
     });
   }, []);
 
   const session = getDefaultSession();
-
   return session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent();
 }
 

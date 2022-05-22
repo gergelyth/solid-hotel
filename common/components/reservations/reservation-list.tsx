@@ -1,13 +1,8 @@
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { useReservations } from "../../hooks/useReservations";
 import { NotEmptyItem } from "../../util/helpers";
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
+import ErrorComponent from "../error-component";
 
 function CreateReservationElement(
   reservation: ReservationAtHotel | null,
@@ -38,12 +33,7 @@ function ReservationElements(
     return <CircularProgress />;
   }
   if (isError || !items) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   const filteredReservations = items

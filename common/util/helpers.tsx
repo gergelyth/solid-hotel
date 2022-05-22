@@ -4,6 +4,8 @@ import {
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { addDays, startOfDay, startOfTomorrow } from "date-fns";
+import { NotLoggedInSnackbarKey } from "../components/auth/login-component";
+import { ShowErrorSnackbar } from "../components/snackbar";
 import { NotFoundError } from "./errors";
 import { GetSession } from "./solid";
 
@@ -81,4 +83,23 @@ export function GetDayAfterDate(date: Date): Date {
 
 export function GetStartOfNextDay(date: Date): Date {
   return startOfDay(addDays(date, 1));
+}
+
+export function OnHookErrorFunction(error: Error, key: string): void {
+  //Standard message from Solid exception - not the most robust way to match errors, but this is unfortunately the only thing we get from the lib
+  if (error.message === "Not signed in") {
+    ShowErrorSnackbar(
+      "User is not signed in. Functionality is severely limited.",
+      true,
+      true,
+      NotLoggedInSnackbarKey
+    );
+    return;
+  }
+
+  ShowErrorSnackbar(
+    `Error using hook: [${error.message}]. See console for details.`
+  );
+  console.error(`Error using hook for key [${key}]`);
+  console.error(error);
 }

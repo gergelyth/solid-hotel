@@ -15,6 +15,8 @@ import GlobalSnackbar from "../../common/components/snackbar";
 import { ProfileCache } from "../../common/util/tracker/profileCache";
 import { CacheHotelProfiles } from "../util/trackerInitializer";
 import { GetSession } from "../../common/util/solid";
+import { SWRConfig } from "swr";
+import { OnHookErrorFunction } from "../../common/util/helpers";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const session = GetSession();
@@ -43,14 +45,20 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SnackbarProvider maxSnack={3}>
-          <Container>
-            <GlobalSnackbar />
-            <NavigationBar />
-            <Box className={additionalStyles.main}>
-              <Component {...pageProps} />
-            </Box>
-            <Footer />
-          </Container>
+          <SWRConfig
+            value={{
+              onError: OnHookErrorFunction,
+            }}
+          >
+            <Container>
+              <GlobalSnackbar />
+              <NavigationBar />
+              <Box className={additionalStyles.main}>
+                <Component {...pageProps} />
+              </Box>
+              <Footer />
+            </Container>
+          </SWRConfig>
         </SnackbarProvider>
       </ThemeProvider>
     </React.Fragment>

@@ -5,11 +5,13 @@ function ShowSnackbar(
   variant: VariantType,
   message: string,
   persist = false,
+  preventDuplicate = false,
   key?: string
 ): void {
   snackbarContext.enqueueSnackbar(message, {
     variant,
     persist: persist,
+    preventDuplicate: preventDuplicate,
     key: key,
   });
 }
@@ -49,12 +51,17 @@ export function ShowWarningSnackbar(message: string): void {
   ShowSnackbar("warning", message);
 }
 
-export function ShowErrorSnackbar(message: string): void {
-  ShowSnackbar("error", message);
+export function ShowErrorSnackbar(
+  message: string,
+  persist = false,
+  preventDuplicate = false,
+  key?: string
+): void {
+  ShowSnackbar("error", message, persist, preventDuplicate, key);
 }
 
 export function ShowInfoSnackbar(message: string, persist = false): () => void {
-  ShowSnackbar("info", message, persist, message);
+  ShowSnackbar("info", message, persist, false, message);
   return () => CloseSnackbar(message);
 }
 
