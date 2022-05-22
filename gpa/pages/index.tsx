@@ -3,33 +3,28 @@ import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "../components/checkout/reservationselect-subpage";
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
+import ErrorComponent from "../../common/components/error-component";
+import { GetSession } from "../../common/util/solid";
 
-function CheckoutButton(
-  reservations: (ReservationAtHotel | null)[] | undefined,
-  isLoading: boolean,
-  isError: boolean
-): JSX.Element {
-  if (isLoading) {
+function CheckoutButton({
+  reservationsResult,
+}: {
+  reservationsResult: {
+    items: (ReservationAtHotel | null)[] | undefined;
+    isLoading: boolean;
+    isError: boolean;
+  };
+}): JSX.Element {
+  if (reservationsResult.isLoading) {
     return <CircularProgress />;
   }
 
-  if (isError || !reservations) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+  if (reservationsResult.isError || !reservationsResult.items) {
+    return <ErrorComponent />;
   }
 
-  if (GetActiveReservations(reservations).length == 0) {
+  if (GetActiveReservations(reservationsResult.items).length == 0) {
     return (
       <i>
         <Typography>No active reservations</Typography>
@@ -47,9 +42,8 @@ function CheckoutButton(
 }
 
 export default function Home(): JSX.Element {
-  const { items, isLoading, isError } = useReservations(
-    GetUserReservationsPodUrl()
-  );
+  const isLoggedIn = GetSession().info.isLoggedIn;
+  const reservationsResult = useReservations(GetUserReservationsPodUrl());
 
   return (
     <Grid
@@ -77,7 +71,11 @@ export default function Home(): JSX.Element {
           </Button>
         </Link>
       </Grid>
-      <Grid item>{CheckoutButton(items, isLoading, isError)}</Grid>
+      {isLoggedIn ? (
+        <Grid item>
+          <CheckoutButton reservationsResult={reservationsResult} />
+        </Grid>
+      ) : null}
       <Grid item>
         <Link href="/privacy">
           <Button variant="contained" color="primary" size="large">

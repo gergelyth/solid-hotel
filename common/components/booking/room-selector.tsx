@@ -3,7 +3,6 @@ import { RoomDefinitionsUrl } from "../../consts/solidIdentifiers";
 import { RoomDefinition } from "../../types/RoomDefinition";
 import {
   CircularProgress,
-  Container,
   Grid,
   Typography,
   Box,
@@ -13,6 +12,7 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { Dispatch, SetStateAction } from "react";
+import ErrorComponent from "../error-component";
 
 function EmptyDescription(): JSX.Element {
   return <i>No description</i>;
@@ -57,12 +57,7 @@ function RoomElements({
     return <CircularProgress />;
   }
   if (isError || !items) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   const isArrayNonEmpty =

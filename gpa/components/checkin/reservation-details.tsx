@@ -6,7 +6,6 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  Container,
   Paper,
   PaperProps,
 } from "@material-ui/core";
@@ -19,6 +18,7 @@ import {
   GetNightCount,
   GetStayInterval,
 } from "../../../common/components/reservations/stay-details";
+import ErrorComponent from "../../../common/components/error-component";
 
 function ReservationDetails({
   reservationId,
@@ -32,11 +32,10 @@ function ReservationDetails({
   );
 
   if (!reservationId) {
-    return (
-      <Typography variant="body1">
-        Wrong query parameter. Cannot parse.
-      </Typography>
+    console.error(
+      "Query parameter [reservationId] not found. Cannot parse reservation."
     );
+    return <ErrorComponent />;
   }
 
   if (isLoading) {
@@ -44,12 +43,7 @@ function ReservationDetails({
   }
 
   if (isError || !items) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   const reservationDetail = items.find(

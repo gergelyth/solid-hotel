@@ -4,13 +4,8 @@ import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import EditableRoomElement from "./editable-room";
 import { useState } from "react";
 import EditRoomPopup from "./edit-room-popup";
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
+import ErrorComponent from "../../../common/components/error-component";
 
 function CreateRoomElement(
   room: RoomDefinition | null,
@@ -63,12 +58,7 @@ function RoomElements(): JSX.Element {
     return <CircularProgress />;
   }
   if (isError || !items) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   const isArrayNonEmpty =

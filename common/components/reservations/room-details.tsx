@@ -11,8 +11,8 @@ function RoomDetails({ roomUrl }: { roomUrl: string }): JSX.Element {
     roomName = "Loading room name...";
     roomDescription = "Loading room description...";
   } else if (isError || !room) {
-    roomName = "Error loading room name...";
-    roomDescription = "Error loading room description...";
+    roomName = "Error loading room name";
+    roomDescription = "Error loading room description";
   } else {
     roomName = room.name;
     roomDescription = room.description ?? "<Empty description>";

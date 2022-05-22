@@ -77,9 +77,10 @@ const SendProfileModificationSnackbar = forwardRef<
   useEffect(() => {
     if (isError) {
       CloseSnackbar(props.snackbarId);
-      throw new Error(
-        "Error using the reservation hook during send profile modification operation."
+      console.error(
+        "Error using the reservation hook during send profile modification operation. Unexpected behaviour might occur."
       );
+      return;
     }
 
     if (!reservations) {

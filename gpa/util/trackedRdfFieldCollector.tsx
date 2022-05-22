@@ -62,9 +62,10 @@ const TrackedRdfFieldCollector = forwardRef<
     console.log("tracked RDF field collector effect started");
     if (privacyTokensError || reservationsError) {
       CloseSnackbar(props.snackbarId);
-      throw new Error(
-        `Error using the privacy tokens hook [${privacyTokensError}] or the reservations hook [${reservationsError}] during RDF field collection`
+      console.error(
+        `Error using the privacy tokens hook [${privacyTokensError}] or the reservations hook [${reservationsError}] during RDF field collection. Unexpected behaviour might occur.`
       );
+      return;
     }
 
     if (!privacyTokens || !reservations) {
