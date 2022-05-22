@@ -7,6 +7,7 @@ import { useReservations } from "../../common/hooks/useReservations";
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
+import { ShowError } from "../../common/util/helpers";
 
 //we cant use the mockAPI to get the required RDF fields, because what if the nationality
 //changed between the current moment and the moment the hotel profile was submitted and saved on the hotel side
@@ -62,8 +63,9 @@ const TrackedRdfFieldCollector = forwardRef<
     console.log("tracked RDF field collector effect started");
     if (privacyTokensError || reservationsError) {
       CloseSnackbar(props.snackbarId);
-      console.error(
-        `Error using the privacy tokens hook [${privacyTokensError}] or the reservations hook [${reservationsError}] during RDF field collection. Unexpected behaviour might occur.`
+      ShowError(
+        `Error using the privacy tokens hook [${privacyTokensError}] or the reservations hook [${reservationsError}] during RDF field collection`,
+        false
       );
       return;
     }

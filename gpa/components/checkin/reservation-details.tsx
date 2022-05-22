@@ -19,6 +19,7 @@ import {
   GetStayInterval,
 } from "../../../common/components/reservations/stay-details";
 import ErrorComponent from "../../../common/components/error-component";
+import { ShowError } from "../../../common/util/helpers";
 
 function ReservationDetails({
   reservationId,
@@ -32,8 +33,9 @@ function ReservationDetails({
   );
 
   if (!reservationId) {
-    console.error(
-      "Query parameter [reservationId] not found. Cannot parse reservation."
+    ShowError(
+      "Query parameter [reservationId] not found. Cannot parse reservation.",
+      true
     );
     return <ErrorComponent />;
   }

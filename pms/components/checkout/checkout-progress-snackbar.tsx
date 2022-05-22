@@ -13,6 +13,7 @@ import { CloseSnackbar } from "../../../common/components/snackbar";
 import {
   GetCurrentDatePushedBy,
   GetStartOfNextDay,
+  ShowError,
 } from "../../../common/util/helpers";
 import { useGuest } from "../../../common/hooks/useGuest";
 import { Field } from "../../../common/types/Field";
@@ -96,9 +97,11 @@ const CheckoutProgressSnackbar = forwardRef<
     console.log("effect started");
     if (apiError || guestError || tokenError) {
       CloseSnackbar(props.key);
-      throw new Error(
-        `Failed to retrieve data protection information from the mock API, privacy tokens, or user information from ${props.reservationOwner}`
+      ShowError(
+        `Failed to retrieve data protection information from the mock API, privacy tokens, or user information from ${props.reservationOwner}`,
+        true
       );
+      return;
     }
 
     if (!guestFields) {

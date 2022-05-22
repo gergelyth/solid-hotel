@@ -8,6 +8,7 @@ import {
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
+import { ShowError } from "../../../common/util/helpers";
 
 async function ExecuteCancel(
   reservationId: string,
@@ -34,7 +35,8 @@ const CancelProgressSnackbar = forwardRef<
     console.log("effect started");
     if (tokenError) {
       CloseSnackbar(props.key);
-      throw new Error("Error using the token hook during cancel");
+      ShowError("Error using the token hook during cancellation", true);
+      return;
     }
 
     if (!privacyTokens) {

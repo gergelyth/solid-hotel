@@ -9,6 +9,7 @@ import {
 import _ from "lodash";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { NotEmptyItem } from "../util/helpers";
+import ErrorComponent from "./error-component";
 
 function FindLatestExpiryDate(tokens: PrivacyToken[]): Date {
   return tokens.reduce((x, y) => (x.expiry > y.expiry ? x : y)).expiry;
@@ -157,11 +158,7 @@ export function PrivacyDashboard<T extends PrivacyToken>({
     return <CircularProgress />;
   }
   if (retrieval.isError || !retrieval.items) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   const filteredTokens = retrieval.items.filter(NotEmptyItem);

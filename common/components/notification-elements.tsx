@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Badge,
-  IconButton,
-  Drawer,
-  CircularProgress,
-  Typography,
-} from "@material-ui/core";
+import { Badge, IconButton, Drawer, Typography } from "@material-ui/core";
 import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
 import { Notification } from "../types/Notification";
 import NotificationList from "./notification-list";
@@ -24,13 +18,17 @@ function GetBadgeContent(
       }
     | undefined
 ): JSX.Element {
-  if (!notificationRetrieval || notificationRetrieval.isError) {
+  if (!notificationRetrieval) {
     return <Typography>-</Typography>;
   }
 
-  if (notificationRetrieval.isLoading || !notificationRetrieval.items) {
+  if (notificationRetrieval.isLoading) {
     //TODO for some reason this doesn't show, even though code gets here
-    return <CircularProgress />;
+    return <Typography>..</Typography>;
+  }
+
+  if (notificationRetrieval.isError || !notificationRetrieval.items) {
+    return <Typography>-</Typography>;
   }
 
   return <Typography>{notificationRetrieval.items.length}</Typography>;

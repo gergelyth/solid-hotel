@@ -103,3 +103,11 @@ export function OnHookErrorFunction(error: Error, key: string): void {
   console.error(`Error using hook for key [${key}]`);
   console.error(error);
 }
+
+export function ShowError(message: string, recoverable: boolean): void {
+  if (!recoverable) {
+    message += " - unexpected behaviour might occur.";
+  }
+  ShowErrorSnackbar(message);
+  console.error(message);
+}

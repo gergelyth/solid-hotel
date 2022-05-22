@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { compareDesc } from "date-fns";
 import { Notification } from "../types/Notification";
+import ErrorComponent from "./error-component";
 import {
   NotificationCreatedAtChip,
   NotificationTypeChip,
@@ -113,7 +114,7 @@ function NotificationList({
   deleteNotification: (notification: Notification) => Promise<void>;
 }): JSX.Element {
   if (!notificationRetrieval || notificationRetrieval.isError) {
-    return <Typography>Error retrieving notifications</Typography>;
+    return <ErrorComponent />;
   }
 
   if (notificationRetrieval.isLoading || !notificationRetrieval.items) {

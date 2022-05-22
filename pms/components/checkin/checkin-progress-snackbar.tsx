@@ -22,7 +22,7 @@ import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
-import { GetStartOfNextDay } from "../../../common/util/helpers";
+import { GetStartOfNextDay, ShowError } from "../../../common/util/helpers";
 
 async function ExecuteCheckIn(
   reservationId: string,
@@ -91,9 +91,11 @@ const CheckinProgressSnackbar = forwardRef<
     console.log("effect started");
     if (apiError || guestError || tokenError) {
       CloseSnackbar(props.key);
-      throw new Error(
-        "Error using the hooks during check-in (potentially failed to retrieve fields from user's Pod)."
+      ShowError(
+        "Error using the hooks during check-in (potentially failed to retrieve fields from user's Pod)",
+        true
       );
+      return;
     }
 
     if (!guestFields) {

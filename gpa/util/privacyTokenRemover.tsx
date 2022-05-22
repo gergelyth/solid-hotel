@@ -7,7 +7,7 @@ import CustomProgressSnackbar from "../../common/components/custom-progress-snac
 import { forwardRef, useEffect } from "react";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { deleteSolidDataset } from "@inrupt/solid-client";
-import { NotEmptyItem } from "../../common/util/helpers";
+import { NotEmptyItem, ShowError } from "../../common/util/helpers";
 
 const PrivacyTokenRemover = forwardRef<
   HTMLDivElement,
@@ -23,9 +23,11 @@ const PrivacyTokenRemover = forwardRef<
     console.log("Privacy token removal effect started");
     if (privacyTokensError) {
       CloseSnackbar(props.snackbarId);
-      throw new Error(
-        `Error using the privacy tokens hook [${privacyTokensError}] during privacy token removal.`
+      ShowError(
+        `Error using the privacy tokens hook [${privacyTokensError}] during privacy token removal.`,
+        false
       );
+      return;
     }
 
     if (!privacyTokens) {

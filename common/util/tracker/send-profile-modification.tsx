@@ -3,7 +3,7 @@ import { forwardRef, useEffect } from "react";
 import { CloseSnackbar, ShowWarningSnackbar } from "../../components/snackbar";
 import { useReservations } from "../../hooks/useReservations";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { NotEmptyItem } from "../helpers";
+import { NotEmptyItem, ShowError } from "../helpers";
 import { ProfileUpdate } from "./trackerSendChange";
 
 async function ExecuteSendProfileModification(
@@ -77,8 +77,9 @@ const SendProfileModificationSnackbar = forwardRef<
   useEffect(() => {
     if (isError) {
       CloseSnackbar(props.snackbarId);
-      console.error(
-        "Error using the reservation hook during send profile modification operation. Unexpected behaviour might occur."
+      ShowError(
+        "Error using the reservation hook during send profile modification operation",
+        false
       );
       return;
     }
