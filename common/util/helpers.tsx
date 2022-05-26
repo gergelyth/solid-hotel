@@ -5,6 +5,7 @@ import {
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { addDays, startOfDay, startOfTomorrow } from "date-fns";
 import { NotLoggedInSnackbarKey } from "../components/auth/login-component";
+import { RemoveLoadingIndicator } from "../components/loading-indicators";
 import { ShowErrorSnackbar } from "../components/snackbar";
 import { NotFoundError } from "./errors";
 import { GetSession } from "./solid";
@@ -86,6 +87,8 @@ export function GetStartOfNextDay(date: Date): Date {
 }
 
 export function OnHookErrorFunction(error: Error, key: string): void {
+  RemoveLoadingIndicator(key);
+
   //Standard message from Solid exception - not the most robust way to match errors, but this is unfortunately the only thing we get from the lib
   if (error.message === "Not signed in") {
     ShowErrorSnackbar(

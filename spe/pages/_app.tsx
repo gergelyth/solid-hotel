@@ -9,6 +9,7 @@ import theme from "../../common/styles/theme";
 import GlobalSnackbar from "../../common/components/snackbar";
 import GlobalSwrConfig from "../../common/components/global-swr-config";
 import { SnackbarProvider } from "notistack";
+import { LoadingIndicators } from "../../common/components/loading-indicators";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
@@ -32,6 +33,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           <GlobalSwrConfig>
             <CssBaseline />
             <GlobalSnackbar />
+            <LoadingIndicators />
             <Component {...pageProps} />
           </GlobalSwrConfig>
         </SnackbarProvider>

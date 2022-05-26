@@ -16,6 +16,7 @@ import { ProfileCache } from "../../common/util/tracker/profileCache";
 import { CacheHotelProfiles } from "../util/trackerInitializer";
 import { GetSession } from "../../common/util/solid";
 import GlobalSwrConfig from "../../common/components/global-swr-config";
+import { LoadingIndicators } from "../../common/components/loading-indicators";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const session = GetSession();
@@ -48,6 +49,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <Container>
               <GlobalSnackbar />
               <NavigationBar />
+              <LoadingIndicators />
               <Box className={additionalStyles.main}>
                 <Component {...pageProps} />
               </Box>
