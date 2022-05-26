@@ -27,7 +27,10 @@ import {
   AddReservation,
   GetOwnerFromReservation,
 } from "../../common/util/solid_reservations";
-import { ConvertToHotelPrivacyToken } from "../../common/hooks/usePrivacyTokens";
+import {
+  ConvertToHotelPrivacyToken,
+  RevalidateHotelPrivacyTokens,
+} from "../../common/hooks/usePrivacyTokens";
 import { GetSession } from "../../common/util/solid";
 import {
   AnonymizeFieldsAndDeleteToken,
@@ -38,6 +41,7 @@ import {
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import UpdateLocalProfileSnackbar from "../../common/components/profile/update-local-profile";
+import { RevalidateReservations } from "../../common/hooks/useReservations";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -87,6 +91,7 @@ export function ReceiveBookingRequest(
 
     reservation.state = ReservationState.CONFIRMED;
     const hotelInboxUrl = await AddReservation(reservation);
+    RevalidateReservations();
     ConfirmReservationStateRequest(
       ReservationState.CONFIRMED,
       reservationInbox,
@@ -101,6 +106,7 @@ export function ReceiveBookingRequest(
     privacyTokens.forEach((tokenDataset) => {
       SendPrivacyToken(reservationInbox, tokenDataset);
     });
+    RevalidateHotelPrivacyTokens();
   };
 
   return { text, onClick, onReceive };
@@ -251,9 +257,10 @@ export function ReceivePrivacyTokenDeletionRequest(
       previousPromise = AnonymizeInboxInNotification(dataset);
     }
 
-    previousPromise.then(() =>
-      AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl)
-    );
+    previousPromise.then(() => {
+      AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl);
+      RevalidateHotelPrivacyTokens();
+    });
   };
 
   return { text, onClick, onReceive };

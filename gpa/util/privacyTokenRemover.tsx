@@ -5,7 +5,10 @@ import {
 import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
 import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
+import {
+  RevalidateGuestPrivacyTokens,
+  useGuestPrivacyTokens,
+} from "../../common/hooks/usePrivacyTokens";
 import { deleteSolidDataset } from "@inrupt/solid-client";
 import { NotEmptyItem, ShowError } from "../../common/util/helpers";
 
@@ -55,7 +58,10 @@ const PrivacyTokenRemover = forwardRef<
       }
       return deleteSolidDataset(token.urlAtGuest, { fetch: session.fetch });
     });
-    Promise.all(deletionPromises).then(() => CloseSnackbar(props.snackbarId));
+    Promise.all(deletionPromises).then(() => {
+      RevalidateGuestPrivacyTokens();
+      CloseSnackbar(props.snackbarId);
+    });
   }, [privacyTokens, privacyTokensError]);
 
   return (

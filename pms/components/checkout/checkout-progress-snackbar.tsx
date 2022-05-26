@@ -23,7 +23,10 @@ import { GetSession } from "../../../common/util/solid";
 import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
-import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
+import {
+  RevalidateHotelPrivacyTokens,
+  useHotelPrivacyTokens,
+} from "../../../common/hooks/usePrivacyTokens";
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 
@@ -73,6 +76,7 @@ async function ExecuteCheckOut(
   console.log("privacy token sent");
 
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
+  RevalidateHotelPrivacyTokens();
 }
 
 const CheckoutProgressSnackbar = forwardRef<

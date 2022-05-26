@@ -10,6 +10,9 @@ import {
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { GetIdFromDatasetUrl } from "../util/urlParser";
+import { mutate } from "swr";
+
+const swrKey = "reservations";
 
 export function ParseReservation(
   reservationThing: Thing,
@@ -64,11 +67,15 @@ export function useReservations(reservationsUrl: string | null): {
   }
 
   return FetchItems<ReservationAtHotel>(
-    "reservations",
+    swrKey,
     reservationsUrl,
     ConvertToReservation,
     (itemUrl) => {
       return itemUrl + "reservation";
     }
   );
+}
+
+export function RevalidateReservations(): void {
+  mutate(swrKey);
 }

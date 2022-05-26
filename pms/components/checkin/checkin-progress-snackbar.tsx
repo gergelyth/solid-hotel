@@ -20,7 +20,10 @@ import { Field } from "../../../common/types/Field";
 import { SubscribeToProfileChanges } from "../../util/trackerInitializer";
 import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
-import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
+import {
+  RevalidateHotelPrivacyTokens,
+  useHotelPrivacyTokens,
+} from "../../../common/hooks/usePrivacyTokens";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 import { GetStartOfNextDay, ShowError } from "../../../common/util/helpers";
 
@@ -46,6 +49,7 @@ async function ExecuteCheckIn(
     hotelProfileWebId
   );
   await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, false);
+  RevalidateHotelPrivacyTokens();
 
   const checkoutDate = getDatetime(
     reservationThing,

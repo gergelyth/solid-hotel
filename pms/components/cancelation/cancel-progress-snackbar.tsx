@@ -6,7 +6,10 @@ import {
   FindWebIdTokenAndDeleteIt,
 } from "../../util/privacyHelper";
 import { CloseSnackbar } from "../../../common/components/snackbar";
-import { useHotelPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
+import {
+  RevalidateHotelPrivacyTokens,
+  useHotelPrivacyTokens,
+} from "../../../common/hooks/usePrivacyTokens";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 import { ShowError } from "../../../common/util/helpers";
 
@@ -19,6 +22,8 @@ async function ExecuteCancel(
   //Deleting the mention of WebId and deleting the corresponding privacy token
   await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, true);
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
+
+  RevalidateHotelPrivacyTokens();
 }
 
 const CancelProgressSnackbar = forwardRef<

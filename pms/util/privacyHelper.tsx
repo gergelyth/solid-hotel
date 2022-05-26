@@ -19,6 +19,7 @@ import {
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
 } from "../../common/consts/solidIdentifiers";
+import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
@@ -85,6 +86,7 @@ async function DeletePrivacyToken(
   const session = GetSession();
   await deleteSolidDataset(privacyToken.urlAtHotel, { fetch: session.fetch });
   await SendPrivacyTokenDeletionNotice(privacyToken, guestInboxUrl);
+  RevalidateHotelPrivacyTokens();
 }
 
 export async function CreateReservationPrivacyToken(
@@ -213,6 +215,7 @@ async function SaveHotelAndCreateGuestPrivacyToken(
     reservation: undefined,
   };
   guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
+  RevalidateHotelPrivacyTokens();
 
   return guestPrivacyToken;
 }
@@ -426,6 +429,7 @@ function ForceCheckout(reservation: ReservationAtHotel): void {
     );
   }
 
+  //TODO this doesn't set the reservationState value I think, because the snackbar doesn't do that
   ShowCustomSnackbar((key) => (
     <CheckoutProgressSnackbar
       key={key}

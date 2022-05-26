@@ -25,6 +25,8 @@ import UpdateLocalProfileSnackbar from "../../common/components/profile/update-l
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import PrivacyTokenRemover from "./privacyTokenRemover";
 import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
+import { RevalidateReservations } from "../../common/hooks/useReservations";
+import { RevalidateGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 
 export function ReceiveReservationStateChange(
   router: NextRouter,
@@ -44,7 +46,9 @@ export function ReceiveReservationStateChange(
   };
   const onReceive = (): void => {
     //TODO we should set the page in VerifyingComponent in different workflows so they don't wait - but how
-    SetReservationStateAndInbox(reservationId, newState, replyInbox);
+    SetReservationStateAndInbox(reservationId, newState, replyInbox).then(() =>
+      RevalidateReservations()
+    );
   };
 
   return { text, onClick, onReceive };
@@ -106,7 +110,7 @@ export function ReceivePairingRequestWithInformation(
       return;
     }
     reservation.owner = webId;
-    AddReservation(reservation, session);
+    AddReservation(reservation, session).then(() => RevalidateReservations());
   };
 
   return { text, onClick, onReceive };
@@ -142,6 +146,7 @@ export function ReceivePrivacyToken(
     await saveSolidDatasetInContainer(privacyPodUrl, privacyTokenDataset, {
       fetch: session.fetch,
     });
+    RevalidateGuestPrivacyTokens();
   };
 
   return { text, onClick, onReceive };

@@ -7,6 +7,7 @@ import {
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
+import { mutate } from "swr";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { PrivacyToken } from "../types/PrivacyToken";
@@ -102,6 +103,10 @@ export function useHotelPrivacyTokens(privacyInbox: string | null): {
   );
 }
 
+export function RevalidateHotelPrivacyTokens(): void {
+  mutate(hotelSwrKey);
+}
+
 export function useGuestPrivacyTokens(privacyInbox: string | null): {
   items: (GuestPrivacyToken | null)[] | undefined;
   isLoading: boolean;
@@ -112,4 +117,8 @@ export function useGuestPrivacyTokens(privacyInbox: string | null): {
     privacyInbox,
     ConvertToGuestPrivacyToken
   );
+}
+
+export function RevalidateGuestPrivacyTokens(): void {
+  mutate(guestSwrKey);
 }

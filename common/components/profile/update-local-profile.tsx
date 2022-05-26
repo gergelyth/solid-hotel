@@ -5,6 +5,7 @@ import { ProfileUpdate } from "../../util/tracker/trackerSendChange";
 import { SetMultipleFieldsInProfile } from "../../util/solid_profile";
 import { UpdateProfileInMemory } from "../../util/tracker/profileCache";
 import { IgnoreNextUpdate } from "../../util/tracker/tracker";
+import { RevalidateGuest } from "../../hooks/useGuest";
 
 async function ExecuteUpdateLocalProfile(
   profileUrl: string,
@@ -34,6 +35,8 @@ async function ExecuteUpdateLocalProfile(
 
   await SetMultipleFieldsInProfile(profileUrl, approvedFields);
   UpdateProfileInMemory(profileUrl, fieldOptions);
+
+  RevalidateGuest(Object.keys(approvedFields), profileUrl);
 
   console.log("local profile updated");
 }

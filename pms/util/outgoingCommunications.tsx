@@ -19,13 +19,17 @@ import {
   CreateActiveProfilePrivacyToken,
   CreateInboxPrivacyToken,
 } from "./privacyHelper";
-import { ParseReservation } from "../../common/hooks/useReservations";
+import {
+  ParseReservation,
+  RevalidateReservations,
+} from "../../common/hooks/useReservations";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import { GetStartOfNextDay } from "../../common/util/helpers";
+import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
@@ -45,6 +49,7 @@ export async function ConfirmReservationStateRequest(
   await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
     fetch: session.fetch,
   });
+  RevalidateReservations();
 }
 
 export async function ReportFailureToGuest(
@@ -113,6 +118,7 @@ export async function SendPairingRequestWithInformation(
     GetStartOfNextDay(parsedReservation.dateTo)
   );
   SendPrivacyToken(guestInboxUrl, profilePrivacyTokenDataset);
+  RevalidateHotelPrivacyTokens();
 }
 
 export async function SendPrivacyToken(

@@ -6,6 +6,7 @@ import {
   setThing,
   Thing,
 } from "@inrupt/solid-client";
+import { RevalidateGuest } from "../../common/hooks/useGuest";
 import { GetDataSet, GetSession } from "../../common/util/solid";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 
@@ -68,6 +69,7 @@ export function GetOwnerAndAnonymizeInMemory(reservationThing: Thing): {
     reservationFieldToRdfMap.owner,
     "Anonymized"
   );
+  RevalidateGuest(undefined, hotelProfileOwnerUrl);
 
   return {
     anonymizedReservationThing: reservationThing,

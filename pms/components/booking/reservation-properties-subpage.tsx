@@ -15,6 +15,7 @@ import {
 } from "../../../common/components/snackbar";
 import { GetCoreReservationFolderFromInboxUrl } from "../../../common/util/urlParser";
 import { CreateAndSavePairingToken } from "../../../common/util/pairingTokenHandler";
+import { RevalidateReservations } from "../../../common/hooks/useReservations";
 
 async function BookRoom(
   roomIdString: string | undefined,
@@ -44,6 +45,7 @@ async function BookRoom(
   const reservationFolder =
     GetCoreReservationFolderFromInboxUrl(reservationInboxUrl);
   await CreateAndSavePairingToken(reservationFolder);
+  RevalidateReservations();
 }
 
 function ReservationPropertiesPage({

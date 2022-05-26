@@ -12,6 +12,7 @@ import { ShowCustomSnackbar } from "../../common/components/snackbar";
 import CheckinProgressSnackbar from "../components/checkin/checkin-progress-snackbar";
 import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-snackbar";
 import CancelProgressSnackbar from "../components/cancelation/cancel-progress-snackbar";
+import { RevalidateReservations } from "../../common/hooks/useReservations";
 
 export function DoOnStateChange(
   reservationId: string,
@@ -59,6 +60,7 @@ export function DoOnStateChange(
   }
 
   SetReservationStateAndInbox(reservationId, newState, guestInboxUrl);
+  RevalidateReservations();
 
   const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
   ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);

@@ -17,6 +17,7 @@ import TrackedRdfFieldCollector, {
   HotelToRdf,
 } from "./trackedRdfFieldCollector";
 import { SendProfileModification } from "./outgoingCommunications";
+import { RevalidateGuest } from "../../common/hooks/useGuest";
 
 function ShowApprovalDialogForHotel(
   webId: string,
@@ -60,6 +61,7 @@ function ShowApprovalDialogForHotel(
         oldFields={() => ProfileCache[webId]}
         closeActionCallback={() => {
           closeFunction();
+          RevalidateGuest(rdfFields, webId);
           //we update the in-memory cache even if we decide not to send the update to the hotel
           CacheProfile(webId, rdfFields);
         }}
