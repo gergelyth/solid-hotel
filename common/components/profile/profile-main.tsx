@@ -1,15 +1,10 @@
 import { useGuest } from "../../hooks/useGuest";
 import ProfileField from "./profile-field";
-import {
-  Grid,
-  Typography,
-  Container,
-  Box,
-  CircularProgress,
-} from "@material-ui/core";
+import { Grid, Container, Box, CircularProgress } from "@material-ui/core";
 import { Field } from "../../types/Field";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { GuestFullName } from "./guest-full-name";
+import ErrorComponent from "../error-component";
 
 function CreateFieldElements(
   guestFields: Field[],
@@ -92,12 +87,7 @@ function ProfileMain({
     return <CircularProgress />;
   }
   if (isError || !guestFields) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>Error retrieving guest data.</Typography>
-        <Box>{isError}</Box>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   return (

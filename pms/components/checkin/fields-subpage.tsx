@@ -1,15 +1,10 @@
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
 import { useRouter } from "next/router";
 import { RequiredFields } from "./required-fields";
+import ErrorComponent from "../../../common/components/error-component";
 
 function RequiredFieldsAtOfflineCheckin({
   currentPage,
@@ -51,12 +46,7 @@ function RequiredFieldsAtOfflineCheckin({
     return <CircularProgress />;
   }
   if (isError || !data) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   return (

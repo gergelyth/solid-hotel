@@ -3,7 +3,6 @@ import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import {
   Box,
   CircularProgress,
-  Container,
   Grid,
   Link,
   Typography,
@@ -15,6 +14,7 @@ import TocPopup from "./toc-popup";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { CacheProfile } from "../../../common/util/tracker/profileCache";
+import ErrorComponent from "../../../common/components/error-component";
 
 function RequiredFieldsAtCheckin({
   currentPage,
@@ -45,12 +45,7 @@ function RequiredFieldsAtCheckin({
     return <CircularProgress />;
   }
   if (isError || !data) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   async function ProceedButtonClick(rdfFields: string[]): Promise<void> {

@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { HotelLocation } from "../consts/hotelConsts";
 import { DataProtectionInformation } from "../util/apiDataRetrieval";
+import { ShowError } from "../util/helpers";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { useGuest } from "./useGuest";
 
@@ -41,8 +42,11 @@ function useMockApi<T>(
   if (nationality) {
     fetchFunction = [baseApiUrl, nationality];
   } else {
-    fetchFunction = (): (string | null | undefined)[] | null => {
+    fetchFunction = function fetchFunction():
+      | (string | null | undefined)[]
+      | null {
       if (!guest || !guest.guestFields) {
+        ShowError("Error retrieving guest nationality", true);
         return null;
       }
 

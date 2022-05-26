@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { GetSession } from "../../common/util/solid";
 import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import { useRequiredFields } from "../../common/hooks/useMockApi";
+import ErrorComponent from "../../common/components/error-component";
 
 function Profile(): JSX.Element | null {
   const router = useRouter();
@@ -27,11 +28,7 @@ function Profile(): JSX.Element | null {
   }
 
   if (!requiredFields.data || requiredFields.isError) {
-    return (
-      <Typography variant="body1">
-        Error occured during data protection info retrieval
-      </Typography>
-    );
+    return <ErrorComponent />;
   }
 
   return (

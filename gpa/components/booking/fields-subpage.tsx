@@ -1,16 +1,12 @@
 import ProfileMain from "../../../common/components/profile/profile-main";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
-import {
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { CircularProgress, Grid, Typography } from "@material-ui/core";
 import { BookingPage } from "../../pages/booking";
 import { Dispatch, SetStateAction } from "react";
 import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
+import ErrorComponent from "../../../common/components/error-component";
 
 function RequiredFields({
   currentPage,
@@ -39,12 +35,7 @@ function RequiredFields({
     return <CircularProgress />;
   }
   if (isError || !data) {
-    return (
-      <Container maxWidth="sm">
-        <Typography>An error occurred.</Typography>
-        <Typography>{isError}</Typography>
-      </Container>
-    );
+    return <ErrorComponent />;
   }
 
   function ProceedButtonClick(): void {

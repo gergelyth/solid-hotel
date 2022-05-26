@@ -8,6 +8,7 @@ import {
 import { useRouter } from "next/router";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
+import ErrorComponent from "../../../common/components/error-component";
 
 function GetDataRetentionPeriod({
   data,
@@ -60,11 +61,7 @@ function DataProtectionProfileDetail(): JSX.Element | null {
   }
 
   if (!dataDetailsRetrieval.data || dataDetailsRetrieval.isError) {
-    return (
-      <Typography variant="body1">
-        Error occured during data protection info retrieval
-      </Typography>
-    );
+    return <ErrorComponent />;
   }
 
   return (

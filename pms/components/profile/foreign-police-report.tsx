@@ -1,8 +1,8 @@
-import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { useGuest } from "../../../common/hooks/useGuest";
 import { CircularProgress, Button } from "@material-ui/core";
 import { Field } from "../../../common/types/Field";
 import { CSVLink } from "react-csv";
+import { ShowError } from "../../../common/util/helpers";
 
 function PrepareCsvArray(guestFields: Field[]): string[][] {
   const guestArray: string[][] = [];
@@ -30,7 +30,7 @@ export function ForeignPoliceReport({
     return <CircularProgress />;
   }
   if (isError || !guestFields) {
-    ShowErrorSnackbar("Failed to retrieve guest information");
+    ShowError("Failed to retrieve guest information", true);
     return null;
   }
 
