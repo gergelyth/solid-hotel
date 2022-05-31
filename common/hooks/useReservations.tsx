@@ -11,6 +11,10 @@ import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { GetIdFromDatasetUrl } from "../util/urlParser";
 import { mutate } from "swr";
+import {
+  AddLoadingIndicator,
+  RemoveLoadingIndicator,
+} from "../components/loading-indicators";
 
 const swrKey = "reservations";
 
@@ -66,7 +70,7 @@ export function useReservations(reservationsUrl: string | null): {
     return { items: undefined, isLoading: false, isError: true };
   }
 
-  return FetchItems<ReservationAtHotel>(
+  const fetchResult = FetchItems<ReservationAtHotel>(
     swrKey,
     reservationsUrl,
     ConvertToReservation,
@@ -74,6 +78,14 @@ export function useReservations(reservationsUrl: string | null): {
       return itemUrl + "reservation";
     }
   );
+
+  if (fetchResult.isValidating) {
+    AddLoadingIndicator(swrKey);
+  } else {
+    RemoveLoadingIndicator(swrKey);
+  }
+
+  return fetchResult;
 }
 
 export function RevalidateReservations(): void {

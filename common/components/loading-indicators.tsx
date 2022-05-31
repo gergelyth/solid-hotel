@@ -1,5 +1,5 @@
 import { LinearProgress, Box, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 
 function LoadingIndicator({ swrKey }: { swrKey: string }): JSX.Element {
   return (
@@ -19,13 +19,28 @@ function LoadingIndicator({ swrKey }: { swrKey: string }): JSX.Element {
 const loadingIndicators: { [swrKey: string]: JSX.Element } = {};
 
 export function AddLoadingIndicator(swrKey: string): void {
+  if (swrKey in loadingIndicators) {
+    return;
+  }
+
   loadingIndicators[swrKey] = <LoadingIndicator swrKey={swrKey} />;
+  forceRender(!render);
 }
 
 export function RemoveLoadingIndicator(swrKey: string): void {
+  if (!(swrKey in loadingIndicators)) {
+    return;
+  }
+
   delete loadingIndicators[swrKey];
+  forceRender(!render);
 }
 
+let render = false;
+let forceRender: React.Dispatch<React.SetStateAction<boolean>>;
+
 export function LoadingIndicators(): JSX.Element {
-  return <React.Fragment>{loadingIndicators}</React.Fragment>;
+  //TODO this is a bit of a hack, but having the loadingIndicators as the state doesn't work, because the object doesn't get changed
+  [render, forceRender] = useState<boolean>(false);
+  return <React.Fragment>{Object.values(loadingIndicators)}</React.Fragment>;
 }
