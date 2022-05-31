@@ -20,6 +20,7 @@ export function RetrieveAllNotifications(
   items: (Notification | null)[];
   isLoading: boolean;
   isError: boolean;
+  isValidating: boolean;
 } {
   const notificationsRetrieval = useNotifications(
     coreUrl,

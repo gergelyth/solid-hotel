@@ -1,9 +1,9 @@
 import { LinearProgress, Box, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 
-function LoadingIndicator({ swrKey }: { swrKey: string }): JSX.Element {
+export function LoadingIndicator({ swrKey }: { swrKey: string }): JSX.Element {
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" mx={1}>
       <Box width="100%" mr={1}>
         <LinearProgress />
       </Box>

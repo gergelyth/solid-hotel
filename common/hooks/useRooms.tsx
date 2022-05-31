@@ -9,6 +9,10 @@ import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
 import useSWR, { mutate } from "swr";
 import { GetDataSet } from "../util/solid";
 import { GetIdFromDatasetUrl } from "../util/urlParser";
+import {
+  AddLoadingIndicator,
+  RemoveLoadingIndicator,
+} from "../components/loading-indicators";
 
 const swrKey = "rooms";
 
@@ -36,11 +40,25 @@ export function useRooms(roomDefinitionsUrl: string): {
   isError: boolean;
   isValidating: boolean;
 } {
-  return FetchItems<RoomDefinition>(
+  const fetchResult = FetchItems<RoomDefinition>(
     swrKey,
     roomDefinitionsUrl,
     ConvertToRoomDefinition
   );
+
+  if (fetchResult.isValidating) {
+    AddLoadingIndicator(swrKey);
+  } else {
+    RemoveLoadingIndicator(swrKey);
+  }
+
+  return fetchResult;
+}
+
+function CreateSpecificRoomSwrKey(
+  roomUrl: string | undefined
+): string[] | null {
+  return roomUrl ? [swrKey, roomUrl] : null;
 }
 
 export function useSpecificRoom(roomUrl: string | undefined): {
@@ -57,10 +75,20 @@ export function useSpecificRoom(roomUrl: string | undefined): {
     );
   };
 
-  const { data, error } = useSWR(
-    () => (roomUrl ? [swrKey, roomUrl] : null),
+  const { data, error, isValidating } = useSWR(
+    () => CreateSpecificRoomSwrKey(roomUrl),
     fetcher
   );
+
+  const specificRoomSwrKey = CreateSpecificRoomSwrKey(roomUrl);
+  if (specificRoomSwrKey) {
+    const swrKeyString = specificRoomSwrKey.join();
+    if (isValidating) {
+      AddLoadingIndicator(swrKeyString);
+    } else {
+      RemoveLoadingIndicator(swrKeyString);
+    }
+  }
 
   return {
     room: data,

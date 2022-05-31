@@ -205,6 +205,7 @@ export function useNotifications(
   items: (Notification | null)[];
   isLoading: boolean;
   isError: boolean;
+  isValidating: boolean;
 } {
   const router = useRouter();
   const fetch = FetchItemsArray<Notification>(
@@ -218,6 +219,7 @@ export function useNotifications(
     items: fetch.items ?? [],
     isLoading: fetch.isLoading,
     isError: fetch.isError,
+    isValidating: fetch.isValidating,
   };
 }
 

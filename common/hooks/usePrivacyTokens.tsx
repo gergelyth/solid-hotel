@@ -8,6 +8,10 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 import { mutate } from "swr";
+import {
+  AddLoadingIndicator,
+  RemoveLoadingIndicator,
+} from "../components/loading-indicators";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { PrivacyToken } from "../types/PrivacyToken";
@@ -96,11 +100,19 @@ export function useHotelPrivacyTokens(privacyInbox: string | null): {
   isLoading: boolean;
   isError: boolean;
 } {
-  return FetchItems<HotelPrivacyToken>(
+  const fetchResult = FetchItems<HotelPrivacyToken>(
     hotelSwrKey,
     privacyInbox,
     ConvertToHotelPrivacyToken
   );
+
+  if (fetchResult.isValidating) {
+    AddLoadingIndicator(hotelSwrKey);
+  } else {
+    RemoveLoadingIndicator(hotelSwrKey);
+  }
+
+  return fetchResult;
 }
 
 export function RevalidateHotelPrivacyTokens(): void {
@@ -112,11 +124,19 @@ export function useGuestPrivacyTokens(privacyInbox: string | null): {
   isLoading: boolean;
   isError: boolean;
 } {
-  return FetchItems<GuestPrivacyToken>(
+  const fetchResult = FetchItems<GuestPrivacyToken>(
     guestSwrKey,
     privacyInbox,
     ConvertToGuestPrivacyToken
   );
+
+  if (fetchResult.isValidating) {
+    AddLoadingIndicator(guestSwrKey);
+  } else {
+    RemoveLoadingIndicator(guestSwrKey);
+  }
+
+  return fetchResult;
 }
 
 export function RevalidateGuestPrivacyTokens(): void {

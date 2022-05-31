@@ -1,4 +1,8 @@
 import useSWR from "swr";
+import {
+  AddLoadingIndicator,
+  RemoveLoadingIndicator,
+} from "../components/loading-indicators";
 import { HotelLocation } from "../consts/hotelConsts";
 import { DataProtectionInformation } from "../util/apiDataRetrieval";
 import { ShowError } from "../util/helpers";
@@ -40,7 +44,7 @@ function useMockApi<T>(
 
   let fetchFunction;
   if (nationality) {
-    fetchFunction = [baseApiUrl, nationality];
+    fetchFunction = () => [baseApiUrl, nationality];
   } else {
     fetchFunction = function fetchFunction():
       | (string | null | undefined)[]
@@ -54,7 +58,18 @@ function useMockApi<T>(
     };
   }
 
-  const { data, error } = useSWR(fetchFunction, fetcher);
+  //TODO is this immutable? can we use useImmutableSwr?
+  const { data, error, isValidating } = useSWR(fetchFunction, fetcher);
+
+  const swrKey = fetchFunction();
+  if (swrKey) {
+    const swrKeyString = swrKey.join();
+    if (isValidating) {
+      AddLoadingIndicator(swrKeyString);
+    } else {
+      RemoveLoadingIndicator(swrKeyString);
+    }
+  }
 
   return {
     data: data,

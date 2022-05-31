@@ -1,10 +1,17 @@
 import { getStringNoLocale, Thing } from "@inrupt/solid-client";
 import useSWR from "swr";
+import {
+  AddLoadingIndicator,
+  RemoveLoadingIndicator,
+} from "../components/loading-indicators";
 import { HotelDetails } from "../types/HotelDetails";
 import { GetProfileOf } from "../util/solid_profile";
 import { hotelFieldToRdfMap } from "../vocabularies/rdf_hotel";
 
-const swrKey = "hotel";
+function CreateSwrKey(hotelWebId: string | undefined): string[] | null {
+  const swrKey = "hotel";
+  return hotelWebId ? [swrKey, hotelWebId] : null;
+}
 
 function ConvertToHotelDetails(
   hotelProfile: Thing | null | undefined,
@@ -41,10 +48,20 @@ export function useHotel(hotelWebId: string | undefined): {
     );
   };
 
-  const { data, error } = useSWR(
-    () => (hotelWebId ? [swrKey, hotelWebId] : null),
+  const { data, error, isValidating } = useSWR(
+    () => CreateSwrKey(hotelWebId),
     fetcher
   );
+
+  const swrKey = CreateSwrKey(hotelWebId);
+  if (swrKey) {
+    const swrKeyString = swrKey.join();
+    if (isValidating) {
+      AddLoadingIndicator(swrKeyString);
+    } else {
+      RemoveLoadingIndicator(swrKeyString);
+    }
+  }
 
   return {
     hotelDetails: data,

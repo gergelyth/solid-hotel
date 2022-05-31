@@ -8,6 +8,7 @@ import { ParserList } from "../types/ParserList";
 import { ShowErrorSnackbar } from "./snackbar";
 import { RevalidateNotifications } from "../hooks/useNotifications";
 import { SafeDeleteDataset } from "../util/solid_wrapper";
+import { LoadingIndicator } from "./loading-indicators";
 
 function GetBadgeContent(
   notificationRetrieval:
@@ -67,6 +68,9 @@ export function GetNotificationElements(
       open={isNotificationsOpen}
       onClose={() => setNotificationsOpen(false)}
     >
+      {notificationRetrieval.isValidating ? (
+        <LoadingIndicator swrKey={"notifications"} />
+      ) : null}
       <NotificationList
         notificationRetrieval={notificationRetrieval}
         deleteNotification={(notification: Notification) =>

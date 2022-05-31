@@ -1,5 +1,9 @@
 import { getLiteral } from "@inrupt/solid-client";
 import useSWR, { mutate } from "swr";
+import {
+  AddLoadingIndicator,
+  RemoveLoadingIndicator,
+} from "../components/loading-indicators";
 import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
 import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid_profile";
@@ -58,7 +62,20 @@ export function useGuest(
     );
   };
 
-  const { data, error } = useSWR(() => CreateSwrKey(rdfNames, webId), fetcher);
+  const { data, error, isValidating } = useSWR(
+    () => CreateSwrKey(rdfNames, webId),
+    fetcher
+  );
+
+  const swrKey = CreateSwrKey(rdfNames, webId);
+  if (swrKey) {
+    const swrKeyString = swrKey.join();
+    if (isValidating) {
+      AddLoadingIndicator(swrKeyString);
+    } else {
+      RemoveLoadingIndicator(swrKeyString);
+    }
+  }
 
   return {
     guestFields: data,
