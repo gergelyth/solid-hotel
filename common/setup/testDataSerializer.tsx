@@ -1,8 +1,11 @@
 import {
   getContainedResourceUrlAll,
-  getSolidDataset,
+  getResourceAcl,
+  getSolidDatasetWithAcl,
   isContainer,
+  SolidDataset,
   toRdfJsDataset,
+  WithResourceInfo,
 } from "@inrupt/solid-client";
 import { GetSession } from "../util/solid";
 import {
@@ -15,10 +18,9 @@ import {
 } from "n3";
 import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
-import { SafeGetDataset } from "../util/solid_wrapper";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import JSZip from "jszip";
-import { SerializationBaseDate, GetPodBaseUrl } from "./setupUtil";
+import { SerializationBaseDate, GetPodBaseUrl, AclFilename } from "./setupUtil";
 
 type SerializedDataset = {
   name: string;
@@ -56,41 +58,59 @@ export async function RecursivelySerializeDatasets(
   baseUrl: string,
   session: Session
 ): Promise<SerializedDataset[]> {
-  const dataSet = await SafeGetDataset(currentUrl);
-  if (!dataSet) {
-    return [];
-  }
+  const datasetWithAcl = await getSolidDatasetWithAcl(currentUrl, {
+    fetch: session.fetch,
+  });
 
   //in case it's a container
-  const urls = getContainedResourceUrlAll(dataSet);
+  const urls = getContainedResourceUrlAll(datasetWithAcl);
   const childResults = await Promise.all(
     urls.map((childUrl) =>
       RecursivelySerializeDatasets(childUrl, baseUrl, session)
     )
   );
   const results = childResults.flat(5);
-  if (isContainer(dataSet)) {
+  if (isContainer(datasetWithAcl)) {
+    const acl = getResourceAcl(datasetWithAcl);
+    if (acl) {
+      const aclResult = await CreateSerializedDataset(
+        acl,
+        `${currentUrl}${AclFilename}`,
+        baseUrl
+      );
+      results.unshift(aclResult);
+    }
     return results;
   }
 
-  const resultContent = await SerializeDataset(currentUrl, session);
+  const result = await CreateSerializedDataset(
+    datasetWithAcl,
+    currentUrl,
+    baseUrl
+  );
+
+  results.unshift(result);
+  return results;
+}
+
+async function CreateSerializedDataset(
+  dataset: SolidDataset & WithResourceInfo,
+  currentUrl: string,
+  baseUrl: string
+): Promise<SerializedDataset> {
+  const resultContent = await SerializeDataset(dataset);
   const result: SerializedDataset = {
     //Return name without the baseUrl
     name: currentUrl.replace(`${baseUrl}`, ""),
     content: resultContent,
   };
 
-  results.unshift(result);
-  return results;
+  return result;
 }
 
 async function SerializeDataset(
-  datasetUrl: string,
-  session: Session
+  dataSet: SolidDataset & WithResourceInfo
 ): Promise<string> {
-  const dataSet = await getSolidDataset(datasetUrl, {
-    fetch: session.fetch,
-  });
   if (isContainer(dataSet)) {
     return "";
   }

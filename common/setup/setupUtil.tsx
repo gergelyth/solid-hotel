@@ -10,6 +10,8 @@ import { ShowErrorSnackbar } from "../components/snackbar";
 import { GetCoreFolderFromWebId } from "../util/urlParser";
 
 export const SerializationBaseDate = new Date(Date.UTC(1970, 0, 1));
+export const AclFilename = "acl";
+export const AclFileRegex = `.*${AclFilename}$`;
 
 export function GetPodBaseUrl(session: Session): string | undefined {
   const webId = session.info.webId;

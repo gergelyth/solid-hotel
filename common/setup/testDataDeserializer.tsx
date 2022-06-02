@@ -1,4 +1,12 @@
-import { fromRdfJsDataset, saveSolidDatasetAt } from "@inrupt/solid-client";
+import {
+  createContainerAt,
+  fromRdfJsDataset,
+  getSolidDatasetWithAcl,
+  hasAccessibleAcl,
+  saveAclFor,
+  saveSolidDatasetAt,
+  SolidDataset,
+} from "@inrupt/solid-client";
 import { GetSession } from "../util/solid";
 import {
   Parser,
@@ -13,7 +21,13 @@ import { xmlSchemaTypes } from "../consts/supportedTypes";
 import { addSeconds, differenceInSeconds } from "date-fns";
 import JSZip from "jszip";
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { SerializationBaseDate, GetPodBaseUrl } from "./setupUtil";
+import {
+  SerializationBaseDate,
+  GetPodBaseUrl,
+  AclFileRegex,
+  AclFilename,
+} from "./setupUtil";
+import { ShowError } from "../util/helpers";
 
 export async function Deserialize(filename: string): Promise<void[]> {
   const session = GetSession();
@@ -64,9 +78,38 @@ async function DeserializeAndSaveDataset(
   const resultSolidDataset = fromRdfJsDataset(quadStore);
 
   const url = baseUrl + name;
+  if (url.match(AclFileRegex)) {
+    const containerUrl = url.replace(AclFilename, "");
+    await HandleAclFile(containerUrl, resultSolidDataset, session);
+    return;
+  }
+
   await saveSolidDatasetAt(url, resultSolidDataset, {
     fetch: session.fetch,
   });
+}
+
+async function HandleAclFile(
+  containerUrl: string,
+  aclDataset: SolidDataset,
+  session: Session
+): Promise<void> {
+  await createContainerAt(containerUrl, {
+    fetch: session.fetch,
+  });
+  const datasetWithAcl = await getSolidDatasetWithAcl(containerUrl, {
+    fetch: session.fetch,
+  });
+
+  if (!hasAccessibleAcl(datasetWithAcl)) {
+    ShowError(
+      `Retrieved dataset ${containerUrl} does not have accessible ACL file`,
+      true
+    );
+    return;
+  }
+
+  await saveAclFor(datasetWithAcl, aclDataset, { fetch: session.fetch });
 }
 
 function ParseDateOffsetIfRequired(quad: Quad): Quad {
