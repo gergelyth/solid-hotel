@@ -6,71 +6,47 @@ import {
   onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 import { SolidLogout } from "../../util/solid";
-import { useGuest } from "../../hooks/useGuest";
-import {
-  Box,
-  Button,
-  Container,
-  CircularProgress,
-  Typography,
-} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { CloseSnackbar, ShowSuccessSnackbar } from "../snackbar";
 
 export const NotLoggedInSnackbarKey = "NotLoggedInSnackbar";
 
-function GetLoginComponent(): JSX.Element {
+function LoginComponent(): JSX.Element {
   return (
     <Link href="/login">
-      <Button variant="contained" color="primary" data-testid="login">
+      <Button variant="contained" color="primary" data-testid="login-button">
         Login
       </Button>
     </Link>
   );
 }
 
-function GetLogoutComponent(): JSX.Element {
+function LogoutComponent(): JSX.Element {
   async function Logout(): Promise<void> {
     await SolidLogout();
-    //TODO for some reason it can't build because it can't find window - may just be intermittent
     window.location.reload();
   }
 
-  //TODO
-  // const { guest, isLoading, isError } = useGuest();
-
-  // if (isLoading) {
-  //   return <CircularProgress />;
-  // }
-  // if (isError || !guest) {
-  //   return (
-  //     <Container>
-  //       <Typography>An error occured.</Typography>;
-  //       <Typography>{isError}</Typography>;
-  //     </Container>
-  //   );
-  // }
-
   return (
-    <Box display="flex" flexDirection="row" alignItems="center">
-      <Box m={1} p={1}>
-        {/* TODO <Typography variant="subtitle1">Hello {guest.firstName}!</Typography> */}
-      </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={async () => {
-          await Logout();
-        }}
-        data-testid="logout"
-      >
-        Logout
-      </Button>
-    </Box>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={async () => {
+        await Logout();
+      }}
+      data-testid="logout-button"
+    >
+      Logout
+    </Button>
   );
 }
 
+/**
+ * A component handling re-authentication on session restore and login/logout functionality.
+ * @returns Login button if user is not logged in, a logout button if they are.
+ */
 function LoginButtonComponent(): JSX.Element {
   const router = useRouter();
 
@@ -92,7 +68,7 @@ function LoginButtonComponent(): JSX.Element {
   }, []);
 
   const session = getDefaultSession();
-  return session.info.isLoggedIn ? GetLogoutComponent() : GetLoginComponent();
+  return session.info.isLoggedIn ? <LogoutComponent /> : <LoginComponent />;
 }
 
 export default LoginButtonComponent;
