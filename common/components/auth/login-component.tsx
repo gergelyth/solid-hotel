@@ -23,7 +23,7 @@ export const NotLoggedInSnackbarKey = "NotLoggedInSnackbar";
 function GetLoginComponent(): JSX.Element {
   return (
     <Link href="/login">
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" data-testid="login">
         Login
       </Button>
     </Link>
@@ -63,6 +63,7 @@ function GetLogoutComponent(): JSX.Element {
         onClick={async () => {
           await Logout();
         }}
+        data-testid="logout"
       >
         Logout
       </Button>
