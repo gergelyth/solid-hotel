@@ -1,10 +1,14 @@
 import { useState } from "react";
-import RoomSelector from "./room-selector";
+import { RoomSelector } from "./room-selector";
 import { Button, Grid, Typography } from "@material-ui/core";
-import DateSelector from "./date-selector";
+import { DateSelector } from "./date-selector";
 import { GetToday, GetTomorrow } from "../../util/helpers";
 
-function BookingProperties({
+/**
+ * Handles the properties of the booking operation, i.e. the selected room and the check-in and check-out dates.
+ * @returns A component allowing the user to select the room, the check-in and check-out dates and the button triggering the booking action.
+ */
+export function BookingProperties({
   onSelectAction,
 }: {
   onSelectAction: (
@@ -22,7 +26,7 @@ function BookingProperties({
     <Grid
       container
       spacing={5}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -47,6 +51,7 @@ function BookingProperties({
 
       <Grid item>
         <Button
+          data-testid="select-reservation-button"
           disabled={
             !selectedRoomId ||
             selectedRoomId.length === 0 ||
@@ -66,5 +71,3 @@ function BookingProperties({
     </Grid>
   );
 }
-
-export default BookingProperties;

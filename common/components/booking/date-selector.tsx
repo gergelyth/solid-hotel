@@ -4,7 +4,12 @@ import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { GetDayAfterDate, GetToday, GetTomorrow } from "../../util/helpers";
 
-function DateSelector({
+/**
+ * Provides a date picker for both the check-in and the check-out date.
+ * Check-in date can't be in the past and check-out date must be after check-in date.
+ * @returns A component containing the two date pickers.
+ */
+export function DateSelector({
   checkinDate,
   setCheckinDate,
   checkoutDate,
@@ -20,6 +25,7 @@ function DateSelector({
       <Box pb={1}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <DatePicker
+            data-testid="checkin-datepicker"
             disablePast
             format="dd/MMM/yyyy"
             label="Check-in date"
@@ -32,6 +38,7 @@ function DateSelector({
       <Box py={1}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <DatePicker
+            data-testid="checkout-datepicker"
             minDate={GetDayAfterDate(checkinDate)}
             format="dd/MMM/yyyy"
             label="Check-out date"
@@ -47,5 +54,3 @@ function DateSelector({
     </Box>
   );
 }
-
-export default DateSelector;

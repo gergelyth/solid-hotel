@@ -9,7 +9,7 @@ import {
 import { SubmitBookingRequest } from "../../util/outgoingCommunications";
 import { AddReservation } from "../../../common/util/solid_reservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import BookingProperties from "../../../common/components/booking/reservation-properties";
+import { BookingProperties } from "../../../common/components/booking/reservation-properties";
 
 async function BookRoom(
   roomIdString: string | undefined,

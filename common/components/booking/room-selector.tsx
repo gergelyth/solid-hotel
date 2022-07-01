@@ -14,10 +14,16 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import ErrorComponent from "../error-component";
 
+/**
+ * Returns an empty description if required.
+ */
 function EmptyDescription(): JSX.Element {
   return <i>No description</i>;
 }
 
+/**
+ * Displays one room definition item with name and description.
+ */
 function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   if (!room) {
     //TODO really shouldn't be nulls here
@@ -43,6 +49,9 @@ function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
 }
 
 //TODO this is the same logic as reservation-list in common
+/**
+ * The list of rooms where selection is driven by radio logic.
+ */
 function RoomElements({
   selectedRoomId,
   setSelectedRoomId,
@@ -65,7 +74,7 @@ function RoomElements({
 
   return isArrayNonEmpty ? (
     <Box px={2}>
-      <FormControl>
+      <FormControl data-testid="room-selector-radio">
         <RadioGroup
           value={selectedRoomId}
           onChange={(e, newValue) => setSelectedRoomId(newValue)}
@@ -90,7 +99,11 @@ function RoomElements({
   );
 }
 
-function RoomSelector({
+/**
+ * Allows the radio-logic driven selection of a room.
+ * @returns A list of rooms retrieved from the hotel's Solid Pod, with the first one selected as default and allows the user to change the selection.
+ */
+export function RoomSelector({
   selectedRoomId,
   setSelectedRoomId,
 }: {
@@ -106,5 +119,3 @@ function RoomSelector({
     </div>
   );
 }
-
-export default RoomSelector;

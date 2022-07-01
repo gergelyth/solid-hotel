@@ -8,7 +8,7 @@ import {
 } from "../../../common/consts/solidIdentifiers";
 import { AddReservation } from "../../../common/util/solid_reservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import BookingProperties from "../../../common/components/booking/reservation-properties";
+import { BookingProperties } from "../../../common/components/booking/reservation-properties";
 import {
   ShowInfoSnackbar,
   ShowSuccessSnackbar,
