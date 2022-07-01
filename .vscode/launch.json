@@ -27,10 +27,8 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Solid Hotel Debug",
-      "port": 9229,
-      "sourceMaps": true,
-      "restart": true
+      "name": "Attach",
+      "port": 9229
     }
   ]
 }

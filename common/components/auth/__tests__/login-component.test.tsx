@@ -3,6 +3,7 @@ import { Session, ISessionInfo } from "@inrupt/solid-client-authn-browser";
 import { render, RenderResult } from "@testing-library/react";
 import LoginButtonComponent from "../login-component";
 import { mocked } from "ts-jest/utils";
+import "@testing-library/jest-dom";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 
 jest.mock("@inrupt/solid-client-authn-browser", () => {
@@ -36,23 +37,23 @@ beforeEach(() => {
 });
 
 describe("<LoginButtonComponent />", () => {
-  test("Should render", async () => {
+  test("Renders without issue", async () => {
     const button = Render();
     expect(button).not.toBeUndefined();
   });
 
-  test("Should render login button if user is logged out", async () => {
+  test("Renders login button if user is logged out", async () => {
     const button = Render();
-    const loginButton = await button.findByTestId("login-button");
-    expect(loginButton).not.toBeUndefined();
+    expect(button.queryByTestId("login-button")).toBeInTheDocument();
+    expect(button.queryByTestId("logout-button")).not.toBeInTheDocument();
   });
 
-  test("Should render logout button if user is logged in", async () => {
+  test("Renders logout button if user is logged in", async () => {
     (getDefaultSession as jest.Mock).mockImplementation(() =>
       MockSession(true)
     );
     const button = Render();
-    const loginButton = await button.findByTestId("logout-button");
-    expect(loginButton).not.toBeUndefined();
+    expect(button.queryByTestId("logout-button")).toBeInTheDocument();
+    expect(button.queryByTestId("login-button")).not.toBeInTheDocument();
   });
 });

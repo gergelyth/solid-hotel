@@ -13,16 +13,22 @@ import { CloseSnackbar, ShowSuccessSnackbar } from "../snackbar";
 
 export const NotLoggedInSnackbarKey = "NotLoggedInSnackbar";
 
+/**
+ * Creates a login button which redirects to the login/ page.
+ */
 function LoginComponent(): JSX.Element {
   return (
     <Link href="/login">
-      <Button variant="contained" color="primary" data-testid="login-button">
+      <Button data-testid="login-button" variant="contained" color="primary">
         Login
       </Button>
     </Link>
   );
 }
 
+/**
+ * Creates a logout button.
+ */
 function LogoutComponent(): JSX.Element {
   async function Logout(): Promise<void> {
     await SolidLogout();
@@ -31,12 +37,12 @@ function LogoutComponent(): JSX.Element {
 
   return (
     <Button
+      data-testid="logout-button"
       variant="contained"
       color="primary"
       onClick={async () => {
         await Logout();
       }}
-      data-testid="logout-button"
     >
       Logout
     </Button>

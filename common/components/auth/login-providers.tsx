@@ -10,6 +10,9 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 
+/**
+ * Some basic checks, nothing too serious.
+ */
 function IsValidHttpUrl(input: string): boolean {
   let url;
 
@@ -22,6 +25,10 @@ function IsValidHttpUrl(input: string): boolean {
   return url.protocol === "http:" || url.protocol === "https:";
 }
 
+/**
+ * Allows the selection of a Solid Pod provider - does some basic verification of the custom provider if inputted.
+ * @returns A component which lets the user either choose a pre-defined Solid provider or connect to a custom one they input.
+ */
 function LoginProviders(): JSX.Element {
   const [customProvider, setCustomProvider] = useState("");
   const [isInputValidUrl, setIsInputValidUrl] = useState(true);
@@ -33,7 +40,7 @@ function LoginProviders(): JSX.Element {
       <Grid
         container
         spacing={4}
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         direction="column"
       >
@@ -54,7 +61,8 @@ function LoginProviders(): JSX.Element {
                 ? ""
                 : "Please enter a valid URL! (with http or https prefix)"
             }
-            id="custom_provider"
+            id="custom-provider"
+            data-testid="custom-provider-textfield"
             label="Your provider"
             variant="outlined"
             type="url"
@@ -67,6 +75,7 @@ function LoginProviders(): JSX.Element {
         </Grid>
         <Grid item>
           <Button
+            data-testid="custom-provider-button"
             variant="contained"
             color="primary"
             onClick={async () => {
@@ -94,9 +103,15 @@ function LoginProviders(): JSX.Element {
         </Grid>
 
         <Grid item>
-          <Grid container spacing={2} justify="center" alignItems="center">
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Grid item xs={6}>
               <Button
+                data-testid="inrupt-provider-button"
                 variant="contained"
                 color="primary"
                 onClick={async () => {
