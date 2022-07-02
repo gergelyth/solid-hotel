@@ -16,7 +16,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { GetHotelInformation } from "../reservations/hotel-details";
 import { GetStayInterval } from "../reservations/stay-details";
 
-function CancelReservationPopup({
+/**
+ * Returns a dialog which compells the user to confirm their decision to cancel the reservation.
+ * If confirmed, executes the cancellation operation.
+ * If the dialog is closed, no action is carried out.
+ * @returns A dialog with some information about the reservation and the option to cancel the reservation or back out.
+ */
+export function CancelReservationPopup({
   reservation,
   isPopupShowing,
   setPopupVisibility,
@@ -36,7 +42,7 @@ function CancelReservationPopup({
         <Grid
           container
           spacing={2}
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           direction="column"
         >
@@ -49,29 +55,25 @@ function CancelReservationPopup({
             <Paper elevation={6}>
               <Grid
                 container
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
                 direction="column"
               >
-                <Box padding={3}>
-                  <Typography>
-                    <Box textAlign="center">
+                <Grid item>
+                  <Box padding={3} textAlign="center">
+                    <Typography>
                       {GetHotelInformation(reservation.hotel)}
-                    </Box>
-                  </Typography>
-                  <Box textAlign="center">
+                    </Typography>
                     <Typography>{GetStayInterval(reservation)}</Typography>
                   </Box>
-                </Box>
+                </Grid>
               </Grid>
             </Paper>
           </Grid>
           <Grid item>
-            <Typography>
-              <Box fontWeight="fontWeightBold" fontStyle="underlined">
-                The reservation will be irrevocably lost.
-              </Box>
-            </Typography>
+            <Box fontWeight="fontWeightBold" fontStyle="underlined">
+              <Typography>The reservation will be irrevocably lost.</Typography>
+            </Box>
           </Grid>
           <Grid item>
             <Typography>
@@ -83,6 +85,7 @@ function CancelReservationPopup({
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid="cancel-reservation-checkbox"
                   checked={isChecked}
                   onChange={(e, newValue) => setChecked(newValue)}
                   name="confirmation"
@@ -101,6 +104,7 @@ function CancelReservationPopup({
                 Back
               </Button>
               <Button
+                data-testid="cancel-reservation-button"
                 variant="contained"
                 color="primary"
                 className={"button"}
@@ -120,5 +124,3 @@ function CancelReservationPopup({
     </Dialog>
   );
 }
-
-export default CancelReservationPopup;

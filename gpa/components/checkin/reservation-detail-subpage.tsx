@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import CancelReservationButton from "../../../common/components/cancellation/cancellation";
+import { CancelReservationButton } from "../../../common/components/cancellation/cancellation";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { Grid, Button } from "@material-ui/core";
 import { CheckinPage } from "../../pages/reservations/[id]";

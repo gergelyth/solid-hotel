@@ -2,7 +2,7 @@ import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
 import ConciseHotelReservationElement from "./concise-hotel-reservation";
 import { Box, Button, Dialog, Grid } from "@material-ui/core";
-import CancelReservationButton from "../../../common/components/cancellation/cancellation";
+import { CancelReservationButton } from "../../../common/components/cancellation/cancellation";
 import OfflineCheckinButton from "../checkin/offline-checkin-button";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { DoOnStateChange } from "../../util/actionOnNewReservationState";
