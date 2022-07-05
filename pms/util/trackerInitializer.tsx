@@ -20,7 +20,7 @@ import {
   CacheProfile,
   ProfileCache,
 } from "../../common/util/tracker/profileCache";
-import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { SendProfileModification } from "./outgoingCommunications";
 
 export async function SubscribeToProfileChanges(

@@ -1,7 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
-import EditFieldPopup from "../../../common/components/profile/edit-field-popup";
+import { EditFieldPopup } from "../../../common/components/profile/edit-field-popup";
 import { HotelProfilesUrl } from "../../../common/consts/solidIdentifiers";
 import GetSupportedFields from "../../../common/consts/supported-fields";
 import { Field } from "../../../common/types/Field";

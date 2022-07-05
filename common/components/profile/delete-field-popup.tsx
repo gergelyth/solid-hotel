@@ -1,4 +1,5 @@
 import {
+  Box,
   Typography,
   Dialog,
   DialogTitle,
@@ -9,7 +10,13 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Dispatch, SetStateAction } from "react";
 
-function DeleteFieldPopup({
+/**
+ * Returns a dialog which enables the user to confirm their decision to delete the requested field.
+ * If confirmed, executes the deletion.
+ * If the dialog is closed, no action is carried out.
+ * @returns A dialog with the option to delete the field or back out.
+ */
+export function DeleteFieldPopup({
   fieldName,
   onConfirmation,
   isPopupShowing,
@@ -33,9 +40,9 @@ function DeleteFieldPopup({
       <DialogTitle id="popup-title">Delete field</DialogTitle>
       <Container maxWidth="sm">
         <Typography>Delete the following field?</Typography>
-        <Typography>
-          <strong>{fieldName}</strong>
-        </Typography>
+        <Box fontWeight="fontWeightBold">
+          <Typography>{fieldName}</Typography>
+        </Box>
         <DialogActions>
           <Button
             variant="contained"
@@ -45,6 +52,7 @@ function DeleteFieldPopup({
             Back
           </Button>
           <Button
+            data-testid="delete-field-popup-button"
             variant="contained"
             color="primary"
             className={"button"}
@@ -61,5 +69,3 @@ function DeleteFieldPopup({
     </Dialog>
   );
 }
-
-export default DeleteFieldPopup;

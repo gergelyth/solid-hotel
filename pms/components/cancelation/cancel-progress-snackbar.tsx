@@ -1,4 +1,4 @@
-import CustomProgressSnackbar from "../../../common/components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import {

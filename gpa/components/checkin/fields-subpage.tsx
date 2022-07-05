@@ -1,4 +1,4 @@
-import ProfileMain from "../../../common/components/profile/profile-main";
+import { ProfileMain } from "../../../common/components/profile/profile-main";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import {
   Box,
@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Dispatch, SetStateAction, useState } from "react";
-import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
+import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/required-fields-button";
 import { CheckinPage } from "../../pages/reservations/[id]";
 import TocPopup from "./toc-popup";
 import { GetSession } from "../../../common/util/solid";

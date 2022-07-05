@@ -21,7 +21,7 @@ import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory
 import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
-import UpdateLocalProfileSnackbar from "../../common/components/profile/update-local-profile";
+import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import PrivacyTokenRemover from "./privacyTokenRemover";
 import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";

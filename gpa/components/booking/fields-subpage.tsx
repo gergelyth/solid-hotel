@@ -1,9 +1,9 @@
-import ProfileMain from "../../../common/components/profile/profile-main";
+import { ProfileMain } from "../../../common/components/profile/profile-main";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { CircularProgress, Grid, Typography } from "@material-ui/core";
 import { BookingPage } from "../../pages/booking";
 import { Dispatch, SetStateAction } from "react";
-import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
+import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/required-fields-button";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import ErrorComponent from "../../../common/components/error-component";

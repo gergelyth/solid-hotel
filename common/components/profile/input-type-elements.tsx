@@ -11,6 +11,10 @@ import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { IdDocumentType } from "../../types/Guest";
 
+/**
+ * Creates a component for STRING typed fields.
+ * @returns A TextField component which lets the user input the string value of the field.
+ */
 function GetFieldInputElement(
   field: Field,
   currentFieldValue: string | undefined,
@@ -18,6 +22,7 @@ function GetFieldInputElement(
 ): JSX.Element {
   return (
     <TextField
+      data-testid="field-string-input"
       required
       id="editInput"
       label={field.fieldPrettyName}
@@ -30,6 +35,10 @@ function GetFieldInputElement(
   );
 }
 
+/**
+ * Creates a component for DATETIME typed fields.
+ * @returns A DatePicker component which lets the user pick the date for the field.
+ */
 function GetDatePickerElement(
   field: Field,
   currentFieldValue: string | undefined,
@@ -38,6 +47,7 @@ function GetDatePickerElement(
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DatePicker
+        data-testid="field-date-picker"
         disablePast
         required
         format="dd/MM/yyyy"
@@ -52,6 +62,10 @@ function GetDatePickerElement(
   );
 }
 
+/**
+ * Creates a component for ENUM typed fields.
+ * @returns A Select component which lets the user choose from the options.
+ */
 function GetEnumPickerElement(
   field: Field,
   options: string[],
@@ -66,6 +80,7 @@ function GetEnumPickerElement(
   return (
     <FormControl>
       <NativeSelect
+        data-testid="field-enum-picker"
         required
         value={currentFieldValue}
         onChange={(event: React.ChangeEvent<{ value: unknown }>) =>
@@ -87,11 +102,21 @@ function GetEnumPickerElement(
   );
 }
 
-export function GetFieldInputElementBasedOnType(
-  field: Field,
-  currentFieldValue: string | undefined,
-  setFieldValue: Dispatch<SetStateAction<string | undefined>>
-): JSX.Element {
+/**
+ * Decides what type of element of component to return based on the type of the field supplied.
+ * Currently supported types are: string, dateTime, idDocumentType.
+ * Adding a new field should consist only of the defining the component above and adding the option to the switch clause here.
+ * @returns The component type for the corresponding field type.
+ */
+export function FieldInputElementBasedOnType({
+  field,
+  currentFieldValue,
+  setFieldValue,
+}: {
+  field: Field;
+  currentFieldValue: string | undefined;
+  setFieldValue: Dispatch<SetStateAction<string | undefined>>;
+}): JSX.Element {
   switch (field.datatype) {
     case xmlSchemaTypes.string:
       return GetFieldInputElement(field, currentFieldValue, setFieldValue);

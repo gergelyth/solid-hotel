@@ -1,6 +1,6 @@
 import { useState } from "react";
-import EditFieldPopup from "./edit-field-popup";
-import DeleteFieldPopup from "./delete-field-popup";
+import { EditFieldPopup } from "./edit-field-popup";
+import { DeleteFieldPopup } from "./delete-field-popup";
 import { RemoveField, SetField } from "../../util/solid_profile";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Grid, Button, Box, Typography } from "@material-ui/core";
@@ -8,6 +8,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { Field } from "../../types/Field";
 import { RevalidateGuest, TriggerRefetchGuest } from "../../hooks/useGuest";
 
+/**
+ * Executes the edit operation.
+ * To give an immediate feedback, the change is applied immediately in the data cache and the Solid Pod is updated asynchronously.
+ */
 function OnEditConfirmation(
   fieldName: string,
   newValue: string,
@@ -25,6 +29,10 @@ function OnEditConfirmation(
   RevalidateGuest(rdfFields, webId);
 }
 
+/**
+ * Executes the delete operation.
+ * To give an immediate feedback, the change is applied immediately in the data cache and the Solid Pod is updated asynchronously.
+ */
 function OnDeleteConfirmation(
   fieldName: string,
   fields: Field[],
@@ -39,6 +47,11 @@ function OnDeleteConfirmation(
   RevalidateGuest(rdfFields, webId);
 }
 
+/**
+ * Handles the edit of the field if applicable.
+ * The type of the input component is determined by the type of the field (string,enum,etc.).
+ * @returns A component contaning the edit confirmation popup dialog and the button showing it.
+ */
 function EditElements({
   field,
   guestFields,
@@ -64,6 +77,7 @@ function EditElements({
     <Box sx={{ mx: 1 }}>
       <Grid item xs={2}>
         <Button
+          data-testid="edit-field-button"
           variant="contained"
           color="primary"
           onClick={() => setEditPopupVisibility(true)}
@@ -90,6 +104,10 @@ function EditElements({
   );
 }
 
+/**
+ * Handles the deletion of the field if applicable.
+ * @returns A component contaning the delete confirmation popup dialog and the button showing it.
+ */
 function DeleteElements({
   field,
   guestFields,
@@ -115,6 +133,7 @@ function DeleteElements({
     <Box sx={{ mx: 1 }}>
       <Grid item xs={2}>
         <Button
+          data-testid="delete-field-button"
           variant="contained"
           color="primary"
           startIcon={<DeleteIcon />}
@@ -136,7 +155,13 @@ function DeleteElements({
   );
 }
 
-function ProfileField({
+/**
+ * Handles the display, edit and deletion of one profile field.
+ * The field can be editable and deletable and either combination will work.
+ * If the edit or delete action is carried out, the field is updated in the cache to show the result immediately and is updated in the Solid Pod asynchronously.
+ * @returns A component containing the basic information about the field (name, current value) and an edit and delete button (depending on the editable and deletable properties).
+ */
+export function ProfileField({
   field,
   guestFields,
   rdfFields,
@@ -164,7 +189,13 @@ function ProfileField({
   };
 
   return (
-    <Grid container item spacing={2} justify="center" alignItems="center">
+    <Grid
+      container
+      item
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+    >
       <Grid item xs={4}>
         <Typography
           variant="body1"
@@ -200,5 +231,3 @@ function ProfileField({
     </Grid>
   );
 }
-
-export default ProfileField;

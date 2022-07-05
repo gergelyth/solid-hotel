@@ -21,7 +21,7 @@ function ErrorComponent(): JSX.Element {
           container
           spacing={1}
           alignItems="center"
-          justify="center"
+          justifyContent="center"
           direction="column"
         >
           <Grid item>

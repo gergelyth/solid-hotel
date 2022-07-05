@@ -3,7 +3,7 @@ import {
   ShowWarningSnackbar,
 } from "../../common/components/snackbar";
 import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
-import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import {
   RevalidateGuestPrivacyTokens,

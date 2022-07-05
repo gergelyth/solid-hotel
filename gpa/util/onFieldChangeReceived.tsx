@@ -9,7 +9,7 @@ import {
   CacheProfile,
   ProfileCache,
 } from "../../common/util/tracker/profileCache";
-import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";

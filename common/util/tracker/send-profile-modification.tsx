@@ -1,4 +1,4 @@
-import CustomProgressSnackbar from "../../components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../../components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import { CloseSnackbar, ShowWarningSnackbar } from "../../components/snackbar";
 import { useReservations } from "../../hooks/useReservations";

@@ -1,4 +1,4 @@
-import ProfileMain from "../../../common/components/profile/profile-main";
+import { ProfileMain } from "../../../common/components/profile/profile-main";
 import {
   Grid,
   Typography,

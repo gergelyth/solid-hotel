@@ -1,4 +1,4 @@
-import CustomProgressSnackbar from "../custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import { CloseSnackbar, ShowWarningSnackbar } from "../snackbar";
 import { ProfileUpdate } from "../../util/tracker/trackerSendChange";
@@ -7,6 +7,11 @@ import { UpdateProfileInMemory } from "../../util/tracker/profileCache";
 import { IgnoreNextUpdate } from "../../util/tracker/tracker";
 import { RevalidateGuest } from "../../hooks/useGuest";
 
+/**
+ * Executes the update of the local profile.
+ * Displays a warning message if there are no approved fields to update the profile with.
+ * If there is at least one approved field, the Solid Pod profile and the in-memory cache is updated.
+ */
 async function ExecuteUpdateLocalProfile(
   profileUrl: string,
   fieldOptions: ProfileUpdate
@@ -41,7 +46,13 @@ async function ExecuteUpdateLocalProfile(
   console.log("local profile updated");
 }
 
-const UpdateLocalProfileSnackbar = forwardRef<
+/**
+ * Executes the update of the local profile.
+ * Displays a warning message if there are no approved fields to update the profile with.
+ * If there is at least one approved field, the Solid Pod profile and the in-memory cache is updated.
+ * @returns A progress snackbar which updates the local profile in useEffect().
+ */
+export const UpdateLocalProfileSnackbar = forwardRef<
   HTMLDivElement,
   {
     key: string | number;
@@ -66,5 +77,3 @@ const UpdateLocalProfileSnackbar = forwardRef<
 });
 
 UpdateLocalProfileSnackbar.displayName = "UpdateLocalProfileSnackbar";
-
-export default UpdateLocalProfileSnackbar;

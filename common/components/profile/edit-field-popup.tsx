@@ -1,15 +1,22 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import {
+  Box,
+  Typography,
   Dialog,
   DialogTitle,
   DialogActions,
   Container,
   Button,
 } from "@material-ui/core";
-import { GetFieldInputElementBasedOnType } from "./input-type-elements";
+import { FieldInputElementBasedOnType } from "./input-type-elements";
 import { Field } from "../../types/Field";
 
-function EditFieldPopup({
+/**
+ * Returns a dialog which enables the user to edit the requested field.
+ * If confirmed, it executes the edit. If the dialog is closed, no action is carried out.
+ * @returns A dialog with the option to edit the field or back out. The input type is determined based on the type of the field value.
+ */
+export function EditFieldPopup({
   field,
   onConfirmation,
   isPopupShowing,
@@ -34,14 +41,17 @@ function EditFieldPopup({
       open={isPopupShowing}
     >
       <DialogTitle id="popup-title">
-        Edit field: <strong>{field.fieldPrettyName}</strong>
+        Edit field:
+        <Box fontWeight="fontWeightBold">
+          <Typography>{field.fieldPrettyName}</Typography>
+        </Box>
       </DialogTitle>
       <Container maxWidth="sm">
-        {GetFieldInputElementBasedOnType(
-          field,
-          currentFieldValue,
-          setFieldValue
-        )}
+        <FieldInputElementBasedOnType
+          field={field}
+          currentFieldValue={currentFieldValue}
+          setFieldValue={setFieldValue}
+        />
         <DialogActions>
           <Button
             variant="contained"
@@ -51,6 +61,7 @@ function EditFieldPopup({
             Back
           </Button>
           <Button
+            data-testid="edit-field-popup-button"
             variant="contained"
             color="primary"
             className={"button"}
@@ -72,5 +83,3 @@ function EditFieldPopup({
     </Dialog>
   );
 }
-
-export default EditFieldPopup;

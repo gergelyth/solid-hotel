@@ -1,6 +1,6 @@
 import { NamedNode, Term } from "rdf-js";
 
-class SchemaType implements NamedNode<string> {
+export class SchemaType implements NamedNode<string> {
   termType!: "NamedNode";
   value: string;
 

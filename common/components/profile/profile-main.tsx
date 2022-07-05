@@ -1,11 +1,14 @@
 import { useGuest } from "../../hooks/useGuest";
-import ProfileField from "./profile-field";
+import { ProfileField } from "./profile-field";
 import { Grid, Container, Box, CircularProgress } from "@material-ui/core";
 import { Field } from "../../types/Field";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { GuestFullName } from "./guest-full-name";
 import ErrorComponent from "../error-component";
 
+/**
+ * Creates the individual fields elements.
+ */
 function CreateFieldElements(
   guestFields: Field[],
   rdfFields: string[] | undefined,
@@ -19,7 +22,7 @@ function CreateFieldElements(
     <Grid
       container
       spacing={3}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -66,7 +69,13 @@ function CreateFieldElements(
 //   };
 // }
 
-function ProfileMain({
+/**
+ * Handles the display, edit and deletion of the profile fields of the guest.
+ * The field can be editable and deletable and either combination will work.
+ * The values for the rdfFields requested are retrieved from the Pod belonging to the WebId supplied - if no WebId is passed, it will default to the currently logged in user.
+ * @returns A component containing the full name of the guest (if applicable) and the list of fields with their values editable/deletable (if applicable).
+ */
+export function ProfileMain({
   rdfFields,
   webId,
   editable = true,
@@ -122,5 +131,3 @@ function ProfileMain({
     </Container>
   );
 }
-
-export default ProfileMain;

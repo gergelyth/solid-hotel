@@ -14,7 +14,7 @@ export const useCustomSnackbarStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomProgressSnackbar = forwardRef<
+export const CustomProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
     key: string | number;
@@ -45,5 +45,3 @@ const CustomProgressSnackbar = forwardRef<
 });
 
 CustomProgressSnackbar.displayName = "CustomProgressSnackbar";
-
-export default CustomProgressSnackbar;

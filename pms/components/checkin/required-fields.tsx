@@ -1,6 +1,6 @@
-import ProfileMain from "../../../common/components/profile/profile-main";
+import { ProfileMain } from "../../../common/components/profile/profile-main";
 import { Grid } from "@material-ui/core";
-import ConfirmRequiredFieldsButton from "../../../common/components/profile/required-fields-button";
+import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/required-fields-button";
 import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
 

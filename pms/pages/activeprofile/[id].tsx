@@ -1,4 +1,4 @@
-import ProfileMain from "../../../common/components/profile/profile-main";
+import { ProfileMain } from "../../../common/components/profile/profile-main";
 import { Button, Grid, Divider } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";

@@ -1,6 +1,6 @@
 import { CloseSnackbar } from "../../common/components/snackbar";
 import { GetUserPrivacyPodUrl } from "../../common/util/solid";
-import CustomProgressSnackbar from "../../common/components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { Dispatch, forwardRef, SetStateAction, useEffect } from "react";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { useReservations } from "../../common/hooks/useReservations";
