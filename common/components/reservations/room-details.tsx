@@ -1,7 +1,11 @@
 import { Box, Typography } from "@material-ui/core";
 import { useSpecificRoom } from "../../hooks/useRooms";
 
-function RoomDetails({ roomUrl }: { roomUrl: string }): JSX.Element {
+/**
+ * Retrieves information about the room from the URL passed.
+ * @returns A two-line component where the first line is the room's name and the second is the room's description.
+ */
+export function RoomDetails({ roomUrl }: { roomUrl: string }): JSX.Element {
   const { room, isLoading, isError } = useSpecificRoom(roomUrl);
 
   let roomName: string;
@@ -25,5 +29,3 @@ function RoomDetails({ roomUrl }: { roomUrl: string }): JSX.Element {
     </Box>
   );
 }
-
-export default RoomDetails;

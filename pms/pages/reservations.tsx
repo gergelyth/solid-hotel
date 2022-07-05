@@ -4,7 +4,7 @@ import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import CreateReservationElement from "../components/reservations/reservation-element";
 import { Grid, Typography, Box } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
-import ReservationStatusList from "../../common/components/reservations/reservation-status-list";
+import { ReservationStatusList } from "../../common/components/reservations/reservation-status-list";
 
 function Reservations(): JSX.Element {
   const router = useRouter();

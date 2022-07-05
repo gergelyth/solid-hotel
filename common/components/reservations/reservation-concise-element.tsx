@@ -11,7 +11,11 @@ import {
 import HotelIcon from "@material-ui/icons/Hotel";
 import { GetNightCount, GetStayInterval } from "./stay-details";
 
-function ReservationConciseElement({
+/**
+ * Displays some basic information about the reservation, such as the count of nights spent at the hotel, as well as the date interval of the stay.
+ * @returns A card component where the information described above is displayed as well as click actions are tracked and the passed function is executed.
+ */
+export function ReservationConciseElement({
   reservation,
   titleElement,
   onClickAction,
@@ -22,6 +26,7 @@ function ReservationConciseElement({
 }): JSX.Element {
   return (
     <Card
+      data-testid="reservation-concise-element-card"
       onClick={(event: React.MouseEvent<HTMLElement>) =>
         onClickAction(event, reservation)
       }
@@ -49,5 +54,3 @@ function ReservationConciseElement({
     </Card>
   );
 }
-
-export default ReservationConciseElement;

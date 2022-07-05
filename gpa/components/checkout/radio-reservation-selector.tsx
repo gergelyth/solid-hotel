@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import ReservationConciseElement from "../../../common/components/reservations/reservation-concise-element";
+import { ReservationConciseElement } from "../../../common/components/reservations/reservation-concise-element";
 import {
   Box,
   FormControl,

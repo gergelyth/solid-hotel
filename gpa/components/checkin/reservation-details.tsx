@@ -12,8 +12,8 @@ import {
 import HotelIcon from "@material-ui/icons/Hotel";
 import RoomIcon from "@material-ui/icons/Room";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-import HotelDetails from "../../../common/components/reservations/hotel-details";
-import RoomDetails from "../../../common/components/reservations/room-details";
+import { HotelDetailsTwoLiner } from "../../../common/components/reservations/hotel-details";
+import { RoomDetails } from "../../../common/components/reservations/room-details";
 import {
   GetNightCount,
   GetStayInterval,
@@ -83,7 +83,7 @@ function ReservationDetails({
           </Box>
         </Grid>
         <Grid item xs={10}>
-          <HotelDetails hotelWebId={reservationDetail.hotel} />
+          <HotelDetailsTwoLiner hotelWebId={reservationDetail.hotel} />
         </Grid>
       </Grid>
 

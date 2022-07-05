@@ -1,6 +1,6 @@
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
-import ReservationConciseElement from "../../../common/components/reservations/reservation-concise-element";
+import { ReservationConciseElement } from "../../../common/components/reservations/reservation-concise-element";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { useSpecificRoom } from "../../../common/hooks/useRooms";
 

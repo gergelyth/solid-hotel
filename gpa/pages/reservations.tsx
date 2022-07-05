@@ -1,11 +1,11 @@
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
-import ReservationStatusList from "../../common/components/reservations/reservation-status-list";
+import { ReservationStatusList } from "../../common/components/reservations/reservation-status-list";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { useRouter } from "next/router";
 import { ShowErrorSnackbar } from "../../common/components/snackbar";
-import ReservationConciseElement from "../../common/components/reservations/reservation-concise-element";
+import { ReservationConciseElement } from "../../common/components/reservations/reservation-concise-element";
 import { HotelDetailsOneLiner } from "../../common/components/reservations/hotel-details";
 import { ReservationClickHandler } from "../../common/types/ReservationClickHandler";
 

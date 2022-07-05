@@ -4,6 +4,10 @@ import { NotEmptyItem } from "../../util/helpers";
 import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 import ErrorComponent from "../error-component";
 
+/**
+ * A helper component which wraps the reservation element into a Grid element making the layout nicer.
+ * @returns The reservation component wrapped in a Grid child element.
+ */
 function CreateReservationElement(
   reservation: ReservationAtHotel | null,
   reservationElement: (item: ReservationAtHotel) => JSX.Element
@@ -22,6 +26,10 @@ function CreateReservationElement(
   );
 }
 
+/**
+ * Retrieves the reservations from the URL provided, filters them and creates the reservation elements.
+ * @returns A list of reservation elements or a simple string informing the user that no reservations are found (or match the filter).
+ */
 function ReservationElements(
   reservationsUrl: string | null,
   reservationFilter: (reservation: ReservationAtHotel) => boolean,
@@ -42,7 +50,7 @@ function ReservationElements(
   const isArrayNonEmpty = filteredReservations.length > 0;
 
   return isArrayNonEmpty ? (
-    <Grid container spacing={1} justify="center" direction="column">
+    <Grid container spacing={1} justifyContent="center" direction="column">
       {filteredReservations.map((item) =>
         CreateReservationElement(item, reservationElement)
       )}
@@ -54,7 +62,13 @@ function ReservationElements(
   );
 }
 
-function ReservationList({
+/**
+ * Returns a list of reservations retrieved from the URL passed to the component.
+ * The type of reservation elements created can be customized.
+ * A filter can also be supplied to show only reservations matching specific criteria (we filter out empty reservations without prompt).
+ * @returns A list of reservation elements or a simple string informing the user that no reservations are found (or match the filter).
+ */
+export function ReservationList({
   reservationsUrl,
   reservationFilter,
   reservationElement,
@@ -69,5 +83,3 @@ function ReservationList({
     reservationElement
   );
 }
-
-export default ReservationList;
