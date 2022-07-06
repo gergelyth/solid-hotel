@@ -4,7 +4,7 @@ import { Grid, Container, Box, CircularProgress } from "@material-ui/core";
 import { Field } from "../../types/Field";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { GuestFullName } from "./guest-full-name";
-import ErrorComponent from "../error-component";
+import { ErrorComponent } from "../error-component";
 
 /**
  * Creates the individual fields elements.

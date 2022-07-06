@@ -2,7 +2,11 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { ErrorOutline } from "@material-ui/icons";
 import { red } from "@material-ui/core/colors";
 
-function ErrorComponent(): JSX.Element {
+/**
+ * A general error component we can show instead of a component that failed to render for some reason.
+ * @returns A component signaling that an error occurred and pointing the user to the console.
+ */
+export function ErrorComponent(): JSX.Element {
   return (
     <Box border={1} borderRadius={16}>
       <Box
@@ -39,5 +43,3 @@ function ErrorComponent(): JSX.Element {
     </Box>
   );
 }
-
-export default ErrorComponent;

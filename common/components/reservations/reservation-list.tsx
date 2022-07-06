@@ -2,7 +2,7 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { useReservations } from "../../hooks/useReservations";
 import { NotEmptyItem } from "../../util/helpers";
 import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
-import ErrorComponent from "../error-component";
+import { ErrorComponent } from "../error-component";
 
 /**
  * A helper component which wraps the reservation element into a Grid element making the layout nicer.

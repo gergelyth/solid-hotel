@@ -3,13 +3,20 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { CheckCircleOutline } from "@material-ui/icons";
 import { green } from "@material-ui/core/colors";
 
+/**
+ * @returns The custom success text wrapped in a component.
+ */
 function SuccessComponent({ text }: { text: string }): JSX.Element {
   return <Typography variant="h6">{text}</Typography>;
 }
 
+/**
+ * @returns The return to the index page button.
+ */
 function ReturnButton({ router }: { router: NextRouter }): JSX.Element {
   return (
     <Button
+      data-testid="return-button"
       variant="contained"
       color="primary"
       onClick={() => router.push("/")}
@@ -19,7 +26,11 @@ function ReturnButton({ router }: { router: NextRouter }): JSX.Element {
   );
 }
 
-function SuccessPage({
+/**
+ * A generic component we can show to the user when something finished/went right.
+ * @returns A component with green color dominating displaying the message passed and a return to the index page button.
+ */
+export function SuccessPage({
   successText,
   router,
 }: {
@@ -44,7 +55,7 @@ function SuccessPage({
           container
           spacing={5}
           alignItems="center"
-          justify="center"
+          justifyContent="center"
           direction="column"
         >
           <Grid item>
@@ -61,5 +72,3 @@ function SuccessPage({
     </Box>
   );
 }
-
-export default SuccessPage;

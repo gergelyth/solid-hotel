@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction } from "react";
 import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/required-fields-button";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 
 function RequiredFields({
   currentPage,

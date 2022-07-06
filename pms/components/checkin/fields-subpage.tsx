@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
 import { useRouter } from "next/router";
 import { RequiredFields } from "./required-fields";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 
 function RequiredFieldsAtOfflineCheckin({
   currentPage,

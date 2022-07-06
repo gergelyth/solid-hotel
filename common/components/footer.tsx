@@ -1,6 +1,9 @@
 import { Box, Typography } from "@material-ui/core";
 import styles from "../styles/styles";
 
+/**
+ * @returns A generic footer component with license and credits.
+ */
 function Footer(): JSX.Element {
   const additionalStyles = styles();
 

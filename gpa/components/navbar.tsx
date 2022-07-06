@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Box } from "@material-ui/core";
 import styles from "../../common/styles/styles";
 import { DynamicLoginComponent } from "../../common/components/auth/dynamic-login-component";
@@ -27,10 +27,13 @@ function NavigationBar(): JSX.Element {
 
   const additionalStyles = styles();
 
+  const [isNotificationsOpen, setNotificationsOpen] = useState(false);
   const notificationElements = GetNotificationElements(
     GetPodOfSession(),
     GPAInboxList,
-    GPAParsers
+    GPAParsers,
+    isNotificationsOpen,
+    setNotificationsOpen
   );
 
   return (

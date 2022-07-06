@@ -1,6 +1,9 @@
 import { Box } from "@material-ui/core";
 import { useSnackbar, ProviderContext, VariantType } from "notistack";
 
+/**
+ * Displays a snackbar with the passed properties.
+ */
 function ShowSnackbar(
   variant: VariantType,
   message: string,
@@ -16,10 +19,16 @@ function ShowSnackbar(
   });
 }
 
+/**
+ * Closes a snackbar currently displayed.
+ */
 export function CloseSnackbar(key: string | number): void {
   snackbarContext.closeSnackbar(key);
 }
 
+/**
+ * Creates a snackbar (with custom properties) in the bottom right corner (usually to indicate that an important operation is going on in the background).
+ */
 export function ShowCustomSnackbar(
   createSnackbarElement: (key: string | number) => JSX.Element,
   key?: string | number
@@ -37,6 +46,10 @@ export function ShowCustomSnackbar(
   });
 }
 
+/**
+ * Shows a success snackbar to the user (green color) to indicate that something finished successfully.
+ * Optionally closes the corresponding info snackbar.
+ */
 export function ShowSuccessSnackbar(
   message: string,
   closeInfoSnackbar?: () => void
@@ -51,6 +64,9 @@ export function ShowWarningSnackbar(message: string): void {
   ShowSnackbar("warning", message);
 }
 
+/**
+ * Shows an error snackbar to the user (red color) to signal that something went wrong.
+ */
 export function ShowErrorSnackbar(
   message: string,
   persist = false,
@@ -60,6 +76,9 @@ export function ShowErrorSnackbar(
   ShowSnackbar("error", message, persist, preventDuplicate, key);
 }
 
+/**
+ * Shows an info snackbar to the user (blue color).
+ */
 export function ShowInfoSnackbar(message: string, persist = false): () => void {
   ShowSnackbar("info", message, persist, false, message);
   return () => CloseSnackbar(message);
@@ -67,9 +86,11 @@ export function ShowInfoSnackbar(message: string, persist = false): () => void {
 
 let snackbarContext: ProviderContext;
 
-function GlobalSnackbar(): JSX.Element {
+/**
+ * A placeholder element providing the option to add snackbars to the page.
+ * @returns An empty Box element.
+ */
+export function GlobalSnackbar(): JSX.Element {
   snackbarContext = useSnackbar();
   return <Box />;
 }
-
-export default GlobalSnackbar;

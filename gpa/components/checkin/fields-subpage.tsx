@@ -14,7 +14,7 @@ import TocPopup from "./toc-popup";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { CacheProfile } from "../../../common/util/tracker/profileCache";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 
 function RequiredFieldsAtCheckin({
   currentPage,

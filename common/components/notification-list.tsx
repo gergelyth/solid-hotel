@@ -11,12 +11,16 @@ import {
 } from "@material-ui/core";
 import { compareDesc } from "date-fns";
 import { Notification } from "../types/Notification";
-import ErrorComponent from "./error-component";
+import { ErrorComponent } from "./error-component";
 import {
   NotificationCreatedAtChip,
   NotificationTypeChip,
 } from "./notification-chips";
 
+/**
+ * Creates the notification item for one given notification.
+ * @returns A component with the chips for time of creation and notification type, the text of the notification and a delete button.
+ */
 function NotificationItem({
   notification,
   key,
@@ -32,6 +36,7 @@ function NotificationItem({
 
   return (
     <Card
+      data-testid="notification-card"
       onClick={(event: React.MouseEvent<HTMLElement>) =>
         notification.onClick(event)
       }
@@ -40,13 +45,18 @@ function NotificationItem({
     >
       <CardActionArea>
         <CardContent>
-          <Grid container spacing={2} justify="center" alignItems="center">
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Grid
               item
               xs={2}
               container
               spacing={2}
-              justify="center"
+              justifyContent="center"
               alignItems="center"
               direction="column"
             >
@@ -58,16 +68,19 @@ function NotificationItem({
               </Grid>
             </Grid>
             <Grid item xs={8}>
-              <Typography
-                variant="body2"
-                align="center"
-                style={{ whiteSpace: "pre-line" }}
-              >
-                <Box fontSize={"85%"}>{notification.text}</Box>
-              </Typography>
+              <Box fontSize={"85%"}>
+                <Typography
+                  variant="body2"
+                  align="center"
+                  style={{ whiteSpace: "pre-line" }}
+                >
+                  {notification.text}
+                </Typography>
+              </Box>
             </Grid>
             <Grid item xs={2}>
               <Button
+                data-testid="notification-delete-button"
                 variant="contained"
                 color="primary"
                 size="medium"
@@ -86,6 +99,9 @@ function NotificationItem({
   );
 }
 
+/**
+ * Orders the notifications by their time of creation in descending order.
+ */
 function OrderNotificationsByDescending(
   first: Notification | null,
   second: Notification | null
@@ -100,7 +116,11 @@ function OrderNotificationsByDescending(
   return compareDesc(first.createdAt, second.createdAt);
 }
 
-function NotificationList({
+/**
+ * Creates the list of notifications present in the Pod ordering them by their time of creation in descending order (i.e. newest is at the top).
+ * @returns The list of notification elements.
+ */
+export function NotificationList({
   notificationRetrieval,
   deleteNotification,
 }: {
@@ -137,5 +157,3 @@ function NotificationList({
     </List>
   );
 }
-
-export default NotificationList;

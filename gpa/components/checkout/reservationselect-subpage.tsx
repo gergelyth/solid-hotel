@@ -8,7 +8,7 @@ import { NotEmptyItem } from "../../../common/util/helpers";
 import { ReservationState } from "../../../common/types/ReservationState";
 import ReservationRadioSelector from "./radio-reservation-selector";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 
 //TODO this is duplicated in reservation-list almost
 export function GetActiveReservations(

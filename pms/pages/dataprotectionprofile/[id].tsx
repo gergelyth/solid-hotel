@@ -8,7 +8,7 @@ import {
 import { useRouter } from "next/router";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 
 function GetDataRetentionPeriod({
   data,

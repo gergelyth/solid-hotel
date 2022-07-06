@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import SuccessPage from "../../common/components/success-page";
+import { SuccessPage } from "../../common/components/success-page";
 import { useState } from "react";
 import { Box } from "@material-ui/core";
 import ReservationSelectForCheckout from "../components/checkout/reservationselect-subpage";

@@ -9,12 +9,19 @@ import {
 import _ from "lodash";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { NotEmptyItem } from "../util/helpers";
-import ErrorComponent from "./error-component";
+import { ErrorComponent } from "./error-component";
 
+/**
+ * @returns The expiry date of the token with the latest expiry date in the batch.
+ */
 function FindLatestExpiryDate(tokens: PrivacyToken[]): Date {
   return tokens.reduce((x, y) => (x.expiry > y.expiry ? x : y)).expiry;
 }
 
+//TODO we probably can do this with date-fns?
+/**
+ * @returns A flag which says if the two dates are on the same day.
+ */
 function AreDatesOnTheSameDay(d1: Date, d2: Date): boolean {
   return (
     d1.getDate() === d2.getDate() &&
@@ -23,23 +30,28 @@ function AreDatesOnTheSameDay(d1: Date, d2: Date): boolean {
   );
 }
 
+/**
+ * @returns Normal text if the entry is highlighted, or faded and smaller text if it's not.
+ */
 function GetHighlightedOrNotEntry(
   text: string,
   highlightValue: boolean
 ): JSX.Element {
-  return (
-    <Typography>
-      {highlightValue ? (
-        <Box>{text}</Box>
-      ) : (
-        <Box color="text.disabled" fontSize="75%">
-          {text}
-        </Box>
-      )}
-    </Typography>
-  );
+  if (highlightValue) {
+    return <Typography>{text}</Typography>;
+  } else {
+    return (
+      <Box color="text.disabled" fontSize="75%">
+        <Typography>{text}</Typography>
+      </Box>
+    );
+  }
 }
 
+/**
+ * Displays one privacy token and highlights if the token is the latest of the tokens referencing the same RDF field to expire.
+ * @returns A component with the RDF field, the token's reason, expiry and a delete button if required.
+ */
 function PrivacyField({
   field,
   token,
@@ -66,7 +78,7 @@ function PrivacyField({
       xs={12}
       spacing={2}
       alignItems="center"
-      justify="center"
+      justifyContent="center"
       direction="row"
     >
       <Grid item xs={3}>
@@ -83,6 +95,11 @@ function PrivacyField({
   );
 }
 
+/**
+ * Displays the privacy tokens for one specific counterparty.
+ * Further groups the tokens by the personal information fields, so tokens referencing the same fields are next to each other.
+ * @returns A component with a list of privacy tokens for a given counterparty grouped by RDF fields.
+ */
 function HotelPrivacy({
   counterparty,
   privacyTokens,
@@ -105,7 +122,7 @@ function HotelPrivacy({
   });
 
   return (
-    <Box>
+    <Box data-testid="counterparty-box">
       <Typography variant="h6">
         <Box textAlign="center">{counterparty}</Box>
       </Typography>
@@ -141,6 +158,13 @@ function HotelPrivacy({
   );
 }
 
+/**
+ * The dashboard containing the privacy tokens of the user.
+ * Generic component so it can be used with both HotelPrivacyToken and GuestPrivacyToken.
+ * Provides the option to group the tokens by a string field.
+ * Provides the option to create a delete button for specific tokens.
+ * @returns A component containing all privacy tokens grouped by a specific string field.
+ */
 export function PrivacyDashboard<T extends PrivacyToken>({
   retrieval,
   tokenGrouping,

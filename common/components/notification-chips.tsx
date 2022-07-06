@@ -11,6 +11,10 @@ import {
   red,
 } from "@material-ui/core/colors";
 
+/**
+ * Displays what type the notification is and color codes them.
+ * @returns A small text component with a text value of the type in the appropriate color.
+ */
 export function NotificationTypeChip({
   notification,
 }: {
@@ -59,6 +63,10 @@ export function NotificationTypeChip({
   );
 }
 
+/**
+ * Display when the notification was created.
+ * @returns A two-line component where the first line is the date and the second is the time of creation.
+ */
 export function NotificationCreatedAtChip({
   notification,
 }: {

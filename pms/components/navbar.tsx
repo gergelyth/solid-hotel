@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -36,10 +36,13 @@ function NavigationBar(): JSX.Element {
   const additionalStyles = styles();
 
   const podAddress = GetPodOfSession();
+  const [isNotificationsOpen, setNotificationsOpen] = useState(false);
   const notificationElements = GetNotificationElements(
     podAddress,
     PMSInboxList,
-    PMSParsers
+    PMSParsers,
+    isNotificationsOpen,
+    setNotificationsOpen
   );
 
   return (

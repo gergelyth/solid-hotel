@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { GetSession } from "../../common/util/solid";
 import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import { useRequiredFields } from "../../common/hooks/useMockApi";
-import ErrorComponent from "../../common/components/error-component";
+import { ErrorComponent } from "../../common/components/error-component";
 
 function Profile(): JSX.Element | null {
   const router = useRouter();

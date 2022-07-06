@@ -11,7 +11,7 @@ import styles from "../../common/styles/styles";
 import Footer from "../../common/components/footer";
 import NavigationBar from "../components/navbar";
 import { SnackbarProvider } from "notistack";
-import GlobalSnackbar from "../../common/components/snackbar";
+import { GlobalSnackbar } from "../../common/components/snackbar";
 import { ProfileCache } from "../../common/util/tracker/profileCache";
 import { CacheHotelProfiles } from "../util/trackerInitializer";
 import { GetSession } from "../../common/util/solid";

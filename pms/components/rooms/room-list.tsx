@@ -5,7 +5,7 @@ import EditableRoomElement from "./editable-room";
 import { useState } from "react";
 import EditRoomPopup from "./edit-room-popup";
 import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 
 function CreateRoomElement(
   room: RoomDefinition | null,

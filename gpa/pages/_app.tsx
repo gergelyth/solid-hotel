@@ -11,7 +11,8 @@ import NavigationBar from "../components/navbar";
 import Footer from "../../common/components/footer";
 import styles from "../../common/styles/styles";
 import { SnackbarProvider } from "notistack";
-import GlobalSnackbar, {
+import {
+  GlobalSnackbar,
   ShowCustomSnackbar,
 } from "../../common/components/snackbar";
 import { GetSession } from "../../common/util/solid";

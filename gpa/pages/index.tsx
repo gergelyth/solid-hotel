@@ -4,7 +4,7 @@ import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { GetActiveReservations } from "../components/checkout/reservationselect-subpage";
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
-import ErrorComponent from "../../common/components/error-component";
+import { ErrorComponent } from "../../common/components/error-component";
 import { GetSession } from "../../common/util/solid";
 
 function CheckoutButton({

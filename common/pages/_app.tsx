@@ -9,7 +9,7 @@ import theme from "../styles/theme";
 import { Box, Container } from "@material-ui/core";
 import styles from "../styles/styles";
 import { SnackbarProvider } from "notistack";
-import GlobalSnackbar from "../components/snackbar";
+import { GlobalSnackbar } from "../components/snackbar";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {

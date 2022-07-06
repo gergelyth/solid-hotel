@@ -12,7 +12,7 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { Dispatch, SetStateAction } from "react";
-import ErrorComponent from "../error-component";
+import { ErrorComponent } from "../error-component";
 
 /**
  * Returns an empty description if required.

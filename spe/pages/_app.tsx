@@ -6,7 +6,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 // TODO https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/theme.js
 import theme from "../../common/styles/theme";
-import GlobalSnackbar from "../../common/components/snackbar";
+import { GlobalSnackbar } from "../../common/components/snackbar";
 import GlobalSwrConfig from "../../common/components/global-swr-config";
 import { SnackbarProvider } from "notistack";
 import { LoadingIndicators } from "../../common/components/loading-indicators";

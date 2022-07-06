@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Badge, IconButton, Drawer, Typography } from "@material-ui/core";
 import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
 import { Notification } from "../types/Notification";
-import NotificationList from "./notification-list";
+import { NotificationList } from "./notification-list";
 import { RetrieveAllNotifications } from "../util/notifications";
 import { ParserList } from "../types/ParserList";
 import { ShowErrorSnackbar } from "./snackbar";
@@ -10,6 +10,10 @@ import { RevalidateNotifications } from "../hooks/useNotifications";
 import { SafeDeleteDataset } from "../util/solid_wrapper";
 import { LoadingIndicator } from "./loading-indicators";
 
+/**
+ * Determines the count of notifications shown in the icon. Respects the loading and potential error operation of the notification retrieval.
+ * @returns The number of notifications or a symbol if not available.
+ */
 function GetBadgeContent(
   notificationRetrieval:
     | {
@@ -35,6 +39,9 @@ function GetBadgeContent(
   return <Typography>{notificationRetrieval.items.length}</Typography>;
 }
 
+/**
+ * Deletes the notification from the Pod if it's already processed.
+ */
 async function DeleteNotification(
   notification: Notification,
   podUrl: string | null,
@@ -49,18 +56,23 @@ async function DeleteNotification(
   RevalidateNotifications(podUrl, inboxRegexList);
 }
 
+/**
+ * Creates the notification panel and the notification icon triggering the panel.
+ * They are in this shared function because they share a lot of the setup.
+ * @returns A Drawer component containing the notification items and an IconButton displaying how many notifications there are.
+ */
 export function GetNotificationElements(
   podAddress: string | null,
   inboxRegexList: string[],
-  parsers: ParserList
+  parsers: ParserList,
+  isNotificationsOpen: boolean,
+  setNotificationsOpen: Dispatch<SetStateAction<boolean>>
 ): { panel: JSX.Element; icon: JSX.Element } {
   const notificationRetrieval = RetrieveAllNotifications(
     podAddress,
     inboxRegexList,
     parsers
   );
-
-  const [isNotificationsOpen, setNotificationsOpen] = useState(false);
 
   const notificationPanel = (
     <Drawer
@@ -90,6 +102,7 @@ export function GetNotificationElements(
       <Badge
         badgeContent={GetBadgeContent(notificationRetrieval)}
         color="secondary"
+        overlap="rectangular"
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",

@@ -18,7 +18,7 @@ import {
   GetNightCount,
   GetStayInterval,
 } from "../../../common/components/reservations/stay-details";
-import ErrorComponent from "../../../common/components/error-component";
+import { ErrorComponent } from "../../../common/components/error-component";
 import { ShowError } from "../../../common/util/helpers";
 
 function ReservationDetails({
