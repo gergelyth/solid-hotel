@@ -15,9 +15,14 @@ import {
   AddLoadingIndicator,
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 const swrKey = "reservations";
 
+/**
+ * Parses the reservation from the {@link Thing}.
+ * @returns The parsed reservation object.
+ */
 export function ParseReservation(
   reservationThing: Thing,
   datasetUrl: string
@@ -49,11 +54,18 @@ export function ParseReservation(
   return reservation;
 }
 
+/**
+ * Retrieves the reservation {@link Thing} from the dataset and delegated the parsing to the method above.
+ * @returns The parsed reservation or null (if there's an issue with the dataset).
+ */
 function ConvertToReservation(
   dataset: SolidDataset,
   url: string
 ): ReservationAtHotel | null {
-  const reservationThing = getThing(dataset, url + "#reservation");
+  const reservationThing = getThing(
+    dataset,
+    LocalNodeSkolemPrefix + "reservation"
+  );
   if (!reservationThing) {
     return null;
   }
@@ -61,6 +73,12 @@ function ConvertToReservation(
   return ParseReservation(reservationThing, url);
 }
 
+/**
+ * Fetches the reservations contained in the container whose URL is passed to the function.
+ * If no URL is passed, the SWR hook doesn't get called.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The reservations and further flags representing the state of the fetch (isLoading, isError).
+ */
 export function useReservations(reservationsUrl: string | null): {
   items: (ReservationAtHotel | null)[] | undefined;
   isLoading: boolean;
@@ -88,6 +106,9 @@ export function useReservations(reservationsUrl: string | null): {
   return fetchResult;
 }
 
+/**
+ * Triggers a refetch of the reservations.
+ */
 export function RevalidateReservations(): void {
   mutate(swrKey);
 }

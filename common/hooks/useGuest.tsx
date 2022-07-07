@@ -8,6 +8,10 @@ import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
 import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid_profile";
 
+/**
+ * Creates the SWR key distinguishing between possible cases to make sure one case's cache is not used for another case's retrieval.
+ * @returns The SWR key fit for the specific case.
+ */
 function CreateSwrKey(
   rdfNames: string[] | undefined,
   webId: string | undefined
@@ -20,6 +24,10 @@ function CreateSwrKey(
   return result;
 }
 
+/**
+ * Retrieves the appropriate supported field definitions from {@link RdfNameToFieldMap} and passes in the value retrieved from the guest profile.
+ * @returns An array of fields with the values substituted or undefined if a passed argument is incorrect.
+ */
 export function GetGuestFieldValues(
   solidProfile: SolidProfile | null,
   rdfNames: string[] | undefined
@@ -47,6 +55,14 @@ export function GetGuestFieldValues(
   return fields;
 }
 
+/**
+ * Fetches the profile of a guest and returns the required fields given by the RDF names passed.
+ * To construct the guest fields, the hook uses {@link RdfNameToFieldMap} and substitutes the values.
+ * If no RDF names are passed, the SWR hook doesn't get called.
+ * If the WebId doesn't get passed, the profile of the default session is retrieved and processed.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The guest fields and further flags representing the state of the fetch (isLoading, isError).
+ */
 export function useGuest(
   rdfNames?: string[],
   webId?: string
@@ -84,6 +100,9 @@ export function useGuest(
   };
 }
 
+/**
+ * Triggers a refetch of the guest data.
+ */
 export function RevalidateGuest(
   rdfNames: string[] | undefined,
   webId: string | undefined = undefined
@@ -91,6 +110,9 @@ export function RevalidateGuest(
   mutate(CreateSwrKey(rdfNames, webId));
 }
 
+/**
+ * Puts the supplied values into the SWR cache quickly to make the change feel immediate.
+ */
 export function TriggerRefetchGuest(
   rdfNames: string[] | undefined,
   newFieldList: Field[],

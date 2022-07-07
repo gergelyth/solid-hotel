@@ -54,12 +54,10 @@ const hotelDatasetMap: { [url: string]: SolidDataset } = {
     "https://testpodurl.com/hotelprivacy/",
     ["testResource1.ttl", "testResource2.ttl"]
   ),
-  "https://testpodurl.com/hotelprivacy/testResource1.ttl": {
-    ...CreateHotelPrivacyTokenDataset(hotelPrivacyTokens[0]),
-  },
-  "https://testpodurl.com/hotelprivacy/testResource2.ttl": {
-    ...CreateHotelPrivacyTokenDataset(hotelPrivacyTokens[1]),
-  },
+  "https://testpodurl.com/hotelprivacy/testResource1.ttl":
+    CreateHotelPrivacyTokenDataset(hotelPrivacyTokens[0]),
+  "https://testpodurl.com/hotelprivacy/testResource2.ttl":
+    CreateHotelPrivacyTokenDataset(hotelPrivacyTokens[1]),
 };
 
 const guestPrivacyTokens: GuestPrivacyToken[] = [
@@ -81,9 +79,8 @@ const guestDatasetMap: { [url: string]: SolidDataset } = {
     "https://testpodurl.com/guestprivacy/",
     ["testResource3.ttl"]
   ),
-  "https://testpodurl.com/guestprivacy/testResource3.ttl": {
-    ...CreateGuestPrivacyTokenDataset(guestPrivacyTokens[0]),
-  },
+  "https://testpodurl.com/guestprivacy/testResource3.ttl":
+    CreateGuestPrivacyTokenDataset(guestPrivacyTokens[0]),
 };
 
 function MockGetDataSet(

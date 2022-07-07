@@ -13,14 +13,19 @@ import {
   AddLoadingIndicator,
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 const swrKey = "rooms";
 
+/**
+ * Parses the room definition from the Solid dataset.
+ * @returns The parsed room definition or null (if there's an issue with the dataset).
+ */
 function ConvertToRoomDefinition(
   dataset: SolidDataset,
   url: string
 ): RoomDefinition | null {
-  const roomThing = getThing(dataset, url + "#room");
+  const roomThing = getThing(dataset, LocalNodeSkolemPrefix + "room");
   if (!roomThing) {
     return null;
   }
@@ -34,6 +39,11 @@ function ConvertToRoomDefinition(
   return room;
 }
 
+/**
+ * Fetches the rooms contained in the container whose URL is passed to the function.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The reservations and further flags representing the state of the fetch (isLoading, isError, isValidating).
+ */
 export function useRooms(roomDefinitionsUrl: string): {
   items: (RoomDefinition | null)[] | undefined;
   isLoading: boolean;
@@ -55,12 +65,21 @@ export function useRooms(roomDefinitionsUrl: string): {
   return fetchResult;
 }
 
+/**
+ * Creates the SWR key distinguishing between possible cases to make sure one case's cache is not used for another case's retrieval.
+ * @returns The SWR key fit for the specific case.
+ */
 function CreateSpecificRoomSwrKey(
   roomUrl: string | undefined
 ): string[] | null {
   return roomUrl ? [swrKey, roomUrl] : null;
 }
 
+/**
+ * Fetches and parses the room whose URL address is passed to the function.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The reservations and further flags representing the state of the fetch (isLoading, isError, isValidating).
+ */
 export function useSpecificRoom(roomUrl: string | undefined): {
   room: RoomDefinition | null | undefined;
   isLoading: boolean;
@@ -97,10 +116,16 @@ export function useSpecificRoom(roomUrl: string | undefined): {
   };
 }
 
+/**
+ * Triggers a refetch of the rooms.
+ */
 export function Revalidate(): void {
   mutate(swrKey);
 }
 
+/**
+ * Puts the supplied values into the SWR cache quickly to make the change feel immediate.
+ */
 export function TriggerRefetch(newRoomList: (RoomDefinition | null)[]): void {
   mutate(swrKey, newRoomList, false);
 }

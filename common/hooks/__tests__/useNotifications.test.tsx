@@ -5,11 +5,7 @@ import { NotificationType } from "../../types/NotificationsType";
 import { NotificationParser } from "../../types//NotificationParser";
 import { GetDataSet } from "../../util/solid";
 import { MockContainer } from "../../util/__tests__/testUtil";
-import {
-  mockSolidDatasetFrom,
-  SolidDataset,
-  WithResourceInfo,
-} from "@inrupt/solid-client";
+import { mockSolidDatasetFrom, SolidDataset } from "@inrupt/solid-client";
 import { SerializeReservationStateChange } from "../../notifications/ReservationStateChange";
 import { ReservationState } from "../../types/ReservationState";
 import { SerializePrivacyInformationDeletion } from "../../notifications/PrivacyInformationDeletion";
@@ -38,7 +34,7 @@ jest.mock("../../util/solid", () => {
 });
 jest.mock("../../util/notifications");
 
-const datasetMap: { [url: string]: SolidDataset & WithResourceInfo } = {
+const datasetMap: { [url: string]: SolidDataset } = {
   "https://testpodurl.com/reservations/": MockContainer(
     "https://testpodurl.com/reservations/",
     ["11111111/", "22222222/"]
@@ -51,28 +47,13 @@ const datasetMap: { [url: string]: SolidDataset & WithResourceInfo } = {
     "https://testpodurl.com/testresources/",
     ["testResource1.ttl", "testResource2.ttl"]
   ),
-  "https://testpodurl.com/testresources/testResource1.ttl": {
-    ...SerializeReservationStateChange(
-      "TestReplyInbox",
-      ReservationState.ACTIVE
-    ),
-    internal_resourceInfo: {
-      sourceIri: "https://testpodurl.com/testresources/testResource1",
-      isRawData: false,
-      contentType: "text/turtle",
-    },
-  },
-  "https://testpodurl.com/testresources/testResource2.ttl": {
-    ...SerializePrivacyInformationDeletion("TestTokenUrl"),
-    internal_resourceInfo: {
-      sourceIri: "https://testpodurl.com/testresources/testResource2",
-      isRawData: false,
-      contentType: "text/turtle",
-    },
-  },
+  "https://testpodurl.com/testresources/testResource1.ttl":
+    SerializeReservationStateChange("TestReplyInbox", ReservationState.ACTIVE),
+  "https://testpodurl.com/testresources/testResource2.ttl":
+    SerializePrivacyInformationDeletion("TestTokenUrl"),
 };
 
-function MockGetDataSet(url: string): Promise<SolidDataset & WithResourceInfo> {
+function MockGetDataSet(url: string): Promise<SolidDataset> {
   const dataset = datasetMap[url];
   if (dataset) {
     return Promise.resolve(dataset);

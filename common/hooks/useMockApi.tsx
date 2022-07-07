@@ -9,6 +9,14 @@ import { ShowError } from "../util/helpers";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { useGuest } from "./useGuest";
 
+/**
+ * Connects to the mock API and fetches the result retrieved from the endpoint.
+ * Provides the hotel location and guest nationality as query parameters.
+ * If no nationality is passed, it uses the {@link useGuest} hook to retrieve it according to the WebId.
+ * If no WebId is passed, the profile retrieved will be the one belonging to the default session.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns Data retrieved from the mock API parsed to the appropriate type (array of strings or {@link DataProtectionInformation})
+ */
 function useMockApi<T>(
   baseApiUrl: string,
   nationality?: string,
@@ -78,6 +86,15 @@ function useMockApi<T>(
   };
 }
 
+/**
+ * Fetches the array of required RDF fields for booking and check-in operation that the guest must have filled out in their Solid profile.
+ * The required fields are based on the location of the hotel and the nationality of the guest.
+ * Connects to the mock API server and parses the result.
+ * If no nationality is passed, it uses the {@link useGuest} hook to retrieve it according to the WebId.
+ * If no WebId is passed, the profile retrieved will be the one belonging to the default session.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns An array of the required RDF fields and further flags representing the state of the fetch (isLoading, isError).
+ */
 export function useRequiredFields(
   nationality?: string,
   webId?: string
@@ -95,6 +112,15 @@ export function useRequiredFields(
   );
 }
 
+/**
+ * Fetches the information used to create the data protection profiles for the guest after check-out.
+ * The required fields are based on the location of the hotel and the nationality of the guest.
+ * Connects to the mock API server and parses the result.
+ * If no nationality is passed, it uses the {@link useGuest} hook to retrieve it according to the WebId.
+ * If no WebId is passed, the profile retrieved will be the one belonging to the default session.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The data protection options and further flags representing the state of the fetch (isLoading, isError).
+ */
 export function useDataProtectionInformation(
   nationality?: string,
   webId?: string

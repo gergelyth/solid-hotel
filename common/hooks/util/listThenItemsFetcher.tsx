@@ -6,6 +6,10 @@ import {
 } from "@inrupt/solid-client";
 import { GetDataSet } from "../../util/solid";
 
+/**
+ * Fetches the contained item and convert it to the appropriate type according to the passed function.
+ * @returns A Promise with the item converted or null
+ */
 function ProcessItem<T>(
   url: UrlString,
   convertToType: (dataset: SolidDataset, url: string) => T | null
@@ -15,6 +19,13 @@ function ProcessItem<T>(
   });
 }
 
+/**
+ * A util function to first fetch a container from a Solid Pod and then fetch the resources contained in that container.
+ * The individual resources are then converted to type T according to the convertToType function.
+ * Optionally it's possible to append a suffix to the resource URLs according to the decorateContainedItemUrl function.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The contained resource items converted to the appropriate type and further flags representing the state of the fetch (isLoading, isError, isValidating).
+ */
 export function FetchItems<T>(
   swrKey: string,
   listUrl: string | null,

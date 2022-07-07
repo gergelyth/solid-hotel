@@ -8,11 +8,19 @@ import { HotelDetails } from "../types/HotelDetails";
 import { GetProfileOf } from "../util/solid_profile";
 import { hotelFieldToRdfMap } from "../vocabularies/rdf_hotel";
 
+/**
+ * Creates the hotel SWR key distinguishing between possible cases to make sure one case's cache is not used for another case's retrieval.
+ * @returns The hotel SWR key fit for the specific case.
+ */
 function CreateSwrKey(hotelWebId: string | undefined): string[] | null {
   const swrKey = "hotel";
   return hotelWebId ? [swrKey, hotelWebId] : null;
 }
 
+/**
+ * Parses the hotel profile fields retrieved from the Solid Pod.
+ * @returns The hotel details or undefined if one of the passed arguments is wrong.
+ */
 function ConvertToHotelDetails(
   hotelProfile: Thing | null | undefined,
   hotelWebId: string | undefined
@@ -37,6 +45,12 @@ function ConvertToHotelDetails(
   return hotel;
 }
 
+/**
+ * Fetches the profile of the hotel and returns the details regarding it (name, location, address).
+ * If the hotel WebId doesn't get passed, the SWR hook doesn't get called.
+ * SWR settings are taken from {@link GlobalSwrConfig}
+ * @returns The hotel details and further flags representing the state of the fetch (isLoading, isError).
+ */
 export function useHotel(hotelWebId: string | undefined): {
   hotelDetails: HotelDetails | undefined;
   isLoading: boolean;
