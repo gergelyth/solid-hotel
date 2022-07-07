@@ -1,5 +1,5 @@
 import { LinearProgress, Box, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 /**
  * @returns A component with an indefinite loading indicator and the optional text of the SWR key.
@@ -46,7 +46,7 @@ export function RemoveLoadingIndicator(swrKey: string): void {
 }
 
 let render = false;
-let forceRender: React.Dispatch<React.SetStateAction<boolean>>;
+let forceRender: Dispatch<SetStateAction<boolean>> = () => undefined;
 
 /**
  * Displays indefinite loading indicators for when an SWR hook is currently validating in the background.

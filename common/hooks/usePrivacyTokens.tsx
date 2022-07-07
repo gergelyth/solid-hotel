@@ -12,6 +12,7 @@ import {
   AddLoadingIndicator,
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { PrivacyToken } from "../types/PrivacyToken";
@@ -40,10 +41,9 @@ function ConvertToPrivacyToken(privacyThing: Thing): PrivacyToken {
 }
 
 export function ConvertToHotelPrivacyToken(
-  dataset: SolidDataset,
-  url: string
+  dataset: SolidDataset
 ): HotelPrivacyToken | null {
-  const privacyThing = getThing(dataset, url + "#privacy");
+  const privacyThing = getThing(dataset, LocalNodeSkolemPrefix + "privacy");
   if (!privacyThing) {
     return null;
   }
@@ -70,7 +70,7 @@ export function ConvertToGuestPrivacyToken(
   dataset: SolidDataset,
   url: string
 ): GuestPrivacyToken | null {
-  const privacyThing = getThing(dataset, url + "#privacy");
+  const privacyThing = getThing(dataset, LocalNodeSkolemPrefix + "privacy");
   if (!privacyThing) {
     return null;
   }

@@ -233,7 +233,7 @@ export function ReceivePrivacyTokenDeletionRequest(
       fetch: session.fetch,
     });
 
-    const privacyToken = ConvertToHotelPrivacyToken(tokenDataset, tokenUrl);
+    const privacyToken = ConvertToHotelPrivacyToken(tokenDataset);
     if (!privacyToken) {
       throw new Error(`Parsing of privacy token ${tokenUrl} failed`);
     }

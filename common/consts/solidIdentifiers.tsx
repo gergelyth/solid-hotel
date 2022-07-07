@@ -1,3 +1,6 @@
+export const LocalNodeSkolemPrefix =
+  "https://inrupt.com/.well-known/sdk-local-node/";
+
 export const HotelPod = "https://solidhotel.inrupt.net/";
 export const HotelWebId = "https://solidhotel.inrupt.net/profile/card#me";
 

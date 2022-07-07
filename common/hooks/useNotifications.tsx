@@ -18,6 +18,7 @@ import { ParserList } from "../types/ParserList";
 import { GetDataSet } from "../util/solid";
 import useSWR, { mutate } from "swr";
 import { GlobSolidUrlPaths } from "../util/helpers";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 const swrKey = "notifications";
 
@@ -75,7 +76,10 @@ function ConvertToNotification(
   parsers: ParserList,
   router: NextRouter
 ): Notification | null {
-  const notificationThing = getThing(dataset, url + "#notification");
+  const notificationThing = getThing(
+    dataset,
+    LocalNodeSkolemPrefix + "notification"
+  );
   if (!notificationThing) {
     return null;
   }
@@ -110,7 +114,7 @@ function ProcessItem<T>(
 }
 
 //TODO put this logic in static render so it's not calculated everytime, just on startup - we can't do this because reservations can get created on the fly
-//probably getserversideProps we can
+//probably getserversideProps we can - just put this into a constant a generate if it's undefined
 async function GetUrlPaths(
   coreUrl: string | null,
   inboxRegexList: string[]

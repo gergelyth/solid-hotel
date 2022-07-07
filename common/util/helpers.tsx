@@ -1,13 +1,9 @@
-import {
-  getContainedResourceUrlAll,
-  getSolidDataset,
-} from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import { getContainedResourceUrlAll } from "@inrupt/solid-client";
 import { addDays, startOfDay, startOfTomorrow } from "date-fns";
 import { NotLoggedInSnackbarKey } from "../components/auth/login-component";
 import { ShowErrorSnackbar } from "../components/snackbar";
 import { NotFoundError } from "./errors";
-import { GetSession } from "./solid";
+import { GetDataSet } from "./solid";
 
 export function NotEmptyItem<T>(item: T | null | undefined): item is T {
   return item !== null && item !== undefined;
@@ -15,8 +11,7 @@ export function NotEmptyItem<T>(item: T | null | undefined): item is T {
 
 export async function GlobSolidUrlPaths(
   urlRegex: string,
-  resourceCache: { [url: string]: string[] },
-  session: Session = GetSession()
+  resourceCache: { [url: string]: string[] }
 ): Promise<string[]> {
   let result: string[] = [];
 
@@ -35,9 +30,7 @@ export async function GlobSolidUrlPaths(
   if (firstPart in resourceCache) {
     containedResources = resourceCache[firstPart];
   } else {
-    const dataSet = await getSolidDataset(firstPart, {
-      fetch: session.fetch,
-    });
+    const dataSet = await GetDataSet(firstPart);
     if (!dataSet) {
       throw new NotFoundError(`Dataset at ${firstPart} not found.`);
     }
