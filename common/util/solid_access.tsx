@@ -1,27 +1,24 @@
 import {
-  getSolidDatasetWithAcl,
   hasResourceAcl,
   hasFallbackAcl,
   hasAccessibleAcl,
   createAclFromFallbackAcl,
   getResourceAcl,
-  saveAclFor,
   setPublicResourceAccess,
   Access,
   setPublicDefaultAccess,
 } from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
-import { GetSession } from "./solid";
+import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "./solid_wrapper";
 
 async function SetPublicAccess(
   resourceUrl: string,
   accessSpecification: Access,
-  isDefaultAccess: boolean,
-  session: Session
+  isDefaultAccess: boolean
 ): Promise<void> {
-  const datasetWithAcl = await getSolidDatasetWithAcl(resourceUrl, {
-    fetch: session.fetch,
-  });
+  const datasetWithAcl = await SafeGetDatasetWithAcl(resourceUrl);
+  if (!datasetWithAcl) {
+    return;
+  }
 
   let resourceAcl;
   if (!hasResourceAcl(datasetWithAcl)) {
@@ -48,13 +45,12 @@ async function SetPublicAccess(
     updatedAcl = setPublicResourceAccess(resourceAcl, accessSpecification);
   }
 
-  await saveAclFor(datasetWithAcl, updatedAcl, { fetch: session.fetch });
+  await SafeSaveAclFor(datasetWithAcl, updatedAcl);
 }
 
 //TODO use the new Solid API if transition from beta before deadline
 export async function SetSubmitterAccessToEveryone(
-  resourceUrl: string,
-  session: Session = GetSession()
+  resourceUrl: string
 ): Promise<void> {
   await SetPublicAccess(
     resourceUrl,
@@ -64,14 +60,12 @@ export async function SetSubmitterAccessToEveryone(
       write: false,
       control: false,
     },
-    false,
-    session
+    false
   );
 }
 
 export async function SetReadAccessToEveryone(
-  resourceUrl: string,
-  session: Session = GetSession()
+  resourceUrl: string
 ): Promise<void> {
   await SetPublicAccess(
     resourceUrl,
@@ -81,7 +75,6 @@ export async function SetReadAccessToEveryone(
       write: false,
       control: false,
     },
-    true,
-    session
+    true
   );
 }

@@ -7,16 +7,14 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
-  deleteSolidDataset,
-  getSolidDataset,
   getStringNoLocale,
   getThing,
-  saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
-import { GetSession } from "./solid";
+import { GetDataSet } from "./solid";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
+import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solid_wrapper";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 const PairingTokenThing = "pairingToken";
 
@@ -25,8 +23,7 @@ function GetTokenDatasetUrl(reservationFolder: string): string {
 }
 
 export async function CreateAndSavePairingToken(
-  reservationFolder: string,
-  session: Session = GetSession()
+  reservationFolder: string
 ): Promise<void> {
   const token = Math.random().toString(36);
 
@@ -42,25 +39,23 @@ export async function CreateAndSavePairingToken(
   tokenDataset = setThing(tokenDataset, tokenThing);
 
   const tokenUrl = GetTokenDatasetUrl(reservationFolder);
-  await saveSolidDatasetAt(tokenUrl, tokenDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(tokenUrl, tokenDataset);
 }
 
 export async function GetPairingToken(
-  reservationFolder: string,
-  session: Session = GetSession()
+  reservationFolder: string
 ): Promise<string | null> {
   const tokenUrl = GetTokenDatasetUrl(reservationFolder);
 
-  const tokenDataset = await getSolidDataset(tokenUrl, {
-    fetch: session.fetch,
-  });
+  const tokenDataset = await GetDataSet(tokenUrl);
   if (!tokenDataset) {
     return null;
   }
 
-  const tokenThing = getThing(tokenDataset, tokenUrl + `#${PairingTokenThing}`);
+  const tokenThing = getThing(
+    tokenDataset,
+    LocalNodeSkolemPrefix + PairingTokenThing
+  );
   if (!tokenThing) {
     return null;
   }
@@ -73,9 +68,8 @@ export async function GetPairingToken(
 }
 
 export async function DeletePairingToken(
-  reservationFolder: string,
-  session: Session = GetSession()
+  reservationFolder: string
 ): Promise<void> {
   const tokenUrl = GetTokenDatasetUrl(reservationFolder);
-  deleteSolidDataset(tokenUrl, { fetch: session.fetch });
+  SafeDeleteDataset(tokenUrl);
 }

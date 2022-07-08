@@ -1,16 +1,14 @@
 import {
-  saveSolidDatasetAt,
   setBoolean,
   setThing,
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
 import { useNotifications } from "../hooks/useNotifications";
 import { notificationToRdfMap } from "../vocabularies/rdf_notification";
 import { Notification } from "../types/Notification";
-import { GetSession } from "./solid";
 import { ParserList } from "../types/ParserList";
+import { SafeSaveDatasetAt } from "./solid_wrapper";
 
 export function RetrieveAllNotifications(
   coreUrl: string | null,
@@ -46,8 +44,7 @@ function TriggerOnReceivedLogic(notifications: (Notification | null)[]): void {
 export async function SetIsProcessedForNotification(
   datasetUrl: string,
   notificationDataset: SolidDataset,
-  notification: Thing,
-  session: Session = GetSession()
+  notification: Thing
 ): Promise<void> {
   notification = setBoolean(
     notification,
@@ -56,7 +53,5 @@ export async function SetIsProcessedForNotification(
   );
   const updatedDataSet = setThing(notificationDataset, notification);
 
-  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }

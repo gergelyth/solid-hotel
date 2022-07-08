@@ -4,14 +4,18 @@ import {
   createThing,
   getSourceUrl,
   getThing,
-  saveSolidDatasetInContainer,
   setThing,
   Thing,
 } from "@inrupt/solid-client";
 import { Field } from "../types/Field";
-import { GetDataSet, GetSession } from "./solid";
+import { GetDataSet } from "./solid";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
-import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
+import {
+  DataProtectionProfilesUrl,
+  LocalNodeSkolemPrefix,
+} from "../consts/solidIdentifiers";
+import { SafeSaveDatasetInContainer } from "./solid_wrapper";
+import { ShowError } from "./helpers";
 
 const HotelProfileThingName = "hotelProfile";
 
@@ -19,8 +23,6 @@ export async function CreateHotelProfile(
   fields: Field[],
   containerUrl: string
 ): Promise<string> {
-  const session = GetSession();
-
   let hotelProfileDataset = createSolidDataset();
 
   let hotelProfileThing = createThing({ name: HotelProfileThingName });
@@ -39,13 +41,14 @@ export async function CreateHotelProfile(
 
   hotelProfileDataset = setThing(hotelProfileDataset, hotelProfileThing);
 
-  const savedDataset = await saveSolidDatasetInContainer(
+  const savedDataset = await SafeSaveDatasetInContainer(
     containerUrl,
-    hotelProfileDataset,
-    {
-      fetch: session.fetch,
-    }
+    hotelProfileDataset
   );
+  if (!savedDataset) {
+    ShowError("There was an issue saving the hotel profile dataset", false);
+    return "";
+  }
 
   const profileUrl = getSourceUrl(savedDataset) + `#${HotelProfileThingName}`;
   return profileUrl;
@@ -65,14 +68,11 @@ export async function CreateDataProtectionProfile(
 export async function GetHotelProfileThing(
   hotelProfileUrl: string
 ): Promise<Thing> {
-  const session = GetSession();
+  const profileDataset = await GetDataSet(hotelProfileUrl);
 
-  const profileDataset = await GetDataSet(hotelProfileUrl, session);
-
-  const url = getSourceUrl(profileDataset);
   const profileThing = getThing(
     profileDataset,
-    url + `#${HotelProfileThingName}`
+    LocalNodeSkolemPrefix + HotelProfileThingName
   );
   if (!profileThing) {
     throw new Error(`Hotel profile thing null in ${hotelProfileUrl}`);

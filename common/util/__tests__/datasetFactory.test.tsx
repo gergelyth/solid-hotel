@@ -7,29 +7,10 @@ import {
   CreateHotelPrivacyTokenDataset,
   CreateReservationDataset,
 } from "../datasetFactory";
-import {
-  createSolidDataset,
-  SolidDataset,
-  toRdfJsDataset,
-} from "@inrupt/solid-client";
-import { Writer } from "n3";
+import { createSolidDataset } from "@inrupt/solid-client";
 import { NotificationType } from "../../types/NotificationsType";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-
-async function SerializeDataset(dataSet: SolidDataset): Promise<string> {
-  const rdfJsDataset = toRdfJsDataset(dataSet);
-  const quadArray = Array.from(rdfJsDataset);
-
-  const writer = new Writer();
-  writer.addQuads(quadArray);
-
-  let result = "";
-  writer.end((error, r) => {
-    result = r;
-  });
-
-  return result;
-}
+import { SerializeDataset } from "./testUtil";
 
 describe("datasetFactory", () => {
   test("CreateReservationDataset creates the expected dataset", async () => {

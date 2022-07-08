@@ -9,6 +9,7 @@ import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Field } from "../../types/Field";
 import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import { RevalidateGuest, TriggerRefetchGuest, useGuest } from "../useGuest";
+import { TestGuestFields } from "../../util/__tests__/testUtil";
 
 jest.mock("../../util/solid_profile", () => {
   return {
@@ -57,31 +58,7 @@ afterEach(() => {
 
 describe("useGuest", () => {
   test("Ideal circumstances return expected data", async () => {
-    const expectedGuestFields: Field[] = [
-      {
-        fieldShortName: "firstName",
-        fieldPrettyName: "First name",
-        fieldValue: "John",
-        rdfName: personFieldToRdfMap["firstName"],
-        datatype: xmlSchemaTypes.string,
-      },
-      {
-        fieldShortName: "lastName",
-        fieldPrettyName: "Last name",
-        fieldValue: "Smith",
-        rdfName: personFieldToRdfMap["lastName"],
-        datatype: xmlSchemaTypes.string,
-      },
-      {
-        fieldShortName: "nationality",
-        fieldPrettyName: "Nationality",
-        fieldValue: "English",
-        rdfName: personFieldToRdfMap["nationality"],
-        datatype: xmlSchemaTypes.string,
-      },
-    ];
-
-    const rdfFields = expectedGuestFields.map((field) => field.rdfName);
+    const rdfFields = TestGuestFields.map((field) => field.rdfName);
     const { result, waitForNextUpdate } = renderHook(() =>
       useGuest(rdfFields, guestWebId)
     );
@@ -94,20 +71,10 @@ describe("useGuest", () => {
     expect(returnValue.isLoading).toBeFalsy();
     expect(returnValue.isError).toBeUndefined();
 
-    expect(returnValue.guestFields).toEqual(expectedGuestFields);
+    expect(returnValue.guestFields).toEqual(TestGuestFields);
   });
 
   test("Only returns queried RDF fields", async () => {
-    const expectedGuestFields: Field[] = [
-      {
-        fieldShortName: "firstName",
-        fieldPrettyName: "First name",
-        fieldValue: "John",
-        rdfName: personFieldToRdfMap["firstName"],
-        datatype: xmlSchemaTypes.string,
-      },
-    ];
-
     const { result, waitForNextUpdate } = renderHook(() =>
       useGuest([personFieldToRdfMap.firstName], guestWebId)
     );
@@ -120,7 +87,7 @@ describe("useGuest", () => {
     expect(returnValue.isLoading).toBeFalsy();
     expect(returnValue.isError).toBeUndefined();
 
-    expect(returnValue.guestFields).toEqual(expectedGuestFields);
+    expect(returnValue.guestFields).toEqual(TestGuestFields[0]);
   });
 
   test("Null guest profile doesn't return data", async () => {
