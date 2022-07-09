@@ -1,11 +1,9 @@
 import {
   getPropertyAll,
-  getSolidDataset,
   getStringNoLocale,
   getTerm,
   getThing,
   removeAll,
-  saveSolidDatasetAt,
   setStringNoLocale,
   setTerm,
   setThing,
@@ -13,9 +11,8 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { NotFoundError } from "./errors";
-import { GetSession } from "./solid";
+import { GetDataSet, GetSession } from "./solid";
 import { SafeSaveDatasetAt } from "./solid_wrapper";
 
 export type SolidProfile = {
@@ -33,21 +30,18 @@ export async function GetProfile(
     return null;
   }
 
-  return GetProfileOf(session.info.webId, session);
+  return GetProfileOf(session.info.webId);
 }
 
 export async function GetProfileOf(
-  webId: string | undefined,
-  session: Session = GetSession()
+  webId: string | undefined
 ): Promise<SolidProfile | null> {
   if (!webId) {
     return null;
   }
 
   const profileAddress = webId.split("#")[0];
-  const dataSet = await getSolidDataset(profileAddress, {
-    fetch: session.fetch,
-  });
+  const dataSet = await GetDataSet(profileAddress);
 
   const profile = getThing(dataSet, webId);
 
@@ -74,10 +68,7 @@ export async function SetField(
   value: string,
   webId?: string
 ): Promise<void> {
-  const session = getDefaultSession();
-  const solidProfile = webId
-    ? await GetProfileOf(webId, session)
-    : await GetProfile();
+  const solidProfile = webId ? await GetProfileOf(webId) : await GetProfile();
 
   return SetFieldInSolidProfile(solidProfile, field, value);
 }
@@ -88,8 +79,7 @@ export async function SetMultipleFieldsInProfile(
     [rdfName: string]: string;
   }
 ): Promise<void> {
-  const session = getDefaultSession();
-  const solidProfile = await GetProfileOf(profileUrl, session);
+  const solidProfile = await GetProfileOf(profileUrl);
 
   if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
     throw new NotFoundError("Profile not found.");
@@ -127,10 +117,7 @@ export async function RemoveField(
   field: string,
   webId?: string
 ): Promise<void> {
-  const session = getDefaultSession();
-  const solidProfile = webId
-    ? await GetProfileOf(webId, session)
-    : await GetProfile();
+  const solidProfile = webId ? await GetProfileOf(webId) : await GetProfile();
 
   if (!solidProfile || !solidProfile.profile || !solidProfile.dataSet) {
     throw new NotFoundError("Profile not found.");
@@ -139,14 +126,11 @@ export async function RemoveField(
   const updatedProfile = removeAll(solidProfile.profile, field);
   const updatedDataSet = setThing(solidProfile.dataSet, updatedProfile);
 
-  await saveSolidDatasetAt(solidProfile.profileAddress, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
 }
 
 export async function SaveProfileThingToPod(
-  profileThing: Thing,
-  session = GetSession()
+  profileThing: Thing
 ): Promise<void> {
   const properties = getPropertyAll(profileThing);
 
@@ -175,7 +159,5 @@ export async function SaveProfileThingToPod(
   }
   const updatedDataSet = setThing(userProfile.dataSet, userProfileThing);
 
-  await saveSolidDatasetAt(userProfile.profileAddress, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(userProfile.profileAddress, updatedDataSet);
 }

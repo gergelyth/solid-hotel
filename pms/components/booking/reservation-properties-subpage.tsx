@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 import { ReservationState } from "../../../common/types/ReservationState";
-import { GetSession } from "../../../common/util/solid";
 import { BookingPage } from "../../pages/booking";
 import {
   HotelWebId,
@@ -27,7 +26,6 @@ async function BookRoom(
   }
 
   const room = RoomDefinitionsUrl + roomIdString;
-  const session = GetSession();
 
   const reservation: ReservationAtHotel = {
     id: null,
@@ -41,7 +39,7 @@ async function BookRoom(
     dateTo: checkoutDate,
   };
 
-  const reservationInboxUrl = await AddReservation(reservation, session);
+  const reservationInboxUrl = await AddReservation(reservation);
   const reservationFolder =
     GetCoreReservationFolderFromInboxUrl(reservationInboxUrl);
   await CreateAndSavePairingToken(reservationFolder);

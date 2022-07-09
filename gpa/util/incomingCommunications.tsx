@@ -110,7 +110,7 @@ export function ReceivePairingRequestWithInformation(
       return;
     }
     reservation.owner = webId;
-    AddReservation(reservation, session).then(() => RevalidateReservations());
+    AddReservation(reservation).then(() => RevalidateReservations());
   };
 
   return { text, onClick, onReceive };

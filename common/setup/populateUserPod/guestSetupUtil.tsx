@@ -1,11 +1,10 @@
 import { RecursiveDelete } from "../setupUtil";
-import { GetPodOfSession, GetSession } from "../../util/solid";
+import { GetPodOfSession } from "../../util/solid";
 import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 import { ShowErrorSnackbar } from "../../components/snackbar";
 
 export async function DeleteAllUserReservations(): Promise<void> {
-  const session = GetSession();
-  const reservationsUrl = GetUserReservationsPodUrl(session);
+  const reservationsUrl = GetUserReservationsPodUrl();
 
   if (!reservationsUrl) {
     ShowErrorSnackbar("Not logged in!");

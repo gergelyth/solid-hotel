@@ -19,15 +19,7 @@ export function CreateInboxUrlFromReservationId(reservationId: string): string {
   return `${containerUrl}${reservationId}/inbox`;
 }
 
-//TODO this is the same as the one below
 export function CreateReservationUrlFromReservationId(
-  reservationId: string
-): string {
-  const containerUrl = GetUserReservationsPodUrl();
-  return `${containerUrl}${reservationId}/reservation`;
-}
-
-export function GetGuestReservationUrlFromReservationId(
   reservationId: string
 ): string {
   const containerUrl = GetUserReservationsPodUrl();

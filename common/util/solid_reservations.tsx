@@ -1,32 +1,33 @@
 import {
-  createContainerAt,
-  createContainerInContainer,
   getSourceUrl,
   getStringNoLocale,
   getThing,
-  saveSolidDatasetAt,
   setInteger,
   setStringNoLocale,
   setThing,
+  SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
-import { GetDataSet, GetPodOfSession, GetSession } from "./solid";
+import { GetDataSet, GetPodOfSession } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
 import { SetSubmitterAccessToEveryone } from "./solid_access";
-import { GetGuestReservationUrlFromReservationId } from "./urlParser";
+import { CreateReservationUrlFromReservationId } from "./urlParser";
 import { ParseReservation } from "../hooks/useReservations";
+import {
+  SafeCreateContainerAt,
+  SafeCreateContainerInContainer,
+  SafeSaveDatasetAt,
+} from "./solid_wrapper";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 const reservationAddress = "reservations/";
 
-export function GetUserReservationsPodUrl(
-  session: Session = GetSession()
-): string | null {
-  const podOfSession = GetPodOfSession(session);
+export function GetUserReservationsPodUrl(): string | null {
+  const podOfSession = GetPodOfSession();
   if (!podOfSession) {
     return null;
   }
@@ -34,71 +35,70 @@ export function GetUserReservationsPodUrl(
 }
 
 export async function AddReservation(
-  reservation: ReservationAtHotel,
-  session = GetSession()
+  reservation: ReservationAtHotel
 ): Promise<string> {
   const reservationDataset = CreateReservationDataset(reservation);
 
-  const reservationsUrl = GetUserReservationsPodUrl(session);
+  const reservationsUrl = GetUserReservationsPodUrl();
   if (!reservationsUrl) {
     throw new Error("Reservations url is null");
   }
 
-  try {
-    await createContainerAt(reservationsUrl, { fetch: session.fetch });
-  } catch {
-    undefined;
-  }
+  await SafeCreateContainerAt(reservationsUrl);
 
-  const reservationContainer = await createContainerInContainer(
-    reservationsUrl,
-    {
-      fetch: session.fetch,
-    }
+  const reservationContainer = await SafeCreateContainerInContainer(
+    reservationsUrl
   );
+  if (!reservationContainer) {
+    return "";
+  }
   const reservationContainerUrl = getSourceUrl(reservationContainer);
 
-  await saveSolidDatasetAt(
+  await SafeSaveDatasetAt(
     reservationContainerUrl + "reservation",
-    reservationDataset,
-    {
-      fetch: session.fetch,
-    }
+    reservationDataset
   );
 
-  const inboxUrl = CreateInboxForReservationUrl(
-    reservationContainerUrl,
-    session
-  );
+  const inboxUrl = CreateInboxForReservationUrl(reservationContainerUrl);
   return inboxUrl;
 }
 
 async function CreateInboxForReservationUrl(
-  reservationContainerUrl: string,
-  session = GetSession()
+  reservationContainerUrl: string
 ): Promise<string> {
   const inboxUrl = reservationContainerUrl + "inbox";
-  await createContainerAt(inboxUrl, { fetch: session.fetch });
+  await SafeCreateContainerAt(inboxUrl);
   await SetSubmitterAccessToEveryone(inboxUrl);
   return inboxUrl;
+}
+
+async function GetReservationDatasetAndThing(
+  reservationUrl: string
+): Promise<{ dataset: SolidDataset; thing: Thing }> {
+  const dataset = await GetDataSet(reservationUrl);
+
+  const reservationThing = getThing(
+    dataset,
+    LocalNodeSkolemPrefix + "reservation"
+  );
+  if (!reservationThing) {
+    throw new NotFoundError(
+      `Thing [reservation] not found at ${reservationUrl}`
+    );
+  }
+
+  return { dataset: dataset, thing: reservationThing };
 }
 
 export async function SetReservationStateAndInbox(
   reservationId: string,
   newState: ReservationState,
-  inboxUrl: string,
-  session = GetSession()
+  inboxUrl: string
 ): Promise<void> {
-  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
-  const dataset = await GetDataSet(datasetUrl, session);
-
-  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
-  if (!reservationThing) {
-    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
-  }
-
+  const datasetUrl = CreateReservationUrlFromReservationId(reservationId);
+  const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
   let updatedReservation = setInteger(
-    reservationThing,
+    thing,
     reservationFieldToRdfMap.state,
     newState.valueOf()
   );
@@ -109,56 +109,38 @@ export async function SetReservationStateAndInbox(
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 
-  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }
 
 export async function SetReservationOwnerToHotelProfile(
   reservationId: string,
-  hotelProfileWebId: string,
-  session = GetSession()
+  hotelProfileWebId: string
 ): Promise<Thing> {
-  //TODO duplication getting this dataset
-  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
-  const dataset = await GetDataSet(datasetUrl, session);
-
-  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
-  if (!reservationThing) {
-    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
-  }
+  const datasetUrl = CreateReservationUrlFromReservationId(reservationId);
+  const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
 
   const updatedReservation = setStringNoLocale(
-    reservationThing,
+    thing,
     reservationFieldToRdfMap.owner,
     hotelProfileWebId
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 
-  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 
-  return reservationThing;
+  return updatedReservation;
 }
 
 export async function SetReservationOwnerAndState(
   reservationId: string,
   ownerWebId: string,
-  newState: ReservationState,
-  session = GetSession()
+  newState: ReservationState
 ): Promise<void> {
-  //TODO duplication getting this dataset
-  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
-  const dataset = await GetDataSet(datasetUrl, session);
-
-  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
-  if (!reservationThing) {
-    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
-  }
+  const datasetUrl = CreateReservationUrlFromReservationId(reservationId);
+  const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
 
   let updatedReservation = setStringNoLocale(
-    reservationThing,
+    thing,
     reservationFieldToRdfMap.owner,
     ownerWebId
   );
@@ -169,26 +151,17 @@ export async function SetReservationOwnerAndState(
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 
-  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }
 
 export async function GetOwnerFromReservation(
-  reservationId: string,
-  session = GetSession()
+  reservationId: string
 ): Promise<string | null> {
-  //TODO duplication getting this dataset
-  const datasetUrl = GetGuestReservationUrlFromReservationId(reservationId);
-  const dataset = await GetDataSet(datasetUrl, session);
-
-  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
-  if (!reservationThing) {
-    throw new NotFoundError(`Thing [#reservation] not found at ${datasetUrl}`);
-  }
+  const datasetUrl = CreateReservationUrlFromReservationId(reservationId);
+  const reservation = await GetReservationDatasetAndThing(datasetUrl);
 
   const ownerWebId = getStringNoLocale(
-    reservationThing,
+    reservation.thing,
     reservationFieldToRdfMap.owner
   );
 
@@ -196,16 +169,9 @@ export async function GetOwnerFromReservation(
 }
 
 export async function GetParsedReservationFromUrl(
-  reservationUrl: string,
-  session = GetSession()
+  reservationUrl: string
 ): Promise<ReservationAtHotel> {
-  //TODO duplicating this
-  const dataset = await GetDataSet(reservationUrl, session);
-  const reservationThing = getThing(dataset, reservationUrl + "#reservation");
-  if (!reservationThing) {
-    throw new Error("Reservation cannot be null");
-  }
+  const reservation = await GetReservationDatasetAndThing(reservationUrl);
 
-  const reservation = ParseReservation(reservationThing, reservationUrl);
-  return reservation;
+  return ParseReservation(reservation.thing, reservationUrl);
 }

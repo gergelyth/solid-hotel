@@ -15,6 +15,8 @@ import { Field } from "../../types/Field";
 import { NotificationType } from "../../types/NotificationsType";
 import { Notification } from "../../types/Notification";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { ReservationAtHotel } from "../../types/ReservationAtHotel";
+import { ReservationState } from "../../types/ReservationState";
 
 const rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const ldpContainer = "http://www.w3.org/ns/ldp#Container";
@@ -111,5 +113,28 @@ export const TestNotifications: Notification[] = [
     createdAt: new Date("2021-07-03 12:34:11"),
     onClick: () => undefined,
     onReceive: () => undefined,
+  },
+];
+
+export const TestReservations: ReservationAtHotel[] = [
+  {
+    id: "reservationId1",
+    inbox: "CounterpartyInboxUrl1",
+    owner: "OwnerWebId1",
+    hotel: "HotelWebId1",
+    room: "RoomUrl1",
+    state: ReservationState.CONFIRMED,
+    dateFrom: new Date("2021-07-03"),
+    dateTo: new Date("2021-07-07"),
+  },
+  {
+    id: "reservationId2",
+    inbox: "CounterpartyInboxUrl2",
+    owner: "OwnerWebId2",
+    hotel: "HotelWebId2",
+    room: "RoomUrl2",
+    state: ReservationState.ACTIVE,
+    dateFrom: new Date("2021-07-15"),
+    dateTo: new Date("2021-07-16"),
   },
 ];

@@ -24,10 +24,9 @@ import { SetReadAccessToEveryone } from "../../common/util/solid_access";
 
 export async function SetHotelProfileField(
   field: string,
-  value: string,
-  session: Session = GetSession()
+  value: string
 ): Promise<void> {
-  const hotelProfile = await GetProfileOf(HotelWebId, session);
+  const hotelProfile = await GetProfileOf(HotelWebId);
   SetFieldInSolidProfile(hotelProfile, field, value);
 }
 
@@ -63,7 +62,7 @@ async function CheckOrCreateRoomContainer(session: Session): Promise<void> {
     });
   } catch (e) {
     await createContainerAt(RoomDefinitionsUrl, { fetch: session.fetch });
-    await SetReadAccessToEveryone(RoomDefinitionsUrl, session);
+    await SetReadAccessToEveryone(RoomDefinitionsUrl);
   }
 }
 

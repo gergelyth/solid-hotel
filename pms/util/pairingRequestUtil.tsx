@@ -15,7 +15,7 @@ export async function SaveInboxAndReturnReservation(
   guestInboxUrl: string
 ): Promise<Thing> {
   const session = GetSession();
-  let reservationDataset = await GetDataSet(reservationUrl, session);
+  let reservationDataset = await GetDataSet(reservationUrl);
   let reservationThing = getThing(
     reservationDataset,
     reservationUrl + "#reservation"

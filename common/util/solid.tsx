@@ -1,22 +1,23 @@
-import {
-  getSolidDataset,
-  SolidDataset,
-  WithResourceInfo,
-} from "@inrupt/solid-client";
+import { SolidDataset, WithResourceInfo } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { NotFoundError } from "./errors";
+import { SafeGetDataset } from "./solid_wrapper";
 
 const privacyAddress = "privacy/";
 
+export function GetSession(): Session {
+  return getDefaultSession();
+}
+
 export async function CheckIfLoggedIn(): Promise<boolean> {
-  const session = getDefaultSession();
+  const session = GetSession();
   await session.handleIncomingRedirect(window.location.href);
   return session.info.isLoggedIn;
 }
 
 export async function SolidLogin(oidcIssuer: string): Promise<void> {
-  const session = getDefaultSession();
+  const session = GetSession();
   await session.login({
     oidcIssuer: oidcIssuer,
     redirectUrl: window.location.href,
@@ -25,19 +26,14 @@ export async function SolidLogin(oidcIssuer: string): Promise<void> {
 
 export async function SolidLogout(): Promise<void> {
   const session = GetSession();
-  if (session == null) {
+  if (!session) {
     return;
   }
   await session.logout();
 }
 
-export function GetSession(): Session {
-  return getDefaultSession();
-}
-
-export function GetPodOfSession(
-  session: Session = GetSession()
-): string | null {
+export function GetPodOfSession(): string | null {
+  const session = GetSession();
   const webId = session.info.webId;
   if (!webId) {
     return null;
@@ -48,12 +44,9 @@ export function GetPodOfSession(
 }
 
 export async function GetDataSet(
-  url: string,
-  session: Session = GetSession()
+  url: string
 ): Promise<SolidDataset & WithResourceInfo> {
-  const dataSet = await getSolidDataset(url, {
-    fetch: session.fetch,
-  });
+  const dataSet = await SafeGetDataset(url);
 
   if (!dataSet) {
     throw new NotFoundError(`Dataset at ${url} not found.`);
@@ -62,10 +55,8 @@ export async function GetDataSet(
   return dataSet;
 }
 
-export function GetUserPrivacyPodUrl(
-  session: Session = GetSession()
-): string | null {
-  const podOfSession = GetPodOfSession(session);
+export function GetUserPrivacyPodUrl(): string | null {
+  const podOfSession = GetPodOfSession();
   if (!podOfSession) {
     return null;
   }

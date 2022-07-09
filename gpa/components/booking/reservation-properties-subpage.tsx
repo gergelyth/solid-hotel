@@ -39,7 +39,7 @@ async function BookRoom(
     dateTo: checkoutDate,
   };
 
-  const inboxUrl = AddReservation(reservation, session);
+  const inboxUrl = AddReservation(reservation);
   reservation.inbox = await inboxUrl;
 
   SubmitBookingRequest(reservation, session);
