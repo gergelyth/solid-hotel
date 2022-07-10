@@ -12,7 +12,7 @@ import Footer from "../../common/components/footer";
 import NavigationBar from "../components/navbar";
 import { SnackbarProvider } from "notistack";
 import { GlobalSnackbar } from "../../common/components/snackbar";
-import { ProfileCache } from "../../common/util/tracker/profileCache";
+import { ProfileCache } from "../../common/util/tracker/profile-cache";
 import { CacheHotelProfiles } from "../util/trackerInitializer";
 import { GetSession } from "../../common/util/solid";
 import GlobalSwrConfig from "../../common/components/global-swr-config";

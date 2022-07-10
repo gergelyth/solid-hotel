@@ -19,7 +19,7 @@ import {
 import { SaveProfileThingToPod } from "../../common/util/solid_profile";
 import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
-import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import { IncomingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";

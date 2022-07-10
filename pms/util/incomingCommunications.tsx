@@ -39,7 +39,7 @@ import {
   HandleIrregularTokenDeletion,
 } from "./privacyHelper";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
-import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import { IncomingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 

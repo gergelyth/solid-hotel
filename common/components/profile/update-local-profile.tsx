@@ -3,7 +3,7 @@ import { forwardRef, useEffect } from "react";
 import { CloseSnackbar, ShowWarningSnackbar } from "../snackbar";
 import { ProfileUpdate } from "../../util/tracker/trackerSendChange";
 import { SetMultipleFieldsInProfile } from "../../util/solid_profile";
-import { UpdateProfileInMemory } from "../../util/tracker/profileCache";
+import { UpdateProfileInMemory } from "../../util/tracker/profile-cache";
 import { IgnoreNextUpdate } from "../../util/tracker/tracker";
 import { RevalidateGuest } from "../../hooks/useGuest";
 

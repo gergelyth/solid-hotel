@@ -20,7 +20,7 @@ import { Field } from "../../../common/types/Field";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 import { deleteSolidDataset } from "@inrupt/solid-client";
 import { GetSession } from "../../../common/util/solid";
-import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
+import { DeleteFromCache } from "../../../common/util/tracker/profile-cache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 import {

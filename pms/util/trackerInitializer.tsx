@@ -9,17 +9,17 @@ import {
   getContainedResourceUrlAll,
   getPropertyAll,
 } from "@inrupt/solid-client";
-import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
 import { GetDataSet } from "../../common/util/solid";
 import {
   HotelProfilesUrl,
   ReservationsUrl,
 } from "../../common/consts/solidIdentifiers";
-import SendProfileModificationSnackbar from "../../common/util/tracker/send-profile-modification";
+import { SendProfileModificationSnackbar } from "../../common/util/tracker/send-profile-modification";
 import {
   CacheProfile,
   ProfileCache,
-} from "../../common/util/tracker/profileCache";
+} from "../../common/util/tracker/profile-cache";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { SendProfileModification } from "./outgoingCommunications";
 

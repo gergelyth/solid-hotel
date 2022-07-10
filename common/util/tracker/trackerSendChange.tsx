@@ -10,12 +10,12 @@ import { forwardRef, useEffect, useState } from "react";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Field } from "../../types/Field";
 import { CloseSnackbar } from "../../components/snackbar";
-import { SendChangeActionButtons } from "./actionButtons";
+import { SendChangeActionButtons } from "./action-buttons";
 import { useCustomSnackbarStyles } from "../../components/custom-progress-snackbar";
 import { FieldValueChange } from "./util";
-import { ValueChangeComponent } from "./valueChangeComponent";
-import { ProfileChangeStrings } from "./profileChangeStrings";
-import { CalculateChanges } from "./defineChanges";
+import { ValueChangeComponent } from "./value-change-component";
+import { ProfileChangeStrings } from "./profile-change-strings";
+import { CalculateChanges } from "./define-changes";
 
 export type ProfileUpdate = {
   [rdfName: string]: { status: boolean; newValue: string };

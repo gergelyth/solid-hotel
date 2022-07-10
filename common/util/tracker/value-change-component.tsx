@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   FormControl,
 } from "@material-ui/core";
-import { ProfileChangeStrings } from "./profileChangeStrings";
+import { ProfileChangeStrings } from "./profile-change-strings";
 import { FieldValueChange } from "./util";
 
 export function ValueChangeComponent({
@@ -27,7 +27,7 @@ export function ValueChangeComponent({
     <Grid
       item
       container
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       spacing={2}
       direction="row"
@@ -37,16 +37,14 @@ export function ValueChangeComponent({
         xs={7}
         container
         direction="column"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         spacing={1}
       >
         <Grid item>
-          <Typography>
-            <Box fontWeight="fontWeightBold" fontStyle="underlined">
-              {fieldValueChange.name}:
-            </Box>
-          </Typography>
+          <Box fontWeight="fontWeightBold" fontStyle="underlined">
+            <Typography>{fieldValueChange.name}:</Typography>
+          </Box>
         </Grid>
         <Grid item>
           <Typography>
@@ -55,7 +53,10 @@ export function ValueChangeComponent({
         </Grid>
       </Grid>
       <Grid item xs={5}>
-        <FormControl disabled={!requiresApproval}>
+        <FormControl
+          data-testid="value-change-radio"
+          disabled={!requiresApproval}
+        >
           <RadioGroup
             row
             value={optionValue}

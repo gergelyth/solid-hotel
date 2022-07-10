@@ -4,7 +4,7 @@ import {
 } from "../../common/components/snackbar";
 import { Subscribe } from "../../common/util/tracker/tracker";
 import { GetSession } from "../../common/util/solid";
-import { CacheProfile } from "../../common/util/tracker/profileCache";
+import { CacheProfile } from "../../common/util/tracker/profile-cache";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
 import TrackedRdfFieldCollector, {

@@ -57,7 +57,7 @@ async function ExecuteSendProfileModification(
   console.log("profile modifications sent");
 }
 
-const SendProfileModificationSnackbar = forwardRef<
+export const SendProfileModificationSnackbar = forwardRef<
   HTMLDivElement,
   {
     snackbarId: string | number;
@@ -109,5 +109,3 @@ const SendProfileModificationSnackbar = forwardRef<
 });
 
 SendProfileModificationSnackbar.displayName = "SendProfileModificationSnackbar";
-
-export default SendProfileModificationSnackbar;

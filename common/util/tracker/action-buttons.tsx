@@ -18,6 +18,7 @@ function SendButton({
   return (
     <Grid item>
       <Button
+        data-testid="send-button"
         variant="contained"
         color="primary"
         className={"button"}
@@ -50,9 +51,16 @@ export function SendChangeActionButtons({
     return null;
   }
   return (
-    <Grid item container justify="center" alignItems="center" spacing={4}>
+    <Grid
+      item
+      container
+      justifyContent="center"
+      alignItems="center"
+      spacing={4}
+    >
       <Grid item>
         <Button
+          data-testid="cancel-button"
           variant="contained"
           color="secondary"
           onClick={() => {
