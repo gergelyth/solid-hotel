@@ -1,24 +1,17 @@
 import { Subscriber, WebSocketResource } from "../../types/WebSocketResource";
 import { GetSession } from "../solid";
 
-//TODO maybe turn of ALL revalidations for certain useSWR keys, e.g. guest
-// manually call refetch when we get a notifications that there is a change
-// use compare(a,b) function to compare the fields we care about
-
-//or get rid of SWR completely and fetch using the Solid functions - if we turn off revalidation we lose its purpose either way
-
 const webSockets: { [host: string]: WebSocketResource } = {};
 
 const oneTimeIgnoreSockets = new Set<string>();
 
-//TODO what happens to these subscribers if I close the app and come back to it? we need to persist this
 export async function Subscribe(
   url: string,
   subscriber: Subscriber
 ): Promise<void> {
   // Create a new subscription to the resource if none existed
   //   url = url.replace(/#.*/, "");
-  await trackResource(url, subscriber);
+  await TrackResource(url, subscriber);
 }
 
 export function UnSubscribe(url: string): void {
@@ -42,13 +35,13 @@ export function IgnoreNextUpdate(url: string): void {
 }
 
 /** Tracks updates to the given resource */
-async function trackResource(
+async function TrackResource(
   url: string,
   subscriber: Subscriber
 ): Promise<void> {
   // Obtain a WebSocket for the given host
   if (!(url in webSockets)) {
-    webSockets[url] = await createWebSocket(url);
+    webSockets[url] = await CreateWebSocket(url);
   }
 
   const webSocketResource = webSockets[url];
@@ -69,10 +62,10 @@ function WaitFor(ms: number): Promise<void> {
 }
 
 /** Creates a WebSocket for the given URL. */
-async function createWebSocket(
+async function CreateWebSocket(
   resourceUrl: string
 ): Promise<WebSocketResource> {
-  const webSocketUrl = await getWebSocketUrl(resourceUrl);
+  const webSocketUrl = await GetWebSocketUrl(resourceUrl);
   const webSocket = new WebSocket(webSocketUrl);
 
   const webSocketResource: WebSocketResource = {
@@ -81,13 +74,13 @@ async function createWebSocket(
   };
 
   webSocket.onmessage = (data) =>
-    processMessage(resourceUrl, data, webSocketResource.subscribers);
+    ProcessMessage(resourceUrl, data, webSocketResource.subscribers);
 
   return webSocketResource;
 }
 
 /** Retrieves the WebSocket URL for the given resource. */
-async function getWebSocketUrl(resourceUrl: string): Promise<string> {
+async function GetWebSocketUrl(resourceUrl: string): Promise<string> {
   const session = GetSession();
   const response = await session.fetch(resourceUrl);
   const webSocketUrl = response.headers.get("Updates-Via");
@@ -96,7 +89,7 @@ async function getWebSocketUrl(resourceUrl: string): Promise<string> {
 }
 
 /** Processes an update message from the WebSocket */
-function processMessage(
+function ProcessMessage(
   hostUrl: string,
   { data }: { data: string },
   subscribers: Set<Subscriber>
