@@ -1,5 +1,6 @@
 import { PrivacyToken } from "./PrivacyToken";
 
+/** A privacy token extension used on the side of the hotel to include some further information required for processing. */
 export type HotelPrivacyToken = PrivacyToken & {
   //TODO maybe NamedNode
   datasetUrlTarget: string;

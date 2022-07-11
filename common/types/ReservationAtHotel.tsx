@@ -1,5 +1,6 @@
 import { ReservationState } from "./ReservationState";
 
+/** The main reservation object containing required information for the lifecycle of a reservation. */
 export type ReservationAtHotel = {
   id: string | null;
   //TODO maybe NamedNode

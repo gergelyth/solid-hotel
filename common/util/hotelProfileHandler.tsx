@@ -17,8 +17,14 @@ import {
 import { SafeSaveDatasetInContainer } from "./solid_wrapper";
 import { ShowError } from "./helpers";
 
+/** The name of the Solid Thing containing the profile. */
 const HotelProfileThingName = "hotelProfile";
 
+/**
+ * Creates the Solid dataset with the guest fields passed as argument.
+ * Saves the dataset in the container whose URL was supplied.
+ * @returns The URL of the saved profile Thing.
+ */
 export async function CreateHotelProfile(
   fields: Field[],
   containerUrl: string
@@ -54,6 +60,11 @@ export async function CreateHotelProfile(
   return profileUrl;
 }
 
+/**
+ * Creates the Solid dataset with the guest fields passed as argument for the purposes of data protection.
+ * Saves the dataset in the container whose URL was supplied.
+ * @returns The URL of the saved profile Thing.
+ */
 export async function CreateDataProtectionProfile(
   guestFields: Field[]
 ): Promise<string> {
@@ -65,6 +76,10 @@ export async function CreateDataProtectionProfile(
   return dataProtectionDatasetWebId;
 }
 
+/**
+ * Retrieves the profile Thing found in the dataset whose URL was passed to the function.
+ * @returns The Solid Thing containing the hotel profile.
+ */
 export async function GetHotelProfileThing(
   hotelProfileUrl: string
 ): Promise<Thing> {

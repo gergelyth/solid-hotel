@@ -26,6 +26,10 @@ import { createContainerAt } from "@inrupt/solid-client";
 import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 import { SetReadAccessToEveryone } from "../../util/solid_access";
 
+/**
+ * Removes all application specific items and containers except the rooms.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export function GetClearAllButRoomsFunction(): () => void {
   return async () => {
     let closeInfoSnackbar = ShowInfoSnackbar(
@@ -53,6 +57,10 @@ export function GetClearAllButRoomsFunction(): () => void {
   };
 }
 
+/**
+ * Removes all room definitions and the container which includes them.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export function GetClearAllRoomsFunction(): () => void {
   return async () => {
     const closeInfoSnackbar = ShowInfoSnackbar("Deleting hotel rooms...", true);
@@ -61,6 +69,10 @@ export function GetClearAllRoomsFunction(): () => void {
   };
 }
 
+/**
+ * Creates the application specific containers, but no further items in them.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export function GetCreateEmptySetupFunction(): () => void {
   return async () => {
     let closeInfoSnackbar = ShowInfoSnackbar(
@@ -94,6 +106,10 @@ export function GetCreateEmptySetupFunction(): () => void {
   };
 }
 
+/**
+ * Saves the hotel properties into the hotel profile (name, location, address).
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export function GetSetupHotelProfileFunction(): () => void {
   return async () => {
     const closeInfoSnackbar = ShowInfoSnackbar(
@@ -105,6 +121,10 @@ export function GetSetupHotelProfileFunction(): () => void {
   };
 }
 
+/**
+ * Creates the room definitions container in the hotel Pod and populates them with room definitions.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export function GetAddRoomsFunction(): () => void {
   return async () => {
     const closeInfoSnackbar = ShowInfoSnackbar(

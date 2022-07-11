@@ -27,6 +27,12 @@ type SerializedDataset = {
   content: string;
 };
 
+/**
+ * Creates a ZIP file of all the datasets contained in the folders of interest.
+ * The folders of interest are relative URL paths and are expanded with the default session's Pod URL.
+ * Helper function - required by the setup functionality.
+ * @returns A ZIP blob with all contained datasets (including ACL) serialized.
+ */
 export async function Serialize(
   foldersOfInterest: string[]
 ): Promise<Blob | undefined> {
@@ -53,6 +59,12 @@ export async function Serialize(
   return content;
 }
 
+/**
+ * Serializes the dataset recursively.
+ * If the dataset is a container, it calls this method on all contained items.
+ * Helper function - required by the setup functionality.
+ * @returns All contained datasets (including ACL) serialized with names.
+ */
 export async function RecursivelySerializeDatasets(
   currentUrl: string,
   baseUrl: string,
@@ -93,6 +105,11 @@ export async function RecursivelySerializeDatasets(
   return results;
 }
 
+/**
+ * Serializes the Solid dataset into an RDF string and parses the name according to the URL.
+ * Helper function - required by the setup functionality.
+ * @returns The RDF string describing the Solid dataset and its resource name.
+ */
 async function CreateSerializedDataset(
   dataset: SolidDataset & WithResourceInfo,
   currentUrl: string,
@@ -108,6 +125,11 @@ async function CreateSerializedDataset(
   return result;
 }
 
+/**
+ * Serializes the Solid dataset into an RDF string.
+ * Helper function - required by the setup functionality.
+ * @returns The RDF string describing the Solid dataset.
+ */
 async function SerializeDataset(
   dataSet: SolidDataset & WithResourceInfo
 ): Promise<string> {
@@ -134,6 +156,12 @@ async function SerializeDataset(
   return result;
 }
 
+/**
+ * Parses the date from the RDF quad, calculates the offset relative to the current date and adds the difference to the base date.
+ * We produce a relative date according to the base date this way - this will then allow us to deserialize in a similar fashion to get a relative date as well.
+ * Helper function - required by the setup functionality.
+ * @returns An RDF quad with relative date.
+ */
 function CreateDateOffsetIfRequired(quad: Quad): Quad {
   const literal = quad.object as Literal;
   if (literal === null || !xmlSchemaTypes.dateTime.equals(literal.datatype)) {

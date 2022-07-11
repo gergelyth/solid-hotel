@@ -1,5 +1,6 @@
 import { NotificationType } from "./NotificationsType";
 
+/** A notification object encompassing information about the object itself and the functions to perform in certain circumstances. */
 export type Notification = {
   notificationUrl: string;
   isProcessed: boolean;

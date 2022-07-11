@@ -1,17 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import apiData from "../api_data.json";
 
+/** A helper type containing the data protection properties (how long to store what fields) */
 export type DataProtectionInformation = {
   dataProtectionYears: number;
   dataProtectionFields: string[];
 };
 
+/** A helper type containing all information parseable from the JSON file. */
 type ApiData = {
   nationality: string;
   fields: string[];
   dataProtectionInformation: DataProtectionInformation;
 };
 
+/**
+ * Find the appropriate entry in the JSON file matching the guest's nationality and the hotel's country.
+ * @returns The entry for the the combination of arguments or undefined if no such entry exists.
+ */
 function GetData(
   hotelLocation: string,
   guestNationality: string
@@ -31,6 +37,11 @@ function GetData(
   return nationalityElement;
 }
 
+/**
+ * Parses the query parameters from the request to get the guest's nationality and the hotel's location.
+ * Looks up the appropriate entry in the static JSON file and returns it to the user.
+ * @returns The appropriate matching entry in JSON format set in the response argument.
+ */
 export function MockApiOperation<ApiDataElement extends keyof ApiData>(
   request: NextApiRequest,
   response: NextApiResponse,

@@ -11,6 +11,10 @@ import { CreatePrivacyFolders } from "../setupUtil";
 import { createContainerAt } from "@inrupt/solid-client";
 import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
 
+/**
+ * Removes all application specific items and containers in the guest Pod.
+ * Helper function - required by guest Solid Pod setup.
+ */
 export function GetGuestClearEverythingFunction(): () => void {
   return async () => {
     let closeInfoSnackbar = ShowInfoSnackbar(
@@ -32,6 +36,10 @@ export function GetGuestClearEverythingFunction(): () => void {
   };
 }
 
+/**
+ * Creates all containers required for the guest Pod, but no further items in them.
+ * Helper function - required by guest Solid Pod setup.
+ */
 export function GetGuestEmptySetupFunction(): () => void {
   return async () => {
     let closeInfoSnackbar = ShowInfoSnackbar(

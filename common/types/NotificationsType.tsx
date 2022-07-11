@@ -1,3 +1,4 @@
+/** An enum defining the possible types of notifications. */
 export enum NotificationType {
   BookingRequest,
   ReservationStateChange,

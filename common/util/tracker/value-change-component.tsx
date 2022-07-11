@@ -10,6 +10,11 @@ import {
 import { ProfileChangeStrings } from "./profile-change-strings";
 import { FieldValueChange } from "./util";
 
+/**
+ * Provides the option to the user to choose between keeping the old value of the field or updating the field with the new value.
+ * The user is able to choose only if it requires their approval. If it doesn't, the radio button form is disabled.
+ * @returns A component with some information about the field and radio button form providing the user with the choice.
+ */
 export function ValueChangeComponent({
   fieldValueChange,
   optionValue,

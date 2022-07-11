@@ -1,5 +1,6 @@
 import { Field } from "../../types/Field";
 
+/** A helper type which encompasses the data about a personal information field change. */
 export type FieldValueChange = {
   name: string;
   rdfName: string;
@@ -7,6 +8,10 @@ export type FieldValueChange = {
   newValue: string;
 };
 
+/**
+ * Compares the old guest fields against the new values and filters out true changes (where the value is indeed different in the versions).
+ * @returns A {@link FieldValueChange} array containing all changes where the oldValue and newValue are different.
+ */
 export function FindChangedFields(
   oldFields: Field[],
   newValues: {

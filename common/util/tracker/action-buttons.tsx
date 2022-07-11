@@ -1,6 +1,10 @@
 import { Grid, Button } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
+/**
+ * Defines an approval button or null if no approval is required for the send.
+ * @returns A button component which triggers the post-approval action on click.
+ */
 function SendButton({
   isSendButtonDisabled,
   requiresApproval,
@@ -34,6 +38,12 @@ function SendButton({
   );
 }
 
+/**
+ * Defines:
+ * - two buttons in case approval is required for the changes to be sent to counterparty (an approve and a cancel button)
+ * - one button in case approval is not required (an acknowledging OK button)
+ * @returns A component contaning one or two buttons described above.
+ */
 export function SendChangeActionButtons({
   isSendButtonDisabled,
   requiresApproval,

@@ -18,6 +18,11 @@ import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 
+/**
+ * Creates the corresponding Solid dataset for the reservation passed as an argument.
+ * RDF properties are taken from {@link reservationFieldToRdfMap}.
+ * @returns The Solid dataset containing the reservation information.
+ */
 export function CreateReservationDataset(
   reservation: ReservationAtHotel
 ): SolidDataset {
@@ -66,6 +71,11 @@ export function CreateReservationDataset(
   return reservationDataset;
 }
 
+/**
+ * Attaches a notification Thing to the Solid dataset passed as an argument with the appropriate type.
+ * RDF properties are taken from {@link notificationToRdfMap}.
+ * @returns The passed Solid dataset enriched with a notification Thing.
+ */
 export function AddNotificationThingToDataset(
   dataset: SolidDataset,
   notificationType: NotificationType
@@ -90,6 +100,11 @@ export function AddNotificationThingToDataset(
   return setThing(dataset, notification);
 }
 
+/**
+ * Creates the corresponding Solid dataset for the hotel privacy token passed as an argument.
+ * RDF properties are taken from {@link privacyTokenToRdfMap}.
+ * @returns The Solid dataset containing the hotel privacy token information.
+ */
 export function CreateHotelPrivacyTokenDataset(
   privacyToken: HotelPrivacyToken
 ): SolidDataset {
@@ -117,6 +132,11 @@ export function CreateHotelPrivacyTokenDataset(
   return privacyTokenDataset;
 }
 
+/**
+ * Creates the corresponding Solid dataset for the guest privacy token passed as an argument.
+ * RDF properties are taken from {@link privacyTokenToRdfMap}.
+ * @returns The Solid dataset containing the guest privacy token information.
+ */
 export function CreateGuestPrivacyTokenDataset(
   privacyToken: GuestPrivacyToken
 ): SolidDataset {
@@ -144,6 +164,11 @@ export function CreateGuestPrivacyTokenDataset(
   return privacyTokenDataset;
 }
 
+/**
+ * Creates the corresponding Solid Thing definition for the privacy token passed as an argument.
+ * RDF properties are taken from {@link privacyTokenToRdfMap}.
+ * @returns The Solid Thing containing the common privacy token properties.
+ */
 function CreateCorePrivacyTokenDataset(privacyToken: PrivacyToken): Thing {
   let newPrivacyToken = createThing({ name: "privacy" });
   privacyToken.fieldList.forEach((field) => {

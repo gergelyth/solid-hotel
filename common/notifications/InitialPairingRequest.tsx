@@ -13,6 +13,10 @@ import { NotificationType } from "../types/NotificationsType";
 import { initialPairingRequestRdfMap } from "../vocabularies/notification_payloads/rdf_initialPairingRequest";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 
+/**
+ * Parses the notification dataset into an initial pairing request submitted by the guest.
+ * @returns The token of the pairing operation and the inbox URL where the hotel can reply.
+ */
 export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
   guestInboxUrl: string;
   token: string;
@@ -42,6 +46,10 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
   return { guestInboxUrl: guestInboxUrl, token: token };
 }
 
+/**
+ * Serializes the reply inbox URL and the secret token for the pairing operation and creates an initial pairing request notification dataset with it.
+ * @returns The initial pairing request dataset.
+ */
 export function SerializeInitialPairingRequest(
   guestInboxUrl: string,
   token: string

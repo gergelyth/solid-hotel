@@ -20,6 +20,10 @@ import {
 import { RoomDefinition } from "../../types/RoomDefinition";
 import { CreateOrUpdateRoom } from "../../../pms/util/solidHotelSpecific";
 
+/**
+ * Creates some example room definitions meant as test data with which to populate the hotel Pod.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 function CreateRooms(): RoomDefinition[] {
   const rooms: RoomDefinition[] = [
     {
@@ -54,6 +58,10 @@ function CreateRooms(): RoomDefinition[] {
   return rooms;
 }
 
+/**
+ * Removes all reservations and reservation inboxes and their container contained in the hotel Pod.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function DeleteAllHotelReservations(): Promise<void> {
   await Promise.all([
     RecursiveDelete(ReservationsUrl),
@@ -61,10 +69,18 @@ export async function DeleteAllHotelReservations(): Promise<void> {
   ]);
 }
 
+/**
+ * Removes all rooms and their container contained in the hotel Pod.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function DeleteAllHotelRooms(): Promise<void> {
   await RecursiveDelete(RoomDefinitionsUrl);
 }
 
+/**
+ * Removes all (hotel and data protection) profiles and their containers contained in the hotel Pod.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function DeleteAllProfiles(): Promise<void> {
   await Promise.all([
     RecursiveDelete(HotelProfilesUrl),
@@ -72,16 +88,28 @@ export async function DeleteAllProfiles(): Promise<void> {
   ]);
 }
 
+/**
+ * Removes all privacy tokens and their container contained in the hotel Pod.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function DeletePrivacyFolders(): Promise<void> {
   await RecursiveDelete(PrivacyTokensUrl);
 }
 
+/**
+ * Creates the booking inbox container which the hotel will monitor for reservations requests from the guest.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function CreateBookingInbox(): Promise<void> {
   const session = GetSession();
   await createContainerAt(BookingInboxUrl, { fetch: session.fetch });
   await SetSubmitterAccessToEveryone(BookingInboxUrl);
 }
 
+/**
+ * Sets the hotel properties (name, location, address) in the hotel Pod profile.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function SetupHotelProfile(): Promise<void> {
   await Promise.all([
     SetHotelProfileField(hotelFieldToRdfMap.name, HotelName),
@@ -91,6 +119,10 @@ export async function SetupHotelProfile(): Promise<void> {
   ]);
 }
 
+/**
+ * Populates the hotel Pod with sample room definitions.
+ * Helper function - required by hotel Solid Pod setup.
+ */
 export async function PopulateHotelPodWithRooms(): Promise<void> {
   const rooms = CreateRooms();
   await Promise.all(rooms.map((room) => CreateOrUpdateRoom(room)));

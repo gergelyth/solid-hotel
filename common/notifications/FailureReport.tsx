@@ -15,6 +15,10 @@ import { NotificationType } from "../types/NotificationsType";
 import { failureReportRdfMap } from "../vocabularies/notification_payloads/rdf_failureReport";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 
+/**
+ * Parses the notification dataset into a failure report.
+ * @returns The failure properties - the corresponding reservation ID, error message and the result state of the reservation.
+ */
 export function DeserializeFailureReport(
   url: string,
   dataset: SolidDataset
@@ -49,6 +53,10 @@ export function DeserializeFailureReport(
   return { reservationId, errorMessage, resultState };
 }
 
+/**
+ * Serializes the failure report with the error message and result reservation state and creates a FailureReport notification dataset with it.
+ * @returns The failure report notification dataset.
+ */
 export function SerializeFailureReport(
   errorMessage: string,
   resultReservationState: ReservationState

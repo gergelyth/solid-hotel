@@ -15,6 +15,10 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 
+/**
+ * Parses the notification dataset into the reservation state change properties.
+ * @returns The reservation state change properties: the reservation ID, the new state of the reservation and the reply inbox which receives any follow-up messages.
+ */
 export function DeserializeReservationStateChange(
   url: string,
   dataset: SolidDataset
@@ -54,6 +58,10 @@ export function DeserializeReservationStateChange(
   return { reservationId, newState, replyInbox };
 }
 
+/**
+ * Serializes the reservation state change properties and creates a notification dataset with it.
+ * @returns The reservation state change notification dataset.
+ */
 export function SerializeReservationStateChange(
   replyInbox: string,
   newState: ReservationState

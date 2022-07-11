@@ -9,7 +9,7 @@ import { Field } from "../../types/Field";
 import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { IdDocumentType } from "../../types/Guest";
+import { IdDocumentType } from "../../types/IdDocument";
 
 /**
  * Creates a component for STRING typed fields.

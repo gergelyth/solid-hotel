@@ -10,6 +10,11 @@ import {
 } from "@inrupt/solid-client";
 import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "./solid_wrapper";
 
+/**
+ * Set the access of Public to the permissions passed as an argument.
+ * Fetches the dataset and modifies the corresponding ACL file (or creates an appropriate one).
+ * Saves the ACL file back in the Solid Pod.
+ */
 async function SetPublicAccess(
   resourceUrl: string,
   accessSpecification: Access,
@@ -49,6 +54,9 @@ async function SetPublicAccess(
 }
 
 //TODO use the new Solid API if transition from beta before deadline
+/**
+ * Give the Public permission to Submit to the container specified.
+ */
 export async function SetSubmitterAccessToEveryone(
   resourceUrl: string
 ): Promise<void> {
@@ -64,6 +72,9 @@ export async function SetSubmitterAccessToEveryone(
   );
 }
 
+/**
+ * Give the Public permission to Read for the container specified.
+ */
 export async function SetReadAccessToEveryone(
   resourceUrl: string
 ): Promise<void> {

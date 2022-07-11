@@ -5,10 +5,20 @@ import { ShowErrorSnackbar } from "../components/snackbar";
 import { NotFoundError } from "./errors";
 import { GetDataSet } from "./solid";
 
+/**
+ * Filters out all null and undefined items.
+ * Also takes care of typing because of generics.
+ * @returns A function which returns false for null or undefined items.
+ */
 export function NotEmptyItem<T>(item: T | null | undefined): item is T {
   return item !== null && item !== undefined;
 }
 
+/**
+ * Expand URL paths in case they contain a * wildcard.
+ * Also keep a cache to avoid re-fetching a resource multiple times.
+ * @returns An array of URL paths with the * wildcard resolved.
+ */
 export async function GlobSolidUrlPaths(
   urlRegex: string,
   resourceCache: { [url: string]: string[] }
@@ -48,6 +58,10 @@ export async function GlobSolidUrlPaths(
   return Promise.all(promises).then(() => result);
 }
 
+/**
+ * Adds the specified number of years, months and days to the current date.
+ * @returns The offset date.
+ */
 export function GetCurrentDatePushedBy(
   yearOffset: number,
   monthOffset: number,
@@ -62,22 +76,30 @@ export function GetCurrentDatePushedBy(
   return date;
 }
 
+/** @returns The current datetime. */
 export function GetToday(): Date {
   return new Date();
 }
 
+/** @returns The start of tomorrow. */
 export function GetTomorrow(): Date {
   return startOfTomorrow();
 }
 
+/** @returns Adds one day to the date supplied as argument. */
 export function GetDayAfterDate(date: Date): Date {
   return addDays(date, 1);
 }
 
+/** @returns Gets the start of the day after the day supplied as argument. */
 export function GetStartOfNextDay(date: Date): Date {
   return startOfDay(addDays(date, 1));
 }
 
+/**
+ * A generic error reporting function used when a data retrieving SWR hook runs into trouble.
+ * Reports the error in a snackbar as well as the console.
+ */
 export function OnHookErrorFunction(error: Error, key: string): void {
   //Standard message from Solid exception - not the most robust way to match errors, but this is unfortunately the only thing we get from the lib
   if (error.message === "Not signed in") {
@@ -97,6 +119,11 @@ export function OnHookErrorFunction(error: Error, key: string): void {
   console.error(error);
 }
 
+/**
+ * A generic error reporting function called when something goes wrong.
+ * Attaches a warning message about potentially unstable state if the operation is not recoverable.
+ * Reports the error with a snackbar as well as the console.
+ */
 export function ShowError(message: string, recoverable: boolean): void {
   if (!recoverable) {
     message += " - unexpected behaviour might occur.";

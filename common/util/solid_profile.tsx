@@ -15,6 +15,7 @@ import { NotFoundError } from "./errors";
 import { GetDataSet, GetSession } from "./solid";
 import { SafeSaveDatasetAt } from "./solid_wrapper";
 
+/** A helper type which contains the profile WebId, the Solid Thing and the dataset. */
 export type SolidProfile = {
   profileAddress: string;
   profile: Thing | null;
@@ -22,6 +23,10 @@ export type SolidProfile = {
   dataSet: SolidDataset | null;
 };
 
+/**
+ * Retrieves the profile of the currently logged in user.
+ * @returns The profile information or null if currently no user is logged in.
+ */
 export async function GetProfile(
   session: Session = GetSession()
 ): Promise<SolidProfile | null> {
@@ -33,6 +38,10 @@ export async function GetProfile(
   return GetProfileOf(session.info.webId);
 }
 
+/**
+ * Retrieves the profile of the user represented by the supplied WebId.
+ * @returns The profile information or null if no WebId is supplied.
+ */
 export async function GetProfileOf(
   webId: string | undefined
 ): Promise<SolidProfile | null> {
@@ -48,6 +57,10 @@ export async function GetProfileOf(
   return { profileAddress, profile, dataSet };
 }
 
+/**
+ * Retrieves the profile of the currently logged in user and parses the value of the requested field.
+ * @returns The string value of the requested field.
+ */
 export async function GetField(field: string): Promise<string> {
   const solidProfile = await GetProfile();
 
@@ -63,6 +76,10 @@ export async function GetField(field: string): Promise<string> {
   return value;
 }
 
+/**
+ * Retrieves the profile of the user represented by WebId passed in or the currently logged in user if no WebId was specified.
+ * Sets the value of the field to the one supplied.
+ */
 export async function SetField(
   field: string,
   value: string,
@@ -73,6 +90,10 @@ export async function SetField(
   return SetFieldInSolidProfile(solidProfile, field, value);
 }
 
+/**
+ * Retrieves the profile of the user represented by WebId passed in or the currently logged in user if no WebId was specified.
+ * Sets the values of multiple fields (given by RDF names) to the values specified.
+ */
 export async function SetMultipleFieldsInProfile(
   profileUrl: string,
   newFields: {
@@ -98,6 +119,10 @@ export async function SetMultipleFieldsInProfile(
   await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
 }
 
+/**
+ * Takes the profile information and modifies the value of the field requested.
+ * Saves the dataset after.
+ */
 export async function SetFieldInSolidProfile(
   solidProfile: SolidProfile | null,
   field: string,
@@ -113,6 +138,10 @@ export async function SetFieldInSolidProfile(
   await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
 }
 
+/**
+ * Retrieves the profile of the user represented by WebId passed in or the currently logged in user if no WebId was specified.
+ * Removes the field requested (given by RDF names) from the profile.
+ */
 export async function RemoveField(
   field: string,
   webId?: string
@@ -129,6 +158,10 @@ export async function RemoveField(
   await SafeSaveDatasetAt(solidProfile.profileAddress, updatedDataSet);
 }
 
+/**
+ * Iterates all fields contained in the Solid Thing supplied and sets them in the profile of the currently logged in user.
+ * Updates the user profile in the Solid Pod.
+ */
 export async function SaveProfileThingToPod(
   profileThing: Thing
 ): Promise<void> {

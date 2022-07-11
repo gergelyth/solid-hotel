@@ -11,6 +11,11 @@ import styles from "../styles/styles";
 import { SnackbarProvider } from "notistack";
 import { GlobalSnackbar } from "../components/snackbar";
 
+/**
+ * The app (core) component of the 'common' application.
+ * Custom additions are:
+ * - the snackbar provider component to allow us to display snackbars throughout the application
+ */
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");

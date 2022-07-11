@@ -1,5 +1,6 @@
 import { GetUserReservationsPodUrl } from "./solid_reservations";
 
+/** Derives the reservation ID from the reservation inbox URL provided. */
 export function GetReservationIdFromInboxUrl(url: string): string {
   //structure:
   //userpod.inrupt.net/reservations/49938104/reservation
@@ -14,11 +15,13 @@ export function GetReservationIdFromInboxUrl(url: string): string {
   return reservationId;
 }
 
+/** Constructs the reservation inbox URL from the reservation ID provided. */
 export function CreateInboxUrlFromReservationId(reservationId: string): string {
   const containerUrl = GetUserReservationsPodUrl();
   return `${containerUrl}${reservationId}/inbox`;
 }
 
+/** Constructs the reservation URL from the reservation ID provided. */
 export function CreateReservationUrlFromReservationId(
   reservationId: string
 ): string {
@@ -26,12 +29,14 @@ export function CreateReservationUrlFromReservationId(
   return `${containerUrl}${reservationId}/reservation`;
 }
 
+/** Derives the core reservation container URL from the reservation inbox URL provided. */
 export function GetCoreReservationFolderFromInboxUrl(inboxUrl: string): string {
   //delete trailing slash character if necessary
   inboxUrl = inboxUrl.replace(/\/$/, "");
   return inboxUrl.replace(new RegExp("inbox$"), "");
 }
 
+/** Derives the core reservation container URL from the reservation URL provided. */
 export function GetCoreReservationFolderFromReservationUrl(
   reservationUrl: string
 ): string {
@@ -40,6 +45,7 @@ export function GetCoreReservationFolderFromReservationUrl(
   return reservationUrl.replace(new RegExp("reservation$"), "");
 }
 
+/** Constructs the reservation inbox URL from the reservation URL provided. */
 export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
   //TODO this is not very robust
   //structure:
@@ -48,6 +54,7 @@ export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
   return reservationUrl.replace(new RegExp("reservation$"), "inbox");
 }
 
+/** Constructs the reservation URL from the reservation inbox URL provided. */
 export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
   //TODO this is not very robust
   //structure:
@@ -56,6 +63,7 @@ export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
   return inboxUrl.replace(new RegExp("inbox$"), "reservation");
 }
 
+/** Derives the ID part of the URL from the URL provided based on the index argument. */
 export function GetIdFromDatasetUrl(
   url: string,
   idIndexFromLast: number
@@ -74,6 +82,7 @@ export function GetIdFromDatasetUrl(
   return result;
 }
 
+/** Derives the core Pod URL from the WebId provided. */
 export function GetCoreFolderFromWebId(webId: string): string {
   return webId.replace("profile/card#me", "");
 }

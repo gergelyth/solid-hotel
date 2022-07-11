@@ -11,6 +11,10 @@ import { NotificationType } from "../types/NotificationsType";
 import { ParseReservation } from "../hooks/useReservations";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 
+/**
+ * Parses the notification dataset into a pairing request reply object with the information sent by the hotel to the guest's new Solid Pod.
+ * @returns The reservation properties and the fields sent over by the hotel after the offline check-in.
+ */
 export function DeserializePairingRequestWithInformation(
   dataset: SolidDataset
 ): {
@@ -37,6 +41,10 @@ export function DeserializePairingRequestWithInformation(
   return { reservation: reservation, profileThing: hotelProfileThing };
 }
 
+/**
+ * Serializes the reservation and hotel profile things and creates an information notification dataset with it to complete the pairing operation.
+ * @returns The pairing request with information notification dataset.
+ */
 export function SerializePairingRequestWithInformation(
   reservationThing: Thing,
   profileThing: Thing

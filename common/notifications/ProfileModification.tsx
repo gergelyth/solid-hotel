@@ -12,8 +12,13 @@ import { NotificationType } from "../types/NotificationsType";
 import { profileModificationRdfMap } from "../vocabularies/notification_payloads/rdf_profileModification";
 import { ProfileUpdate } from "../util/tracker/trackerSendChange";
 
+/** The prefix name of the profile changes Thing in the dataset. */
 const thingName = "profileModification";
 
+/**
+ * Parses the notification dataset into a dictionary of profile change modifications, where the key is the RDF name of the field and the value is the new field value.
+ * @returns The profile changes by RDF key.
+ */
 export function DeserializeProfileModification(dataset: SolidDataset): {
   [rdfName: string]: string;
 } {
@@ -44,6 +49,10 @@ export function DeserializeProfileModification(dataset: SolidDataset): {
   return result;
 }
 
+/**
+ * Serializes the profile changes and creates a profile modification notification dataset with it.
+ * @returns The profile modication notification dataset, where each Thing represent a change in one field.
+ */
 export function SerializeProfileModification(
   profileUpdate: ProfileUpdate
 ): SolidDataset {

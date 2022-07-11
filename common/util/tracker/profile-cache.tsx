@@ -3,8 +3,12 @@ import { GetGuestFieldValues } from "../../hooks/useGuest";
 import { GetProfileOf } from "../solid_profile";
 import { ProfileUpdate } from "./trackerSendChange";
 
+/** A WebId to fields cache map, which is used to determine old values after new values are already in the user's Solid Pod. */
 export const ProfileCache: { [url: string]: Field[] } = {};
 
+/**
+ * Adds a new entry into the profile cache by retrieving the fields from the user's Solid Pod which are assigned to the passed WebId.
+ */
 export async function CacheProfile(
   profileUrl: string,
   rdfFields: string[]
@@ -22,6 +26,9 @@ export async function CacheProfile(
   CacheProfileFields(profileUrl, guestFields);
 }
 
+/**
+ * Sets the new values for the given fields in the cache assigned to the passed WebId.
+ */
 export function UpdateProfileInMemory(
   profileUrl: string,
   fieldOptions: ProfileUpdate
@@ -38,6 +45,9 @@ export function UpdateProfileInMemory(
   }
 }
 
+/**
+ * Adds a new entry into the profile cache with the passed fields.
+ */
 export async function CacheProfileFields(
   profileUrl: string,
   fields: Field[]
@@ -45,6 +55,9 @@ export async function CacheProfileFields(
   ProfileCache[profileUrl] = fields.map((x) => ({ ...x }));
 }
 
+/**
+ * Deletes the WebId entry and its assigned fields from the cache.
+ */
 export function DeleteFromCache(profileUrl: string): void {
   delete ProfileCache[profileUrl];
 }

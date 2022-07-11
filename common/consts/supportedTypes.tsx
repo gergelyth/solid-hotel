@@ -1,5 +1,8 @@
 import { NamedNode, Term } from "rdf-js";
 
+/**
+ * Helper class inheriting from NamedNode, which takes care of handling equality.
+ */
 export class SchemaType implements NamedNode<string> {
   termType!: "NamedNode";
   value: string;
@@ -16,6 +19,10 @@ export class SchemaType implements NamedNode<string> {
   }
 }
 
+/**
+ * Currently supported data types for fields.
+ * If a new type is added, make sure to add a corresponding element handling that type in {@link FieldInputElementBasedOnType}.
+ */
 export const xmlSchemaTypes = {
   //   boolean: "http://www.w3.org/2001/XMLSchema#boolean",
   dateTime: new SchemaType("http://www.w3.org/2001/XMLSchema#dateTime"),

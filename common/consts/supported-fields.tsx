@@ -8,6 +8,12 @@ import { xmlSchemaTypes } from "./supportedTypes";
 //to show the only the requireds (in SPE if used independently, we can use all fields) - we could make a field in the JSON which lists all required fields
 //for some default key and we could also specify types in that json - that would make this file irrelevant (if also the pretty names can be sourced from some
 //description field)
+/**
+ * The definitions of the support profile fields.
+ * This is the single entry point of adding a new supported field, however:
+ * - if the datatype differs from those already present, one must also implement an input component in {@link FieldInputElementBasedOnType}.
+ * - add the new RDF fields definition in {@link personFieldToRdfMap}.
+ */
 export default function GetSupportedFields(): Field[] {
   return [
     {

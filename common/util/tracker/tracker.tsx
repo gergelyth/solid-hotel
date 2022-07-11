@@ -1,10 +1,16 @@
 import { Subscriber, WebSocketResource } from "../../types/WebSocketResource";
 import { GetSession } from "../solid";
 
+/** A map of host URL to WebSocket instance and its subscribers to keep track of them. */
 const webSockets: { [host: string]: WebSocketResource } = {};
 
+/** Keeps track of the sockets which should ignore the next update. */
 const oneTimeIgnoreSockets = new Set<string>();
 
+/**
+ * Main entrypoint for initializing a tracking functionality for a given resource.
+ * Creates the WebSocket instance if required, initializes it and sets it up to call the subscriber methods when a PUB message is received.
+ */
 export async function Subscribe(
   url: string,
   subscriber: Subscriber
@@ -14,6 +20,9 @@ export async function Subscribe(
   await TrackResource(url, subscriber);
 }
 
+/**
+ * Closes the WebSocket assigned to the resource URL in order to no longer receive notifications of changes.
+ */
 export function UnSubscribe(url: string): void {
   //TODO does this work?
   const webSocketResource = webSockets[url];
@@ -30,11 +39,17 @@ export function UnSubscribe(url: string): void {
   console.log(`Unsubscribed from ${url}`);
 }
 
+/**
+ * Instruct the tracker to ignore the next message that gets received and don't call the subscriber onReceive method.
+ * Used when the system is about to do the next profile update in order to avoid endless cyclical notifications.
+ */
 export function IgnoreNextUpdate(url: string): void {
   oneTimeIgnoreSockets.add(url);
 }
 
-/** Tracks updates to the given resource */
+/**
+ * Initialize the WebSocket and open it to be able to receive messages.
+ */
 async function TrackResource(
   url: string,
   subscriber: Subscriber
@@ -57,11 +72,15 @@ async function TrackResource(
   webSocketResource.webSocket.send(`sub ${url}`);
 }
 
+/** Helper method to wait for the given amount of milliseconds. Helps to avoid constant pinging. */
 function WaitFor(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Creates a WebSocket for the given URL. */
+/**
+ * Creates a WebSocket instance for the given URL and sets up the onMessage event to call the subscriber function.
+ * @returns The created WebSocket instance.
+ */
 async function CreateWebSocket(
   resourceUrl: string
 ): Promise<WebSocketResource> {
@@ -79,7 +98,11 @@ async function CreateWebSocket(
   return webSocketResource;
 }
 
-/** Retrieves the WebSocket URL for the given resource. */
+/**
+ * Retrieves the WebSocket URL for the given Solid resource.
+ * Throws an error if the resource doesn't have one (should never be the case).
+ * @returns The WebSocket URL.
+ */
 async function GetWebSocketUrl(resourceUrl: string): Promise<string> {
   const session = GetSession();
   const response = await session.fetch(resourceUrl);
@@ -88,7 +111,10 @@ async function GetWebSocketUrl(resourceUrl: string): Promise<string> {
   return webSocketUrl;
 }
 
-/** Processes an update message from the WebSocket */
+/**
+ * Processes an update message from the WebSocket and calls the subscriber function to react to it.
+ * Ignores all other types of messages.
+ */
 function ProcessMessage(
   hostUrl: string,
   { data }: { data: string },

@@ -26,10 +26,17 @@ import {
   TestDataSetupButtons,
 } from "../components/setup/setup-components";
 
+/** The default hotel test account prepared for these app prototypes. */
 const HotelTestAccount = HotelWebId;
 /* TODO: change this to solidguest! */
+/** The default guest test account prepared for these app prototypes. */
 const GuestTestAccount = "https://gergelyth.inrupt.net/profile/card#me";
 
+/**
+ * Provides the setup functionalities for hotel Pods.
+ * If the app recognizes that the logged in user is the default test hotel handle, it also offers the option to populate the Pod with the test data prepared.
+ * @returns A component with the buttons to clear the Pod, perform an empty setup (create only the containers and no actual objects) or save/load the test data.
+ */
 function HotelSetupSubPage(): JSX.Element {
   return (
     <Grid
@@ -96,6 +103,11 @@ function HotelSetupSubPage(): JSX.Element {
   );
 }
 
+/**
+ * Provides the setup functionalities for guest Pods.
+ * If the app recognizes that the logged in user is the default test guest handle, it also offers the option to populate the Pod with the test data prepared.
+ * @returns A component with the buttons to clear the Pod, perform an empty setup (create only the containers and no actual objects) or save/load the test data.
+ */
 function GuestSetupSubPage(): JSX.Element {
   return (
     <Grid
@@ -134,6 +146,13 @@ function GuestSetupSubPage(): JSX.Element {
   );
 }
 
+/**
+ * Index page of the setup application.
+ * Contains the login functionality which allows the user to login through a built-in or custom Solid Pod provider.
+ * We provide options for the Solid Pod setup for the application prototypes as well as a functionality to clear the Pod.
+ * If the app recognizes that the logged in user is the default test hotel or test guest handle, it also offers to populate the Pod with the test data prepared.
+ * @returns A component entailing all described above.
+ */
 export default function Home(): JSX.Element {
   const webId = GetSession()?.info.webId;
   const isHotelTestAccount = webId === HotelTestAccount;

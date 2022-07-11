@@ -29,6 +29,10 @@ import {
 } from "./setupUtil";
 import { ShowError } from "../util/helpers";
 
+/**
+ * Deserializes the given test data contained in a ZIP file with the passed filename.
+ * Helper function - required by the setup functionality.
+ */
 export async function Deserialize(filename: string): Promise<void[]> {
   const session = GetSession();
   const baseUrl = GetPodBaseUrl(session);
@@ -58,6 +62,11 @@ export async function Deserialize(filename: string): Promise<void[]> {
   return Promise.all(promises);
 }
 
+/**
+ * Deserializes and saves one dataset from the given RDF string with the given name.
+ * The dataset is saved in the Pod whose URL is passed to this function.
+ * Helper function - required by the setup functionality.
+ */
 async function DeserializeAndSaveDataset(
   session: Session,
   baseUrl: string,
@@ -89,6 +98,10 @@ async function DeserializeAndSaveDataset(
   });
 }
 
+/**
+ * Saves the deserialized ACL file for the given container.
+ * Helper function - required by the setup functionality.
+ */
 async function HandleAclFile(
   containerUrl: string,
   aclDataset: SolidDataset,
@@ -112,6 +125,12 @@ async function HandleAclFile(
   await saveAclFor(datasetWithAcl, aclDataset, { fetch: session.fetch });
 }
 
+/**
+ * Parses the date from the RDF quad, calculates the offset relative to the base date and adds the difference to the current date.
+ * We produce a relative date according to the current one this way.
+ * Helper function - required by the setup functionality.
+ * @returns A quad with a date relative to the current date.
+ */
 function ParseDateOffsetIfRequired(quad: Quad): Quad {
   const literal = quad.object as Literal;
   if (literal === null || !xmlSchemaTypes.dateTime.equals(literal.datatype)) {

@@ -6,6 +6,11 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { NotEmptyItem, ShowError } from "../helpers";
 import { ProfileUpdate } from "./trackerSendChange";
 
+/**
+ * Sends the approved local profile modifications to the counterparty.
+ * Filters the reservations with the filter provided and sends the changes to all counterparties listed in them.
+ * Warns the user in case it was called with no approved fields or if there are no reservation which match the criteria.
+ */
 async function ExecuteSendProfileModification(
   reservations: (ReservationAtHotel | null)[],
   fieldOptions: ProfileUpdate,
@@ -57,6 +62,10 @@ async function ExecuteSendProfileModification(
   console.log("profile modifications sent");
 }
 
+/**
+ * Sends the approved local profile modifications to the counterparty.
+ * Fetches all reservations which match the filter provided and sends to all counterparties listed in them.
+ */
 export const SendProfileModificationSnackbar = forwardRef<
   HTMLDivElement,
   {

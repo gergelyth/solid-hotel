@@ -1,3 +1,4 @@
+/** A helper type which encompasses the display values of various components in the profile change approval snackbar. */
 export type ProfileChangeStrings = {
   headline: string;
   instruction: string;
@@ -6,6 +7,10 @@ export type ProfileChangeStrings = {
   approveButtonText: string;
 };
 
+/**
+ * Defines the display values for the case when the user modified a local version of their profile.
+ * @returns The display values to show in the profile change snackbar.
+ */
 export function OutgoingProfileChangeStrings(
   requiresApproval: boolean
 ): ProfileChangeStrings {
@@ -20,6 +25,10 @@ export function OutgoingProfileChangeStrings(
   };
 }
 
+/**
+ * Defines the display values for the case when the counterparty modified a field in their own version of the profile.
+ * @returns The display values to show in the profile change snackbar.
+ */
 export function IncomingProfileChangeStrings(): ProfileChangeStrings {
   return {
     headline: "Changes in a remote profile detected",

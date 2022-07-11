@@ -24,8 +24,12 @@ import {
 } from "./solid_wrapper";
 import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
+/** The relative URL address of the reservation container. */
 const reservationAddress = "reservations/";
 
+/**
+ * @returns The absolute URL of the reservation container based on the Solid Pod address of the currently logged in user.
+ */
 export function GetUserReservationsPodUrl(): string | null {
   const podOfSession = GetPodOfSession();
   if (!podOfSession) {
@@ -34,6 +38,11 @@ export function GetUserReservationsPodUrl(): string | null {
   return podOfSession + "/" + reservationAddress;
 }
 
+/**
+ * Creates the reservation dataset from the reservation object supplied as argument and saves it in the reservation container.
+ * Also creates the inbox for the reservation.
+ * @returns The URL of the reservation inbox.
+ */
 export async function AddReservation(
   reservation: ReservationAtHotel
 ): Promise<string> {
@@ -63,6 +72,11 @@ export async function AddReservation(
   return inboxUrl;
 }
 
+/**
+ * Creates the reservation inbox for the corresponding reservation passed as URL.
+ * Sets the Public's access to Submitter.
+ * @returns The URL of the reservation inbox.
+ */
 async function CreateInboxForReservationUrl(
   reservationContainerUrl: string
 ): Promise<string> {
@@ -72,6 +86,11 @@ async function CreateInboxForReservationUrl(
   return inboxUrl;
 }
 
+/**
+ * Retrieves the reservation dataset and Solid Thing of the corresponding reservation referred to with the URL supplied.
+ * Throws an error if there's an issue with the integrity of the structure.
+ * @returns The reservation dataset and Thing.
+ */
 async function GetReservationDatasetAndThing(
   reservationUrl: string
 ): Promise<{ dataset: SolidDataset; thing: Thing }> {
@@ -90,6 +109,10 @@ async function GetReservationDatasetAndThing(
   return { dataset: dataset, thing: reservationThing };
 }
 
+/**
+ * Constructs the absolute URL of the reservation based on the ID and fetches the reservation dataset.
+ * Sets the reservation state and the counterparty inbox value to the values supplied.
+ */
 export async function SetReservationStateAndInbox(
   reservationId: string,
   newState: ReservationState,
@@ -112,6 +135,10 @@ export async function SetReservationStateAndInbox(
   await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }
 
+/**
+ * Constructs the absolute URL of the reservation based on the ID and fetches the reservation dataset.
+ * Sets the reservation owner field to point to the hotel profile of the guest.
+ */
 export async function SetReservationOwnerToHotelProfile(
   reservationId: string,
   hotelProfileWebId: string
@@ -131,6 +158,10 @@ export async function SetReservationOwnerToHotelProfile(
   return updatedReservation;
 }
 
+/**
+ * Constructs the absolute URL of the reservation based on the ID and fetches the reservation dataset.
+ * Sets the reservation state and the reservation owner value to the values supplied.
+ */
 export async function SetReservationOwnerAndState(
   reservationId: string,
   ownerWebId: string,
@@ -154,6 +185,11 @@ export async function SetReservationOwnerAndState(
   await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }
 
+/**
+ * Constructs the absolute URL of the reservation based on the ID and fetches the reservation dataset.
+ * Retrieves the WebId of the reservation owner from the dataset.
+ * @returns The WebId of the reservation owner.
+ */
 export async function GetOwnerFromReservation(
   reservationId: string
 ): Promise<string | null> {
@@ -168,6 +204,10 @@ export async function GetOwnerFromReservation(
   return ownerWebId;
 }
 
+/**
+ * Fetches the reservation dataset based on the URL supplied and creates the reservation object based on the dataset retrieved.
+ * @returns The reservation parsed from the dataset.
+ */
 export async function GetParsedReservationFromUrl(
   reservationUrl: string
 ): Promise<ReservationAtHotel> {

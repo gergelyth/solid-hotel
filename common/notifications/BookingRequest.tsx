@@ -7,6 +7,10 @@ import {
   CreateReservationDataset,
 } from "../util/datasetFactory";
 
+/**
+ * Parses the notification dataset into a booking request.
+ * @returns The reservation properties submitted by the guest.
+ */
 export function DeserializeBookingRequest(
   dataset: SolidDataset
 ): ReservationAtHotel {
@@ -24,6 +28,10 @@ export function DeserializeBookingRequest(
   return reservation;
 }
 
+/**
+ * Serializes the reservation and creates a BookingRequest notification dataset with it.
+ * @returns The booking request notification dataset.
+ */
 export function SerializeBookingRequest(
   reservation: ReservationAtHotel
 ): SolidDataset {

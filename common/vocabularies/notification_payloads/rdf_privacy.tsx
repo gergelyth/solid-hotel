@@ -1,3 +1,4 @@
+/** A vocabulary map defining the RDF properties used for privacy tokens. */
 export const privacyTokenToRdfMap: Record<string, string> = {
   hotelInboxForDeletion: "schema:hotelInboxForDeletion",
   datasetUrlTarget: "schema:datasetUrlTarget",

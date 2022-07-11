@@ -1,7 +1,9 @@
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { grey, purple } from "@material-ui/core/colors";
 
-// Create a theme instance.
+/**
+ * Some custom CSS styles for common elements, e.g. navigation bar, grid items, footer and main component.
+ */
 const styles = makeStyles(() =>
   createStyles({
     selectedGridItem: {

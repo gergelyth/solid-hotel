@@ -16,12 +16,17 @@ import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solid_wrapper";
 import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
+/** The name of the Solid Thing containing the pairing token. */
 const PairingTokenThing = "pairingToken";
 
+/** @returns The URL path of the pairing token contained in the reservation folder supplied. */
 function GetTokenDatasetUrl(reservationFolder: string): string {
   return `${reservationFolder}${PairingTokenThing}`;
 }
 
+/**
+ * Creates a random string as a pairing token and saves it in the reservation folder for a given reservation.
+ */
 export async function CreateAndSavePairingToken(
   reservationFolder: string
 ): Promise<void> {
@@ -42,6 +47,10 @@ export async function CreateAndSavePairingToken(
   await SafeSaveDatasetAt(tokenUrl, tokenDataset);
 }
 
+/**
+ * Retrieves the pairing token string from a given reservation folder for a given reservation.
+ * @returns The pairing token string.
+ */
 export async function GetPairingToken(
   reservationFolder: string
 ): Promise<string | null> {
@@ -67,6 +76,9 @@ export async function GetPairingToken(
   return token;
 }
 
+/**
+ * Deletes the pairing token from the hotel's Solid Pod.
+ */
 export async function DeletePairingToken(
   reservationFolder: string
 ): Promise<void> {

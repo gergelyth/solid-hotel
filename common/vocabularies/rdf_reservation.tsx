@@ -1,5 +1,6 @@
 // import { SCHEMA_INRUPT_EXT } from "@inrupt/vocab-common-rdf";
 
+/** A vocabulary map defining the RDF properties used for reservations. */
 export const reservationFieldToRdfMap: Record<string, string> = {
   // rdfType: SCHEMA_INRUPT_EXT.LodgingReservation,
   rdfType: "schema:lodgingReservation",

@@ -16,6 +16,10 @@ import {
 import { ShowError } from "./helpers";
 import { GetSession } from "./solid";
 
+/**
+ * A general function called when a Solid operation throws an error.
+ * We report the error in a snackbar and in console as well.
+ */
 function ParseAndShowSolidError(e: unknown): void {
   let message = e;
   if (e instanceof Error) {
@@ -27,6 +31,10 @@ function ParseAndShowSolidError(e: unknown): void {
   ShowError(`${helpMessage} [${message}]`, false);
 }
 
+/**
+ * Retrieves the Solid dataset with error catching.
+ * @returns The Solid dataset found at the URL supplied.
+ */
 export async function SafeGetDataset(
   url: string
 ): Promise<(SolidDataset & WithResourceInfo) | undefined> {
@@ -41,6 +49,10 @@ export async function SafeGetDataset(
   }
 }
 
+/**
+ * Retrieves the ACL Solid dataset with error catching.
+ * @returns The ACL Solid dataset found at the URL supplied.
+ */
 export async function SafeGetDatasetWithAcl(
   url: string
 ): Promise<(SolidDataset & WithServerResourceInfo & WithAcl) | undefined> {
@@ -55,6 +67,10 @@ export async function SafeGetDatasetWithAcl(
   }
 }
 
+/**
+ * Creates a container at the URL supplied with error catching.
+ * @returns The container dataset created.
+ */
 export async function SafeCreateContainerAt(
   containerUrl: string
 ): Promise<(SolidDataset & WithResourceInfo) | undefined> {
@@ -69,6 +85,10 @@ export async function SafeCreateContainerAt(
   }
 }
 
+/**
+ * Creates a container in a container at the URL supplied with error catching.
+ * @returns The container dataset created.
+ */
 export async function SafeCreateContainerInContainer(
   containerUrl: string
 ): Promise<(SolidDataset & WithResourceInfo) | undefined> {
@@ -83,6 +103,9 @@ export async function SafeCreateContainerInContainer(
   }
 }
 
+/**
+ * Saves the ACL dataset for the given dataset with error catching.
+ */
 export async function SafeSaveAclFor(
   datasetWithAcl: WithAccessibleAcl,
   updatedAcl: SolidDataset
@@ -97,6 +120,9 @@ export async function SafeSaveAclFor(
   }
 }
 
+/**
+ * Deletes a Solid dataset found at the URL supplied with error catching.
+ */
 export async function SafeDeleteDataset(url: string): Promise<void> {
   const session = GetSession();
   try {
@@ -106,6 +132,10 @@ export async function SafeDeleteDataset(url: string): Promise<void> {
   }
 }
 
+/**
+ * Saves the Solid dataset with error catching.
+ * @returns The Solid dataset created at the URL supplied.
+ */
 export async function SafeSaveDatasetAt(
   url: string,
   dataset: SolidDataset
@@ -121,6 +151,10 @@ export async function SafeSaveDatasetAt(
   }
 }
 
+/**
+ * Saves the Solid dataset in a container with the URL supplied with error catching.
+ * @returns The Solid dataset created in the container.
+ */
 export async function SafeSaveDatasetInContainer(
   containerUrl: string,
   dataset: SolidDataset

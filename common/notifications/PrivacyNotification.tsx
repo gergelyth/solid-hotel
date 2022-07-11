@@ -7,6 +7,10 @@ import { NotificationType } from "../types/NotificationsType";
 import { ConvertToGuestPrivacyToken } from "../hooks/usePrivacyTokens";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 
+/**
+ * Parses the notification dataset into a guest privacy token.
+ * @returns The guest privacy token created for the guest.
+ */
 export function DeserializeGuestPrivacyNotification(
   dataset: SolidDataset
 ): GuestPrivacyToken {
@@ -23,6 +27,10 @@ export function DeserializeGuestPrivacyNotification(
   return guestPrivacyToken;
 }
 
+/**
+ * Serializes the guest privacy token and creates a privacy token notification dataset with it.
+ * @returns The privacy token notification dataset.
+ */
 export function SerializeGuestPrivacyNotification(
   privacyToken: GuestPrivacyToken
 ): SolidDataset {

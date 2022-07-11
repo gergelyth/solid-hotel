@@ -12,6 +12,10 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { privacyDeletionToRdfMap } from "../vocabularies/notification_payloads/rdf_privacyDeletion";
 
+/**
+ * Parses the notification dataset into a privacy token deletion request.
+ * @returns The token URL of the privacy token to be deleted and an optional guest inbox where the hotel can report the successful operation.
+ */
 export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
   tokenUrl: string;
   guestInboxUrl: string | undefined;
@@ -39,6 +43,10 @@ export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
   return { tokenUrl, guestInboxUrl };
 }
 
+/**
+ * Serializes the privacy token URL and an optional reply inbox argument to create the privacy token deletion request notification.
+ * @returns The privacy token deletion request notification dataset.
+ */
 export function SerializePrivacyInformationDeletion(
   tokenUrl: string,
   guestInboxUrl?: string

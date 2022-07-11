@@ -17,10 +17,16 @@ import { ValueChangeComponent } from "./value-change-component";
 import { ProfileChangeStrings } from "./profile-change-strings";
 import { CalculateChanges } from "./define-changes";
 
+/** A helper type mapping the RDF name of the personal information field to its approval status and the new value. */
 export type ProfileUpdate = {
   [rdfName: string]: { status: boolean; newValue: string };
 };
 
+/**
+ * Determines the display text of the header.
+ * It's either the name of the guest whose profile the change is related to (if available) or the hotel WebId.
+ * @returns A header component with the name of the current stakeholder in question.
+ */
 function Header({
   oldGuestFields,
   hotelUrl,
@@ -59,6 +65,10 @@ function Header({
   );
 }
 
+/**
+ * Creates the instruction component which guides to user to the appropriate action.
+ * @returns A text component containing the instruction.
+ */
 function InstructionText({
   instruction,
   disabled,
@@ -77,6 +87,9 @@ function InstructionText({
   );
 }
 
+/**
+ * @returns A helper text component displayed while the profile changes are determined in the background.
+ */
 function LoadingText({ disabled }: { disabled: boolean }): JSX.Element | null {
   if (disabled) {
     return null;
@@ -89,6 +102,9 @@ function LoadingText({ disabled }: { disabled: boolean }): JSX.Element | null {
   );
 }
 
+/**
+ * @returns A helper loading icon component displayed while the profile changes are determined in the background.
+ */
 function LoadingIcon({ disabled }: { disabled: boolean }): JSX.Element | null {
   if (disabled) {
     return null;
@@ -101,6 +117,10 @@ function LoadingIcon({ disabled }: { disabled: boolean }): JSX.Element | null {
   );
 }
 
+/**
+ * Creates the radio components with the option to either keep or update the fields for which a change was received.
+ * @returns An array of elements providing the options update the given field or not.
+ */
 function ChangeElements(
   changedFields: FieldValueChange[] | undefined,
   fieldOptions: ProfileUpdate,
@@ -125,6 +145,17 @@ function ChangeElements(
   ));
 }
 
+/**
+ * A snackbar component reacting to a change made in the guest's profile field.
+ * Used in two circumstances:
+ * 1. The user performs a change in at least one field in the Solid Pod which we identify with a WebSocket update. In this case oldFields represent the values in cache, while newValues get
+ * populated from the current state of the Solid Pod.
+ * 2. We receive a notification that the counterparty performed a change in one of the fields. This case newChangeValues is populated and we set oldFields to equal the current guestFields
+ * retrieved from the Pod.
+ * After these variables are determined, we compare the set of fields and determine which field (RDF name) changed and from what value to what.
+ * The snackbar displays these fields (besides some accompanying information) and provides a radio option to either update the specific fields with the new value or keep the current one.
+ * @returns A snackbar behaving as described above.
+ */
 const SendChangeSnackbar = forwardRef<
   HTMLDivElement,
   {
