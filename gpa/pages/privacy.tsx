@@ -12,6 +12,11 @@ import { GetInboxUrlFromReservationUrl } from "../../common/util/urlParser";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 import { SubmitPrivacyTokenDeletionRequest } from "../util/outgoingCommunications";
 
+/**
+ * See the description of the {@link CreateDeleteButton}.
+ * Since we send the inbox along the request in which the GPA is expecting an answer, we create a GuestPrivacyToken just for the GPA with the inbox in it.
+ * The template token received as an argument acts a sample according to which we create this special token.
+ */
 async function CreateInboxTokenUntilConfirmation(
   templateToken: GuestPrivacyToken
 ): Promise<void> {
@@ -34,9 +39,14 @@ async function CreateInboxTokenUntilConfirmation(
   });
 }
 
-//send the inbox along to which GPA is expecting an answer and create a GuestPrivacyToken just for the GPA with the inbox in it,
-//with the same datatargeturl as the data protection profile token is. The PMS, after sending the reply, doesnt delete the notification,
-//but anonymizes the inbox URL. The GPA when gets the answer about the deletion, deletes both privacy tokens.
+/**
+ * Creates the delete button for the specific privacy token.
+ * The button is deleted if the expiry date did not pass yet.
+ * Sends the inbox along the request in which the GPA is expecting an answer and creates a GuestPrivacyToken just for the GPA with the inbox in it with the same datatargeturl as the data protection profile token.
+ * The PMS, after sending the reply, doesn't delete the notification, but anonymizes the inbox URL.
+ * When the GPA gets the answer about the deletion, deletes both privacy tokens.
+ * @returns The delete button with the onClick functionality to submit the privacy token deletion request.
+ */
 function CreateDeleteButton(token: PrivacyToken): JSX.Element {
   return (
     <Button
@@ -73,6 +83,13 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
   );
 }
 
+/**
+ * The GPA wrapper around the privacy dashboard component described in {@link PrivacyDashboard}.
+ * Defines the privacy token retrieval to fetch the guest privacy tokens from the guest's privacy container.
+ * Groups the privacy tokens by the hotel WebId.
+ * Defines the delete button component with the privacy token deletion request implementation (see {@link CreateDeleteButton}).
+ * @returns A component wrapping the {@link PrivacyDashboard} component with GPA specific actions.
+ */
 function PrivacyDashboardPage(): JSX.Element {
   return (
     <Container maxWidth="lg">

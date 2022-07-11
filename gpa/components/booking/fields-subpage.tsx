@@ -8,6 +8,13 @@ import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { ErrorComponent } from "../../../common/components/error-component";
 
+/**
+ * Has the responsibility to collect the values for all RDF fields required for booking.
+ * The required fields are retrieved from the mock API utility.
+ * The proceed button is disabled until every field has a value.
+ * When the button is enabled and clicked, we execute the booking operation.
+ * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the booking.
+ */
 function RequiredFields({
   currentPage,
   setCurrentPage,

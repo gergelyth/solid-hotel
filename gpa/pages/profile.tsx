@@ -11,6 +11,11 @@ import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import { useRequiredFields } from "../../common/hooks/useMockApi";
 import { ErrorComponent } from "../../common/components/error-component";
 
+/**
+ * The GPA wrapper around the profile editor component described in {@link ProfileMain}.
+ * Retrieves the required fields which must be present based on the guest's nationality and the hotel's location and allows the user to modify these fields.
+ * @returns A component wrapping the {@link ProfileMain} component with GPA specific actions.
+ */
 function Profile(): JSX.Element | null {
   const router = useRouter();
 

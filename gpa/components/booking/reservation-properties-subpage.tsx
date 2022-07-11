@@ -11,6 +11,11 @@ import { AddReservation } from "../../../common/util/solid_reservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { BookingProperties } from "../../../common/components/booking/reservation-properties";
 
+/**
+ * The function to execute if the user decides to make the reservation.
+ * It collects the properties selected for the reservation, such as the room and the check-in and check-out dates.
+ * Creates the reservation in the guest Pod and submits the booking request to the hotel Pod.
+ */
 async function BookRoom(
   roomIdString: string | undefined,
   checkinDate: Date | undefined,
@@ -45,6 +50,12 @@ async function BookRoom(
   SubmitBookingRequest(reservation, session);
 }
 
+/**
+ * The GPA wrapper around the room selection component described in {@link BookingProperties}.
+ * Defines the action to take when the user decides to go ahead with the reservation.
+ * Doesn't call the function yet, but sets defines the function with the booking properties selected here.
+ * @returns A component wrapping the {@link BookingProperties} component with GPA specific actions.
+ */
 function ReservationPropertiesPage({
   currentPage,
   setCurrentPage,

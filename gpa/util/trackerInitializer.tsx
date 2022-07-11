@@ -12,6 +12,11 @@ import TrackedRdfFieldCollector, {
 } from "./trackedRdfFieldCollector";
 import FieldChangeReceiverSnackbar from "./onFieldChangeReceived";
 
+/**
+ * Subscribe to profile changes in the guest's profile.
+ * We perceive the updates via the WebSocket publish messages.
+ * When an update is received, we trigger the {@link FieldChangeReceiverSnackbar} to allow the user to propagate the changes to the hotels.
+ */
 async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
   return Subscribe(profileUrl, {
     onClick: () => {
@@ -27,6 +32,11 @@ async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
   });
 }
 
+/**
+ * Executes a distinct on the personal information fields to get a set of fields tracked by at least one hotel.
+ * Caches the values of these fields in memory.
+ * Subscribes to updates on the guest profile.
+ */
 async function CacheUserProfile(hotelRdfMap: HotelToRdf): Promise<void> {
   const webId = GetSession().info.webId;
   if (!webId) {
@@ -45,6 +55,12 @@ async function CacheUserProfile(hotelRdfMap: HotelToRdf): Promise<void> {
   return SubscribeToProfileChanges(webId);
 }
 
+/**
+ * A snackbar notification displayed in the bottom right corner determining the personal information fields we must currently track.
+ * Triggered on every application launch.
+ * The values of these fields are cached in memory to help determine the old value if the Solid Pod gets updated.
+ * @returns A custom progress snackbar caching the currently tracked personal information field values.
+ */
 const UserTrackerInitializerSnackbar = forwardRef<
   HTMLDivElement,
   {

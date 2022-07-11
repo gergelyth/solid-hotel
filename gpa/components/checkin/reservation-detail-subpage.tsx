@@ -9,6 +9,9 @@ import {
   SubmitCheckinRequest,
 } from "../../util/outgoingCommunications";
 
+/**
+ * Submits the check-in request to the hotel Pod.
+ */
 function ExecuteCheckin(
   currentReservation: ReservationAtHotel | undefined
 ): void {
@@ -22,10 +25,17 @@ function ExecuteCheckin(
   SubmitCheckinRequest(currentReservation);
 }
 
+/**
+ * Submit the cancellation request to the hotel Pod.
+ */
 function ConfirmCancellation(reservation: ReservationAtHotel): void {
   SubmitCancellationRequest(reservation);
 }
 
+/**
+ * The component displayed when a specific reservation is opened and is in focus.
+ * @returns A component displaying information about the reservation, the cancel button and a check-in button.
+ */
 function ReservationDetailsPage({
   reservationId,
   setExecuteCheckin,

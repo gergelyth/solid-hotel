@@ -9,13 +9,16 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { ShowError } from "../../common/util/helpers";
 
-//we cant use the mockAPI to get the required RDF fields, because what if the nationality
-//changed between the current moment and the moment the hotel profile was submitted and saved on the hotel side
-
+/** A helper type describing a mapping from hotel WebId to the set of RDF fields. */
 export type HotelToRdf = {
   [hotel: string]: Set<string>;
 };
 
+/**
+ * The function that determines the currently tracked fields.
+ * We filter the privacy tokens so they only reference active reservation and which are not past their expiry.
+ * @returns A hotel WebId to RDF fields map.
+ */
 function CollectRdfFields(
   hotelsWithActiveReservation: string[],
   privacyTokens: (GuestPrivacyToken | null)[]
@@ -46,6 +49,12 @@ function CollectRdfFields(
   return hotelToRdfFieldMap;
 }
 
+/**
+ * A snackbar notification displayed in the bottom right corner determining which hotel tracks which personal information fields currently.
+ * We define the list of active reservations first, deduce the hotel WebIds from those and pair the privacy tokens to these hotels.
+ * Note that we can't use the mockAPI to get the required RDF fields, because the nationality may change between the current moment and the moment the hotel profile was submitted and saved on the hotel's side.
+ * @returns A custom progress snackbar collecting the currently tracked fields.
+ */
 const TrackedRdfFieldCollector = forwardRef<
   HTMLDivElement,
   {

@@ -7,6 +7,11 @@ import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
 import { ErrorComponent } from "../../common/components/error-component";
 import { GetSession } from "../../common/util/solid";
 
+/**
+ * The check-out button which takes the user to the checkout page.
+ * It's disabled if there are no active reservations for the user.
+ * @returns The check-out button or a text notice (in case no active reservations are currently found)>
+ */
 function CheckoutButton({
   reservationsResult,
 }: {
@@ -41,6 +46,12 @@ function CheckoutButton({
   }
 }
 
+/**
+ * The index page for the GPA application.
+ * Contains links in form of button to the other pages: booking, reservations, checkout, privacy dashboard, profile editor.
+ * The check-out button/link is active only if there's a currently an active reservation for the guest.
+ * @returns The GPA index page.
+ */
 export default function Home(): JSX.Element {
   const isLoggedIn = GetSession().info.isLoggedIn;
   const reservationsResult = useReservations(GetUserReservationsPodUrl());

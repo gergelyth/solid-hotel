@@ -2,6 +2,9 @@ import { Button } from "@material-ui/core";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { SubmitCheckoutRequest } from "../../util/outgoingCommunications";
 
+/**
+ * Submits the check-out request to the hotel Pod.
+ */
 function Checkout(
   reservationId: string,
   reservations: ReservationAtHotel[]
@@ -19,6 +22,11 @@ function Checkout(
   SubmitCheckoutRequest(reservation);
 }
 
+/**
+ * A button whose onClick event triggers the check-out action.
+ * Also has the option to provide onClick actions in an argument.
+ * @returns A check-out button for a given reservation.
+ */
 function CheckoutButton({
   reservationId,
   reservations,

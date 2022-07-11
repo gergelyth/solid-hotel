@@ -16,6 +16,14 @@ import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { CacheProfile } from "../../../common/util/tracker/profile-cache";
 import { ErrorComponent } from "../../../common/components/error-component";
 
+/**
+ * Has the responsibility to collect the values for all RDF fields required for check-in.
+ * The required fields are retrieved from the mock API utility.
+ * The proceed button is disabled until every field has a value.
+ * When the button is enabled and clicked, we execute the check-in operation.
+ * The component also contains a sample Terms And Conditions link as well.
+ * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the check-in.
+ */
 function RequiredFieldsAtCheckin({
   currentPage,
   setCurrentPage,

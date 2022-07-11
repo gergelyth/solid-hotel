@@ -11,6 +11,10 @@ import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ErrorComponent } from "../../../common/components/error-component";
 
 //TODO this is duplicated in reservation-list almost
+/**
+ * Filters out empty reservations and those whose state is not ACTIVE.
+ * @returns An array of non-empty ACTIVE reservations.
+ */
 export function GetActiveReservations(
   reservations: (ReservationAtHotel | null)[]
 ): ReservationAtHotel[] {
@@ -21,6 +25,12 @@ export function GetActiveReservations(
   return filteredReservations;
 }
 
+/**
+ * The main component for the check-out activity.
+ * Retrieves the reservations and calls {@link ReservationRadioSelector} with the filter to show only ACTIVE reservations.
+ * If a reservation is selected, the check-out button gets enabled and the user can start the check-out process by clicking on the button.
+ * @returns A component containing the reservation selector and the check-out button.
+ */
 function ReservationSelectForCheckout({
   currentPage,
   setCurrentPage,

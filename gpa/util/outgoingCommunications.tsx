@@ -13,6 +13,9 @@ import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 
+/**
+ * Creates the booking request dataset and submits it into the hotel's booking requests inbox.
+ */
 export async function SubmitBookingRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
@@ -24,6 +27,9 @@ export async function SubmitBookingRequest(
   });
 }
 
+/**
+ * A common function to create the reservation state change request dataset and submit it into the hotel's reservation inbox.
+ */
 async function SubmitReservationStateChangeRequest(
   hotelInboxUrl: string | null,
   reservation: ReservationAtHotel,
@@ -53,6 +59,9 @@ async function SubmitReservationStateChangeRequest(
   });
 }
 
+/**
+ * Creates the check-in request dataset and submits it into the hotel's reservation inbox.
+ */
 export async function SubmitCheckinRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
@@ -65,6 +74,9 @@ export async function SubmitCheckinRequest(
   );
 }
 
+/**
+ * Creates the cancellation request dataset and submits it into the hotel's reservation inbox.
+ */
 export async function SubmitCancellationRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
@@ -77,6 +89,9 @@ export async function SubmitCancellationRequest(
   );
 }
 
+/**
+ * Creates the check-out request dataset and submits it into the hotel's reservation inbox.
+ */
 export async function SubmitCheckoutRequest(
   reservation: ReservationAtHotel,
   session = getDefaultSession()
@@ -89,6 +104,9 @@ export async function SubmitCheckoutRequest(
   );
 }
 
+/**
+ * Creates the pairing request dataset and submits it into the hotel's reservation inbox which we got as a query parameter of the pairing/ page.
+ */
 export async function SubmitInitialPairingRequest(
   guestInboxUrl: Promise<string>,
   pairingToken: string,
@@ -105,6 +123,9 @@ export async function SubmitInitialPairingRequest(
   });
 }
 
+/**
+ * Creates the privacy token deletion request dataset and submits it into the hotel's specific inbox created for these requests.
+ */
 export async function SubmitPrivacyTokenDeletionRequest(
   privacyToken: GuestPrivacyToken,
   guestInboxUrl?: string,
@@ -130,6 +151,9 @@ export async function SubmitPrivacyTokenDeletionRequest(
   );
 }
 
+/**
+ * Creates the profile modifiation notice dataset and submits it into the hotel's reservation inbox.
+ */
 export async function SendProfileModification(
   approvedFields: ProfileUpdate,
   hotelInboxUrl: string,

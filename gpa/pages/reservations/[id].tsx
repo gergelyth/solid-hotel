@@ -5,12 +5,17 @@ import { useState } from "react";
 import ReservationDetailsPage from "../../components/checkin/reservation-detail-subpage";
 import RequiredFieldsAtCheckin from "../../components/checkin/fields-subpage";
 
+/** An enum which helps to keep track of which subpage the reservation details page is currently showing. */
 export enum CheckinPage {
   ReservationDetail,
   RequiredFields,
   Finish,
 }
 
+/**
+ * The simple page presenting the user a successful notice in case the check-in was successfully requested.
+ * @returns The success page after check-in.
+ */
 function FinishPage({
   successText,
   currentPage,
@@ -27,6 +32,12 @@ function FinishPage({
   return <SuccessPage successText={successText} router={router} />;
 }
 
+/**
+ * The page displayed for a specific reservation given by the ID.
+ * The reservation ID is given as a query parameter.
+ * Shows reservation information, but is also the entry point for the cancel and check-in operations as well.
+ * @returns The reservation detail page.
+ */
 function ReservationDetail(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(CheckinPage.ReservationDetail);
 

@@ -12,6 +12,11 @@ import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { HotelDetailsOneLiner } from "../../../common/components/reservations/hotel-details";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
+/**
+ * Displays the reservations matching the supplied filter in a list so the user can select one via radio buttons.
+ * The reservation ID is propagated upwards via a state set capability.
+ * @returns A RadioGroup component with reservations acting as element.
+ */
 function ReservationRadioSelector({
   selectedReservationId,
   setSelectedReservationId,

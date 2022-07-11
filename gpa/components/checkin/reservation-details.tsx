@@ -21,6 +21,11 @@ import {
 import { ErrorComponent } from "../../../common/components/error-component";
 import { ShowError } from "../../../common/util/helpers";
 
+/**
+ * Displays detailed information about a reservation.
+ * The reservation is fetched from the Solid Pod and parsed afterwards.
+ * @returns A component containing details of the hotel, of the room and information about the dates the stay is booked for.
+ */
 function ReservationDetails({
   reservationId,
   setCurrentReservation,

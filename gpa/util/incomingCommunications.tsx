@@ -28,6 +28,12 @@ import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { RevalidateGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 
+/**
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
+ * The onClick function takes the user to the reservation detail page in {@link ReservationDetail}.
+ * The onReceive function sets the new reservation state and updates the reply inbox field in the guest's Solid Pod.
+ * @returns The notification properties described above along with the text field, which informs the user of the successful operation.
+ */
 export function ReceiveReservationStateChange(
   router: NextRouter,
   url: string,
@@ -54,6 +60,12 @@ export function ReceiveReservationStateChange(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a failure report notification.
+ * The onClick function takes the user to the reservation detail page in {@link ReservationDetail}.
+ * The onReceive function does nothing.
+ * @returns The notification properties described above along with the text field, which informs the user of the failure.
+ */
 export function ReceiveFailureReport(
   router: NextRouter,
   url: string,
@@ -81,6 +93,12 @@ export function ReceiveFailureReport(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a pairing request notification with the payload sent by the hotel..
+ * The onClick function provides the ability (as this is only optional) to populate the guest's profile with the fields presented during offline check-in.
+ * The onReceive function saves the reservation details to the guest Pod.
+ * @returns The notification properties described above along with the text field, which informs the user of the receipt of the data.
+ */
 export function ReceivePairingRequestWithInformation(
   router: NextRouter,
   url: string,
@@ -110,12 +128,19 @@ export function ReceivePairingRequestWithInformation(
       return;
     }
     reservation.owner = webId;
+    //TODO remove the dummy reservation?
     AddReservation(reservation).then(() => RevalidateReservations());
   };
 
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a privacy token notification.
+ * The onClick function takes the user to the privacy dashboard in {@link PrivacyDashboardPage}
+ * The onReceive function creates the guest privacy token and saves it in the privacy token container found in the guest Pod.
+ * @returns The notification properties described above along with the text field, which informs the user of the receipt of the privacy token.
+ */
 export function ReceivePrivacyToken(
   router: NextRouter,
   url: string,
@@ -152,6 +177,12 @@ export function ReceivePrivacyToken(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a privacy token deletion notice notification.
+ * The onClick function does nothing.
+ * The onReceive function displays a progress snackbar which deletes the corresponding privacy token on the side of the guest.
+ * @returns The notification properties described above along with the text field, which informs the user of the successful operation.
+ */
 export function ReceivePrivacyTokenDeletionNotice(
   router: NextRouter,
   reservationInboxUrl: string,
@@ -180,6 +211,12 @@ export function ReceivePrivacyTokenDeletionNotice(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
+ * The onClick function displays a snackbar which lets the guess choose which field updates to propagate to their Solid Pod.
+ * The onReceive function does nothing.
+ * @returns The notification properties described above along with the text field, which informs the user that a notification was received.
+ */
 export function ReceiveProfileModification(
   router: NextRouter,
   reservationInboxUrl: string,

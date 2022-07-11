@@ -12,6 +12,12 @@ import {
 import { deleteSolidDataset } from "@inrupt/solid-client";
 import { NotEmptyItem, ShowError } from "../../common/util/helpers";
 
+/**
+ * A snackbar notification displayed in the bottom right corner to inform the user that privacy tokens are being deleted.
+ * This is triggered in reaction to the hotel's notice that a privacy token was deleted on their side and we should delete the corresponding one on the side of the guest as well.
+ * Deletes all privacy tokens which reference the hotel privacy token that was just deleted.
+ * @returns A custom progress snackbar deleting the corresponding guest privacy tokens to the hotel's recently deleted token.
+ */
 const PrivacyTokenRemover = forwardRef<
   HTMLDivElement,
   {

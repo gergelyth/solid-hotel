@@ -9,6 +9,11 @@ import { ReservationConciseElement } from "../../common/components/reservations/
 import { HotelDetailsOneLiner } from "../../common/components/reservations/hotel-details";
 import { ReservationClickHandler } from "../../common/types/ReservationClickHandler";
 
+/**
+ * A GPA wrapper for the {@link ReservationConciseElement} component.
+ * This is the function which instructs what type of component to show in the list reservations page.
+ * @returns The reservation element.
+ */
 function CreateReservationElement(
   item: ReservationAtHotel,
   onClickAction: ReservationClickHandler
@@ -22,6 +27,12 @@ function CreateReservationElement(
   );
 }
 
+/**
+ * The GPA page for displaying the list of reservations.
+ * Shows the reservation lists broken down into categories by their current state.
+ * Defines the onReservationClick function to take the user to the reservation detail page in {@link ReservationDetail}
+ * @returns The list reservations page.
+ */
 function Reservations(): JSX.Element {
   const userReservationsUrl = GetUserReservationsPodUrl();
 

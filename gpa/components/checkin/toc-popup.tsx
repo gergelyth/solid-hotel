@@ -10,6 +10,10 @@ import {
   DialogContent,
 } from "@material-ui/core";
 
+/**
+ * A sample placeholder Terms of Service component listing some conditions.
+ * @returns A components containing sample excerpts from a potential ToC document as well as an acknowledging button closing it.
+ */
 function TocPopup({
   isPopupShowing,
   setPopupVisibility,

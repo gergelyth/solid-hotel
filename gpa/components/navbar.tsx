@@ -12,6 +12,12 @@ import {
 } from "@inrupt/solid-client-authn-browser";
 import { useRouter } from "next/router";
 
+/**
+ * The navigation bar displayed at the top of the GPA page.
+ * As this component is ubiqutious, it handles the session restore capability of the Solid login functionality and contains the login/logout button as well.
+ * Also contains the notification element, which display how many notifications the user has as well as opens the drawer which enables the user to view them.
+ * @returns A component including the notification display and logic as well as the login/logout trigger button.
+ */
 function NavigationBar(): JSX.Element {
   const router = useRouter();
 

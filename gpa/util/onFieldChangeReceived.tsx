@@ -19,6 +19,10 @@ import TrackedRdfFieldCollector, {
 import { SendProfileModification } from "./outgoingCommunications";
 import { RevalidateGuest } from "../../common/hooks/useGuest";
 
+/**
+ * Creates the approval dialog popup for a given hotel in the bottom right corner.
+ * Allows the user to choose which field value changes to propagate to the hotel (more information in {@link SendChangeSnackbar} and {@link SendProfileModificationSnackbar}).
+ */
 function ShowApprovalDialogForHotel(
   webId: string,
   hotelUrl: string,
@@ -72,6 +76,11 @@ function ShowApprovalDialogForHotel(
   );
 }
 
+/**
+ * Creates the close function for the given hotel's field approval dialog to trigger the dialog for the next hotel in order.
+ * The last hotel's dialog in the chain triggers nothing and closes the dialog only.
+ * @returns The closing function of the approval dialog snackbar.
+ */
 function GetCloseFunctionForIndex(
   webId: string,
   reservationUrl: string,
@@ -102,6 +111,10 @@ function GetCloseFunctionForIndex(
     );
 }
 
+/**
+ * Go through the hotels and trigger a field approval dialog for each of them.
+ * The closing function of a popup either triggers the popup for the next hotel or ends the chain.
+ */
 function IterateHotelsAndCreateApprovalDialogs(
   webId: string,
   hotelRdfMap: HotelToRdf
@@ -123,6 +136,12 @@ function IterateHotelsAndCreateApprovalDialogs(
   );
 }
 
+/**
+ * A custom progress snackbar shown when at least one tracked personal information field's value is changed in the guest Pod.
+ * Firstly we gather what fields are currently in use at the side of hotels where the guest has a reservation and categorize them by the hotel.
+ * Then we show sequential dialogs offering the option to the user to separately choose which hotel should receive which field update (only for fields they currently possess).
+ * @returns A custom progress snackbar while all the data is being initialized. Triggers the approval dialog popups once everything's ready.
+ */
 const FieldChangeReceiverSnackbar = forwardRef<
   HTMLDivElement,
   {
