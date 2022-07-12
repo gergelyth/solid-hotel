@@ -3,6 +3,6 @@
   "entryPoints": ["../common", "../gpa", "../pms", "../spe"],
   "entryPointStrategy": "expand",
   "tsconfig": "./tsconfig.json",
-  "out": "docs",
+  "out": "../docs/progdoc/docs",
   "exclude": ["**/*.js", "**/node_modules/**"]
 }
