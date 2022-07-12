@@ -22,6 +22,7 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import JSZip from "jszip";
 import { SerializationBaseDate, GetPodBaseUrl, AclFilename } from "./setupUtil";
 
+/** Helper type which encompasses the name of the Solid resource and the RDF string content. */
 type SerializedDataset = {
   name: string;
   content: string;

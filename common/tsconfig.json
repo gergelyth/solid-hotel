@@ -22,7 +22,14 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    //These are here so typedoc is able to generate the docs for all projects and cross-references would work between them
+    "../gpa/**/*.ts",
+    "../gpa/**/*.tsx",
+    "../pms/**/*.ts",
+    "../pms/**/*.tsx",
+    "../spe/**/*.ts",
+    "../spe/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

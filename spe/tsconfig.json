@@ -22,7 +22,10 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    //These are here so typedoc is able to generate the docs for the module references in common
+    "../common/**/*.ts",
+    "../common/**/*.tsx" 
   ],
   "exclude": [
     "node_modules",

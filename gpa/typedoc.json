@@ -1,0 +1,8 @@
+{
+  "name": "Guest Portal Application Documentation",
+  "entryPoints": ["../gpa", "../common"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "./tsconfig.json",
+  "out": "docs",
+  "exclude": ["**/*.js", "**/node_modules/**"]
+}

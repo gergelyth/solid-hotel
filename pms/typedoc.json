@@ -1,0 +1,8 @@
+{
+  "name": "Property Management System Documentation",
+  "entryPoints": ["../pms", "../common"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "./tsconfig.json",
+  "out": "docs",
+  "exclude": ["**/*.js", "**/node_modules/**"]
+}

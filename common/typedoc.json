@@ -1,0 +1,8 @@
+{
+  "name": "Solid Hotel Documentation",
+  "entryPoints": ["../common", "../gpa", "../pms", "../spe"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "./tsconfig.json",
+  "out": "docs",
+  "exclude": ["**/*.js", "**/node_modules/**"]
+}

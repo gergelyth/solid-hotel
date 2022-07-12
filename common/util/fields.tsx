@@ -28,6 +28,10 @@ function CreateMap(): {
   };
 }
 
+/**
+ * {@link FieldNameToFieldMap} maps the programmatical name of the field to the field definition
+ * {@link RdfNameToFieldMap} maps the RDF name of the field to the field definition
+ */
 export const {
   FieldNameToFieldMap,
   RdfNameToFieldMap,
