@@ -212,7 +212,7 @@ export function ReceivePrivacyTokenDeletionNotice(
 }
 
 /**
- * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
+ * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a profile modification notification.
  * The onClick function displays a snackbar which lets the guess choose which field updates to propagate to their Solid Pod.
  * The onReceive function does nothing.
  * @returns The notification properties described above along with the text field, which informs the user that a notification was received.

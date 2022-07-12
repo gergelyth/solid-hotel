@@ -36,6 +36,10 @@ import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-s
 import { ConfirmCancellation } from "../components/reservations/reservation-element";
 import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
 
+/**
+ * Retrieves the dataset represented by the URL and anonymizes the fields included in the array passed to the function.
+ * Saves the updated dataset to the Pod afterwards.
+ */
 async function AnonymizeFields(
   datasetUrlTarget: string,
   fieldList: string[]
@@ -64,6 +68,11 @@ async function AnonymizeFields(
   );
 }
 
+/**
+ * Anonymizes the fields listed in the privacy token in the dataset referred to by the privacy token.
+ * After this, the privacy token is deleted from the Pod.
+ * Optionally accepts the guest reply inbox parameter where the hotel can submit the deletion notice (if not supplied, the inbox URL in the privacy token is used).
+ */
 export async function AnonymizeFieldsAndDeleteToken(
   privacyToken: HotelPrivacyToken,
   guestInboxUrl?: string
@@ -76,6 +85,10 @@ export async function AnonymizeFieldsAndDeleteToken(
   await DeletePrivacyToken(privacyToken, guestInboxUrl);
 }
 
+/**
+ * Deletes the privacy token in the Solid Pod and sends a notice to the guest about it.
+ * Optionally accepts the guest reply inbox parameter where the hotel can submit the deletion notice (if not supplied, the inbox URL in the privacy token is used).
+ */
 async function DeletePrivacyToken(
   privacyToken: HotelPrivacyToken,
   guestInboxUrl?: string
@@ -89,6 +102,11 @@ async function DeletePrivacyToken(
   RevalidateHotelPrivacyTokens();
 }
 
+/**
+ * Creates the appropriate privacy tokens for a confirmed reservation (WebId and inbox).
+ * Saves the hotel privacy tokens to the hotel Pod and returns the guest privacy tokens meant for the guest.
+ * @returns An array of tokens containing the two guest privacy tokens which are then sent to the guest.
+ */
 export async function CreateReservationPrivacyToken(
   reservationUrl: string,
   guestInbox: string,
@@ -113,6 +131,11 @@ export async function CreateReservationPrivacyToken(
   return Promise.all([webIdToken, inboxToken]);
 }
 
+/**
+ * Creates the inbox privacy token for a confirmed reservation.
+ * Saves the hotel privacy token to the hotel Pod and returns the guest privacy token meant for the guest.
+ * @returns A guest privacy token about their inbox which is then sent to the guest.
+ */
 export async function CreateInboxPrivacyToken(
   reservationUrl: string,
   guestInbox: string,
@@ -131,6 +154,11 @@ export async function CreateInboxPrivacyToken(
   return inboxToken;
 }
 
+/**
+ * Creates the active hotel profile privacy token for an active reservation.
+ * Saves the hotel privacy token to the hotel Pod and returns the guest privacy token meant for the guest.
+ * @returns A guest privacy token about their hotel profile which is then sent to the guest.
+ */
 export async function CreateActiveProfilePrivacyToken(
   datasetUrlTarget: string,
   guestInbox: string,
@@ -149,6 +177,11 @@ export async function CreateActiveProfilePrivacyToken(
   );
 }
 
+/**
+ * Creates the data protection profile privacy token for a past reservation.
+ * Saves the hotel privacy token to the hotel Pod and returns the guest privacy token meant for the guest.
+ * @returns A guest privacy token about their data protection profile which is then sent to the guest.
+ */
 export async function CreateDataProtectionProfilePrivacyToken(
   datasetUrlTarget: string,
   reservationUrl: string,
@@ -168,6 +201,11 @@ export async function CreateDataProtectionProfilePrivacyToken(
   );
 }
 
+/**
+ * Creates the privacy token according to the arguments supplied.
+ * Saves the hotel privacy token to the hotel Pod and returns the guest privacy token meant for the guest.
+ * @returns A guest privacy token which is then sent to the guest.
+ */
 async function SaveHotelAndCreateGuestPrivacyToken(
   datasetUrlTarget: string,
   fields: string[],
@@ -220,6 +258,11 @@ async function SaveHotelAndCreateGuestPrivacyToken(
   return guestPrivacyToken;
 }
 
+/**
+ * Looks for the WebId privacy token created for the reservation represented by the ID passed.
+ * Deletes the privacy token if found and informs the guest about it.
+ * Anonymizes the target fields in the target dataset if required.
+ */
 export async function FindWebIdTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
   reservationId: string,
@@ -234,6 +277,11 @@ export async function FindWebIdTokenAndDeleteIt(
   );
 }
 
+/**
+ * Looks for the inbox privacy token created for the reservation represented by the ID passed.
+ * Deletes the privacy token if found and informs the guest about it.
+ * Anonymizes the target fields in the target dataset if required.
+ */
 export async function FindInboxTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
   reservationId: string,
@@ -248,6 +296,10 @@ export async function FindInboxTokenAndDeleteIt(
   );
 }
 
+/**
+ * Looks for the hotel profile privacy token created for the reservation represented by the ID passed.
+ * Deletes the privacy token if found.
+ */
 export async function FindHotelProfileTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
   reservationId: string
@@ -260,6 +312,11 @@ export async function FindHotelProfileTokenAndDeleteIt(
   );
 }
 
+/**
+ * Looks for the hotel profile privacy token created for the reservation represented by the ID passed.
+ * Deletes the privacy token if found and informs the guest about it.
+ * Anonymizes the target fields in the target dataset if required.
+ */
 async function FindTokenAndDeleteIt(
   privacyTokens: (HotelPrivacyToken | null)[],
   reservationId: string,
@@ -293,6 +350,9 @@ async function FindTokenAndDeleteIt(
   }
 }
 
+/**
+ * Anonymizes the inbox field in the privacy token deletion notification and saves the updated dataset to the Pod.
+ */
 export async function AnonymizeInboxInNotification(
   dataset: SolidDataset,
   session: Session = GetSession()
@@ -319,7 +379,12 @@ export async function AnonymizeInboxInNotification(
   });
 }
 
-//TODO There's a case by case study for this in my notebook. Prepare it nicely and put it somewhere
+//TODO the method never return false
+/**
+ * A case by case study of the occasions when a privacy token is required to be deleted after it's past its expiration date.
+ * This study is explained in detail in the thesis.
+ * @returns A flag is we should go ahead with the deletion of the privacy token.
+ */
 export async function HandleIrregularTokenDeletion(
   privacyToken: HotelPrivacyToken
 ): Promise<boolean> {
@@ -420,6 +485,10 @@ export async function HandleIrregularTokenDeletion(
   }
 }
 
+/**
+ * The guest didn't check-out in the timeframe provided for such.
+ * We trigger the activity and force them to check-out.
+ */
 function ForceCheckout(reservation: ReservationAtHotel): void {
   const reservationId = reservation.id;
   const inbox = reservation.inbox;
@@ -440,6 +509,10 @@ function ForceCheckout(reservation: ReservationAtHotel): void {
   ));
 }
 
+/**
+ * Something went wrong (or there was a manual intervention) and a privacy token wasn't deleted when it should have been.
+ * Throws an error explaining the issue.
+ */
 function HandleCaseWhenAutoDeletionFailed(
   privacyToken: HotelPrivacyToken
 ): void {

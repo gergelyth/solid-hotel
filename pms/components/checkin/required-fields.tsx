@@ -4,6 +4,13 @@ import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/
 import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
 
+/**
+ * Has the responsibility to collect the values for all RDF fields required for check-in.
+ * The required fields array is passed as an argument.
+ * The proceed button is disabled until every required field has a value.
+ * When the button is enabled and clicked, we execute the check-in operation.
+ * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the check-in.
+ */
 export function RequiredFields({
   data,
   hotelProfileWebId,

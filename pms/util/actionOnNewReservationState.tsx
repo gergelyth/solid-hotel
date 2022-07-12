@@ -14,6 +14,11 @@ import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-s
 import CancelProgressSnackbar from "../components/cancelation/cancel-progress-snackbar";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 
+/**
+ * Performs the state specific action when the state of the reservation gets changed.
+ * Updates the reservation state and reply inbox address in the Solid Pod.
+ * Sends a notification to the guest that the reservation state was successfully updated.
+ */
 export function DoOnStateChange(
   reservationId: string,
   newState: ReservationState,
@@ -66,6 +71,10 @@ export function DoOnStateChange(
   ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);
 }
 
+/**
+ * Performs the check-in operation.
+ * This is a function wrapper triggering the {@link CheckinProgressSnackbar} snackbar to execute the actions.
+ */
 async function OnCheckIn(
   reservationId: string,
   replyInbox: string
@@ -86,6 +95,10 @@ async function OnCheckIn(
   ));
 }
 
+/**
+ * Performs the check-out operation.
+ * This is a function wrapper triggering the {@link CheckoutProgressSnackbar} snackbar to execute the actions.
+ */
 async function OnCheckOut(
   reservationId: string,
   replyInbox: string

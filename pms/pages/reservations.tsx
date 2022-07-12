@@ -6,6 +6,15 @@ import { Grid, Typography, Box } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
 import { ReservationStatusList } from "../../common/components/reservations/reservation-status-list";
 
+/**
+ * The PMS page for displaying the list of reservations.
+ * Shows the reservation lists broken down into categories by their current state.
+ * Defines the onReservationClick function to take the user to either
+ * - the hotel profile page ({@link ActiveHotelProfileDetail})
+ * - the data protection profile page ({@link DataProtectionProfileDetail})
+ * depending on the state of the reservation.
+ * @returns The list reservations page.
+ */
 function Reservations(): JSX.Element {
   const router = useRouter();
 

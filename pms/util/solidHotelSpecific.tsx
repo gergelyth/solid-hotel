@@ -22,6 +22,10 @@ import {
 import { GetSession } from "../../common/util/solid";
 import { SetReadAccessToEveryone } from "../../common/util/solid_access";
 
+/**
+ * Fetches the profile of the hotel and sets the field value to be the value passed to the function.
+ * Saves the profile to the Pod.
+ */
 export async function SetHotelProfileField(
   field: string,
   value: string
@@ -30,6 +34,10 @@ export async function SetHotelProfileField(
   SetFieldInSolidProfile(hotelProfile, field, value);
 }
 
+/**
+ * Creates the Solid dataset from the room definition object passed to the function.
+ * Saves it in the hotel Pod creating the room definition container if not already present.
+ */
 export async function CreateOrUpdateRoom(
   room: RoomDefinition,
   session: Session = GetSession()
@@ -55,6 +63,9 @@ export async function CreateOrUpdateRoom(
   });
 }
 
+/**
+ * Tries to fetch the room container from the hotel Pod - if the container doesn't exist yet, it creates it and sets the appropriate Read persmission for the Public.
+ */
 async function CheckOrCreateRoomContainer(session: Session): Promise<void> {
   try {
     await getSolidDataset(RoomDefinitionsUrl, {
@@ -66,6 +77,9 @@ async function CheckOrCreateRoomContainer(session: Session): Promise<void> {
   }
 }
 
+/**
+ * Constucts the room definition URL based on the object passed and deletes it from the hotel Pod.
+ */
 export async function DeleteRoom(
   room: RoomDefinition,
   session: Session = GetSession()

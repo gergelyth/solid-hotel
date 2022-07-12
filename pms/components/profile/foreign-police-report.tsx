@@ -4,6 +4,10 @@ import { Field } from "../../../common/types/Field";
 import { CSVLink } from "react-csv";
 import { ShowError } from "../../../common/util/helpers";
 
+/**
+ * Prepares the CSV file data from the guest fields retrieved from the hotel Pod.
+ * @returns The hotel profile of the guest in CSV format.
+ */
 function PrepareCsvArray(guestFields: Field[]): string[][] {
   const guestArray: string[][] = [];
   guestFields.forEach((field) => {
@@ -17,6 +21,10 @@ function PrepareCsvArray(guestFields: Field[]): string[][] {
   return guestArray;
 }
 
+/**
+ * Prepares the personal information package in CSV format which can then be sent to the authorities.
+ * @returns A button which triggers a prompt to download a CSV file with the personal information data of the guest (created from the hotel profile of the guest).
+ */
 export function ForeignPoliceReport({
   rdfFields,
   webId,

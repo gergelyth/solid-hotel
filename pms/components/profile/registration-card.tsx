@@ -13,6 +13,11 @@ import PrintIcon from "@material-ui/icons/Print";
 import { useReactToPrint } from "react-to-print";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
+/**
+ * Provides a printable format of the guest's hotel profile.
+ * The printing function is performed according to system defaults.
+ * @returns A dialog with the print overview and button which triggers the print.
+ */
 export function RegistrationCard({
   rdfFields,
   webId,

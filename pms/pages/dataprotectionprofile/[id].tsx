@@ -38,6 +38,13 @@ function GetDataRetentionPeriod({
   );
 }
 
+/**
+ * The page displayed for the guest data protection profile in PMS.
+ * The data protection profile URL is passed as a query parameter.
+ * Contains a read-only version of the profile editor component by {@link ProfileMain} where the fields are neither editable nor deletable.
+ * In addition it contains a small text component which displays the data protection retention period in effect for the guest.
+ * @returns The data protection profile page for a specific guest.
+ */
 function DataProtectionProfileDetail(): JSX.Element | null {
   const router = useRouter();
 

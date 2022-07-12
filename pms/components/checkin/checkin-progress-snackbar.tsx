@@ -27,6 +27,11 @@ import {
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 import { GetStartOfNextDay, ShowError } from "../../../common/util/helpers";
 
+/**
+ * Creates the hotel profile of the guest, caches the field values in memory and subscribes to WebSocket messages monitoring for changes in the values of the fields.
+ * Removes the references to now not-needed fields as well as the corresponding privacy tokens.
+ * Creates the new privacy tokens required by the new reservation state.
+ */
 async function ExecuteCheckIn(
   reservationId: string,
   guestFields: Field[],
@@ -71,6 +76,13 @@ async function ExecuteCheckIn(
   console.log("privacy token sent");
 }
 
+/**
+ * A snackbar notification displayed in the bottom right corner executing the check-in operation for the reservation given by its ID.
+ * We first retrieve the required fields from the mock API to know what personal information we require.
+ * Then we retrieve the values for these fields from the Pod of the guest and create the hotel profile of the guest from these fields.
+ * We also need to remove the now redundant privacy tokens and create new ones appropriate for the new reservation state.
+ * @returns A custom progress snackbar executing the check-in operation.
+ */
 const CheckinProgressSnackbar = forwardRef<
   HTMLDivElement,
   {

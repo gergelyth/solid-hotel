@@ -7,12 +7,17 @@ import { SetReservationOwnerAndState } from "../../common/util/solid_reservation
 import { ReservationState } from "../../common/types/ReservationState";
 import QrComponent from "../components/checkin/qr-subpage";
 
+/** An enum which helps to keep track of which subpage the offline check-in page is currently showing. */
 export enum OfflineCheckinPage {
   RequiredFields,
   QrComponent,
   Finish,
 }
 
+/**
+ * The simple page presenting the user a successful notice in case the offline check-in was successfully completed.
+ * @returns The success page after offline check-in.
+ */
 function FinishPage({
   router,
   successText,
@@ -29,6 +34,15 @@ function FinishPage({
   return <SuccessPage successText={successText} router={router} />;
 }
 
+/**
+ * The page guiding the user through the offline check-in operation.
+ * The reservation ID is passed as a query parameter.
+ * Contains three subpages:
+ * 1. requires the user to input values for all required fields based on the guest's nationality and the hotel's location
+ * 2. displays a QR code which the hotel employee can show to the guest taking them to the GPA pairing page {@link QrComponent}
+ * 3. a success notice informing the user that the offline check-in operation was successfully finished
+ * @returns The offline check-in page.
+ */
 function OfflineCheckin(): JSX.Element | null {
   const [currentPage, setCurrentPage] = useState(
     OfflineCheckinPage.RequiredFields

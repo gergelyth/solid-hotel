@@ -17,6 +17,11 @@ import { GetPairingToken } from "../../../common/util/pairingTokenHandler";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import Link from "next/link";
 
+/**
+ * Fetches the pairing token of the reservation and creates the QR target URL.
+ * It's the pairing/ page in the GPA coupled with the query parameters of the hotel inbox URL and the pairing token.
+ * The target URL is propagated upward through a set state action.
+ */
 async function SetTargetUrl(
   hotelInboxUrl: string,
   reservationFolder: string,
@@ -40,6 +45,11 @@ async function SetTargetUrl(
   setTargetUrl(targetUrl.toString());
 }
 
+/**
+ * The QR code embodies the target URL which is the pairing page in the GPA coupled with the query parameters of the hotel inbox URL (in which the guest can reply back) and the pairing token.
+ * The URL itself is displayed for ease of access.
+ * @returns The QR code and the URL link with the same target URL.
+ */
 function QrCodeElement({
   hotelInboxUrl,
   reservationFolder,
@@ -74,6 +84,10 @@ function QrCodeElement({
   );
 }
 
+/**
+ * Presents a QR code (as well as an URL link) directing the user to the GPA page which will guide them creating a Solid Pod and pairing that to the current reservation.
+ * @returns A component containing the QR code, an URL link and the instruction for the user.
+ */
 export function QrElementWithHeadings({
   reservationId,
 }: {
@@ -110,6 +124,10 @@ export function QrElementWithHeadings({
   );
 }
 
+/**
+ * Presents a QR code (as well as an URL link) directing the user to the GPA page which will guide them creating a Solid Pod and pairing that to the current reservation.
+ * @returns A component containing the QR code, an URL link and acknowledging Continue button to proceed with the operation.
+ */
 function QrComponent({
   reservationId,
   currentPage,

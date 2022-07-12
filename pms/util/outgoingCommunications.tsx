@@ -31,6 +31,9 @@ import { SerializePrivacyInformationDeletion } from "../../common/notifications/
 import { GetStartOfNextDay } from "../../common/util/helpers";
 import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 
+/**
+ * Creates the reservation state change notification dataset and submits it into the guest reservation inbox.
+ */
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
   guestInboxUrl: string | null,
@@ -52,6 +55,9 @@ export async function ConfirmReservationStateRequest(
   RevalidateReservations();
 }
 
+/**
+ * Creates the failure report notification dataset and submits it into the guest reservation inbox.
+ */
 export async function ReportFailureToGuest(
   errorMessage: string,
   resultState: ReservationState,
@@ -69,6 +75,10 @@ export async function ReportFailureToGuest(
   });
 }
 
+/**
+ * Creates the pairing request notification dataset with the reservation information and the personal information fields initialized during offline check-in.
+ * Adjust some fields to represent a normal reservation (now that it's paired with a guest Pod as usual) and creates the required privacy tokens as well.
+ */
 export async function SendPairingRequestWithInformation(
   reservationUrl: string,
   hotelInboxUrl: string,
@@ -121,6 +131,9 @@ export async function SendPairingRequestWithInformation(
   RevalidateHotelPrivacyTokens();
 }
 
+/**
+ * Creates the privacy token notification dataset and submits it into the guest reservation inbox.
+ */
 export async function SendPrivacyToken(
   guestInboxUrl: string,
   privacyToken: GuestPrivacyToken,
@@ -133,6 +146,9 @@ export async function SendPrivacyToken(
   });
 }
 
+/**
+ * Creates the privacy token deletion notice notification dataset and submits it into the guest reservation inbox.
+ */
 export async function SendPrivacyTokenDeletionNotice(
   privacyToken: HotelPrivacyToken,
   guestInboxUrl?: string,
@@ -159,6 +175,9 @@ export async function SendPrivacyTokenDeletionNotice(
   });
 }
 
+/**
+ * Creates the profile modification notification dataset and submits it into the guest reservation inbox.
+ */
 export async function SendProfileModification(
   approvedFields: ProfileUpdate,
   guestInboxUrl: string,

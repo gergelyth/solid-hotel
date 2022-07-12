@@ -16,6 +16,11 @@ import { GetCoreReservationFolderFromInboxUrl } from "../../../common/util/urlPa
 import { CreateAndSavePairingToken } from "../../../common/util/pairingTokenHandler";
 import { RevalidateReservations } from "../../../common/hooks/useReservations";
 
+/**
+ * The function to execute if the user decides to make the reservation.
+ * It collects the properties selected for the reservation, such as the room and the check-in and check-out dates.
+ * Creates the reservation in the hotel Pod, along with the reservation inbox and pairing token as well.
+ */
 async function BookRoom(
   roomIdString: string | undefined,
   checkinDate: Date | undefined,
@@ -46,6 +51,12 @@ async function BookRoom(
   RevalidateReservations();
 }
 
+/**
+ * The PMS wrapper around the room selection component described in {@link BookingProperties}.
+ * Defines the action to take when the user decides to go ahead with the reservation.
+ * Doesn't call the function yet, but sets defines the function with the booking properties selected here.
+ * @returns A component wrapping the {@link BookingProperties} component with PMS specific actions.
+ */
 function ReservationPropertiesPage({
   currentPage,
   setCurrentPage,

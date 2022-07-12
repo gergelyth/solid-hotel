@@ -30,6 +30,12 @@ import {
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 
+/**
+ * Creates the data protection profile of the guest according to the conditions retrieved from the mock API.
+ * Removes the profile fields from the in-memory cache, deletes the hotel profile and closes the WebSocket to not receive publish messages anymore.
+ * Removes the references to now not-needed fields as well as the corresponding privacy tokens.
+ * Creates the new privacy tokens required by the new reservation state.
+ */
 async function ExecuteCheckOut(
   guestFields: Field[],
   dataProtectionInformation: DataProtectionInformation,
@@ -79,6 +85,13 @@ async function ExecuteCheckOut(
   RevalidateHotelPrivacyTokens();
 }
 
+/**
+ * A snackbar notification displayed in the bottom right corner executing the check-out operation for the reservation given by its ID.
+ * We first retrieve the data protection information properties from the mock API to know what conditions to apply for the data protection profile.
+ * Then we retrieve the values for these fields from the hotel profile of the guest in the hotel Pod create the data protection profile of the guest from these fields.
+ * We also need to remove the now redundant privacy tokens and create new ones appropriate for the new reservation state.
+ * @returns A custom progress snackbar executing the check-out operation.
+ */
 const CheckoutProgressSnackbar = forwardRef<
   HTMLDivElement,
   {

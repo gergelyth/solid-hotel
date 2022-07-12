@@ -12,6 +12,12 @@ import {
   Grid,
 } from "@material-ui/core";
 
+/**
+ * Returns a dialog which enables the user to edit the room definition.
+ * If confirmed, it executes the edit and the change should be seen immediately as we update the local SWR cache with the new values.
+ * If the dialog is closed, no action is carried out.
+ * @returns A dialog with the option to edit the room definition or back out (or null if the dialog is not showing).
+ */
 function EditRoomPopup({
   room,
   updateRoomLocally,

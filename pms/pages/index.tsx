@@ -9,6 +9,7 @@ import { AddReservation } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetReservationIdFromInboxUrl } from "../../common/util/urlParser";
 
+//TODO what to show on the PMS index page? - add comment after
 export default function Home(): JSX.Element | null {
   let reservationId: string;
   return (

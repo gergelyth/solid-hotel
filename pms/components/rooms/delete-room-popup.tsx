@@ -16,6 +16,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { DeleteRoom } from "../../util/solidHotelSpecific";
 
+/**
+ * Returns a dialog which enables the user to confirm their decision to delete the selected room definition.
+ * If confirmed, it executes the deletion and cancels all reservations made for this room.
+ * If the dialog is closed, no action is carried out.
+ * @returns A dialog with the option to delete the room definition (and cancel all reservations) or back out (or null if the dialog is not showing).
+ */
 function DeleteRoomPopup({
   room,
   updateRoomLocally,
@@ -121,6 +127,7 @@ function DeleteRoomPopup({
                 startIcon={<DeleteIcon />}
                 onClick={() => {
                   // TODO: deleted room doesnt disappear immediately locally!
+                  //TODO cancel all reservations
                   updateRoomLocally(room, true);
                   DeleteRoom(room);
                   Revalidate();

@@ -9,6 +9,10 @@ import { DoOnStateChange } from "../../util/actionOnNewReservationState";
 import { Dispatch, SetStateAction, useState } from "react";
 import { QrElementWithHeadings } from "../checkin/qr-subpage";
 
+//TODO this is not correct that the cancel button calls this - we need to call the cancel snackbar stuff to remove privacy tokens as well
+/**
+ * The function which executes the state change of the cancellation.
+ */
 export function ConfirmCancellation(reservation: ReservationAtHotel): void {
   if (!reservation.id) {
     throw new Error("Reservation ID is null");
@@ -25,6 +29,10 @@ export function ConfirmCancellation(reservation: ReservationAtHotel): void {
   );
 }
 
+/**
+ * The popup dialog containing the QR code used for pairing the reservation with a guest Solid Pod.
+ * @returns The QR code dialog or null (is the dialog is not showing).
+ */
 function PairingQrPopup({
   reservationId,
   isPopupShowing,
@@ -53,6 +61,10 @@ function PairingQrPopup({
   );
 }
 
+/**
+ * Creates an enriched version of the {@link ReservationConciseElement} component adding the offline check-in and the cancel reservation button.
+ * @returns The reservation element with confirmed reservation functionalities.
+ */
 function ConfirmedReservationDetails({
   reservation,
   onClickAction,
@@ -89,6 +101,11 @@ function ConfirmedReservationDetails({
   );
 }
 
+/**
+ * Creates an enriched version of the {@link ReservationConciseElement} component adding a button which show the pairing QR code in a popup dialog.
+ * Also logically contains the QR popup element.
+ * @returns The reservation element with a QR popup triggering button.
+ */
 function ActiveUnpairedReservationDetails({
   reservation,
   onClickAction,
@@ -133,6 +150,10 @@ function ActiveUnpairedReservationDetails({
   );
 }
 
+/**
+ * A wrapper for the {@link ReservationConciseElement} component, encompassing it in in a Grid element.
+ * @returns The element for all reservations not needing specific functionalities.
+ */
 function OtherReservationDetails({
   reservation,
   onClickAction,
@@ -158,6 +179,15 @@ function OtherReservationDetails({
   );
 }
 
+/**
+ * A PMS wrapper for the {@link ReservationConciseElement} component.
+ * This is the function which instructs what type of component to show in the list reservations page.
+ * In order to enrich the component with PMS specific information, we make a distinction between
+ * - the confirmed reservations ({@link ConfirmedReservationDetails})
+ * - the unpaired reservations ({@link ActiveUnpairedReservationDetails})
+ * - all other types ({@link ConciseHotelReservationElement})
+ * @returns The reservation element.
+ */
 function CreateReservationElement(
   reservation: ReservationAtHotel,
   onClickAction: ReservationClickHandler

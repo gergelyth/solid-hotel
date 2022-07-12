@@ -13,6 +13,9 @@ import {
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 import { ShowError } from "../../../common/util/helpers";
 
+/**
+ * Finds and deletes the privacy tokens created for the confirmed reservation (webId, inbox URL).
+ */
 async function ExecuteCancel(
   reservationId: string,
   privacyTokens: (HotelPrivacyToken | null)[]
@@ -26,6 +29,12 @@ async function ExecuteCancel(
   RevalidateHotelPrivacyTokens();
 }
 
+/**
+ * A snackbar notification displayed in the bottom right corner performing the reservation cancel operation for the reservation given by its ID.
+ * Fetches the hotel privacy tokens and deletes those which were created for this reservation.
+ * The reservation state change is not done here but in the calling method.
+ * @returns A custom progress snackbar executing the cancel operation.
+ */
 const CancelProgressSnackbar = forwardRef<
   HTMLDivElement,
   {

@@ -18,6 +18,15 @@ import { GetSession } from "../../common/util/solid";
 import GlobalSwrConfig from "../../common/components/global-swr-config";
 import { LoadingIndicators } from "../../common/components/loading-indicators";
 
+/**
+ * The app (core) component of the 'pms' application.
+ * Custom additions are:
+ * - the snackbar provider component to allow us to display snackbars throughout the application
+ * - the PMS navigation bar
+ * - the loading indicators for SWR hook validations
+ * - the generic footer of the applications
+ * Also contains the trigger to cache the hotel profile field values for the guests with an active reservation.
+ */
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const session = GetSession();
 

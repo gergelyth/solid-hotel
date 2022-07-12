@@ -6,6 +6,13 @@ import { RegistrationCard } from "../../components/profile/registration-card";
 import { useState } from "react";
 import { ForeignPoliceReport } from "../../components/profile/foreign-police-report";
 
+/**
+ * The page displayed for the guest active profile in PMS.
+ * The hotel profile URL is passed as a query parameter.
+ * Contains a profile editor component by {@link ProfileMain} where the fields are editable but not deletable.
+ * In addition it contains the option to print out the registration card and export the CSV file for the authorities report.
+ * @returns The hotel profile page for a specific guest.
+ */
 function ActiveHotelProfileDetail(): JSX.Element | null {
   const [isRegPopupShowing, setRegPopupVisibility] = useState(false);
   const router = useRouter();

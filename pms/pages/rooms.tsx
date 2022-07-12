@@ -1,6 +1,11 @@
 import RoomList from "../components/rooms/room-list";
 import { Grid, Typography } from "@material-ui/core";
 
+/**
+ * The page displayed for the PMS room management operations.
+ * Essentially only a page wrapper for the {@link RoomList} component.
+ * @returns The room management page.
+ */
 function RoomManagement(): JSX.Element {
   return (
     <Grid

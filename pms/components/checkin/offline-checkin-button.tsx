@@ -8,6 +8,10 @@ import { Field } from "../../../common/types/Field";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { CreateHotelProfile } from "../../../common/util/hotelProfileHandler";
 
+/**
+ * Creates the hotel profile of the guest, saves it in the hotel Pod and redirects the user to the offline check-in page.
+ * Gets triggered when the guest nationality is entered.
+ */
 function OnConfirmation(
   reservation: ReservationAtHotel,
   nationalityField: Field,
@@ -35,6 +39,11 @@ function OnConfirmation(
   // }
 }
 
+/**
+ * Entry point for the offline check-in operation.
+ * Starts by showing a dialog which requires the hotel employee to enter the guest's nationality, as this will drive the selection of required personal information fields.
+ * @returns A button which starts the offline check-in process.
+ */
 function OfflineCheckinButton({
   reservation,
 }: {

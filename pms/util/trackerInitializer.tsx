@@ -23,6 +23,11 @@ import {
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { SendProfileModification } from "./outgoingCommunications";
 
+/**
+ * Subscribe to profile changes in a given hotel profile.
+ * We perceive the updates via the WebSocket publish messages.
+ * When an update is received, we trigger the {@link SendChangeSnackbar} snackbar to inform the hotel employee that the field changes are being propagated to the guest.
+ */
 export async function SubscribeToProfileChanges(
   profileUrl: string,
   checkedRdfFields: string[]
@@ -72,6 +77,12 @@ export async function SubscribeToProfileChanges(
   });
 }
 
+/**
+ * A function gathering the hotel profiles of the guests currently having an active reservation, caching the field values and subscribing to the updates via WebSocket notifications.
+ * Triggered on every application launch.
+ * The values of these fields are cached in memory to help determine the old value if the Solid Pod gets updated.
+ * Shows a progress snackbar in the bottom right corner to indicate this background activity.
+ */
 export async function CacheHotelProfiles(): Promise<void> {
   const hotelProfileContainer = await GetDataSet(HotelProfilesUrl);
   const hotelProfileUrls = getContainedResourceUrlAll(hotelProfileContainer);

@@ -43,6 +43,12 @@ import { IncomingProfileChangeStrings } from "../../common/util/tracker/profile-
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 
+/**
+ * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
+ * The onClick function takes the user to the reservations page.
+ * The onReceive function sets the new reservation state and performs the state specific operation - this is delegated to the {@link DoOnStateChange} function.
+ * @returns The notification properties described above along with the text field, which informs the user of the reservation state change.
+ */
 export function ReceiveReservationStateChange(
   router: NextRouter,
   notificationUrl: string,
@@ -57,6 +63,7 @@ export function ReceiveReservationStateChange(
   //TODO check if onReceive gets no Error, and adjust this text accordingly
   const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservation.`;
   const onClick = (): void => {
+    //TODO this doesn't work - no such page in PMS - fix comment afterwards!
     router.push(`/reservations/${encodeURIComponent(reservationId)}`);
   };
   const onReceive = (): void => {
@@ -67,6 +74,12 @@ export function ReceiveReservationStateChange(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of a booking request notification.
+ * The onClick function takes the user to the reservations page.
+ * The onReceive function (since we auto confirm all reservations) creates the reservation in the hotel Pod, reports the confirmation to the user and creates the required privacy tokens for a confirmed reservation.
+ * @returns The notification properties described above along with the text field, which informs the user of the new reservation.
+ */
 export function ReceiveBookingRequest(
   router: NextRouter,
   bookingRequestUrl: string,
@@ -112,6 +125,12 @@ export function ReceiveBookingRequest(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of a profile modification notification.
+ * The onClick function displays a snackbar which lets the guess choose which field updates to propagate to their Solid Pod.
+ * The onReceive function does nothing.
+ * @returns The notification properties described above along with the text field, which informs the user that a notification was received.
+ */
 export function ReceiveProfileModification(
   router: NextRouter,
   hotelInboxUrl: string,
@@ -163,6 +182,12 @@ export function ReceiveProfileModification(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of the pairing request notification.
+ * The onClick function does nothing.
+ * The onReceive function checks if the pairing token matches the one sent by the guest and replies to the guest with the reservation information as well as the personal information filled out during offline check-in.
+ * @returns The notification properties described above along with the text field, which informs the user that a pairing request was received.
+ */
 export function ReceiveInitialPairingRequest(
   router: NextRouter,
   hotelInboxUrl: string,
@@ -211,6 +236,12 @@ export function ReceiveInitialPairingRequest(
   return { text, onClick, onReceive };
 }
 
+/**
+ * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of the privacy token deletion request notification.
+ * The onClick function does nothing.
+ * The onReceive function parses the hotel privacy token in question, checks that it's past its expiration date and if so, anonymizes the required fields and deletes the token of which the guest is then informed.
+ * @returns The notification properties described above along with the text field, which informs the user that a privacy token deletion request was received.
+ */
 export function ReceivePrivacyTokenDeletionRequest(
   router: NextRouter,
   hotelInboxUrl: string,

@@ -7,6 +7,11 @@ import DeleteRoomPopup from "./delete-room-popup";
 import EditRoomPopup from "./edit-room-popup";
 
 //TODO same logic as EditableField
+/**
+ * Displays an element for a specific room containing the room definition information as well an Edit and Delete button.
+ * The buttons trigger a popup enabling the corresponding actions.
+ * @returns The element for a specific room definition - also logically contains the Edit and Delete popup dialogs.
+ */
 function EditableRoomElement({
   room,
   key,

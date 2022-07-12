@@ -6,6 +6,14 @@ import { useRouter } from "next/router";
 import { RequiredFields } from "./required-fields";
 import { ErrorComponent } from "../../../common/components/error-component";
 
+/**
+ * Has the responsibility to collect the values for all RDF fields required for check-in.
+ * The required fields are retrieved from the mock API utility and are based on the guest's nationality and the hotel's country.
+ * The reservation ID, nationality of the guest and hotel profile WebId are passed as query parameters.
+ * The proceed button is disabled until every field has a value.
+ * When the button is enabled and clicked, we execute the check-in operation.
+ * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the check-in.
+ */
 function RequiredFieldsAtOfflineCheckin({
   currentPage,
   setCurrentPage,

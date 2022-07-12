@@ -4,6 +4,11 @@ import { ReservationConciseElement } from "../../../common/components/reservatio
 import { Box, Grid, Typography } from "@material-ui/core";
 import { useSpecificRoom } from "../../../common/hooks/useRooms";
 
+/**
+ * The PMS wrapper around the reservation element described in {@link ReservationConciseElement}.
+ * Retrieves the room definition for which the reservation is made and displays some basic information about it.
+ * @returns A component wrapping the {@link BookingProperties} component with PMS specific actions.
+ */
 function ConciseHotelReservationElement({
   reservation,
   onClickAction,
