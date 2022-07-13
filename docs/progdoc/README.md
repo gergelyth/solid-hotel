@@ -4,7 +4,7 @@ We will provide an overview of the codebase here as well as mention a couple of 
 
 ## Overview
 
-TODO Solid Pod structure, booking, check-in, check-out, profile mod, SWR, RDF vocabularies, setup (serialization), pages (NEXT), notifications, mock API, material
+TODO Solid Pod structure, booking, check-in, check-out, profile mod, RDF vocabularies,  pages (NEXT), notifications, mock API, material
 
 ### Solid authentication
 
@@ -14,6 +14,37 @@ The entry point is the login/logout button displayed in the navigation bars of t
 Additionally:
 - We check on page reload if we can restore the previous session based on the auth token in effect
 - We need to define a workaround on how to load these components as some functions in the auth library call `window`, which is causing issues when the page is pre-rendered on the server side by Next.js. We take advantage of Next's [dynamic loading capability](https://nextjs.org/docs/advanced-features/dynamic-import).
+
+### Setup functionality
+
+The index page of the `common` subproject serves as the setup page for the application prototypes. In essence, this should be the first stop when the applications are used for the first time.
+
+We provide the functions to set up (or clear) the structure the Solid Pods meant to be used by the applications. This is implemented in modules contained in the `common/setup/populateHotelPod` and `common/setup/populateGuestPod` directories.
+
+Besides the simpler, more manual methods, we attempt to match the WebId of the logged in user to recognize the test accounts meant for this project. If the user logs in with either the guest or hotel test account, we also enable the serialization and deserialization of the sample test data.
+
+The (de)serialization is based on the fact that Solid resources are in effect RDF files. Our conversion is as follows (detailing only serialization here, as the opposite direction is symmetrical to the process):
+1. We convert the Solid dataset into RdfJs dataset using a function from the `inrupt` library
+2. We use [n3](https://github.com/rdfjs/N3.js/) to convert RdfJs into Quads and write it as string
+3. After we gather all resources with appropriate filenames and their contents now represented by a simple string, we zip them up with [jszip](https://stuk.github.io/jszip/) and create a download prompt for the user
+
+Also note the following things regarding the (de)serialization process:
+1. Since we make heavy use of datetime objects in our applications, we can't do the saving/loading simply without intervention as the test data would become invalid if it would get loaded a month after it was saved (e.g. a reservation would be shown as active, even though the check-out date is long in the past). Because of this, we need special handling to save relative dates rather than absolute ones:
+   - We define a constant base datetime object and calculate the intervals between this base date and the moment the serialization happens and save this
+   - Upon deserialization we calculate the same interval between the saved relative date and the base date (which is the same as it was during serialization) and add it to the current moment
+2. As we grant permissions to certain containers for the Public, we also need to handle ACL files attached to the Solid resources so these may be reinstated during data loading
+
+### Data fetching - SWR
+
+Data fetching is performed using the [SWR](https://swr.vercel.app/) library. The data query works on the following principle
+- on the first occassion of the hook call it saves the data retrieved in the cache
+- on every subsequent query it immediately returns the cached data to give provide quick feedback while it sends a fetch request to the data storage and returns the fresh query result upon completion
+
+To make it reusable across our codebase, we define custom hooks for the different types of data we need to retrieve (`common/hooks` directory). We override the `fetch` function of SWR for it to be compatible with Solid Pods and parse the results to TS objects.
+
+In order to provide precise feedback to the user, we also returns some flags describing the state of the retrieval. These booleans - such as `isLoading`, `isError` or `isValidating` - help with the interim state of the page until the data can be presented. Additionally, built into our custom hooks is also the capability to display loading bars we dub `loading indicators` to signal when data revalidation is happening in the background. These show up under the navigation bar.
+
+Apart from the general `useSWR` hook, we also use the `mutate` function if we need to trigger a data refetch action.
 
 ### Snackbars
 
