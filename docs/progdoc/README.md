@@ -4,7 +4,7 @@ We will provide an overview of the codebase here as well as mention a couple of 
 
 ## Overview
 
-TODO Solid Pod structure, booking, check-in, check-out, profile mod, RDF vocabularies,  pages (NEXT), notifications, mock API, material
+TODO Solid Pod structure, booking, check-in, check-out, RDF vocabularies, mock API, material
 
 ### Solid authentication
 
@@ -14,6 +14,45 @@ The entry point is the login/logout button displayed in the navigation bars of t
 Additionally:
 - We check on page reload if we can restore the previous session based on the auth token in effect
 - We need to define a workaround on how to load these components as some functions in the auth library call `window`, which is causing issues when the page is pre-rendered on the server side by Next.js. We take advantage of Next's [dynamic loading capability](https://nextjs.org/docs/advanced-features/dynamic-import).
+
+### Profile synchronization
+
+One of the requirements of the applications was to showcase the functionality of synchronization between the guest profile copies held at the guest and the hotel. There are two main challenges we solve here:
+1. We need to able to react to profile changes made outside the frame of the applications (performed either directly in the Solid Pod or through another Solid app)
+2. In order to provide a better overview for the user on what has changed, we need to store the personal information field value somewhere to compare with the new values which are the only ones we can see after the update
+
+The first challenge is solved by subscribing to the resource's WebSocket updates (`common/tracker/tracker`). When the profile is updated, we get a publish notification informing about the change. 
+*Note that we also need a way to ignore a message about an update we're going to perform - e.g. when we receive a profile change notice from the counterparty and decide to update our local profile with the change, we must not trigger a profile change event. Fortunately, this is easy to achieve by just ignoring the next message reported by the WebSocket.*
+
+We now know that an update has happened, but we still don't what the update actually is. This is where point 2. comes in effect. When a hotel profile gets created, we can store the field values in memory (`common/tracker/profile-cache`) so that we can compare with the new values already present in the Solid Pod. In addition, during the application startup, we can check what profiles are currently contained in the Pod, initialize the cache for them (`trackerInitializer`) and subscribe to the WebSocket notifications. This guarantees that our solution survives an application outage or a page refresh. *Note that it's possible that a field change happens while our application is down, in which case we don't take note of it. This is a known limitation, but we don't expect the PMS application to be down a lot.*
+
+Now that we have both the old and new values of the fields, we can compare what changed and present those to the user for either propagation approval (in the case of the guest) or propagation notice (in the case of the hotel). This is handled mainly by the `util/tracker/trackerSendChange` snackbar and the components defined in `util/tracker`. In the latter case, where no approval is required for the propagation, the radio buttons, providing the option to select which changes to send to the counterparty, are disabled.
+
+### Notifications (communication protocol)
+
+Notifications are the messaging protocol with the help of which the hotel and the guest communicate. 
+
+They are displayed in a drawer element (`NotificationList` component), which is triggered by the notification icon (`common/components/notification-elements`) contained in the navigation bars. As a QOL improvement, we provide small indicators (so called chips) for each notification displaying its type category and the datetime of when it was created (`common/components/notification-chips`).
+
+We enumerate 8 types of notifications:
+1. BookingRequest - can be submitted only by the guest to request a reservation at the hotel
+2. ReservationStateChange - a generic notification used either for requesting (from guest to hotel) or confirming (from hotel to guest) a reservation state change - the action carried out depends on the new state
+3. FailureReport - sent only by the hotel to the guest to inform them about a failure of one of their requests
+4. ProfileModification - contains the fields and their new values of the change performed at the side of the counterparty
+5. InitialPairingRequest - sent by the guest to the hotel requesting the pairing of a reservation to a guest Solid Pod (contains the pairing token)
+6. PairingRequestWithInformation - the answer for the previous request by the hotel containing the reservation information and the guest profile filled out during offline check-in
+7. PrivacyToken - the privacy token sent from the hotel to the guest
+8. PrivacyTokenDeletion - either a privacy token deletion request (from guest to hotel) or a deletion notice (from hotel to guest)
+
+Notifications are retrieved from containers whose addresses are different in the GPA (`gpa/consts/inboxList`) and the PMS (`pms/consts/inboxList`).
+
+Besides some common properties parseable from the notification dataset (such as `isProcessed` or `type` flag) we need to be able to define what the notification should display, what actions to perform when it's received or when it's clicked on. These properties differ according to the type of the notification as well as they differ for the GPA and PMS (i.e. the GPA reacts differently when it receives a reservation state change request than the PMS). To handle this, we provide a mapping assigning a parser method based on the type of the notification separately for the GPA (`gpa/consts/parsers`) and the PMS (`pms/consts/parsers`). 
+
+Parser implementation are found in the `incomingCommunications` modules. The symmetrical `outgoingCommunications` modules handle the sending (submitting) side of the transaction.
+
+Symmetrical conversion functions from Solid dataset to TS object and vice versa can be found in the `common/notifications` directory for every notification type.
+
+The `useNotifications` hook can therefore fetch the notifications from the inboxes, parse the common properties and delegate the type specific actions to the parsers. Note that after the execution of the `onReceive()` function of the notification, we set its `isProcessed` flag to `true` to make sure we don't execute multiple times.
 
 ### Setup functionality
 
@@ -55,6 +94,16 @@ We use three types of snackbar notifications.
 1. Basic snackbar variants of 4 types: info, success, warning and error. These notifications display a simple message to the user in the bottom left corner.
 2. Custom snackbars showing various information or informing the user of a background process currently happening. These show in the bottom right corner. We define a generic progress snackbar element (`CustomProgressSnackbar`) which displays a message and a loading bar during the run of a background process (i.e. check-in operation, check-out operation, cancellation, etc.). Since these notifications are essentially React elements, we can also freely call our hooks during them without breaking the [rules of hooks](https://reactjs.org/docs/hooks-rules.html). 
 3. Using similar logic as 2., we also use this functionality to display the profile change approval dialogs to the user.
+
+### Entry points - pages
+
+The main entry points to the applications are listed in the `pages` directories. The syntax for this is set by NextJs, which states that the page must define a default export of a JSX.Element object to be displayed. The name of the page is determined by the name of the file. Fortunately, Next also supports dynamic routing, which allows us to construct pages for specific items represented by identificators in the syntax of e.g. `[id]`.
+
+We also use API pages for our mock API service. These have the following signature:
+```ts
+export default async function (request: NextApiRequest, response: NextApiResponse): Promise<void> {...}
+```
+The result of the function must be saved in the `response` argument.
 
 ### Error reporting
 
