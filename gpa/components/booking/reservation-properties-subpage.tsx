@@ -44,10 +44,12 @@ async function BookRoom(
     dateTo: checkoutDate,
   };
 
-  const inboxUrl = AddReservation(reservation);
-  reservation.inbox = await inboxUrl;
+  const inboxUrl = await AddReservation(reservation);
 
-  SubmitBookingRequest(reservation, session);
+  await SubmitBookingRequest({
+    ...reservation,
+    inbox: inboxUrl,
+  });
 }
 
 /**

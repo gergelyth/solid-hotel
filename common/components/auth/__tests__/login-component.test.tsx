@@ -1,10 +1,9 @@
 import React from "react";
-import { Session, ISessionInfo } from "@inrupt/solid-client-authn-browser";
 import { render, RenderResult } from "@testing-library/react";
 import LoginButtonComponent from "../login-component";
-import { mocked } from "ts-jest/utils";
 import "@testing-library/jest-dom";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { MockSession } from "../../../util/__tests__/testUtil";
 
 jest.mock("@inrupt/solid-client-authn-browser", () => {
   return {
@@ -15,17 +14,6 @@ jest.mock("@inrupt/solid-client-authn-browser", () => {
     onSessionRestore: () => undefined,
   };
 });
-
-function MockSession(isLoggedIn: boolean): Session {
-  const sessionInfo: ISessionInfo = {
-    isLoggedIn: isLoggedIn,
-    sessionId: "dummy",
-  };
-  const mockSession = mocked({
-    info: sessionInfo,
-  } as unknown as Session);
-  return mockSession;
-}
 
 function Render(): RenderResult {
   return render(<LoginButtonComponent />);

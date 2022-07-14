@@ -15,7 +15,7 @@ import { ErrorComponent } from "../../../common/components/error-component";
  * When the button is enabled and clicked, we execute the booking operation.
  * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the booking.
  */
-function RequiredFields({
+export function RequiredFields({
   currentPage,
   setCurrentPage,
   confirmReservation,
@@ -54,7 +54,7 @@ function RequiredFields({
     <Grid
       container
       spacing={3}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -75,5 +75,3 @@ function RequiredFields({
     </Grid>
   );
 }
-
-export default RequiredFields;

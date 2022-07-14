@@ -17,6 +17,8 @@ import { Notification } from "../../types/Notification";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
+import { ISessionInfo, Session } from "@inrupt/solid-client-authn-browser";
+import { mocked } from "ts-jest/utils";
 
 const rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const ldpContainer = "http://www.w3.org/ns/ldp#Container";
@@ -44,6 +46,18 @@ export function MockContainer(
   thing = addUrl(thing, rdfType, ldpContainer);
 
   return container;
+}
+
+export function MockSession(isLoggedIn?: boolean, webId?: string): Session {
+  const sessionInfo: ISessionInfo = {
+    isLoggedIn: isLoggedIn ?? true,
+    sessionId: "dummy",
+    webId: webId,
+  };
+  const mockSession = mocked({
+    info: sessionInfo,
+  } as unknown as Session);
+  return mockSession;
 }
 
 export async function SerializeDataset(dataSet: SolidDataset): Promise<string> {
