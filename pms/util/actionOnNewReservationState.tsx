@@ -34,9 +34,9 @@ export function DoOnStateChange(
     case ReservationState.ACTIVE:
       try {
         OnCheckIn(reservationId, guestInboxUrl);
-      } catch (error) {
+      } catch (error: unknown) {
         ReportFailureToGuest(
-          error.message,
+          `${error}`,
           ReservationState.CONFIRMED,
           guestInboxUrl
         );
@@ -48,9 +48,9 @@ export function DoOnStateChange(
     case ReservationState.PAST:
       try {
         OnCheckOut(reservationId, guestInboxUrl);
-      } catch (error) {
+      } catch (error: unknown) {
         ReportFailureToGuest(
-          error.message,
+          `${error}`,
           ReservationState.ACTIVE,
           guestInboxUrl
         );

@@ -1,7 +1,7 @@
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import Link from "next/link";
 import LoginButtonComponent from "../../common/components/auth/login-component";
-import subscribe from "../profile/tracker";
+// import { Subscribe } from "../../common/util/tracker/tracker";
 
 export default function Home() {
   return (
@@ -33,9 +33,9 @@ export default function Home() {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() =>
-              subscribe("https://gergelyth.inrupt.net/profile/card")
-            }
+            // onClick={() =>
+            //   Subscribe("https://gergelyth.inrupt.net/profile/card")
+            // }
           >
             Subscribe
           </Button>
