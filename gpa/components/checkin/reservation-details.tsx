@@ -26,7 +26,7 @@ import { ShowError } from "../../../common/util/helpers";
  * The reservation is fetched from the Solid Pod and parsed afterwards.
  * @returns A component containing details of the hotel, of the room and information about the dates the stay is booked for.
  */
-function ReservationDetails({
+export function ReservationDetails({
   reservationId,
   setCurrentReservation,
 }: {
@@ -133,5 +133,3 @@ function ReservationDetails({
     </Box>
   );
 }
-
-export default ReservationDetails;

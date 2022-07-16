@@ -17,7 +17,7 @@ import { ShowErrorSnackbar } from "../../../common/components/snackbar";
  * The reservation ID is propagated upwards via a state set capability.
  * @returns A RadioGroup component with reservations acting as element.
  */
-function ReservationRadioSelector({
+export function ReservationRadioSelector({
   selectedReservationId,
   setSelectedReservationId,
   filteredReservations,
@@ -64,5 +64,3 @@ function ReservationRadioSelector({
     </Box>
   );
 }
-
-export default ReservationRadioSelector;

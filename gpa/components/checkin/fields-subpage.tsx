@@ -10,7 +10,7 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/required-fields-button";
 import { CheckinPage } from "../../pages/reservations/[id]";
-import TocPopup from "./toc-popup";
+import { TocPopup } from "./toc-popup";
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { CacheProfile } from "../../../common/util/tracker/profile-cache";
@@ -24,7 +24,7 @@ import { ErrorComponent } from "../../../common/components/error-component";
  * The component also contains a sample Terms And Conditions link as well.
  * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the check-in.
  */
-function RequiredFieldsAtCheckin({
+export function RequiredFieldsAtCheckin({
   currentPage,
   setCurrentPage,
   executeCheckin,
@@ -71,7 +71,7 @@ function RequiredFieldsAtCheckin({
     <Grid
       container
       spacing={3}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -79,20 +79,23 @@ function RequiredFieldsAtCheckin({
         <Typography variant="h4">Check-in</Typography>
       </Grid>
       <Grid item>
-        <Typography variant="subtitle2">
-          <Box mx={3} textAlign="center">
+        <Box mx={3} textAlign="center">
+          <Typography variant="subtitle2">
             By clicking Proceed, you agree to the points set out in our{" "}
-            <Link onClick={() => setTermsPopupVisibility(true)}>
+            <Link
+              data-testid="toc-link"
+              onClick={() => setTermsPopupVisibility(true)}
+            >
               Terms and conditions
             </Link>{" "}
             document.
-          </Box>
-        </Typography>
+          </Typography>
+        </Box>
       </Grid>
       <Grid item>
-        <Typography>
-          <Box fontWeight="fontWeightBold">Required personal information</Box>
-        </Typography>
+        <Box fontWeight="fontWeightBold">
+          <Typography>Required personal information</Typography>
+        </Box>
       </Grid>
       <Grid item>
         <ProfileMain rdfFields={data} />
@@ -112,5 +115,3 @@ function RequiredFieldsAtCheckin({
     </Grid>
   );
 }
-
-export default RequiredFieldsAtCheckin;

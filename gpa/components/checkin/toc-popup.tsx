@@ -14,7 +14,7 @@ import {
  * A sample placeholder Terms of Service component listing some conditions.
  * @returns A components containing sample excerpts from a potential ToC document as well as an acknowledging button closing it.
  */
-function TocPopup({
+export function TocPopup({
   isPopupShowing,
   setPopupVisibility,
 }: {
@@ -24,49 +24,50 @@ function TocPopup({
   return (
     <Dialog onClose={() => setPopupVisibility(false)} open={isPopupShowing}>
       <DialogTitle id="popup-title">Terms and conditions</DialogTitle>
-      <DialogContent>
+      <DialogContent data-testid="toc-dialog">
         <Grid
           container
           spacing={2}
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           direction="column"
         >
           <Grid item>
-            <Typography variant="h6">
-              <Box fontWeight="fontWeightBold">Paragraph I</Box>
-            </Typography>
+            <Box fontWeight="fontWeightBold">
+              <Typography variant="h6">Paragraph I</Typography>
+            </Box>
           </Grid>
           <Grid item>
-            <Typography variant="subtitle1">
-              <Box mx={3}>
+            <Box mx={3}>
+              <Typography variant="subtitle1">
                 (I.1.) A copy of your personal information will be created in
                 the Solid pod of the hotel. This is to avoid situations, when a
                 guest may edit or delete a required field during the critical
                 interval between check-in and check-out.
-              </Box>
-            </Typography>
+              </Typography>
+            </Box>
           </Grid>
           <Grid item>
-            <Typography variant="subtitle1">
-              <Box mx={3}>
+            <Box mx={3}>
+              <Typography variant="subtitle1">
                 (I.2.) This data is viewable by hotel employees strictly on a
                 need-to-know basis.
-              </Box>
-            </Typography>
+              </Typography>
+            </Box>
           </Grid>
           <Grid item>
-            <Typography variant="subtitle1">
-              <Box mx={3}>
+            <Box mx={3}>
+              <Typography variant="subtitle1">
                 (I.3.) This data (or a part of it) is stored after check-out to
                 adhere to data protection legislations.
-              </Box>
-            </Typography>
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Button
+          data-testid="toc-ok-button"
           variant="contained"
           color="primary"
           onClick={() => setPopupVisibility(false)}
@@ -77,5 +78,3 @@ function TocPopup({
     </Dialog>
   );
 }
-
-export default TocPopup;

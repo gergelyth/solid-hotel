@@ -27,7 +27,7 @@ function Checkout(
  * Also has the option to provide onClick actions in an argument.
  * @returns A check-out button for a given reservation.
  */
-function CheckoutButton({
+export function CheckoutButton({
   reservationId,
   reservations,
   onClickFunction,
@@ -38,6 +38,7 @@ function CheckoutButton({
 }): JSX.Element {
   return (
     <Button
+      data-testid="checkout-button"
       variant="contained"
       color="primary"
       disabled={reservationId === ""}
@@ -50,5 +51,3 @@ function CheckoutButton({
     </Button>
   );
 }
-
-export default CheckoutButton;

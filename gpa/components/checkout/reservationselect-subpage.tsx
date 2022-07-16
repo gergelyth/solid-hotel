@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import CheckoutButton from "./checkout-button";
+import { CheckoutButton } from "./checkout-button";
 import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 import { CheckoutPage } from "../../pages/checkout";
 import { useReservations } from "../../../common/hooks/useReservations";
 import { GetUserReservationsPodUrl } from "../../../common/util/solid_reservations";
 import { NotEmptyItem } from "../../../common/util/helpers";
 import { ReservationState } from "../../../common/types/ReservationState";
-import ReservationRadioSelector from "./radio-reservation-selector";
+import { ReservationRadioSelector } from "./radio-reservation-selector";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ErrorComponent } from "../../../common/components/error-component";
 
@@ -31,7 +31,7 @@ export function GetActiveReservations(
  * If a reservation is selected, the check-out button gets enabled and the user can start the check-out process by clicking on the button.
  * @returns A component containing the reservation selector and the check-out button.
  */
-function ReservationSelectForCheckout({
+export function ReservationSelectForCheckout({
   currentPage,
   setCurrentPage,
 }: {
@@ -61,7 +61,7 @@ function ReservationSelectForCheckout({
     <Grid
       container
       spacing={5}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -69,12 +69,10 @@ function ReservationSelectForCheckout({
         <Typography variant="h4">Checkout</Typography>
       </Grid>
       <Box>
-        <Grid item justify="flex-start">
-          <Typography variant="body1">
-            <Box px={2} fontWeight="fontWeightBold">
-              Active reservations
-            </Box>
-          </Typography>
+        <Grid item container justifyContent="flex-start">
+          <Box px={2} fontWeight="fontWeightBold">
+            <Typography variant="body1">Active reservations</Typography>
+          </Box>
         </Grid>
       </Box>
       <Grid item>
@@ -100,5 +98,3 @@ function ReservationSelectForCheckout({
     </Grid>
   );
 }
-
-export default ReservationSelectForCheckout;

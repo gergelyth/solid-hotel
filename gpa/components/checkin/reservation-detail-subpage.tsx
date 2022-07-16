@@ -3,7 +3,7 @@ import { CancelReservationButton } from "../../../common/components/cancellation
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { Grid, Button } from "@material-ui/core";
 import { CheckinPage } from "../../pages/reservations/[id]";
-import ReservationDetails from "./reservation-details";
+import { ReservationDetails } from "./reservation-details";
 import {
   SubmitCancellationRequest,
   SubmitCheckinRequest,
@@ -36,7 +36,7 @@ function ConfirmCancellation(reservation: ReservationAtHotel): void {
  * The component displayed when a specific reservation is opened and is in focus.
  * @returns A component displaying information about the reservation, the cancel button and a check-in button.
  */
-function ReservationDetailsPage({
+export function ReservationDetailsPage({
   reservationId,
   setExecuteCheckin,
   currentPage,
@@ -59,7 +59,7 @@ function ReservationDetailsPage({
     <Grid
       container
       spacing={5}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -85,6 +85,7 @@ function ReservationDetailsPage({
 
       <Grid item>
         <Button
+          data-testid="checkin-button"
           variant="contained"
           color="primary"
           disabled={!currentReservation}
@@ -101,5 +102,3 @@ function ReservationDetailsPage({
     </Grid>
   );
 }
-
-export default ReservationDetailsPage;

@@ -2,8 +2,8 @@ import { SuccessPage } from "../../../common/components/success-page";
 import { Box } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ReservationDetailsPage from "../../components/checkin/reservation-detail-subpage";
-import RequiredFieldsAtCheckin from "../../components/checkin/fields-subpage";
+import { ReservationDetailsPage } from "../../components/checkin/reservation-detail-subpage";
+import { RequiredFieldsAtCheckin } from "../../components/checkin/fields-subpage";
 
 /** An enum which helps to keep track of which subpage the reservation details page is currently showing. */
 export enum CheckinPage {

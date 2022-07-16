@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { SuccessPage } from "../../common/components/success-page";
 import { useState } from "react";
 import { Box } from "@material-ui/core";
-import ReservationSelectForCheckout from "../components/checkout/reservationselect-subpage";
+import { ReservationSelectForCheckout } from "../components/checkout/reservationselect-subpage";
 
 /** An enum which helps to keep track of which subpage the check-out page is currently showing. */
 export enum CheckoutPage {
