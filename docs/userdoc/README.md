@@ -176,6 +176,8 @@ The privacy dashboard is similar in structure to the [page described in the GPA]
 
 <div align="center"> <h2><ins>Solid Profile Editor</ins></h2> </div>
 
+The Solid Profile Editor is a small, simple application consisting of two pages: [the login page](#login) common for all our applications and the profile page, which displays the personal information fields of the guest fetched from their profile. The fields are both editable and deletable.
+
 <div align="center"> <h2><ins>Shared functionalities reference</ins></h2> </div>
 
 We detail the operations here which are common for two or more applications.
