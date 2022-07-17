@@ -1,4 +1,4 @@
-@prefix solidhotel: <https://github.com/gergelyth/solid-hotel/blob/master/solidhotel#> .
+@prefix solidhotel: <https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -11,7 +11,7 @@ solidhotel: rdf:type owl:Ontology ;
     dcterms:title "Solid Hotel project ontology" ;
     dcterms:description "The ontology adding RDF terms required for the Solid Hotel project." ;
     vann:preferredNamespacePrefix "solidhotel" ;
-    vann:preferredNamespaceURI <https://github.com/gergelyth/solid-hotel/blob/master/solidhotel#> .
+    vann:preferredNamespaceURI <https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#> .
 
 ### Classes
 solidhotel:ReservationLink
