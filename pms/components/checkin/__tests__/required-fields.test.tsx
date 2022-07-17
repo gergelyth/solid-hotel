@@ -3,6 +3,7 @@ import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { OfflineCheckinPage } from "../../../pages/checkin";
 import { RequiredFields } from "../required-fields";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 let confirmButtonProps: {
   onClickFunction: () => void;
@@ -39,7 +40,10 @@ jest.mock("../../../../common/components/profile/profile-main", () => {
   };
 });
 
-const requiredFields = ["foaf:firstName", "foaf:lastName"];
+const requiredFields = [
+  personFieldToRdfMap.firstName,
+  personFieldToRdfMap.lastName,
+];
 function Render(
   setCurrentPage: () => void,
   executeCheckin: () => void

@@ -4,17 +4,11 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { RoomSelector } from "../room-selector";
 import { TestRoomDefinitions } from "../../../util/__tests__/testUtil";
+import { useRooms } from "../../../hooks/useRooms";
 
 jest.mock("../../../hooks/useRooms", () => {
   return {
-    useRooms: () => {
-      return {
-        items: TestRoomDefinitions,
-        isLoading: false,
-        isError: false,
-        isValidating: false,
-      };
-    },
+    useRooms: jest.fn(),
   };
 });
 
@@ -32,11 +26,23 @@ function Render(
 
 describe("<RoomSelector />", () => {
   test("Renders list of rooms with mock API call without issue", async () => {
+    (useRooms as jest.Mock).mockReturnValue({
+      items: TestRoomDefinitions,
+      isLoading: false,
+      isError: false,
+      isValidating: false,
+    });
     const roomSelector = Render();
     expect(roomSelector).not.toBeUndefined();
   });
 
   test("Switches room in state when prompted", async () => {
+    (useRooms as jest.Mock).mockReturnValue({
+      items: TestRoomDefinitions,
+      isLoading: false,
+      isError: false,
+      isValidating: false,
+    });
     const roomSwitchCallback = jest.fn();
     const roomSelector = Render("roomId2", roomSwitchCallback);
 

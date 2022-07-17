@@ -6,6 +6,7 @@ import { MockSession } from "../../../../common/util/__tests__/testUtil";
 import { CheckinPage } from "../../../pages/reservations/[id]";
 import { CacheProfile } from "../../../../common/util/tracker/profile-cache";
 import userEvent from "@testing-library/user-event";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 let confirmButtonProps: {
   onClickFunction: () => void;
@@ -40,7 +41,10 @@ jest.mock("../../../../common/util/solid", () => {
   };
 });
 
-const requiredFields = ["foaf:firstName", "foaf:lastName"];
+const requiredFields = [
+  personFieldToRdfMap.firstName,
+  personFieldToRdfMap.lastName,
+];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
     useRequiredFields: jest.fn(() => {

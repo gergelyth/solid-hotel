@@ -1,5 +1,6 @@
 import { createSolidDataset } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
+import { pairingTokenToRdfMap } from "../../vocabularies/rdf_pairingToken";
 import {
   CreateAndSavePairingToken,
   DeletePairingToken,
@@ -49,7 +50,7 @@ describe("pairingTokenHandler", () => {
       "https://testpodurl.com/reservations/11111111/pairingToken"
     );
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/pairingToken> <schema:token> "0.icq3lx1ui0p".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/pairingToken> <${pairingTokenToRdfMap.pairingToken}> "0.icq3lx1ui0p".
 `;
     const serializedResult = await SerializeDataset(savedDataset);
     expect(serializedResult).toEqual(expectedRdf);
@@ -58,7 +59,7 @@ describe("pairingTokenHandler", () => {
   });
 
   test("GetPairingToken returns the correct token", async () => {
-    const rdf = `<https://inrupt.com/.well-known/sdk-local-node/pairingToken> <schema:token> "0.icq3lx1ui0p".
+    const rdf = `<https://inrupt.com/.well-known/sdk-local-node/pairingToken> <${pairingTokenToRdfMap.pairingToken}> "0.icq3lx1ui0p".
 `;
     const dataset = await DeserializeDataset(rdf);
     (GetDataSet as jest.Mock).mockReturnValue(Promise.resolve(dataset));

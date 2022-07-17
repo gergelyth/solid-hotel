@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import { Field } from "../../../types/Field";
 import { FieldInputElementBasedOnType } from "../input-type-elements";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
+import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
 function Render(field: Field): RenderResult {
   return render(
@@ -21,7 +22,7 @@ describe("<FieldInputElementBasedOnType />", () => {
       fieldShortName: "nationality",
       fieldPrettyName: "Nationality",
       fieldValue: "English",
-      rdfName: "schema:nationality",
+      rdfName: personFieldToRdfMap.nationality,
       datatype: xmlSchemaTypes.string,
     };
 
@@ -36,7 +37,7 @@ describe("<FieldInputElementBasedOnType />", () => {
       fieldShortName: "idDocumentExpiry",
       fieldPrettyName: "ID Document expiry",
       fieldValue: "11/Jul/2022",
-      rdfName: "schema:idDocumentExpiry",
+      rdfName: personFieldToRdfMap.expiry,
       datatype: xmlSchemaTypes.dateTime,
     };
 
@@ -51,7 +52,7 @@ describe("<FieldInputElementBasedOnType />", () => {
       fieldShortName: "idDocumentType",
       fieldPrettyName: "ID Document Type",
       fieldValue: "PASSPORT",
-      rdfName: "schema:idDocumentType",
+      rdfName: personFieldToRdfMap.idDocumentType,
       datatype: xmlSchemaTypes.idDocumentType,
     };
 

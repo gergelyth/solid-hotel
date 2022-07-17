@@ -21,6 +21,7 @@ import { ReservationState } from "../../../../common/types/ReservationState";
 import { UnSubscribe } from "../../../../common/util/tracker/tracker";
 import { SafeDeleteDataset } from "../../../../common/util/solid_wrapper";
 import { SendPrivacyToken } from "../../../util/outgoingCommunications";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 const TestReservationId = "TestReservationId";
 const ReplyInbox = "https://testpodurl.com/inbox/";
@@ -42,7 +43,10 @@ jest.mock("../../../../common/util/solid_reservations", () => {
   };
 });
 
-const dataProtectionFields = ["foaf:firstName", "foaf:lastName"];
+const dataProtectionFields = [
+  personFieldToRdfMap.firstName,
+  personFieldToRdfMap.lastName,
+];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
     useDataProtectionInformation: jest.fn(() => {

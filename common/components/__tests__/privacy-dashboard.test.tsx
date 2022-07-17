@@ -4,25 +4,26 @@ import "@testing-library/jest-dom";
 import { PrivacyToken } from "../../types/PrivacyToken";
 import { PrivacyDashboard } from "../privacy-dashboard";
 import { ReservationState } from "../../types/ReservationState";
+import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 
 const testPrivacyTokens: PrivacyToken[] = [
   {
     urlAtHotel: "TestUrl1",
-    fieldList: ["foaf:firstName", "foaf:lastName"],
+    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: new Date("2021-11-23"),
   },
   {
     urlAtHotel: "TestUrl2",
-    fieldList: ["schema:email"],
+    fieldList: [personFieldToRdfMap.email],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-11-25"),
   },
   {
     urlAtHotel: "TestUrl3",
-    fieldList: ["schema:phone"],
+    fieldList: [personFieldToRdfMap.phone],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-11-29"),
@@ -72,19 +73,25 @@ describe("<PrivacyDashboard />", () => {
 
     const reason1 = counterpartyBoxes[0];
     expect(reason1.innerHTML.includes("TestReason1")).toBeTruthy();
-    expect(reason1.innerHTML.includes("foaf:firstName")).toBeTruthy();
-    expect(reason1.innerHTML.includes("foaf:lastName")).toBeTruthy();
+    expect(
+      reason1.innerHTML.includes(personFieldToRdfMap.firstName)
+    ).toBeTruthy();
+    expect(
+      reason1.innerHTML.includes(personFieldToRdfMap.lastName)
+    ).toBeTruthy();
 
-    expect(reason1.innerHTML.includes("schema:email")).toBeFalsy();
-    expect(reason1.innerHTML.includes("schema:phone")).toBeFalsy();
+    expect(reason1.innerHTML.includes(personFieldToRdfMap.email)).toBeFalsy();
 
     const reason2 = counterpartyBoxes[1];
     expect(reason2.innerHTML.includes("TestReason2")).toBeTruthy();
-    expect(reason2.innerHTML.includes("schema:email")).toBeTruthy();
-    expect(reason2.innerHTML.includes("schema:phone")).toBeTruthy();
+    expect(reason2.innerHTML.includes(personFieldToRdfMap.email)).toBeTruthy();
 
-    expect(reason2.innerHTML.includes("foaf:firstName")).toBeFalsy();
-    expect(reason2.innerHTML.includes("foaf:lastName")).toBeFalsy();
+    expect(
+      reason2.innerHTML.includes(personFieldToRdfMap.firstName)
+    ).toBeFalsy();
+    expect(
+      reason2.innerHTML.includes(personFieldToRdfMap.lastName)
+    ).toBeFalsy();
   });
 
   test("Delete button renders only for selected tokens", async () => {

@@ -5,12 +5,12 @@ import LoginProviders from "../login-providers";
 import userEvent from "@testing-library/user-event";
 import { SolidLogin } from "../../../util/solid";
 
+jest.mock("../../../util/solid");
 jest.mock("../dynamic-handle-redirect-component", () => {
   return {
     DynamicHandleRedirectComponent: () => null,
   };
 });
-jest.mock("../../../util/solid");
 
 function Render(): RenderResult {
   return render(<LoginProviders />);

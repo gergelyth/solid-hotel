@@ -87,7 +87,7 @@ describe("useGuest", () => {
     expect(returnValue.isLoading).toBeFalsy();
     expect(returnValue.isError).toBeUndefined();
 
-    expect(returnValue.guestFields).toEqual(TestGuestFields[0]);
+    expect(returnValue.guestFields).toEqual([TestGuestFields[0]]);
   });
 
   test("Null guest profile doesn't return data", async () => {
@@ -159,7 +159,7 @@ describe("useGuest", () => {
 
     expect(mockMutate).toBeCalledWith([
       "guest",
-      "foaf:firstName,foaf:familyName",
+      `${personFieldToRdfMap.firstName},${personFieldToRdfMap.lastName}`,
       "TestWebId",
     ]);
   });
@@ -190,7 +190,7 @@ describe("useGuest", () => {
 
     expect(mockMutate).toBeCalledWith([
       "guest",
-      "foaf:firstName,foaf:familyName",
+      `${personFieldToRdfMap.firstName},${personFieldToRdfMap.lastName}`,
       "TestWebId",
     ]);
   });

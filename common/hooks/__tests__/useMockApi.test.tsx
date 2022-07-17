@@ -4,13 +4,14 @@ import { useGuest } from "../useGuest";
 import { Field } from "../../types/Field";
 import { useDataProtectionInformation, useRequiredFields } from "../useMockApi";
 import { DataProtectionInformation } from "../../util/apiDataRetrieval";
+import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 
 const testGuestFields: Field[] = [
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
     fieldValue: "Spanish",
-    rdfName: "schema:nationality",
+    rdfName: personFieldToRdfMap.nationality,
     datatype: xmlSchemaTypes.string,
   },
 ];
@@ -45,7 +46,11 @@ describe("useMockApi", () => {
   test("useRequiredFields with nationality passed in works as expected and doesn't call useGuest", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
-        json: () => Promise.resolve(["foaf:firstName", "foaf:familyName"]),
+        json: () =>
+          Promise.resolve([
+            personFieldToRdfMap.firstName,
+            personFieldToRdfMap.lastName,
+          ]),
       })
     ) as jest.Mock;
 
@@ -61,7 +66,10 @@ describe("useMockApi", () => {
     expect(returnValue.isLoading).toBeFalsy();
     expect(returnValue.isError).toBeUndefined();
 
-    expect(returnValue.data).toEqual(["foaf:firstName", "foaf:familyName"]);
+    expect(returnValue.data).toEqual([
+      personFieldToRdfMap.firstName,
+      personFieldToRdfMap.lastName,
+    ]);
 
     expect(useGuest).toBeCalledTimes(2);
     //Calling useGuest with an undefined key parameter won't call the hook (we need to call it because of the rules of the hooks, but SWR won't execute)
@@ -76,7 +84,11 @@ describe("useMockApi", () => {
   test("useRequiredFields with nationality missing calls useGuest to retrieve the nationality and returns correct data", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
-        json: () => Promise.resolve(["foaf:firstName", "foaf:familyName"]),
+        json: () =>
+          Promise.resolve([
+            personFieldToRdfMap.firstName,
+            personFieldToRdfMap.lastName,
+          ]),
       })
     ) as jest.Mock;
 
@@ -92,17 +104,20 @@ describe("useMockApi", () => {
     expect(returnValue.isLoading).toBeFalsy();
     expect(returnValue.isError).toBeUndefined();
 
-    expect(returnValue.data).toEqual(["foaf:firstName", "foaf:familyName"]);
+    expect(returnValue.data).toEqual([
+      personFieldToRdfMap.firstName,
+      personFieldToRdfMap.lastName,
+    ]);
 
     expect(useGuest).toBeCalledTimes(2);
     expect(useGuest).toHaveBeenNthCalledWith(
       1,
-      ["schema:nationality"],
+      [personFieldToRdfMap.nationality],
       "TestWebId"
     );
     expect(useGuest).toHaveBeenNthCalledWith(
       2,
-      ["schema:nationality"],
+      [personFieldToRdfMap.nationality],
       "TestWebId"
     );
 
@@ -114,7 +129,10 @@ describe("useMockApi", () => {
   test("useDataProtectionInformation works as expected", async () => {
     const expectedDataProtectionInformation: DataProtectionInformation = {
       dataProtectionYears: 5,
-      dataProtectionFields: ["schema:idDocumentNumber", "schema:email"],
+      dataProtectionFields: [
+        personFieldToRdfMap.idDocumentNumber,
+        personFieldToRdfMap.email,
+      ],
     };
 
     global.fetch = jest.fn(() =>
@@ -122,7 +140,10 @@ describe("useMockApi", () => {
         json: () =>
           Promise.resolve({
             dataProtectionYears: 5,
-            dataProtectionFields: ["schema:idDocumentNumber", "schema:email"],
+            dataProtectionFields: [
+              personFieldToRdfMap.idDocumentNumber,
+              personFieldToRdfMap.email,
+            ],
           }),
       })
     ) as jest.Mock;

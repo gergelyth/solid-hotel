@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import { LocalNodeSkolemPrefix } from "../../consts/solidIdentifiers";
 import { useNotifications } from "../../hooks/useNotifications";
 import { NotificationType } from "../../types/NotificationsType";
+import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
 import { AddNotificationThingToDataset } from "../datasetFactory";
 import {
   RetrieveAllNotifications,
@@ -63,9 +64,13 @@ describe("notifications", () => {
       .spyOn(global, "Date")
       .mockImplementation(() => mockDate as unknown as string);
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> <something:notificationType> 0;
-    <something:createdAt> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <something:processed> true.
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> <${
+      notificationToRdfMap.notificationType
+    }> 0;
+    <${
+      notificationToRdfMap.createdAt
+    }> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${notificationToRdfMap.isProcessed}> true.
 `;
 
     let calledUrl;

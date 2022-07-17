@@ -21,6 +21,7 @@ import { getThing, Thing } from "@inrupt/solid-client";
 import { LocalNodeSkolemPrefix } from "../../../../common/consts/solidIdentifiers";
 import { CacheProfileFields } from "../../../../common/util/tracker/profile-cache";
 import { SubscribeToProfileChanges } from "../../../util/trackerInitializer";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 const TestReservationId = "TestReservationId";
 const GuestWebId = "GuestWebId";
@@ -41,7 +42,10 @@ jest.mock("../../../../common/util/solid_reservations", () => {
   };
 });
 
-const requiredFields = ["foaf:firstName", "foaf:lastName"];
+const requiredFields = [
+  personFieldToRdfMap.firstName,
+  personFieldToRdfMap.lastName,
+];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
     useRequiredFields: jest.fn(() => {

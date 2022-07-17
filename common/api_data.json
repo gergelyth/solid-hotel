@@ -6,70 +6,70 @@
                 {
                     "nationality": "English",
                     "fields": [
-                        "foaf:firstName",
-                        "foaf:familyName",
-                        "schema:nationality",
-                        "schema:idDocumentNumber",
-                        "schema:email"
+                        "http://xmlns.com/foaf/0.1/firstName",
+                        "http://xmlns.com/foaf/0.1/lastName",
+                        "https://schema.org/nationality",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                        "http://www.w3.org/2006/vcard/ns#email"
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
                         "dataProtectionFields": [                        
-                            "foaf:firstName",
-                            "foaf:familyName",
-                            "schema:nationality",
-                            "schema:idDocumentNumber",
-                            "schema:email"
+                            "http://xmlns.com/foaf/0.1/firstName",
+                            "http://xmlns.com/foaf/0.1/lastName",
+                            "https://schema.org/nationality",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                            "http://www.w3.org/2006/vcard/ns#email"
                         ]
                     }
                 },
                 {
                     "nationality": "Spanish",
                     "fields": [
-                        "foaf:firstName",
-                        "foaf:familyName",
-                        "schema:nationality",
-                        "schema:idDocumentType",
-                        "schema:idDocumentNumber",
-                        "schema:idDocumentExpiry",
-                        "schema:email",
-                        "schema:phone_number"
+                        "http://xmlns.com/foaf/0.1/firstName",
+                        "http://xmlns.com/foaf/0.1/lastName",
+                        "https://schema.org/nationality",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                        "https://w3id.org/GConsent#hasExpiry",
+                        "http://www.w3.org/2006/vcard/ns#email",
+                        "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
                         "dataProtectionFields": [
-                            "foaf:firstName",
-                            "foaf:familyName",
-                            "schema:nationality",
-                            "schema:idDocumentType",
-                            "schema:idDocumentNumber",
-                            "schema:email"
+                            "http://xmlns.com/foaf/0.1/firstName",
+                            "http://xmlns.com/foaf/0.1/lastName",
+                            "https://schema.org/nationality",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                            "http://www.w3.org/2006/vcard/ns#email"
                         ]
                     }
                 },
                 {
                     "nationality": "Danish",
                     "fields": [
-                        "foaf:firstName",
-                        "foaf:familyName",
-                        "schema:nationality",
-                        "schema:idDocumentType",
-                        "schema:idDocumentNumber",
-                        "schema:idDocumentExpiry",
-                        "schema:email",
-                        "schema:phone_number"
+                        "http://xmlns.com/foaf/0.1/firstName",
+                        "http://xmlns.com/foaf/0.1/lastName",
+                        "https://schema.org/nationality",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                        "https://w3id.org/GConsent#hasExpiry",
+                        "http://www.w3.org/2006/vcard/ns#email",
+                        "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
                         "dataProtectionFields": [                        
-                            "foaf:firstName",
-                            "foaf:familyName",
-                            "schema:nationality",
-                            "schema:idDocumentType",
-                            "schema:idDocumentNumber",
-                            "schema:idDocumentExpiry",
-                            "schema:email",
-                            "schema:phone_number"
+                            "http://xmlns.com/foaf/0.1/firstName",
+                            "http://xmlns.com/foaf/0.1/lastName",
+                            "https://schema.org/nationality",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                            "https://w3id.org/GConsent#hasExpiry",
+                            "http://www.w3.org/2006/vcard/ns#email",
+                            "https://schema.org/phone"
                         ]
                     }
                 }
@@ -81,52 +81,52 @@
                 {
                     "nationality": "English",
                     "fields": [
-                        "foaf:firstName",
-                        "foaf:familyName",
-                        "schema:nationality",
-                        "schema:idDocumentType",
-                        "schema:idDocumentNumber",
-                        "schema:idDocumentExpiry",
-                        "schema:email",
-                        "schema:phone_number"
+                        "http://xmlns.com/foaf/0.1/firstName",
+                        "http://xmlns.com/foaf/0.1/lastName",
+                        "https://schema.org/nationality",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                        "https://w3id.org/GConsent#hasExpiry",
+                        "http://www.w3.org/2006/vcard/ns#email",
+                        "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 3,
                         "dataProtectionFields": [                        
-                            "foaf:firstName",
-                            "foaf:familyName",
-                            "schema:nationality",
-                            "schema:idDocumentType",
-                            "schema:idDocumentNumber",
-                            "schema:idDocumentExpiry",
-                            "schema:email",
-                            "schema:phone_number"
+                            "http://xmlns.com/foaf/0.1/firstName",
+                            "http://xmlns.com/foaf/0.1/lastName",
+                            "https://schema.org/nationality",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                            "https://w3id.org/GConsent#hasExpiry",
+                            "http://www.w3.org/2006/vcard/ns#email",
+                            "https://schema.org/phone"
                         ]
                     }
                 },
                 {
                     "nationality": "Spanish",
                     "fields": [
-                        "foaf:firstName",
-                        "foaf:familyName",
-                        "schema:nationality",
-                        "schema:idDocumentType",
-                        "schema:idDocumentNumber",
-                        "schema:idDocumentExpiry",
-                        "schema:email",
-                        "schema:phone_number"
+                        "http://xmlns.com/foaf/0.1/firstName",
+                        "http://xmlns.com/foaf/0.1/lastName",
+                        "https://schema.org/nationality",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                        "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                        "https://w3id.org/GConsent#hasExpiry",
+                        "http://www.w3.org/2006/vcard/ns#email",
+                        "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
                         "dataProtectionYears": 5,
                         "dataProtectionFields": [                        
-                            "foaf:firstName",
-                            "foaf:familyName",
-                            "schema:nationality",
-                            "schema:idDocumentType",
-                            "schema:idDocumentNumber",
-                            "schema:idDocumentExpiry",
-                            "schema:email",
-                            "schema:phone_number"
+                            "http://xmlns.com/foaf/0.1/firstName",
+                            "http://xmlns.com/foaf/0.1/lastName",
+                            "https://schema.org/nationality",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentType",
+                            "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#idDocumentNumber",
+                            "https://w3id.org/GConsent#hasExpiry",
+                            "http://www.w3.org/2006/vcard/ns#email",
+                            "https://schema.org/phone"
                         ]
                     }
                 }

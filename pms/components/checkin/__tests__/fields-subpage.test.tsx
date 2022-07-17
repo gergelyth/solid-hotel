@@ -6,6 +6,7 @@ import { mocked } from "ts-jest/utils";
 import { RequiredFieldsAtOfflineCheckin } from "../fields-subpage";
 import { OfflineCheckinPage } from "../../../pages/checkin";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 function MockRouter(): NextRouter {
   const mockRouter = mocked({
@@ -40,7 +41,10 @@ jest.mock("next/router", () => {
   };
 });
 
-const requiredFields = ["foaf:firstName", "foaf:lastName"];
+const requiredFields = [
+  personFieldToRdfMap.firstName,
+  personFieldToRdfMap.lastName,
+];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
     useRequiredFields: jest.fn(() => {

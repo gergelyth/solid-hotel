@@ -6,5 +6,5 @@ export const notificationToRdfMap: Record<string, string> = {
   type: "http://www.w3.org/ns/solid/terms#Notification",
   isProcessed: SOLIDHOTEL.isProcessed,
   notificationType: SOLIDHOTEL.notificationType,
-  createdAt: DCTERMS.created,
+  createdAt: DCTERMS.created.value,
 };

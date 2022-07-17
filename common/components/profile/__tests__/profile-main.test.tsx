@@ -5,27 +5,28 @@ import { Field } from "../../../types/Field";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { ProfileMain } from "../profile-main";
 import { useGuest } from "../../../hooks/useGuest";
+import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
 const testGuestFields: Field[] = [
   {
     fieldShortName: "firstName",
     fieldPrettyName: "First name",
     fieldValue: "John",
-    rdfName: "schema:firstName",
+    rdfName: personFieldToRdfMap.firstName,
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "lastName",
     fieldPrettyName: "Last name",
     fieldValue: "Smith",
-    rdfName: "schema:lastName",
+    rdfName: personFieldToRdfMap.lastName,
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
     fieldValue: "English",
-    rdfName: "schema:nationality",
+    rdfName: personFieldToRdfMap.nationality,
     datatype: xmlSchemaTypes.string,
   },
 ];

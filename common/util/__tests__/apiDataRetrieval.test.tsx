@@ -2,6 +2,7 @@ import { mocked } from "ts-jest/utils";
 import "@testing-library/jest-dom";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MockApiOperation } from "../apiDataRetrieval";
+import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 
 function MockRequest(): NextApiRequest {
   const query: { [key: string]: string } = {
@@ -17,11 +18,11 @@ function MockRequest(): NextApiRequest {
 describe("apiDataRetrieval", () => {
   test("MockApiOperation returns correct data", async () => {
     const expectedResult = [
-      "foaf:firstName",
-      "foaf:familyName",
-      "schema:nationality",
-      "schema:idDocumentNumber",
-      "schema:email",
+      personFieldToRdfMap.firstName,
+      personFieldToRdfMap.lastName,
+      personFieldToRdfMap.nationality,
+      personFieldToRdfMap.idDocumentNumber,
+      personFieldToRdfMap.email,
     ];
 
     let jsonResult;

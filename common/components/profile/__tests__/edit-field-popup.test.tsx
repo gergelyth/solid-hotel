@@ -5,12 +5,13 @@ import userEvent from "@testing-library/user-event";
 import { EditFieldPopup } from "../edit-field-popup";
 import { Field } from "../../../types/Field";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
+import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
 const testField: Field = {
   fieldShortName: "nationality",
   fieldPrettyName: "Nationality",
   fieldValue: undefined,
-  rdfName: "schema:nationality",
+  rdfName: personFieldToRdfMap.nationality,
   datatype: xmlSchemaTypes.string,
 };
 

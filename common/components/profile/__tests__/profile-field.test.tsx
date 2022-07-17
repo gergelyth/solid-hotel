@@ -6,6 +6,7 @@ import { Field } from "../../../types/Field";
 import { ProfileField } from "../profile-field";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { RemoveField, SetField } from "../../../util/solid_profile";
+import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
 jest.mock("../../../util/solid_profile", () => {
   return {
@@ -40,21 +41,21 @@ const testGuestFields: Field[] = [
     fieldShortName: "firstName",
     fieldPrettyName: "First name",
     fieldValue: "John",
-    rdfName: "schema:firstName",
+    rdfName: personFieldToRdfMap.firstName,
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "lastName",
     fieldPrettyName: "Last name",
     fieldValue: "Smith",
-    rdfName: "schema:lastName",
+    rdfName: personFieldToRdfMap.lastName,
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
     fieldValue: "English",
-    rdfName: "schema:nationality",
+    rdfName: personFieldToRdfMap.nationality,
     datatype: xmlSchemaTypes.string,
   },
 ];
@@ -133,7 +134,10 @@ describe("<ProfileField />", () => {
     ) as Element;
     await userEvent.click(editFieldPopupButton);
 
-    expect(mockSetField).toBeCalledWith("foaf:firstName", newFieldValue);
+    expect(mockSetField).toBeCalledWith(
+      personFieldToRdfMap.firstName,
+      newFieldValue
+    );
   });
 
   test("Delete field functionality triggers field delete events correctly", async () => {
@@ -157,6 +161,6 @@ describe("<ProfileField />", () => {
     ) as Element;
     await userEvent.click(deleteFieldPopupButton);
 
-    expect(mockRemoveField).toBeCalledWith("foaf:firstName");
+    expect(mockRemoveField).toBeCalledWith(personFieldToRdfMap.firstName);
   });
 });

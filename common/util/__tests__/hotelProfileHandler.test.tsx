@@ -1,5 +1,6 @@
 import { createSolidDataset } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
+import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import {
   CreateDataProtectionProfile,
   CreateHotelProfile,
@@ -59,9 +60,9 @@ describe("hotelProfileHandler", () => {
     expect(SafeSaveDatasetInContainer).toBeCalledTimes(1);
     expect(calledUrl).toEqual("TestContainerUrl");
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> <foaf:firstName> "John";
-    <foaf:familyName> "Smith";
-    <schema:nationality> "English".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> <${personFieldToRdfMap.firstName}> "John";
+    <${personFieldToRdfMap.lastName}> "Smith";
+    <${personFieldToRdfMap.nationality}> "English".
 `;
     const serializedResult = await SerializeDataset(savedDataset);
     expect(serializedResult).toEqual(expectedRdf);
@@ -92,9 +93,9 @@ describe("hotelProfileHandler", () => {
     expect(SafeSaveDatasetInContainer).toBeCalledTimes(1);
     expect(calledUrl).toEqual("DataProtectionContainerUrl");
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> <foaf:firstName> "John";
-    <foaf:familyName> "Smith";
-    <schema:nationality> "English".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> <${personFieldToRdfMap.firstName}> "John";
+    <${personFieldToRdfMap.lastName}> "Smith";
+    <${personFieldToRdfMap.nationality}> "English".
 `;
     const serializedResult = await SerializeDataset(savedDataset);
     expect(serializedResult).toEqual(expectedRdf);
@@ -105,9 +106,9 @@ describe("hotelProfileHandler", () => {
   });
 
   test("GetHotelProfileThing returns correct data", async () => {
-    const rdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> <foaf:firstName> "John";
-    <foaf:familyName> "Smith";
-    <schema:nationality> "English".
+    const rdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> <${personFieldToRdfMap.firstName}> "John";
+    <${personFieldToRdfMap.lastName}> "Smith";
+    <${personFieldToRdfMap.nationality}> "English".
 `;
     const dataset = {
       ...(await DeserializeDataset(rdf)),

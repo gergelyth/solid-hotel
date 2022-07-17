@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import { RequiredFields } from "../fields-subpage";
 import { BookingPage } from "../../../pages/booking";
 import { MockSession } from "../../../../common/util/__tests__/testUtil";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 let confirmButtonProps: {
   onClickFunction: () => void;
@@ -34,7 +35,10 @@ jest.mock("../../../../common/util/solid", () => {
   };
 });
 
-const requiredFields = ["foaf:firstName", "foaf:lastName"];
+const requiredFields = [
+  personFieldToRdfMap.firstName,
+  personFieldToRdfMap.lastName,
+];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
     useRequiredFields: jest.fn(() => {

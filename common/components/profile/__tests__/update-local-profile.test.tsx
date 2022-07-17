@@ -3,6 +3,7 @@ import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ProfileUpdate } from "../../../util/tracker/trackerSendChange";
 import { UpdateLocalProfileSnackbar } from "../update-local-profile";
+import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
 const TestProfileUrl = "TestProfileUrl";
 
@@ -30,7 +31,7 @@ jest.mock("../../../util/solid_profile", () => {
   };
 });
 let mockUpdateProfileInMemory = jest.fn();
-jest.mock("../../../util/tracker/profileCache", () => {
+jest.mock("../../../util/tracker/profile-cache", () => {
   return {
     UpdateProfileInMemory: (profileUrl: string, fieldOptions: ProfileUpdate) =>
       mockUpdateProfileInMemory(profileUrl, fieldOptions),
@@ -63,9 +64,14 @@ beforeEach(() => {
 
 describe("<UpdateLocalProfileSnackbar />", () => {
   test("Snackbar doesn't call update methods if there are no approved fields", async () => {
-    const fieldOptions: ProfileUpdate = {
-      "foaf:firstName": { status: false, newValue: "John" },
-      "foaf:lastName": { status: false, newValue: "Smith" },
+    const fieldOptions: ProfileUpdate = {};
+    fieldOptions[personFieldToRdfMap.firstName] = {
+      status: false,
+      newValue: "John",
+    };
+    fieldOptions[personFieldToRdfMap.lastName] = {
+      status: false,
+      newValue: "Smith",
     };
     const updateProfileSnackbar = Render(fieldOptions);
     expect(updateProfileSnackbar).toBeDefined();
@@ -78,9 +84,14 @@ describe("<UpdateLocalProfileSnackbar />", () => {
   });
 
   test("With at least one approved field there is no warning and appropriate methods are called", async () => {
-    const fieldOptions: ProfileUpdate = {
-      "foaf:firstName": { status: true, newValue: "John" },
-      "foaf:lastName": { status: false, newValue: "Smith" },
+    const fieldOptions: ProfileUpdate = {};
+    fieldOptions[personFieldToRdfMap.firstName] = {
+      status: true,
+      newValue: "John",
+    };
+    fieldOptions[personFieldToRdfMap.lastName] = {
+      status: false,
+      newValue: "Smith",
     };
     const updateProfileSnackbar = Render(fieldOptions);
     expect(updateProfileSnackbar).toBeDefined();
@@ -95,9 +106,14 @@ describe("<UpdateLocalProfileSnackbar />", () => {
     expect(mockShowWarningSnackbar).not.toBeCalled();
 
     expect(mockIgnoreNextUpdate).toBeCalledWith(TestProfileUrl);
-    expect(mockSetMultipleFieldsInProfile).toBeCalledWith(TestProfileUrl, {
-      "foaf:firstName": "John",
-    });
+    const expectedArgument: {
+      [rdfName: string]: string;
+    } = {};
+    expectedArgument[personFieldToRdfMap.firstName] = "John";
+    expect(mockSetMultipleFieldsInProfile).toBeCalledWith(
+      TestProfileUrl,
+      expectedArgument
+    );
     expect(mockUpdateProfileInMemory).toBeCalledWith(
       TestProfileUrl,
       fieldOptions

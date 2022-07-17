@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import { TestGuestFields } from "../../../../common/util/__tests__/testUtil";
 import { ForeignPoliceReport } from "../foreign-police-report";
 import { useGuest } from "../../../../common/hooks/useGuest";
+import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
 jest.mock("../../../../common/hooks/useGuest", () => {
   return {
@@ -36,7 +37,7 @@ describe("<ForeignPoliceReport  />", () => {
 
     const linkValue = linkElement?.href;
     expect(linkValue).toContain(
-      `"Field name","RDF property","Value""First name","foaf:firstName","John""Last name","foaf:familyName","Smith""Nationality","schema:nationality","English"`
+      `"Field name","RDF property","Value""First name","${personFieldToRdfMap.firstName}","John""Last name","${personFieldToRdfMap.lastName}","Smith""Nationality","${personFieldToRdfMap.nationality},"English"`
     );
   });
 });

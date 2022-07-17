@@ -13,5 +13,5 @@ export const privacyTokenToRdfMap: Record<string, string> = {
   reason: "http://purl.org/goodrelations/v1#description",
   forReservationState: "https://schema.org/reservationStatus",
   expiry: "https://w3id.org/GConsent#hasExpiry",
-  url: VOID.uriLookupEndpoint,
+  url: VOID.uriLookupEndpoint.value,
 };

@@ -14,6 +14,10 @@ import {
   TestGuestPrivacyTokens,
   TestHotelPrivacyTokens,
 } from "./testUtil";
+import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { reservationFieldToRdfMap } from "../../vocabularies/rdf_reservation";
+import { privacyTokenToRdfMap } from "../../vocabularies/notification_payloads/rdf_privacy";
+import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
 
 describe("datasetFactory", () => {
   test("CreateReservationDataset creates the expected dataset", async () => {
@@ -28,13 +32,13 @@ describe("datasetFactory", () => {
       dateTo: new Date("2021-07-07"),
     };
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <schema:reservationFor> "RoomUrl1";
-    <ldp:inbox> "CounterpartyInboxUrl1";
-    <schema:reservationAt> "HotelWebId1";
-    <schema:owner> "OwnerWebId1";
-    <schema:state> 1;
-    <schema:checkinTime> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <schema:checkoutTime> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.room}> "RoomUrl1";
+    <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
+    <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
+    <${reservationFieldToRdfMap.state}> 1;
+    <${reservationFieldToRdfMap.checkinTime}> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${reservationFieldToRdfMap.checkoutTime}> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
     const dataset = CreateReservationDataset(reservation);
@@ -48,9 +52,13 @@ describe("datasetFactory", () => {
       .spyOn(global, "Date")
       .mockImplementation(() => mockDate as unknown as string);
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> <something:processed> false;
-    <something:notificationType> 6;
-    <something:createdAt> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> <${
+      notificationToRdfMap.isProcessed
+    }> false;
+    <${notificationToRdfMap.notificationType}> 6;
+    <${
+      notificationToRdfMap.createdAt
+    }> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
     const dataset = AddNotificationThingToDataset(
@@ -64,14 +72,14 @@ describe("datasetFactory", () => {
   });
 
   test("CreateHotelPrivacyTokenDataset creates the expected dataset", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <schema:fields> "foaf:firstName", "foaf:familyName";
-    <schema:reason> "TestReason1";
-    <schema:forReservationState> 1;
-    <schema:expiry> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <schema:hotelAddressUrl> "https://testpodurl.com/hotelprivacy/testResource1.ttl";
-    <schema:datasetUrlTarget> "TestDatasetUrlTarget1";
-    <schema:guestInbox> "TestGuestInbox1";
-    <schema:reservation> "TestReservationUrl1".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
+    <${privacyTokenToRdfMap.reason}> "TestReason1";
+    <${privacyTokenToRdfMap.forReservationState}> 1;
+    <${privacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${privacyTokenToRdfMap.url}> "https://testpodurl.com/hotelprivacy/testResource1.ttl";
+    <${privacyTokenToRdfMap.datasetUrlTarget}> "TestDatasetUrlTarget1";
+    <${privacyTokenToRdfMap.guestInbox}> "TestGuestInbox1";
+    <${privacyTokenToRdfMap.reservation}> "TestReservationUrl1".
 `;
 
     const dataset = CreateHotelPrivacyTokenDataset(TestHotelPrivacyTokens[0]);
@@ -80,14 +88,14 @@ describe("datasetFactory", () => {
   });
 
   test("CreateGuestPrivacyTokenDataset creates the expected dataset", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <schema:fields> "foaf:firstName", "foaf:familyName";
-    <schema:reason> "TestReason1";
-    <schema:forReservationState> 1;
-    <schema:expiry> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <schema:hotelAddressUrl> "TestUrlAtHotel1";
-    <schema:hotelInboxForDeletion> "TestHotelInbox1";
-    <schema:hotel> "TestHotelWebId1";
-    <schema:reservation> "TestReservationUrl1".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
+    <${privacyTokenToRdfMap.reason}> "TestReason1";
+    <${privacyTokenToRdfMap.forReservationState}> 1;
+    <${privacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${privacyTokenToRdfMap.url}> "TestUrlAtHotel1";
+    <${privacyTokenToRdfMap.hotelInboxForDeletion}> "TestHotelInbox1";
+    <${privacyTokenToRdfMap.hotel}> "TestHotelWebId1";
+    <${privacyTokenToRdfMap.reservation}> "TestReservationUrl1".
 `;
 
     const dataset = CreateGuestPrivacyTokenDataset(TestGuestPrivacyTokens[0]);
