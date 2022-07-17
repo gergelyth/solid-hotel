@@ -9,9 +9,9 @@ import {
 } from "./outgoingCommunications";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 import { ShowCustomSnackbar } from "../../common/components/snackbar";
-import CheckinProgressSnackbar from "../components/checkin/checkin-progress-snackbar";
+import { CheckinProgressSnackbar } from "../components/checkin/checkin-progress-snackbar";
 import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-snackbar";
-import CancelProgressSnackbar from "../components/cancelation/cancel-progress-snackbar";
+import { CancelProgressSnackbar } from "../components/cancelation/cancel-progress-snackbar";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 
 /**

@@ -3,8 +3,8 @@ import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { Grid, Box, Typography, Button } from "@material-ui/core";
 import HotelIcon from "@material-ui/icons/Hotel";
 import DeleteIcon from "@material-ui/icons/Delete";
-import DeleteRoomPopup from "./delete-room-popup";
-import EditRoomPopup from "./edit-room-popup";
+import { DeleteRoomPopup } from "./delete-room-popup";
+import { EditRoomPopup } from "./edit-room-popup";
 
 //TODO same logic as EditableField
 /**
@@ -12,7 +12,7 @@ import EditRoomPopup from "./edit-room-popup";
  * The buttons trigger a popup enabling the corresponding actions.
  * @returns The element for a specific room definition - also logically contains the Edit and Delete popup dialogs.
  */
-function EditableRoomElement({
+export function EditableRoomElement({
   room,
   key,
   updateRoomLocally,
@@ -32,7 +32,7 @@ function EditableRoomElement({
       item
       key={key}
       spacing={2}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
     >
       <Grid item xs={1}>
@@ -43,21 +43,24 @@ function EditableRoomElement({
       <Grid item xs={7}>
         <Grid container direction="row" spacing={1}>
           <Grid item>
-            <Typography variant="body2">
-              <Box fontWeight="fontWeightBold">Room:</Box>
-            </Typography>
+            <Box fontWeight="fontWeightBold">
+              <Typography variant="body2">Room:</Typography>
+            </Box>
           </Grid>
           <Grid item>
             <Typography variant="body2">{room.name}</Typography>
           </Grid>
         </Grid>
+        <Box fontWeight="fontWeightBold">
+          <Typography variant="body2">Description:</Typography>
+        </Box>
         <Typography variant="body2">
-          <Box fontWeight="fontWeightBold">Description:</Box>
           {room.description ?? "<Empty description>"}
         </Typography>
       </Grid>
       <Grid item xs={1}>
         <Button
+          data-testid="edit-button"
           variant="contained"
           color="primary"
           onClick={() => setEditPopupVisibility(true)}
@@ -67,6 +70,7 @@ function EditableRoomElement({
       </Grid>
       <Grid item xs={1}>
         <Button
+          data-testid="delete-button"
           variant="contained"
           color="primary"
           startIcon={<DeleteIcon />}
@@ -90,5 +94,3 @@ function EditableRoomElement({
     </Grid>
   );
 }
-
-export default EditableRoomElement;

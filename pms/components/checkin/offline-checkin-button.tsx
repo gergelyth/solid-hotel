@@ -44,7 +44,7 @@ function OnConfirmation(
  * Starts by showing a dialog which requires the hotel employee to enter the guest's nationality, as this will drive the selection of required personal information fields.
  * @returns A button which starts the offline check-in process.
  */
-function OfflineCheckinButton({
+export function OfflineCheckinButton({
   reservation,
 }: {
   reservation: ReservationAtHotel;
@@ -74,8 +74,16 @@ function OfflineCheckinButton({
       </Button>
       <EditFieldPopup
         field={nationalityField}
-        onConfirmation={(nationalityFieldName: string, nationality: string) =>
-          OnConfirmation(reservation, nationalityField, nationality, router)
+        onConfirmation={async (
+          nationalityFieldName: string,
+          nationality: string
+        ) =>
+          await OnConfirmation(
+            reservation,
+            nationalityField,
+            nationality,
+            router
+          )
         }
         isPopupShowing={isNationalityPopupShowing}
         setPopupVisibility={setNationalityPopupVisibility}
@@ -83,5 +91,3 @@ function OfflineCheckinButton({
     </Box>
   );
 }
-
-export default OfflineCheckinButton;

@@ -18,7 +18,7 @@ import {
  * If the dialog is closed, no action is carried out.
  * @returns A dialog with the option to edit the room definition or back out (or null if the dialog is not showing).
  */
-function EditRoomPopup({
+export function EditRoomPopup({
   room,
   updateRoomLocally,
   isPopupShowing,
@@ -52,7 +52,7 @@ function EditRoomPopup({
         <Grid
           container
           spacing={2}
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           direction="column"
         >
@@ -90,6 +90,7 @@ function EditRoomPopup({
                 Back
               </Button>
               <Button
+                data-testid="edit-room-popup-button"
                 variant="contained"
                 color="primary"
                 className={"button"}
@@ -117,5 +118,3 @@ function EditRoomPopup({
     </Dialog>
   );
 }
-
-export default EditRoomPopup;

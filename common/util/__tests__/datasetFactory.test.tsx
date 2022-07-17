@@ -9,8 +9,11 @@ import {
 } from "../datasetFactory";
 import { createSolidDataset } from "@inrupt/solid-client";
 import { NotificationType } from "../../types/NotificationsType";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { SerializeDataset } from "./testUtil";
+import {
+  SerializeDataset,
+  TestGuestPrivacyTokens,
+  TestHotelPrivacyTokens,
+} from "./testUtil";
 
 describe("datasetFactory", () => {
   test("CreateReservationDataset creates the expected dataset", async () => {
@@ -61,17 +64,6 @@ describe("datasetFactory", () => {
   });
 
   test("CreateHotelPrivacyTokenDataset creates the expected dataset", async () => {
-    const hotelPrivacyToken = {
-      urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource1.ttl",
-      fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
-      reason: "TestReason1",
-      forReservationState: ReservationState.CONFIRMED,
-      expiry: new Date("2021-07-11"),
-      datasetUrlTarget: "TestDatasetUrlTarget1",
-      guestInbox: "TestGuestInbox1",
-      reservation: "TestReservationUrl1",
-    };
-
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <schema:fields> "foaf:firstName", "foaf:familyName";
     <schema:reason> "TestReason1";
     <schema:forReservationState> 1;
@@ -82,24 +74,12 @@ describe("datasetFactory", () => {
     <schema:reservation> "TestReservationUrl1".
 `;
 
-    const dataset = CreateHotelPrivacyTokenDataset(hotelPrivacyToken);
+    const dataset = CreateHotelPrivacyTokenDataset(TestHotelPrivacyTokens[0]);
     const serializedResult = await SerializeDataset(dataset);
     expect(serializedResult).toEqual(expectedRdf);
   });
 
   test("CreateGuestPrivacyTokenDataset creates the expected dataset", async () => {
-    const guestPrivacyToken = {
-      urlAtHotel: "TestUrlAtHotel1",
-      fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
-      reason: "TestReason1",
-      forReservationState: ReservationState.CONFIRMED,
-      expiry: new Date("2021-07-11"),
-      hotelInboxForDeletion: "TestHotelInbox1",
-      hotel: "TestHotelWebId1",
-      urlAtGuest: "https://testpodurl.com/guestprivacy/testResource3.ttl",
-      reservation: "TestReservationUrl1",
-    };
-
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <schema:fields> "foaf:firstName", "foaf:familyName";
     <schema:reason> "TestReason1";
     <schema:forReservationState> 1;
@@ -110,7 +90,7 @@ describe("datasetFactory", () => {
     <schema:reservation> "TestReservationUrl1".
 `;
 
-    const dataset = CreateGuestPrivacyTokenDataset(guestPrivacyToken);
+    const dataset = CreateGuestPrivacyTokenDataset(TestGuestPrivacyTokens[0]);
     const serializedResult = await SerializeDataset(dataset);
     expect(serializedResult).toEqual(expectedRdf);
   });

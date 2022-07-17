@@ -35,7 +35,7 @@ async function ExecuteCancel(
  * The reservation state change is not done here but in the calling method.
  * @returns A custom progress snackbar executing the cancel operation.
  */
-const CancelProgressSnackbar = forwardRef<
+export const CancelProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
     key: string | number;
@@ -73,5 +73,3 @@ const CancelProgressSnackbar = forwardRef<
 });
 
 CancelProgressSnackbar.displayName = "CancelProgressSnackbar";
-
-export default CancelProgressSnackbar;

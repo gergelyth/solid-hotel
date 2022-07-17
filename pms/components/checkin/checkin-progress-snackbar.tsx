@@ -83,7 +83,7 @@ async function ExecuteCheckIn(
  * We also need to remove the now redundant privacy tokens and create new ones appropriate for the new reservation state.
  * @returns A custom progress snackbar executing the check-in operation.
  */
-const CheckinProgressSnackbar = forwardRef<
+export const CheckinProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
     key: string | number;
@@ -149,5 +149,3 @@ const CheckinProgressSnackbar = forwardRef<
 });
 
 CheckinProgressSnackbar.displayName = "CheckinProgressSnackbar";
-
-export default CheckinProgressSnackbar;

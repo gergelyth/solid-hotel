@@ -9,7 +9,7 @@ import { useSpecificRoom } from "../../../common/hooks/useRooms";
  * Retrieves the room definition for which the reservation is made and displays some basic information about it.
  * @returns A component wrapping the {@link BookingProperties} component with PMS specific actions.
  */
-function ConciseHotelReservationElement({
+export function ConciseHotelReservationElement({
   reservation,
   onClickAction,
 }: {
@@ -34,9 +34,9 @@ function ConciseHotelReservationElement({
       titleElement={
         <Grid container direction="row" spacing={1}>
           <Grid item>
-            <Typography variant="body2">
-              <Box fontWeight="fontWeightBold">Room:</Box>
-            </Typography>
+            <Box fontWeight="fontWeightBold">
+              <Typography variant="body2">Room:</Typography>
+            </Box>
           </Grid>
           <Grid item>
             <Typography variant="body2">{roomName}</Typography>
@@ -47,5 +47,3 @@ function ConciseHotelReservationElement({
     />
   );
 }
-
-export default ConciseHotelReservationElement;

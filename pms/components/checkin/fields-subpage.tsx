@@ -14,7 +14,7 @@ import { ErrorComponent } from "../../../common/components/error-component";
  * When the button is enabled and clicked, we execute the check-in operation.
  * @returns A component containing the profile fields and the ability to edit their values and a proceed button which triggers the check-in.
  */
-function RequiredFieldsAtOfflineCheckin({
+export function RequiredFieldsAtOfflineCheckin({
   currentPage,
   setCurrentPage,
   executeCheckin,
@@ -25,6 +25,7 @@ function RequiredFieldsAtOfflineCheckin({
 }): JSX.Element | null {
   const router = useRouter();
 
+  //TODO reservation ID is unnecessary?
   let reservationId = router.query.id;
   if (Array.isArray(reservationId)) {
     reservationId = reservationId[0];
@@ -61,17 +62,17 @@ function RequiredFieldsAtOfflineCheckin({
     <Grid
       container
       spacing={2}
-      justify="center"
+      justifyContent="center"
       alignItems="stretch"
       direction="column"
     >
-      <Grid item container justify="center">
+      <Grid item container justifyContent="center">
         <Typography variant="h4">Check-in</Typography>
       </Grid>
-      <Grid item container justify="center">
-        <Typography>
-          <Box fontWeight="fontWeightBold">Required personal information</Box>
-        </Typography>
+      <Grid item container justifyContent="center">
+        <Box fontWeight="fontWeightBold">
+          <Typography>Required personal information</Typography>
+        </Box>
       </Grid>
       <RequiredFields
         data={data}
@@ -83,5 +84,3 @@ function RequiredFieldsAtOfflineCheckin({
     </Grid>
   );
 }
-
-export default RequiredFieldsAtOfflineCheckin;

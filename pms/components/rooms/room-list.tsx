@@ -1,9 +1,9 @@
 import { TriggerRefetch, useRooms } from "../../../common/hooks/useRooms";
 import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
-import EditableRoomElement from "./editable-room";
+import { EditableRoomElement } from "./editable-room";
 import { useState } from "react";
-import EditRoomPopup from "./edit-room-popup";
+import { EditRoomPopup } from "./edit-room-popup";
 import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
 import { ErrorComponent } from "../../../common/components/error-component";
 
@@ -34,7 +34,7 @@ function CreateRoomElement(
  * Defines the actions to perform when a room is created/edited/deleted.
  * @returns A component containing all room definitions (or a text component informing the user that no such items exist) and a Create Room button. Also logically contains the edit room popup dialog.
  */
-function RoomList(): JSX.Element {
+export function RoomList(): JSX.Element {
   const [isCreatePopupShowing, setCreatePopupVisibility] = useState(false);
 
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
@@ -79,7 +79,7 @@ function RoomList(): JSX.Element {
     <Grid
       container
       spacing={5}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -88,7 +88,7 @@ function RoomList(): JSX.Element {
           <Grid
             container
             spacing={2}
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             direction="column"
           >
@@ -101,6 +101,7 @@ function RoomList(): JSX.Element {
 
       <Grid item>
         <Button
+          data-testid="create-room-button"
           variant="contained"
           color="primary"
           onClick={() => setCreatePopupVisibility(true)}
@@ -119,5 +120,3 @@ function RoomList(): JSX.Element {
     </Grid>
   );
 }
-
-export default RoomList;

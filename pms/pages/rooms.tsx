@@ -1,4 +1,4 @@
-import RoomList from "../components/rooms/room-list";
+import { RoomList } from "../components/rooms/room-list";
 import { Grid, Typography } from "@material-ui/core";
 
 /**

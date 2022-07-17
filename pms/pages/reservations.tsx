@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { ReservationsUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import CreateReservationElement from "../components/reservations/reservation-element";
+import { CreateReservationElement } from "../components/reservations/reservation-element";
 import { Grid, Typography, Box } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
 import { ReservationStatusList } from "../../common/components/reservations/reservation-status-list";

@@ -19,6 +19,9 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 import { ISessionInfo, Session } from "@inrupt/solid-client-authn-browser";
 import { mocked } from "ts-jest/utils";
+import { HotelPrivacyToken } from "../../types/HotelPrivacyToken";
+import { GuestPrivacyToken } from "../../types/GuestPrivacyToken";
+import { RoomDefinition } from "../../types/RoomDefinition";
 
 const rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const ldpContainer = "http://www.w3.org/ns/ldp#Container";
@@ -130,6 +133,12 @@ export const TestNotifications: Notification[] = [
   },
 ];
 
+export const TestRoomDefinitions: RoomDefinition[] = [
+  { id: "roomId1", name: "Room 1", description: "Description 1" },
+  { id: "roomId2", name: "Room 2", description: "Description 2" },
+  { id: "roomId3", name: "Room 3", description: "Description 3" },
+];
+
 export const TestReservations: ReservationAtHotel[] = [
   {
     id: "reservationId1",
@@ -150,5 +159,53 @@ export const TestReservations: ReservationAtHotel[] = [
     state: ReservationState.ACTIVE,
     dateFrom: new Date("2021-07-15"),
     dateTo: new Date("2021-07-16"),
+  },
+];
+
+export const TestHotelPrivacyTokens: HotelPrivacyToken[] = [
+  {
+    urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource1.ttl",
+    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    reason: "TestReason1",
+    forReservationState: ReservationState.CONFIRMED,
+    expiry: new Date("2021-07-11"),
+    datasetUrlTarget: "TestDatasetUrlTarget1",
+    guestInbox: "TestGuestInbox1",
+    reservation: "TestReservationUrl1",
+  },
+  {
+    urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource2.ttl",
+    fieldList: [personFieldToRdfMap.firstName],
+    reason: "TestReason2",
+    forReservationState: ReservationState.ACTIVE,
+    expiry: new Date("2021-07-22"),
+    datasetUrlTarget: "TestDatasetUrlTarget2",
+    guestInbox: "TestGuestInbox2",
+    reservation: "TestReservationUrl2",
+  },
+];
+
+export const TestGuestPrivacyTokens: GuestPrivacyToken[] = [
+  {
+    urlAtHotel: "TestUrlAtHotel1",
+    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    reason: "TestReason1",
+    forReservationState: ReservationState.CONFIRMED,
+    expiry: new Date("2021-07-11"),
+    hotelInboxForDeletion: "TestHotelInbox1",
+    hotel: "TestHotelWebId1",
+    urlAtGuest: "https://testpodurl.com/guestprivacy/testResource3.ttl",
+    reservation: "TestReservationUrl1",
+  },
+  {
+    urlAtHotel: "TestUrlAtHotel2",
+    fieldList: [personFieldToRdfMap.firstName],
+    reason: "TestReason2",
+    forReservationState: ReservationState.ACTIVE,
+    expiry: new Date("2021-07-22"),
+    hotelInboxForDeletion: "TestHotelInbox2",
+    hotel: "TestHotelWebId2",
+    urlAtGuest: "https://testpodurl.com/guestprivacy/testResource4.ttl",
+    reservation: "TestReservationUrl2",
   },
 ];

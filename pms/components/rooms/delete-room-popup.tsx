@@ -22,7 +22,7 @@ import { DeleteRoom } from "../../util/solidHotelSpecific";
  * If the dialog is closed, no action is carried out.
  * @returns A dialog with the option to delete the room definition (and cancel all reservations) or back out (or null if the dialog is not showing).
  */
-function DeleteRoomPopup({
+export function DeleteRoomPopup({
   room,
   updateRoomLocally,
   isPopupShowing,
@@ -50,7 +50,7 @@ function DeleteRoomPopup({
         <Grid
           container
           spacing={2}
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           direction="column"
         >
@@ -61,29 +61,25 @@ function DeleteRoomPopup({
             <Paper elevation={6}>
               <Grid
                 container
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
                 direction="column"
               >
-                <Box padding={3}>
+                <Box padding={3} textAlign="center">
+                  <Typography>{room.name}</Typography>
                   <Typography>
-                    <Box textAlign="center">{room.name}</Box>
-                  </Typography>
-                  <Typography>
-                    <Box textAlign="center">
-                      {room.description ?? "<Empty description>"}
-                    </Box>
+                    {room.description ?? "<Empty description>"}
                   </Typography>
                 </Box>
               </Grid>
             </Paper>
           </Grid>
           <Grid item>
-            <Typography>
-              <Box fontWeight="fontWeightBold" fontStyle="underlined">
+            <Box fontWeight="fontWeightBold" fontStyle="underlined">
+              <Typography>
                 Clicking delete will cancel all reservations made for this room!
-              </Box>
-            </Typography>
+              </Typography>
+            </Box>
           </Grid>
           <Grid item>
             {
@@ -102,6 +98,7 @@ function DeleteRoomPopup({
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid="delete-room-checkbox"
                   checked={isChecked}
                   onChange={(e, newValue) => setChecked(newValue)}
                   name="confirmation"
@@ -120,6 +117,7 @@ function DeleteRoomPopup({
                 Back
               </Button>
               <Button
+                data-testid="delete-room-popup-button"
                 variant="contained"
                 color="primary"
                 className={"button"}
@@ -143,5 +141,3 @@ function DeleteRoomPopup({
     </Dialog>
   );
 }
-
-export default DeleteRoomPopup;

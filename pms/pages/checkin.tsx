@@ -2,10 +2,10 @@ import { SuccessPage } from "../../common/components/success-page";
 import { Box } from "@material-ui/core";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
-import RequiredFieldsAtCheckin from "../components/checkin/fields-subpage";
+import { RequiredFieldsAtOfflineCheckin } from "../components/checkin/fields-subpage";
 import { SetReservationOwnerAndState } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
-import QrComponent from "../components/checkin/qr-subpage";
+import { QrComponent } from "../components/checkin/qr-subpage";
 
 /** An enum which helps to keep track of which subpage the offline check-in page is currently showing. */
 export enum OfflineCheckinPage {
@@ -60,7 +60,7 @@ function OfflineCheckin(): JSX.Element | null {
 
   return (
     <Box width={1}>
-      <RequiredFieldsAtCheckin
+      <RequiredFieldsAtOfflineCheckin
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         executeCheckin={(hotelProfileWebId: string) => {

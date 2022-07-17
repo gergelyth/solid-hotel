@@ -45,11 +45,11 @@ export function RequiredFields({
     <Grid
       item
       container
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
-      <Grid item xs={6} container justify="center">
+      <Grid item xs={6} container justifyContent="center">
         <ProfileMain
           rdfFields={data}
           webId={hotelProfileWebId}
@@ -57,7 +57,7 @@ export function RequiredFields({
           forceRender={forceRender}
         />
       </Grid>
-      <Grid item container justify="center">
+      <Grid item container justifyContent="center">
         <ConfirmRequiredFieldsButton
           onClickFunction={() => {
             executeCheckin(hotelProfileWebId);

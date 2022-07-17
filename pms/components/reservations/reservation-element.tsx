@@ -1,9 +1,9 @@
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ReservationClickHandler } from "../../../common/types/ReservationClickHandler";
-import ConciseHotelReservationElement from "./concise-hotel-reservation";
+import { ConciseHotelReservationElement } from "./concise-hotel-reservation";
 import { Box, Button, Dialog, Grid } from "@material-ui/core";
 import { CancelReservationButton } from "../../../common/components/cancellation/cancellation";
-import OfflineCheckinButton from "../checkin/offline-checkin-button";
+import { OfflineCheckinButton } from "../checkin/offline-checkin-button";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { DoOnStateChange } from "../../util/actionOnNewReservationState";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -76,7 +76,7 @@ function ConfirmedReservationDetails({
     <Grid
       container
       spacing={2}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="row"
     >
@@ -86,7 +86,7 @@ function ConfirmedReservationDetails({
           onClickAction={onClickAction}
         />
       </Grid>
-      <Grid item xs={4} container justify="flex-end" direction="row">
+      <Grid item xs={4} container justifyContent="flex-end" direction="row">
         <Grid item>
           <OfflineCheckinButton reservation={reservation} />
         </Grid>
@@ -118,7 +118,7 @@ function ActiveUnpairedReservationDetails({
     <Grid
       container
       spacing={2}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="row"
     >
@@ -128,9 +128,10 @@ function ActiveUnpairedReservationDetails({
           onClickAction={onClickAction}
         />
       </Grid>
-      <Grid item xs={2} container justify="center" direction="row">
+      <Grid item xs={2} container justifyContent="center" direction="row">
         <Grid item>
           <Button
+            data-testid="pairing-qr-button"
             variant="contained"
             color="primary"
             onClick={() => {
@@ -165,7 +166,7 @@ function OtherReservationDetails({
     <Grid
       container
       spacing={2}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="row"
     >
@@ -188,7 +189,7 @@ function OtherReservationDetails({
  * - all other types ({@link ConciseHotelReservationElement})
  * @returns The reservation element.
  */
-function CreateReservationElement(
+export function CreateReservationElement(
   reservation: ReservationAtHotel,
   onClickAction: ReservationClickHandler
 ): JSX.Element {
@@ -218,5 +219,3 @@ function CreateReservationElement(
     );
   }
 }
-
-export default CreateReservationElement;

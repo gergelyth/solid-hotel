@@ -68,7 +68,7 @@ function QrCodeElement({
     <Grid
       container
       spacing={4}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -77,7 +77,7 @@ function QrCodeElement({
           <Link href={targetUrl}>{targetUrl}</Link>
         </Typography>
       </Grid>
-      <Grid item>
+      <Grid item data-testid="qr-code">
         <QRCode value={targetUrl} />;
       </Grid>
     </Grid>
@@ -101,7 +101,7 @@ export function QrElementWithHeadings({
       item
       container
       spacing={7}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -128,7 +128,7 @@ export function QrElementWithHeadings({
  * Presents a QR code (as well as an URL link) directing the user to the GPA page which will guide them creating a Solid Pod and pairing that to the current reservation.
  * @returns A component containing the QR code, an URL link and acknowledging Continue button to proceed with the operation.
  */
-function QrComponent({
+export function QrComponent({
   reservationId,
   currentPage,
   setCurrentPage,
@@ -145,7 +145,7 @@ function QrComponent({
     <Grid
       container
       spacing={7}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >
@@ -153,6 +153,7 @@ function QrComponent({
       <Grid item>
         <Box>
           <Button
+            data-testid="continue-button"
             variant="contained"
             color="primary"
             onClick={() => {
@@ -166,5 +167,3 @@ function QrComponent({
     </Grid>
   );
 }
-
-export default QrComponent;

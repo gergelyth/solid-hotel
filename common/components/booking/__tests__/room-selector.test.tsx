@@ -3,19 +3,13 @@ import { screen, render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { RoomSelector } from "../room-selector";
-import { RoomDefinition } from "../../../types/RoomDefinition";
-
-const testRoomDefinitions: RoomDefinition[] = [
-  { id: "roomId1", name: "Room 1", description: "Description 1" },
-  { id: "roomId2", name: "Room 2", description: "Description 2" },
-  { id: "roomId3", name: "Room 3", description: "Description 3" },
-];
+import { TestRoomDefinitions } from "../../../util/__tests__/testUtil";
 
 jest.mock("../../../hooks/useRooms", () => {
   return {
     useRooms: () => {
       return {
-        items: testRoomDefinitions,
+        items: TestRoomDefinitions,
         isLoading: false,
         isError: false,
         isValidating: false,

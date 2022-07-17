@@ -45,12 +45,12 @@ export function RegistrationCard({
           <Grid
             container
             spacing={3}
-            justify="center"
+            justifyContent="center"
             alignItems="stretch"
             direction="column"
           >
             <DialogTitle id="popup-title">Registration card</DialogTitle>
-            <Grid item container justify="flex-end">
+            <Grid item container justifyContent="flex-end">
               <Typography variant="caption" align="center">
                 Date: {new Date().toDateString()}
               </Typography>
@@ -68,7 +68,7 @@ export function RegistrationCard({
               item
               container
               spacing={3}
-              justify="center"
+              justifyContent="center"
               alignItems="center"
               direction="row"
             >
@@ -87,7 +87,7 @@ export function RegistrationCard({
               item
               container
               spacing={3}
-              justify="center"
+              justifyContent="center"
               alignItems="center"
               direction="row"
             >
@@ -105,10 +105,11 @@ export function RegistrationCard({
           </Grid>
         </Box>
       </Grid>
-      <Grid item container justify="center">
+      <Grid item container justifyContent="center">
         <Box m={1} p={1}>
           <DialogActions>
             <Button
+              data-testid="print-button"
               variant="contained"
               color="primary"
               className={"button"}
