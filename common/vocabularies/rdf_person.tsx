@@ -10,7 +10,7 @@ export const personFieldToRdfMap: Record<string, string> = {
   lastName: FOAF.lastName,
   nationality: "https://schema.org/nationality",
   idDocumentType: SOLIDHOTEL.idDocumentType,
-  idDocumentNumber: "schema:idDocumentNumber",
+  idDocumentNumber: SOLIDHOTEL.idDocumentNumber,
   idDocumentExpiry: "https://w3id.org/GConsent#hasExpiry",
   email: VCARD.email,
   phone: FOAF.phone,
