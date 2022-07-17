@@ -4,46 +4,40 @@ import "@testing-library/jest-dom";
 import { useHotelPrivacyTokens } from "../../../../common/hooks/usePrivacyTokens";
 import {
   TestGuestFields,
+  TestGuestPrivacyTokens,
   TestHotelPrivacyTokens,
+  TestReservations,
 } from "../../../../common/util/__tests__/testUtil";
 import {
-  FindInboxTokenAndDeleteIt,
+  CreateActiveProfilePrivacyToken,
   FindWebIdTokenAndDeleteIt,
 } from "../../../util/privacyHelper";
 import { CheckinProgressSnackbar } from "../checkin-progress-snackbar";
 import { useGuest } from "../../../../common/hooks/useGuest";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
+import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solid_reservations";
+import { CreateReservationDataset } from "../../../../common/util/datasetFactory";
+import { getThing, Thing } from "@inrupt/solid-client";
+import { LocalNodeSkolemPrefix } from "../../../../common/consts/solidIdentifiers";
+import { CacheProfileFields } from "../../../../common/util/tracker/profile-cache";
+import { SubscribeToProfileChanges } from "../../../util/trackerInitializer";
 
 const TestReservationId = "TestReservationId";
 const GuestWebId = "GuestWebId";
 const ReplyInbox = "https://testpodurl.com/inbox/";
 
-jest.mock("../../../util/privacyHelper");
-jest.mock("../../../../common/util/tracker/profile-cache");
-jest.mock("../../../../common/components/snackbar");
 jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
 
-jest.mock("../../../../common/util/solid_wrapper", () => {
+jest.mock("../../../../common/util/solid_reservations", () => {
   return {
-    SafeSaveDatasetInContainer: jest.fn(() => {
-      return {
-        internal_resourceInfo: {
-          sourceIri: "https://testpodurl.com/profiles/11111111",
-          isRawData: true,
-        },
-      };
-    }),
-  };
-});
-
-jest.mock("../../../../common/consts/solidIdentifiers", () => {
-  return {
-    PrivacyTokensUrl: "https://testpodurl.com/privacy/",
-    HotelProfilesUrl: "https://testpodurl.com/hotelprofiles/",
+    SetReservationOwnerToHotelProfile: jest.fn(),
+    GetUserReservationsPodUrl: jest.fn(
+      () => "https://testpodurl.com/reservations/"
+    ),
   };
 });
 
@@ -64,12 +58,47 @@ jest.mock("../../../../common/hooks/useGuest", () => {
     useGuest: jest.fn(),
   };
 });
+
+jest.mock("../../../../common/util/solid_wrapper", () => {
+  return {
+    SafeSaveDatasetInContainer: jest.fn(() => {
+      return {
+        internal_resourceInfo: {
+          sourceIri: "https://testpodurl.com/hotelprofiles/11111111",
+          isRawData: true,
+        },
+      };
+    }),
+  };
+});
+
+jest.mock("../../../../common/consts/solidIdentifiers", () => {
+  return {
+    ...jest.requireActual("../../../../common/consts/solidIdentifiers"),
+    PrivacyTokensUrl: "https://testpodurl.com/privacy/",
+    HotelProfilesUrl: "https://testpodurl.com/hotelprofiles/",
+  };
+});
+
+jest.mock("../../../util/privacyHelper");
+jest.mock("../../../util/outgoingCommunications");
+jest.mock("../../../../common/components/snackbar");
+
+jest.mock("../../../util/trackerInitializer");
+jest.mock("../../../../common/util/tracker/profile-cache");
+
 jest.mock("../../../../common/hooks/usePrivacyTokens", () => {
   return {
     useHotelPrivacyTokens: jest.fn(),
     RevalidateHotelPrivacyTokens: jest.fn(),
   };
 });
+
+function CreateReservationThing(): Thing | null {
+  const dataset = CreateReservationDataset(TestReservations[0]);
+  const thing = getThing(dataset, LocalNodeSkolemPrefix + "reservation");
+  return thing;
+}
 
 function Render(): RenderResult {
   return render(
@@ -91,13 +120,20 @@ describe("<CheckinProgressSnackbar >", () => {
         isError: false,
       };
     });
+    const guestFields = [TestGuestFields[0], TestGuestFields[1]];
     (useGuest as jest.Mock).mockImplementation(() => {
       return {
-        guestFields: [TestGuestFields[0], TestGuestFields[1]],
+        guestFields: guestFields,
         isLoading: false,
         isError: false,
       };
     });
+    (SetReservationOwnerToHotelProfile as jest.Mock).mockReturnValue(
+      CreateReservationThing()
+    );
+    (CreateActiveProfilePrivacyToken as jest.Mock).mockReturnValue(
+      TestGuestPrivacyTokens[1]
+    );
 
     const checkinProgressSnackbar = Render();
     expect(checkinProgressSnackbar).toBeDefined();
@@ -113,6 +149,31 @@ describe("<CheckinProgressSnackbar >", () => {
     expect(useGuest).toBeCalledWith(requiredFields, GuestWebId);
     expect(useHotelPrivacyTokens).toBeCalledWith(
       "https://testpodurl.com/privacy/"
+    );
+
+    const expectedWebId =
+      "https://testpodurl.com/hotelprofiles/11111111#hotelProfile";
+
+    expect(CacheProfileFields).toBeCalledWith(expectedWebId, guestFields);
+    expect(SubscribeToProfileChanges).toBeCalledWith(
+      expectedWebId,
+      requiredFields
+    );
+    expect(SetReservationOwnerToHotelProfile).toBeCalledWith(
+      TestReservationId,
+      expectedWebId
+    );
+    expect(FindWebIdTokenAndDeleteIt).toBeCalledWith(
+      TestHotelPrivacyTokens,
+      TestReservationId,
+      false
+    );
+    expect(CreateActiveProfilePrivacyToken).toBeCalledWith(
+      expectedWebId,
+      ReplyInbox,
+      `https://testpodurl.com/reservations/${TestReservationId}/reservation`,
+      requiredFields,
+      new Date("2021-07-08")
     );
   });
 });
