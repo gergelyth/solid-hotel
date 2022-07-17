@@ -18,8 +18,6 @@ import {
 import { useGuest } from "../../../common/hooks/useGuest";
 import { Field } from "../../../common/types/Field";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
-import { deleteSolidDataset } from "@inrupt/solid-client";
-import { GetSession } from "../../../common/util/solid";
 import { DeleteFromCache } from "../../../common/util/tracker/profile-cache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
@@ -29,6 +27,7 @@ import {
 } from "../../../common/hooks/usePrivacyTokens";
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
+import { SafeDeleteDataset } from "../../../common/util/solid_wrapper";
 
 /**
  * Creates the data protection profile of the guest according to the conditions retrieved from the mock API.
@@ -59,10 +58,7 @@ async function ExecuteCheckOut(
   UnSubscribe(reservationOwner);
   DeleteFromCache(reservationOwner);
 
-  const session = GetSession();
-  await deleteSolidDataset(reservationOwner.split("#")[0], {
-    fetch: session.fetch,
-  });
+  await SafeDeleteDataset(reservationOwner.split("#")[0]);
   await FindHotelProfileTokenAndDeleteIt(privacyTokens, reservationId);
 
   const privacyToken = await CreateDataProtectionProfilePrivacyToken(
@@ -92,7 +88,7 @@ async function ExecuteCheckOut(
  * We also need to remove the now redundant privacy tokens and create new ones appropriate for the new reservation state.
  * @returns A custom progress snackbar executing the check-out operation.
  */
-const CheckoutProgressSnackbar = forwardRef<
+export const CheckoutProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
     key: string | number;
@@ -155,5 +151,3 @@ const CheckoutProgressSnackbar = forwardRef<
 });
 
 CheckoutProgressSnackbar.displayName = "CheckoutProgressSnackbar";
-
-export default CheckoutProgressSnackbar;

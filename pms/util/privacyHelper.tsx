@@ -32,7 +32,7 @@ import { GetParsedReservationFromUrl } from "../../common/util/solid_reservation
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
-import CheckoutProgressSnackbar from "../components/checkout/checkout-progress-snackbar";
+import { CheckoutProgressSnackbar } from "../components/checkout/checkout-progress-snackbar";
 import { ConfirmCancellation } from "../components/reservations/reservation-element";
 import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
 
