@@ -1,6 +1,6 @@
 /** A vocabulary map defining the RDF properties used for reservations. */
 export const reservationFieldToRdfMap: Record<string, string> = {
-  rdfType: "https://schema.org/LodgingReservation",
+  type: "https://schema.org/LodgingReservation",
   id: "https://schema.org/reservationId",
   inbox: "https://schema.org/replyToUrl",
   owner: "http://purl.org/vocab/frbr/core#owner",

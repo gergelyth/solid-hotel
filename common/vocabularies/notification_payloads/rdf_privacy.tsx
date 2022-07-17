@@ -2,6 +2,7 @@ import { VOID } from "@inrupt/vocab-common-rdf";
 
 /** A vocabulary map defining the RDF properties used for privacy tokens. */
 export const privacyTokenToRdfMap: Record<string, string> = {
+  type: "schema:privacyToken",
   hotelInboxForDeletion: "https://schema.org/replyToUrl",
   datasetUrlTarget: "schema:targetDataset",
   hotel: "schema:forHotel",
