@@ -1,5 +1,6 @@
 /** A vocabulary map defining the RDF properties used for room definitions. */
 export const roomFieldToRdfMap: Record<string, string> = {
-  name: "something:name",
-  description: "gr:description",
+  type: "http://purl.org/acco/ns#HotelRoom",
+  name: "http://purl.org/goodrelations/v1#name",
+  description: "http://purl.org/goodrelations/v1#description",
 };
