@@ -13,8 +13,9 @@ import { CustomProgressSnackbar } from "../../common/components/custom-progress-
 import { forwardRef, useEffect, useState } from "react";
 import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
-import TrackedRdfFieldCollector, {
+import {
   HotelToRdf,
+  TrackedRdfFieldCollector,
 } from "./trackedRdfFieldCollector";
 import { SendProfileModification } from "./outgoingCommunications";
 import { RevalidateGuest } from "../../common/hooks/useGuest";
@@ -142,7 +143,7 @@ function IterateHotelsAndCreateApprovalDialogs(
  * Then we show sequential dialogs offering the option to the user to separately choose which hotel should receive which field update (only for fields they currently possess).
  * @returns A custom progress snackbar while all the data is being initialized. Triggers the approval dialog popups once everything's ready.
  */
-const FieldChangeReceiverSnackbar = forwardRef<
+export const FieldChangeReceiverSnackbar = forwardRef<
   HTMLDivElement,
   {
     snackbarId: string | number;
@@ -187,5 +188,3 @@ const FieldChangeReceiverSnackbar = forwardRef<
 });
 
 FieldChangeReceiverSnackbar.displayName = "FieldChangeReceiverSnackbar";
-
-export default FieldChangeReceiverSnackbar;

@@ -2,15 +2,15 @@ import {
   CloseSnackbar,
   ShowWarningSnackbar,
 } from "../../common/components/snackbar";
-import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
+import { GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import {
   RevalidateGuestPrivacyTokens,
   useGuestPrivacyTokens,
 } from "../../common/hooks/usePrivacyTokens";
-import { deleteSolidDataset } from "@inrupt/solid-client";
 import { NotEmptyItem, ShowError } from "../../common/util/helpers";
+import { SafeDeleteDataset } from "../../common/util/solid_wrapper";
 
 /**
  * A snackbar notification displayed in the bottom right corner to inform the user that privacy tokens are being deleted.
@@ -18,7 +18,7 @@ import { NotEmptyItem, ShowError } from "../../common/util/helpers";
  * Deletes all privacy tokens which reference the hotel privacy token that was just deleted.
  * @returns A custom progress snackbar deleting the corresponding guest privacy tokens to the hotel's recently deleted token.
  */
-const PrivacyTokenRemover = forwardRef<
+export const PrivacyTokenRemover = forwardRef<
   HTMLDivElement,
   {
     snackbarId: string | number;
@@ -55,14 +55,13 @@ const PrivacyTokenRemover = forwardRef<
       return;
     }
 
-    const session = GetSession();
     const deletionPromises = filteredPrivacyTokens.map((token) => {
       if (!token.urlAtGuest) {
         throw new Error(
           "GuestPrivacyToken URL is null during token removal process."
         );
       }
-      return deleteSolidDataset(token.urlAtGuest, { fetch: session.fetch });
+      return SafeDeleteDataset(token.urlAtGuest);
     });
     Promise.all(deletionPromises).then(() => {
       RevalidateGuestPrivacyTokens();
@@ -80,5 +79,3 @@ const PrivacyTokenRemover = forwardRef<
 });
 
 PrivacyTokenRemover.displayName = "PrivacyTokenRemover";
-
-export default PrivacyTokenRemover;

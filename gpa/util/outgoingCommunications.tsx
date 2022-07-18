@@ -1,5 +1,3 @@
-import { saveSolidDatasetInContainer } from "@inrupt/solid-client";
-import { getDefaultSession, Session } from "@inrupt/solid-client-authn-browser";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { BookingInboxUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationState } from "../../common/types/ReservationState";
@@ -7,24 +5,21 @@ import { SerializeReservationStateChange } from "../../common/notifications/Rese
 import { SerializeBookingRequest } from "../../common/notifications/BookingRequest";
 import { SerializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
-import { GetSession } from "../../common/util/solid";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
+import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
 
 /**
  * Creates the booking request dataset and submits it into the hotel's booking requests inbox.
  */
 export async function SubmitBookingRequest(
-  reservation: ReservationAtHotel,
-  session = getDefaultSession()
+  reservation: ReservationAtHotel
 ): Promise<void> {
   const notificationDataset = SerializeBookingRequest(reservation);
 
-  await saveSolidDatasetInContainer(BookingInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(BookingInboxUrl, notificationDataset);
 }
 
 /**
@@ -33,8 +28,7 @@ export async function SubmitBookingRequest(
 async function SubmitReservationStateChangeRequest(
   hotelInboxUrl: string | null,
   reservation: ReservationAtHotel,
-  requestedState: ReservationState,
-  session: Session
+  requestedState: ReservationState
 ): Promise<void> {
   if (!hotelInboxUrl) {
     //TODO this can happen when the hotel has not confirmed the reservation yet and we try to cancel
@@ -54,23 +48,19 @@ async function SubmitReservationStateChangeRequest(
     requestedState
   );
 
-  await saveSolidDatasetInContainer(hotelInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(hotelInboxUrl, notificationDataset);
 }
 
 /**
  * Creates the check-in request dataset and submits it into the hotel's reservation inbox.
  */
 export async function SubmitCheckinRequest(
-  reservation: ReservationAtHotel,
-  session = getDefaultSession()
+  reservation: ReservationAtHotel
 ): Promise<void> {
   await SubmitReservationStateChangeRequest(
     reservation.inbox,
     reservation,
-    ReservationState.ACTIVE,
-    session
+    ReservationState.ACTIVE
   );
 }
 
@@ -78,14 +68,12 @@ export async function SubmitCheckinRequest(
  * Creates the cancellation request dataset and submits it into the hotel's reservation inbox.
  */
 export async function SubmitCancellationRequest(
-  reservation: ReservationAtHotel,
-  session = getDefaultSession()
+  reservation: ReservationAtHotel
 ): Promise<void> {
   await SubmitReservationStateChangeRequest(
     reservation.inbox,
     reservation,
-    ReservationState.CANCELLED,
-    session
+    ReservationState.CANCELLED
   );
 }
 
@@ -93,14 +81,12 @@ export async function SubmitCancellationRequest(
  * Creates the check-out request dataset and submits it into the hotel's reservation inbox.
  */
 export async function SubmitCheckoutRequest(
-  reservation: ReservationAtHotel,
-  session = getDefaultSession()
+  reservation: ReservationAtHotel
 ): Promise<void> {
   await SubmitReservationStateChangeRequest(
     reservation.inbox,
     reservation,
-    ReservationState.PAST,
-    session
+    ReservationState.PAST
   );
 }
 
@@ -110,17 +96,14 @@ export async function SubmitCheckoutRequest(
 export async function SubmitInitialPairingRequest(
   guestInboxUrl: Promise<string>,
   pairingToken: string,
-  hotelInboxUrl: string,
-  session = getDefaultSession()
+  hotelInboxUrl: string
 ): Promise<void> {
   const notificationDataset = SerializeInitialPairingRequest(
     await guestInboxUrl,
     pairingToken
   );
 
-  await saveSolidDatasetInContainer(hotelInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(hotelInboxUrl, notificationDataset);
 }
 
 /**
@@ -128,8 +111,7 @@ export async function SubmitInitialPairingRequest(
  */
 export async function SubmitPrivacyTokenDeletionRequest(
   privacyToken: GuestPrivacyToken,
-  guestInboxUrl?: string,
-  session = GetSession()
+  guestInboxUrl?: string
 ): Promise<void> {
   if (!privacyToken.urlAtHotel) {
     throw new Error(
@@ -142,12 +124,9 @@ export async function SubmitPrivacyTokenDeletionRequest(
     guestInboxUrl
   );
 
-  await saveSolidDatasetInContainer(
+  await SafeSaveDatasetInContainer(
     privacyToken.hotelInboxForDeletion,
-    notificationDataset,
-    {
-      fetch: session.fetch,
-    }
+    notificationDataset
   );
 }
 
@@ -156,12 +135,9 @@ export async function SubmitPrivacyTokenDeletionRequest(
  */
 export async function SendProfileModification(
   approvedFields: ProfileUpdate,
-  hotelInboxUrl: string,
-  session: Session = GetSession()
+  hotelInboxUrl: string
 ): Promise<void> {
   const profileModification = SerializeProfileModification(approvedFields);
 
-  await saveSolidDatasetInContainer(hotelInboxUrl, profileModification, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(hotelInboxUrl, profileModification);
 }

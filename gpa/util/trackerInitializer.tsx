@@ -7,10 +7,11 @@ import { GetSession } from "../../common/util/solid";
 import { CacheProfile } from "../../common/util/tracker/profile-cache";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
-import TrackedRdfFieldCollector, {
+import {
   HotelToRdf,
+  TrackedRdfFieldCollector,
 } from "./trackedRdfFieldCollector";
-import FieldChangeReceiverSnackbar from "./onFieldChangeReceived";
+import { FieldChangeReceiverSnackbar } from "./onFieldChangeReceived";
 
 /**
  * Subscribe to profile changes in the guest's profile.
@@ -18,7 +19,7 @@ import FieldChangeReceiverSnackbar from "./onFieldChangeReceived";
  * When an update is received, we trigger the {@link FieldChangeReceiverSnackbar} to allow the user to propagate the changes to the hotels.
  */
 async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
-  return Subscribe(profileUrl, {
+  await Subscribe(profileUrl, {
     onClick: () => {
       undefined;
     },
@@ -52,7 +53,7 @@ async function CacheUserProfile(hotelRdfMap: HotelToRdf): Promise<void> {
   });
 
   await CacheProfile(webId, Array.from(rdfFields));
-  return SubscribeToProfileChanges(webId);
+  await SubscribeToProfileChanges(webId);
 }
 
 /**
@@ -61,7 +62,7 @@ async function CacheUserProfile(hotelRdfMap: HotelToRdf): Promise<void> {
  * The values of these fields are cached in memory to help determine the old value if the Solid Pod gets updated.
  * @returns A custom progress snackbar caching the currently tracked personal information field values.
  */
-const UserTrackerInitializerSnackbar = forwardRef<
+export const UserTrackerInitializerSnackbar = forwardRef<
   HTMLDivElement,
   {
     snackbarId: string | number;
@@ -104,5 +105,3 @@ const UserTrackerInitializerSnackbar = forwardRef<
 });
 
 UserTrackerInitializerSnackbar.displayName = "UserTrackerInitializerSnackbar";
-
-export default UserTrackerInitializerSnackbar;

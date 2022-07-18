@@ -1,7 +1,4 @@
-import {
-  saveSolidDatasetInContainer,
-  SolidDataset,
-} from "@inrupt/solid-client";
+import { SolidDataset } from "@inrupt/solid-client";
 import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
@@ -23,10 +20,11 @@ import { IncomingProfileChangeStrings } from "../../common/util/tracker/profile-
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
-import PrivacyTokenRemover from "./privacyTokenRemover";
+import { PrivacyTokenRemover } from "./privacyTokenRemover";
 import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { RevalidateGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
+import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
 
 /**
  * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
@@ -156,7 +154,6 @@ export function ReceivePrivacyToken(
     router.push("/privacy");
   };
   const onReceive = async (): Promise<void> => {
-    const session = GetSession();
     const privacyPodUrl = GetUserPrivacyPodUrl();
     if (!privacyPodUrl) {
       ShowErrorSnackbar("User not logged in");
@@ -168,9 +165,7 @@ export function ReceivePrivacyToken(
     //we need this workaround, otherwise we would save the Thing with the inbox url (we also delete the notification Thing this way)
     const privacyTokenDataset = CreateGuestPrivacyTokenDataset(privacyToken);
 
-    await saveSolidDatasetInContainer(privacyPodUrl, privacyTokenDataset, {
-      fetch: session.fetch,
-    });
+    await SafeSaveDatasetInContainer(privacyPodUrl, privacyTokenDataset);
     RevalidateGuestPrivacyTokens();
   };
 

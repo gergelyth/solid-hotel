@@ -7,6 +7,7 @@ import { CheckinPage } from "../../../pages/reservations/[id]";
 import { CacheProfile } from "../../../../common/util/tracker/profile-cache";
 import userEvent from "@testing-library/user-event";
 import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
+import { useRequiredFields } from "../../../../common/hooks/useMockApi";
 
 let confirmButtonProps: {
   onClickFunction: () => void;
@@ -47,13 +48,7 @@ const requiredFields = [
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
-    useRequiredFields: jest.fn(() => {
-      return {
-        data: requiredFields,
-        isLoading: false,
-        isError: false,
-      };
-    }),
+    useRequiredFields: jest.fn(),
   };
 });
 
@@ -72,6 +67,11 @@ function Render(
 
 describe("<RequiredFieldsAtCheckin />", () => {
   test("Renders correctly and calls components with correct arguments", async () => {
+    (useRequiredFields as jest.Mock).mockReturnValue({
+      data: requiredFields,
+      isLoading: false,
+      isError: false,
+    });
     const setCurrentPage = jest.fn();
     const executeCheckin = jest.fn();
 

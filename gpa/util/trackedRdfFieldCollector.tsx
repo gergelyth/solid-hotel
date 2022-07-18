@@ -55,7 +55,7 @@ function CollectRdfFields(
  * Note that we can't use the mockAPI to get the required RDF fields, because the nationality may change between the current moment and the moment the hotel profile was submitted and saved on the hotel's side.
  * @returns A custom progress snackbar collecting the currently tracked fields.
  */
-const TrackedRdfFieldCollector = forwardRef<
+export const TrackedRdfFieldCollector = forwardRef<
   HTMLDivElement,
   {
     snackbarId: string | number;
@@ -109,5 +109,3 @@ const TrackedRdfFieldCollector = forwardRef<
 });
 
 TrackedRdfFieldCollector.displayName = "TrackedRdfFieldCollector";
-
-export default TrackedRdfFieldCollector;
