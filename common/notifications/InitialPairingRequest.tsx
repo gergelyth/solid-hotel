@@ -2,9 +2,7 @@ import {
   addStringNoLocale,
   createSolidDataset,
   createThing,
-  getSourceUrl,
   getStringNoLocale,
-  getThing,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -12,6 +10,7 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { initialPairingRequestRdfMap } from "../vocabularies/notification_payloads/rdf_initialPairingRequest";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
+import { GetThing } from "../util/solid";
 
 /**
  * Parses the notification dataset into an initial pairing request submitted by the guest.
@@ -21,8 +20,7 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
   guestInboxUrl: string;
   token: string;
 } {
-  const url = getSourceUrl(dataset);
-  const requestThing = getThing(dataset, url + "#pairingRequest");
+  const requestThing = GetThing(dataset, "pairingRequest");
   if (!requestThing) {
     throw new Error("Initial pairing request thing cannot be null");
   }

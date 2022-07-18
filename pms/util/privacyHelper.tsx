@@ -1,6 +1,5 @@
 import {
   getSourceUrl,
-  getThing,
   getThingAll,
   setStringNoLocale,
   setThing,
@@ -22,7 +21,7 @@ import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetStartOfNextDay, ShowError } from "../../common/util/helpers";
-import { GetDataSet, GetSession } from "../../common/util/solid";
+import { GetDataSet, GetSession, GetThing } from "../../common/util/solid";
 import { GetParsedReservationFromUrl } from "../../common/util/solid_reservations";
 import {
   SafeDeleteDataset,
@@ -360,7 +359,7 @@ export async function AnonymizeInboxInNotification(
     throw new Error("Dataset URL is null");
   }
 
-  let deletionThing = getThing(dataset, datasetUrl + "#privacyTokenDeletion");
+  let deletionThing = GetThing(dataset, "privacyTokenDeletion");
   if (!deletionThing) {
     throw new Error("Deletion thing is null");
   }

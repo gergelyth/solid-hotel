@@ -3,7 +3,6 @@ import {
   getDatetime,
   getInteger,
   getStringNoLocale,
-  getThing,
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
@@ -15,7 +14,7 @@ import {
   AddLoadingIndicator,
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
-import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
+import { GetThing } from "../util/solid";
 
 const swrKey = "reservations";
 
@@ -62,10 +61,7 @@ function ConvertToReservation(
   dataset: SolidDataset,
   url: string
 ): ReservationAtHotel | null {
-  const reservationThing = getThing(
-    dataset,
-    LocalNodeSkolemPrefix + "reservation"
-  );
+  const reservationThing = GetThing(dataset, "reservation");
   if (!reservationThing) {
     return null;
   }

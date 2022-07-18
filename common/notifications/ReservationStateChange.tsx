@@ -5,7 +5,6 @@ import {
   createThing,
   getInteger,
   getStringNoLocale,
-  getThing,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -14,6 +13,7 @@ import { reservationStateChangeToRdfMap } from "../vocabularies/notification_pay
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
+import { GetThing } from "../util/solid";
 
 /**
  * Parses the notification dataset into the reservation state change properties.
@@ -28,7 +28,7 @@ export function DeserializeReservationStateChange(
   replyInbox: string;
 } {
   //TODO perhaps we should define a general serializer/deserializer
-  const stateChangeThing = getThing(dataset, url + "#reservationStateChange");
+  const stateChangeThing = GetThing(dataset, "reservationStateChange");
   if (!stateChangeThing) {
     throw new Error("State change thing cannot be null");
   }

@@ -5,7 +5,6 @@ import {
   createThing,
   getInteger,
   getStringNoLocale,
-  getThing,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -14,6 +13,7 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { failureReportRdfMap } from "../vocabularies/notification_payloads/rdf_failureReport";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
+import { GetThing } from "../util/solid";
 
 /**
  * Parses the notification dataset into a failure report.
@@ -27,7 +27,7 @@ export function DeserializeFailureReport(
   errorMessage: string;
   resultState: ReservationState;
 } {
-  const failureThing = getThing(dataset, url + "#failure");
+  const failureThing = GetThing(dataset, "failure");
   if (!failureThing) {
     throw new Error("Failure thing cannot be null");
   }

@@ -9,6 +9,7 @@ const reservationTestUrl = "https://testpodurl.com/reservations/";
 
 jest.mock("../../util/solid", () => {
   return {
+    ...jest.requireActual("../../util/solid"),
     GetDataSet: jest.fn(),
   };
 });

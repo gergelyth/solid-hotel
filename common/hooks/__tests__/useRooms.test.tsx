@@ -22,6 +22,7 @@ const roomTestUrl = "https://testpodurl.com/rooms/";
 
 jest.mock("../../util/solid", () => {
   return {
+    ...jest.requireActual("../../util/solid"),
     GetDataSet: jest.fn(),
   };
 });

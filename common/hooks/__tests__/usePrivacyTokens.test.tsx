@@ -22,6 +22,7 @@ const guestTestPodUrl = "https://testpodurl.com/guestprivacy/";
 
 jest.mock("../../util/solid", () => {
   return {
+    ...jest.requireActual("../../util/solid"),
     GetDataSet: jest.fn(),
   };
 });

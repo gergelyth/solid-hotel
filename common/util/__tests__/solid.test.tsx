@@ -1,4 +1,8 @@
-import { createSolidDataset } from "@inrupt/solid-client";
+import {
+  createSolidDataset,
+  createThing,
+  setThing,
+} from "@inrupt/solid-client";
 import {
   getDefaultSession,
   ISessionInfo,
@@ -11,6 +15,7 @@ import {
   GetDataSet,
   GetPodOfSession,
   GetSession,
+  GetThing,
   GetUserPrivacyPodUrl,
   SolidLogin,
   SolidLogout,
@@ -104,6 +109,42 @@ describe("solid", () => {
     expect(SafeGetDataset).toBeCalledWith("TestUrl");
 
     expect(result).toEqual(dataset);
+  });
+
+  test("GetThing returns correct local thing", async () => {
+    const thingLocal = createThing({ name: "thingName" });
+    let dataset = createSolidDataset();
+    dataset = setThing(dataset, thingLocal);
+
+    const datasetWithUrl = {
+      ...dataset,
+      internal_resourceInfo: {
+        sourceIri: "https://testpodurl.com/resource.ttl",
+        isRawData: false,
+      },
+    };
+
+    const result = GetThing(datasetWithUrl, "thingName");
+    expect(result).not.toBeNull();
+  });
+
+  test("GetThing returns correct persisted thing", async () => {
+    const thingPersisted = createThing({
+      url: "https://testpodurl.com/resource.ttl#thingName",
+    });
+    let dataset = createSolidDataset();
+    dataset = setThing(dataset, thingPersisted);
+
+    const datasetWithUrl = {
+      ...dataset,
+      internal_resourceInfo: {
+        sourceIri: "https://testpodurl.com/resource.ttl",
+        isRawData: false,
+      },
+    };
+
+    const result = GetThing(datasetWithUrl, "thingName");
+    expect(result).not.toBeNull();
   });
 
   test("GetUserPrivacyPodUrl returns correct URL", async () => {

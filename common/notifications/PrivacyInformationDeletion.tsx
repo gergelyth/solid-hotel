@@ -4,13 +4,13 @@ import {
   createThing,
   getSourceUrl,
   getStringNoLocale,
-  getThing,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { privacyDeletionToRdfMap } from "../vocabularies/notification_payloads/rdf_privacyDeletion";
+import { GetThing } from "../util/solid";
 
 /**
  * Parses the notification dataset into a privacy token deletion request.
@@ -25,7 +25,7 @@ export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
     throw new Error("Dataset URL is null");
   }
 
-  const deletionThing = getThing(dataset, datasetUrl + "#privacyTokenDeletion");
+  const deletionThing = GetThing(dataset, "#privacyTokenDeletion");
   if (!deletionThing) {
     throw new Error("Deletion thing is null");
   }

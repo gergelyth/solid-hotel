@@ -1,7 +1,6 @@
 import {
   getSourceUrl,
   getStringNoLocale,
-  getThing,
   setInteger,
   setStringNoLocale,
   setThing,
@@ -12,7 +11,7 @@ import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
-import { GetDataSet, GetPodOfSession } from "./solid";
+import { GetDataSet, GetPodOfSession, GetThing } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
 import { SetSubmitterAccessToEveryone } from "./solid_access";
 import { CreateReservationUrlFromReservationId } from "./urlParser";
@@ -22,7 +21,6 @@ import {
   SafeCreateContainerInContainer,
   SafeSaveDatasetAt,
 } from "./solid_wrapper";
-import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 /** The relative URL address of the reservation container. */
 const reservationAddress = "reservations/";
@@ -96,10 +94,7 @@ async function GetReservationDatasetAndThing(
 ): Promise<{ dataset: SolidDataset; thing: Thing }> {
   const dataset = await GetDataSet(reservationUrl);
 
-  const reservationThing = getThing(
-    dataset,
-    LocalNodeSkolemPrefix + "reservation"
-  );
+  const reservationThing = GetThing(dataset, "reservation");
   if (!reservationThing) {
     throw new NotFoundError(
       `Thing [reservation] not found at ${reservationUrl}`

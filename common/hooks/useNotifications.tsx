@@ -3,7 +3,6 @@ import {
   getContainedResourceUrlAll,
   getDatetime,
   getInteger,
-  getThing,
   SolidDataset,
   Thing,
   UrlString,
@@ -15,10 +14,9 @@ import { SetIsProcessedForNotification } from "../util/notifications";
 import { NotificationParser } from "../types/NotificationParser";
 import { NotificationType } from "../types/NotificationsType";
 import { ParserList } from "../types/ParserList";
-import { GetDataSet } from "../util/solid";
+import { GetDataSet, GetThing } from "../util/solid";
 import useSWR, { mutate } from "swr";
 import { GlobSolidUrlPaths } from "../util/helpers";
-import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 const swrKey = "notifications";
 
@@ -86,10 +84,7 @@ function ConvertToNotification(
   parsers: ParserList,
   router: NextRouter
 ): Notification | null {
-  const notificationThing = getThing(
-    dataset,
-    LocalNodeSkolemPrefix + "notification"
-  );
+  const notificationThing = GetThing(dataset, "notification");
   if (!notificationThing) {
     return null;
   }

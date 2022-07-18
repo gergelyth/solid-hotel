@@ -31,6 +31,7 @@ jest.mock("../solid_wrapper", () => {
 });
 jest.mock("../solid", () => {
   return {
+    ...jest.requireActual("../solid"),
     GetDataSet: jest.fn(),
     GetPodOfSession: jest.fn(() => "https://testpodurl.com"),
   };

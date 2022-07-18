@@ -3,17 +3,13 @@ import {
   createSolidDataset,
   createThing,
   getSourceUrl,
-  getThing,
   setThing,
   Thing,
 } from "@inrupt/solid-client";
 import { Field } from "../types/Field";
-import { GetDataSet } from "./solid";
+import { GetDataSet, GetThing } from "./solid";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
-import {
-  DataProtectionProfilesUrl,
-  LocalNodeSkolemPrefix,
-} from "../consts/solidIdentifiers";
+import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
 import { SafeSaveDatasetInContainer } from "./solid_wrapper";
 import { ShowError } from "./helpers";
 
@@ -85,10 +81,7 @@ export async function GetHotelProfileThing(
 ): Promise<Thing> {
   const profileDataset = await GetDataSet(hotelProfileUrl);
 
-  const profileThing = getThing(
-    profileDataset,
-    LocalNodeSkolemPrefix + HotelProfileThingName
-  );
+  const profileThing = GetThing(profileDataset, HotelProfileThingName);
   if (!profileThing) {
     throw new Error(`Hotel profile thing null in ${hotelProfileUrl}`);
   }

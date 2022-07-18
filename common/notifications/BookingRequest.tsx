@@ -1,4 +1,4 @@
-import { getSourceUrl, getThing, SolidDataset } from "@inrupt/solid-client";
+import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ParseReservation } from "../hooks/useReservations";
 import { NotificationType } from "../types/NotificationsType";
@@ -6,6 +6,7 @@ import {
   AddNotificationThingToDataset,
   CreateReservationDataset,
 } from "../util/datasetFactory";
+import { GetThing } from "../util/solid";
 
 /**
  * Parses the notification dataset into a booking request.
@@ -19,7 +20,7 @@ export function DeserializeBookingRequest(
     throw new Error("Dataset URL is null");
   }
 
-  const reservationThing = getThing(dataset, datasetUrl + "#reservation");
+  const reservationThing = GetThing(dataset, "reservation");
   if (!reservationThing) {
     throw new Error("Reservation cannot be null");
   }

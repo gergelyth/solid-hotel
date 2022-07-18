@@ -1,6 +1,13 @@
-import { SolidDataset, WithResourceInfo } from "@inrupt/solid-client";
+import {
+  getSourceUrl,
+  getThing,
+  SolidDataset,
+  Thing,
+  WithResourceInfo,
+} from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 import { NotFoundError } from "./errors";
 import { SafeGetDataset } from "./solid_wrapper";
 
@@ -78,6 +85,20 @@ export async function GetDataSet(
   }
 
   return dataSet;
+}
+
+export function GetThing(
+  dataset: SolidDataset,
+  thingName: string
+): Thing | null {
+  const localThing = getThing(dataset, LocalNodeSkolemPrefix + thingName);
+  if (localThing) {
+    return localThing;
+  }
+
+  const datasetUrl = getSourceUrl(dataset);
+  const thingPersisted = getThing(dataset, `${datasetUrl}#${thingName}`);
+  return thingPersisted;
 }
 
 /**

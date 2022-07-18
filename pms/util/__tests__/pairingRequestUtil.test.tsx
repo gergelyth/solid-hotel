@@ -18,6 +18,7 @@ import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reser
 
 jest.mock("../../../common/util/solid", () => {
   return {
+    ...jest.requireActual("../../../common/util/solid"),
     GetDataSet: jest.fn(),
   };
 });

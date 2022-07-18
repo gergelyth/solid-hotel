@@ -17,11 +17,11 @@ import { useGuest } from "../../../../common/hooks/useGuest";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
 import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solid_reservations";
 import { CreateReservationDataset } from "../../../../common/util/datasetFactory";
-import { getThing, Thing } from "@inrupt/solid-client";
-import { LocalNodeSkolemPrefix } from "../../../../common/consts/solidIdentifiers";
+import { Thing } from "@inrupt/solid-client";
 import { CacheProfileFields } from "../../../../common/util/tracker/profile-cache";
 import { SubscribeToProfileChanges } from "../../../util/trackerInitializer";
 import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
+import { GetThing } from "../../../../common/util/solid";
 
 const TestReservationId = "TestReservationId";
 const GuestWebId = "GuestWebId";
@@ -94,7 +94,7 @@ jest.mock("../../../../common/hooks/usePrivacyTokens", () => {
 
 function CreateReservationThing(): Thing | null {
   const dataset = CreateReservationDataset(TestReservations[0]);
-  const thing = getThing(dataset, LocalNodeSkolemPrefix + "reservation");
+  const thing = GetThing(dataset, "reservation");
   return thing;
 }
 

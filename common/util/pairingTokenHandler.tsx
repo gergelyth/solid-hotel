@@ -8,13 +8,11 @@ import {
   createSolidDataset,
   createThing,
   getStringNoLocale,
-  getThing,
   setThing,
 } from "@inrupt/solid-client";
-import { GetDataSet } from "./solid";
+import { GetDataSet, GetThing } from "./solid";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solid_wrapper";
-import { LocalNodeSkolemPrefix } from "../consts/solidIdentifiers";
 
 /** The name of the Solid Thing containing the pairing token. */
 const PairingTokenThing = "pairingToken";
@@ -61,10 +59,7 @@ export async function GetPairingToken(
     return null;
   }
 
-  const tokenThing = getThing(
-    tokenDataset,
-    LocalNodeSkolemPrefix + PairingTokenThing
-  );
+  const tokenThing = GetThing(tokenDataset, PairingTokenThing);
   if (!tokenThing) {
     return null;
   }

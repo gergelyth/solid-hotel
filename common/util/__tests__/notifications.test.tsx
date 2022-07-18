@@ -1,6 +1,5 @@
-import { createSolidDataset, getThing } from "@inrupt/solid-client";
+import { createSolidDataset } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
-import { LocalNodeSkolemPrefix } from "../../consts/solidIdentifiers";
 import { useNotifications } from "../../hooks/useNotifications";
 import { NotificationType } from "../../types/NotificationsType";
 import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
@@ -9,6 +8,7 @@ import {
   RetrieveAllNotifications,
   SetIsProcessedForNotification,
 } from "../notifications";
+import { GetThing } from "../solid";
 import { SafeSaveDatasetAt } from "../solid_wrapper";
 import { SerializeDataset, TestNotifications } from "./testUtil";
 
@@ -87,7 +87,7 @@ describe("notifications", () => {
       dataset,
       NotificationType.BookingRequest
     );
-    const thing = getThing(dataset, LocalNodeSkolemPrefix + "notification");
+    const thing = GetThing(dataset, "notification");
     expect(thing).not.toBeNull();
     if (!thing) {
       return;
