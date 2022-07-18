@@ -5,19 +5,26 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
+import { CreateHotelPrivacyTokenDataset } from "../../../common/util/datasetFactory";
 import { GetDataSet } from "../../../common/util/solid";
 import {
   SafeDeleteDataset,
   SafeSaveDatasetAt,
+  SafeSaveDatasetInContainer,
 } from "../../../common/util/solid_wrapper";
 import {
   MockSession,
   SerializeDataset,
   TestHotelPrivacyTokens,
+  TestReservations,
 } from "../../../common/util/__tests__/testUtil";
 import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
+import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reservation";
 import { SendPrivacyTokenDeletionNotice } from "../outgoingCommunications";
-import { AnonymizeFieldsAndDeleteToken } from "../privacyHelper";
+import {
+  AnonymizeFieldsAndDeleteToken,
+  CreateInboxPrivacyToken,
+} from "../privacyHelper";
 
 jest.mock("../../../common/components/custom-progress-snackbar", () => {
   return {
@@ -54,7 +61,7 @@ beforeEach(() => {
 });
 
 describe("privacyHelper", () => {
-  test("AnonymizeFieldsAndDeleteToken", async () => {
+  test("AnonymizeFieldsAndDeleteToken anonymizes fields correctly", async () => {
     let dataset = createSolidDataset();
     let thing = createThing({ name: "testThing" });
     thing = setStringNoLocale(thing, personFieldToRdfMap.firstName, "John");
@@ -89,6 +96,57 @@ describe("privacyHelper", () => {
     expect(SendPrivacyTokenDeletionNotice).toBeCalledWith(
       TestHotelPrivacyTokens[0],
       "SuppliedGuestInboxUrl"
+    );
+  });
+
+  test("CreateInboxPrivacyToken creates correct tokens", async () => {
+    (SafeSaveDatasetInContainer as jest.Mock).mockReturnValue({
+      ...createSolidDataset(),
+      internal_resourceInfo: {
+        sourceIri: "TestSourceIri",
+        isRawData: false,
+      },
+    });
+    const guestToken = await CreateInboxPrivacyToken(
+      "TestReservationUrl",
+      "TestGuestInbox",
+      TestReservations[0]
+    );
+
+    const expectedGuestPrivacyToken = {
+      urlAtHotel: "TestSourceIri",
+      fieldList: [reservationFieldToRdfMap.inbox],
+      reason: "Reservation inbox used for communication with the hotel",
+      forReservationState: 1,
+      expiry: new Date("2021-07-08"),
+      hotelInboxForDeletion: "https://testpodurl.com/privacyinbox/",
+      hotel: "TestWebId",
+      urlAtGuest: undefined,
+      reservation: undefined,
+    };
+
+    expect(guestToken).toEqual(expectedGuestPrivacyToken);
+
+    const expectedHotelPrivacyToken = {
+      urlAtHotel: null,
+      fieldList: [reservationFieldToRdfMap.inbox],
+      reason: "Reservation inbox used for communication with the hotel",
+      forReservationState: 1,
+      expiry: new Date("2021-07-08"),
+      datasetUrlTarget: "TestReservationUrl",
+      guestInbox: "TestGuestInbox",
+      reservation: "TestReservationUrl",
+    };
+
+    expect(SafeSaveDatasetInContainer).toBeCalledWith(
+      "https://testpodurl.com/privacy/",
+      expect.anything()
+    );
+
+    const savedTokenTokenDataset = (SafeSaveDatasetInContainer as jest.Mock)
+      .mock.calls[0][1];
+    expect(savedTokenTokenDataset).toEqual(
+      CreateHotelPrivacyTokenDataset(expectedHotelPrivacyToken)
     );
   });
 });
