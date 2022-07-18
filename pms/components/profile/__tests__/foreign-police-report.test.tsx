@@ -37,7 +37,7 @@ describe("<ForeignPoliceReport  />", () => {
 
     const linkValue = linkElement?.href;
     expect(linkValue).toContain(
-      `"Field name","RDF property","Value""First name","${personFieldToRdfMap.firstName}","John""Last name","${personFieldToRdfMap.lastName}","Smith""Nationality","${personFieldToRdfMap.nationality},"English"`
+      `"Field name","RDF property","Value""First name","${personFieldToRdfMap.firstName}","John""Last name","${personFieldToRdfMap.lastName}","Smith""Nationality","${personFieldToRdfMap.nationality}","English"`
     );
   });
 });

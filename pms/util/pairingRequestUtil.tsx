@@ -1,13 +1,14 @@
 import {
   getStringNoLocale,
   getThing,
-  saveSolidDatasetAt,
   setStringNoLocale,
   setThing,
   Thing,
 } from "@inrupt/solid-client";
+import { LocalNodeSkolemPrefix } from "../../common/consts/solidIdentifiers";
 import { RevalidateGuest } from "../../common/hooks/useGuest";
-import { GetDataSet, GetSession } from "../../common/util/solid";
+import { GetDataSet } from "../../common/util/solid";
+import { SafeSaveDatasetAt } from "../../common/util/solid_wrapper";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 
 /**
@@ -18,11 +19,10 @@ export async function SaveInboxAndReturnReservation(
   reservationUrl: string,
   guestInboxUrl: string
 ): Promise<Thing> {
-  const session = GetSession();
   let reservationDataset = await GetDataSet(reservationUrl);
   let reservationThing = getThing(
     reservationDataset,
-    reservationUrl + "#reservation"
+    LocalNodeSkolemPrefix + "reservation"
   );
   if (!reservationThing) {
     throw new Error(
@@ -38,9 +38,7 @@ export async function SaveInboxAndReturnReservation(
 
   reservationDataset = setThing(reservationDataset, reservationThing);
 
-  saveSolidDatasetAt(reservationUrl, reservationDataset, {
-    fetch: session.fetch,
-  });
+  SafeSaveDatasetAt(reservationUrl, reservationDataset);
 
   return reservationThing;
 }

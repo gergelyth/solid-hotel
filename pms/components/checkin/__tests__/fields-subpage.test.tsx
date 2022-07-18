@@ -47,13 +47,7 @@ const requiredFields = [
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
-    useRequiredFields: jest.fn(() => {
-      return {
-        data: requiredFields,
-        isLoading: false,
-        isError: false,
-      };
-    }),
+    useRequiredFields: jest.fn(),
   };
 });
 
@@ -69,6 +63,11 @@ function Render(): RenderResult {
 
 describe("<RequiredFieldsAtOfflineCheckin />", () => {
   test("Parses query parameters correctly", async () => {
+    (useRequiredFields as jest.Mock).mockReturnValue({
+      data: requiredFields,
+      isLoading: false,
+      isError: false,
+    });
     const requiredFieldsComponent = Render();
     expect(requiredFieldsComponent).toBeDefined();
 

@@ -48,13 +48,7 @@ const requiredFields = [
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
-    useRequiredFields: jest.fn(() => {
-      return {
-        data: requiredFields,
-        isLoading: false,
-        isError: false,
-      };
-    }),
+    useRequiredFields: jest.fn(),
   };
 });
 jest.mock("../../../../common/hooks/useGuest", () => {
@@ -117,6 +111,11 @@ function Render(): RenderResult {
 
 describe("<CheckinProgressSnackbar >", () => {
   test("Check-in execute expected operations with expected arguments", async () => {
+    (useRequiredFields as jest.Mock).mockReturnValue({
+      data: requiredFields,
+      isLoading: false,
+      isError: false,
+    });
     (useHotelPrivacyTokens as jest.Mock).mockImplementation(() => {
       return {
         items: TestHotelPrivacyTokens,

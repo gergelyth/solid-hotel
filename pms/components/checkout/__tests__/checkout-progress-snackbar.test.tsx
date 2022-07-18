@@ -49,16 +49,7 @@ const dataProtectionFields = [
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
-    useDataProtectionInformation: jest.fn(() => {
-      return {
-        data: {
-          dataProtectionYears: 5,
-          dataProtectionFields: dataProtectionFields,
-        },
-        isLoading: false,
-        isError: false,
-      };
-    }),
+    useDataProtectionInformation: jest.fn(),
   };
 });
 jest.mock("../../../util/privacyHelper");
@@ -116,6 +107,14 @@ function Render(): RenderResult {
 
 describe("<CheckoutProgressSnackbar >", () => {
   test("Check-out executes expected operations with expected arguments", async () => {
+    (useDataProtectionInformation as jest.Mock).mockReturnValue({
+      data: {
+        dataProtectionYears: 5,
+        dataProtectionFields: dataProtectionFields,
+      },
+      isLoading: false,
+      isError: false,
+    });
     (useHotelPrivacyTokens as jest.Mock).mockImplementation(() => {
       return {
         items: TestHotelPrivacyTokens,

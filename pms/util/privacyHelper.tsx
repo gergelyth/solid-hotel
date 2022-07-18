@@ -1,16 +1,11 @@
 import {
-  deleteSolidDataset,
-  getSolidDataset,
   getSourceUrl,
   getThing,
   getThingAll,
-  saveSolidDatasetAt,
-  saveSolidDatasetInContainer,
   setStringNoLocale,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
 import {
   ShowCustomSnackbar,
   ShowWarningSnackbar,
@@ -26,9 +21,14 @@ import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
-import { GetStartOfNextDay } from "../../common/util/helpers";
-import { GetSession } from "../../common/util/solid";
+import { GetStartOfNextDay, ShowError } from "../../common/util/helpers";
+import { GetDataSet, GetSession } from "../../common/util/solid";
 import { GetParsedReservationFromUrl } from "../../common/util/solid_reservations";
+import {
+  SafeDeleteDataset,
+  SafeSaveDatasetAt,
+  SafeSaveDatasetInContainer,
+} from "../../common/util/solid_wrapper";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
@@ -44,11 +44,7 @@ async function AnonymizeFields(
   datasetUrlTarget: string,
   fieldList: string[]
 ): Promise<void> {
-  const session = GetSession();
-
-  let targetDataset = await getSolidDataset(datasetUrlTarget, {
-    fetch: session.fetch,
-  });
+  let targetDataset = await GetDataSet(datasetUrlTarget);
 
   const containedThings = getThingAll(targetDataset);
   if (containedThings.length !== 1) {
@@ -61,11 +57,7 @@ async function AnonymizeFields(
   });
 
   targetDataset = setThing(targetDataset, thing);
-  return new Promise(() =>
-    saveSolidDatasetAt(datasetUrlTarget, targetDataset, {
-      fetch: session.fetch,
-    })
-  );
+  await SafeSaveDatasetAt(datasetUrlTarget, targetDataset);
 }
 
 /**
@@ -96,8 +88,7 @@ async function DeletePrivacyToken(
   if (!privacyToken.urlAtHotel) {
     throw new Error("Privacy token URL is null. Cannot process/delete");
   }
-  const session = GetSession();
-  await deleteSolidDataset(privacyToken.urlAtHotel, { fetch: session.fetch });
+  await SafeDeleteDataset(privacyToken.urlAtHotel);
   await SendPrivacyTokenDeletionNotice(privacyToken, guestInboxUrl);
   RevalidateHotelPrivacyTokens();
 }
@@ -239,10 +230,9 @@ async function SaveHotelAndCreateGuestPrivacyToken(
 
   const hotelPrivacyTokenDataset =
     CreateHotelPrivacyTokenDataset(hotelPrivacyToken);
-  const savedDataset = await saveSolidDatasetInContainer(
+  const savedDataset = await SafeSaveDatasetInContainer(
     PrivacyTokensUrl,
-    hotelPrivacyTokenDataset,
-    { fetch: session.fetch }
+    hotelPrivacyTokenDataset
   );
 
   const guestPrivacyToken: GuestPrivacyToken = {
@@ -252,6 +242,15 @@ async function SaveHotelAndCreateGuestPrivacyToken(
     urlAtGuest: undefined,
     reservation: undefined,
   };
+
+  if (!savedDataset) {
+    ShowError(
+      "Because of the dataset saving failure above, we didn't get an URL to continue here",
+      false
+    );
+    return guestPrivacyToken;
+  }
+
   guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
   RevalidateHotelPrivacyTokens();
 
@@ -354,8 +353,7 @@ async function FindTokenAndDeleteIt(
  * Anonymizes the inbox field in the privacy token deletion notification and saves the updated dataset to the Pod.
  */
 export async function AnonymizeInboxInNotification(
-  dataset: SolidDataset,
-  session: Session = GetSession()
+  dataset: SolidDataset
 ): Promise<void> {
   const datasetUrl = getSourceUrl(dataset);
   if (!datasetUrl) {
@@ -374,9 +372,7 @@ export async function AnonymizeInboxInNotification(
   );
   const updatedDataSet = setThing(dataset, deletionThing);
 
-  await saveSolidDatasetAt(datasetUrl, updatedDataSet, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }
 
 //TODO the method never return false
