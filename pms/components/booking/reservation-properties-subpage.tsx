@@ -57,7 +57,7 @@ async function BookRoom(
  * Doesn't call the function yet, but sets defines the function with the booking properties selected here.
  * @returns A component wrapping the {@link BookingProperties} component with PMS specific actions.
  */
-function ReservationPropertiesPage({
+export function ReservationPropertiesPage({
   currentPage,
   setCurrentPage,
 }: {
@@ -80,5 +80,3 @@ function ReservationPropertiesPage({
     />
   );
 }
-
-export default ReservationPropertiesPage;

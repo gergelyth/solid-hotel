@@ -33,7 +33,7 @@ function ActiveHotelProfileDetail(): JSX.Element | null {
     <Grid
       container
       spacing={3}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="row"
     >
@@ -51,7 +51,7 @@ function ActiveHotelProfileDetail(): JSX.Element | null {
         xs={5}
         container
         spacing={3}
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         direction="column"
       >

@@ -38,11 +38,9 @@ function Profile(): JSX.Element | null {
 
   return (
     <Container>
-      <Typography variant="h4">
-        <Box textAlign="center" sx={{ mb: 4 }}>
-          Your profile
-        </Box>
-      </Typography>
+      <Box textAlign="center" sx={{ mb: 4 }}>
+        <Typography variant="h4">Your profile</Typography>
+      </Box>
       <ProfileMain
         rdfFields={requiredFields.data}
         webId={webId}

@@ -79,12 +79,7 @@ function PairingPage(
 
   const guestInboxUrl = AddReservation(CreateDummyReservation());
   RevalidateReservations();
-  SubmitInitialPairingRequest(
-    guestInboxUrl,
-    pairingToken,
-    hotelInboxUrl,
-    session
-  );
+  SubmitInitialPairingRequest(guestInboxUrl, pairingToken, hotelInboxUrl);
 
   //TODO wait for specific incoming request - potentially implement this in VerifyingPage as well
 

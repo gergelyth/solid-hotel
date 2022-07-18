@@ -13,15 +13,13 @@ import { useHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 function PrivacyDashboardPage(): JSX.Element {
   return (
     <Container maxWidth="lg">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4">
-          <Box textAlign="center">Privacy dashboard</Box>
-        </Typography>
-        <Typography variant="caption">
-          <Box fontStyle="italic" textAlign="center">
+      <Box sx={{ mb: 4 }} textAlign="center">
+        <Typography variant="h4">Privacy dashboard</Typography>
+        <Box fontStyle="italic">
+          <Typography variant="caption">
             Entries with the latest expiry date are highlighted
-          </Box>
-        </Typography>
+          </Typography>
+        </Box>
       </Box>
 
       <PrivacyDashboard

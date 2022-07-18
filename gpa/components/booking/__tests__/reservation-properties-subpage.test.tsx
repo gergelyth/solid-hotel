@@ -3,7 +3,7 @@ import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { BookingPage } from "../../../pages/booking";
 import { MockSession } from "../../../../common/util/__tests__/testUtil";
-import ReservationPropertiesPage from "../reservation-properties-subpage";
+import { ReservationPropertiesPage } from "../reservation-properties-subpage";
 import { AddReservation } from "../../../../common/util/solid_reservations";
 import { ReservationState } from "../../../../common/types/ReservationState";
 import { SubmitBookingRequest } from "../../../util/outgoingCommunications";

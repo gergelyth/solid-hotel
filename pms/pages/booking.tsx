@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { SuccessPage } from "../../common/components/success-page";
 import { useState } from "react";
 import { Box, Stepper, Step, StepLabel } from "@material-ui/core";
-import ReservationPropertiesPage from "../components/booking/reservation-properties-subpage";
+import { ReservationPropertiesPage } from "../components/booking/reservation-properties-subpage";
 
 /** An enum which helps to keep track of which subpage the booking page is currently showing. */
 export enum BookingPage {

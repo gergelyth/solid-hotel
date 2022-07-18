@@ -46,7 +46,7 @@ function Reservations(): JSX.Element {
     <Grid
       container
       spacing={3}
-      justify="center"
+      justifyContent="center"
       alignItems="stretch"
       direction="column"
     >

@@ -53,27 +53,24 @@ function Reservations(): JSX.Element {
     <Grid
       container
       spacing={1}
-      justify="center"
+      justifyContent="center"
       alignItems="stretch"
       direction="column"
     >
       <Grid item>
-        <Typography variant="h4">
-          <Box textAlign="center">Your reservations</Box>
-        </Typography>
+        <Box textAlign="center">
+          <Typography variant="h4">Your reservations</Typography>
+        </Box>
       </Grid>
       <Grid item>
-        <Typography variant="caption">
-          <Box fontStyle="italic" textAlign="center">
+        <Box fontStyle="italic" textAlign="center">
+          <Typography variant="caption">
             This is a list of all reservations made across various hotels.
-          </Box>
-          <Box fontStyle="italic" textAlign="center">
+          </Typography>
+          <Typography variant="caption">
             Actionable reservations are highlighted.
-          </Box>
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography variant="caption"></Typography>
+          </Typography>
+        </Box>
       </Grid>
 
       <Grid item>

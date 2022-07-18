@@ -60,7 +60,7 @@ export default function Home(): JSX.Element {
     <Grid
       container
       spacing={5}
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       direction="column"
     >

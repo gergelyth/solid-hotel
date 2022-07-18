@@ -30,11 +30,11 @@ function GetDataRetentionPeriod({
   }
 
   return (
-    <Typography variant="subtitle2">
-      <Box display="flex" justifyContent="flex-end" alignItems="center">
+    <Box display="flex" justifyContent="flex-end" alignItems="center">
+      <Typography variant="subtitle2">
         Data protection length: {data.dataProtectionYears} years
-      </Box>
-    </Typography>
+      </Typography>
+    </Box>
   );
 }
 

@@ -1,4 +1,3 @@
-import { saveSolidDatasetInContainer } from "@inrupt/solid-client";
 import { Button, Container, Typography, Box } from "@material-ui/core";
 import { PrivacyDashboard } from "../../common/components/privacy-dashboard";
 import { ShowErrorSnackbar } from "../../common/components/snackbar";
@@ -7,7 +6,8 @@ import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationState } from "../../common/types/ReservationState";
 import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
-import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
+import { GetUserPrivacyPodUrl } from "../../common/util/solid";
+import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
 import { GetInboxUrlFromReservationUrl } from "../../common/util/urlParser";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 import { SubmitPrivacyTokenDeletionRequest } from "../util/outgoingCommunications";
@@ -20,7 +20,6 @@ import { SubmitPrivacyTokenDeletionRequest } from "../util/outgoingCommunication
 async function CreateInboxTokenUntilConfirmation(
   templateToken: GuestPrivacyToken
 ): Promise<void> {
-  const session = GetSession();
   const privacyPodUrl = GetUserPrivacyPodUrl();
   if (!privacyPodUrl) {
     ShowErrorSnackbar("User not logged in");
@@ -34,9 +33,7 @@ async function CreateInboxTokenUntilConfirmation(
     "The inbox URL to wait for the data protection profile removal confirmation.\nWill be removed as confirmation is received.";
   const newTokenDataset = CreateGuestPrivacyTokenDataset(newToken);
 
-  await saveSolidDatasetInContainer(privacyPodUrl, newTokenDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(privacyPodUrl, newTokenDataset);
 }
 
 /**
@@ -93,15 +90,13 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
 function PrivacyDashboardPage(): JSX.Element {
   return (
     <Container maxWidth="lg">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4">
-          <Box textAlign="center">Privacy dashboard</Box>
-        </Typography>
-        <Typography variant="caption">
-          <Box fontStyle="italic" textAlign="center">
+      <Box sx={{ mb: 4 }} textAlign="center">
+        <Typography variant="h4">Privacy dashboard</Typography>
+        <Box fontStyle="italic">
+          <Typography variant="caption">
             Entries with the latest expiry date are highlighted
-          </Box>
-        </Typography>
+          </Typography>
+        </Box>
       </Box>
 
       <PrivacyDashboard
