@@ -187,7 +187,15 @@ In case something goes wrong during a component render, we replace the component
 
 ### <ins>RDF vocabularies</ins>
 
-**TODO**
+In the spirit of LinkedData, we make an effort to try and reuse appropriate RDF definitions already created. However, in order to define RDF terms for all data classes and properties, we must create a project specific vocabulary as well to fill in the gaps.
+
+We call this ontology `solidhotel`. The RDFS definition is described in Turtle format in file `solidhotel.ttl`. 
+
+To use these custom solutions, we also generate a so-called *convenience object* with the help of the vocabulary [artifact generator](https://github.com/inrupt/artifact-generator). We can generate the helper file with the following command:
+```command
+> npx @inrupt/artifact-generator generate --inputResources ./solidhotel.ttl
+```
+Unfortunately, the generator doesn't add the enumeration classes to the resulting file, so some manual additions are necessary. We store the result at `common/solidhotel-vocab` and reference it directly from our code. The RDF terms are strictly only initialized in the `common/vocabularies` folder and we use the created mappings throughout our applications.
 
 ### <ins>Other files</ins>
 

@@ -35,11 +35,11 @@ solidhotel:ReservationStateChange
     rdfs:label "ReservationStateChange"@en .
 
 ### Enumerates
-solidhotel:ReservationActive a ${privacyTokenToRdfMap.reservation}StatusType ;
+solidhotel:ReservationActive a schema:ReservationStatusType ;
     rdfs:label "ReservationActive" ;
     rdfs:comment "The status for a currently active reservation where the guest is checked-in." .
 
-solidhotel:ReservationPast a ${privacyTokenToRdfMap.reservation}StatusType ;
+solidhotel:ReservationPast a schema:ReservationStatusType ;
     rdfs:label "ReservationPast" ;
     rdfs:comment "The status for a reservation in the past where the guest has already checked-out" .
 
