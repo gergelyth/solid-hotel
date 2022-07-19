@@ -9,6 +9,7 @@ import {
 import "@testing-library/jest-dom";
 import {
   SetReadAccessToEveryone,
+  SetSubmitterAccessToAgent,
   SetSubmitterAccessToEveryone,
 } from "../solid_access";
 import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "../solid_wrapper";
@@ -102,5 +103,38 @@ describe("solid_access", () => {
     expect(modeNamedNode?.value).toEqual(
       "http://www.w3.org/ns/auth/acl#Append"
     );
+
+    const agentClassNamedNode = getNamedNode(
+      things[0],
+      "http://www.w3.org/ns/auth/acl#agentClass"
+    );
+    expect(agentClassNamedNode?.value).toEqual(
+      "http://xmlns.com/foaf/0.1/Agent"
+    );
+  });
+
+  test("SetSubmitterAccessToAgent creates correct ACL definition", async () => {
+    const updatedAcl = await RunTest(
+      async () =>
+        await SetSubmitterAccessToAgent(
+          "https://testpodurl.com/container/",
+          "https://webid.com/profile/card#me"
+        )
+    );
+
+    const things = getThingAll(updatedAcl);
+    const modeNamedNode = getNamedNode(
+      things[0],
+      "http://www.w3.org/ns/auth/acl#mode"
+    );
+    expect(modeNamedNode?.value).toEqual(
+      "http://www.w3.org/ns/auth/acl#Append"
+    );
+
+    const agentNamedNode = getNamedNode(
+      things[0],
+      "http://www.w3.org/ns/auth/acl#agent"
+    );
+    expect(agentNamedNode?.value).toEqual("https://webid.com/profile/card#me");
   });
 });
