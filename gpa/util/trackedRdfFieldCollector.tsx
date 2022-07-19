@@ -102,7 +102,7 @@ export const TrackedRdfFieldCollector = forwardRef<
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.snackbarId}
+      snackbarKey={props.snackbarId}
       message={"Collecting tracked RDF fields"}
     />
   );

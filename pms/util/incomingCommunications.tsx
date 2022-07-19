@@ -165,7 +165,7 @@ export function ReceiveProfileModification(
           approveButtonFunction={(fieldOptions) =>
             ShowCustomSnackbar((key) => (
               <UpdateLocalProfileSnackbar
-                key={key}
+                snackbarKey={key}
                 profileUrl={reservationOwner}
                 fieldOptions={fieldOptions}
               />

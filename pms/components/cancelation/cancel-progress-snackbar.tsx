@@ -38,7 +38,7 @@ async function ExecuteCancel(
 export const CancelProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarKey: string | number;
     reservationId: string;
   }
 >((props, ref) => {
@@ -48,7 +48,7 @@ export const CancelProgressSnackbar = forwardRef<
   useEffect(() => {
     console.log("effect started");
     if (tokenError) {
-      CloseSnackbar(props.key);
+      CloseSnackbar(props.snackbarKey);
       ShowError("Error using the token hook during cancellation", true);
       return;
     }
@@ -59,14 +59,14 @@ export const CancelProgressSnackbar = forwardRef<
     }
 
     ExecuteCancel(props.reservationId, privacyTokens).then(() =>
-      CloseSnackbar(props.key)
+      CloseSnackbar(props.snackbarKey)
     );
   }, [privacyTokens, tokenError]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      snackbarKey={props.snackbarKey}
       message={"Canceling reservation"}
     />
   );

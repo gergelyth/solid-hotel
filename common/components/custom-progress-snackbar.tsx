@@ -24,13 +24,13 @@ export const useCustomSnackbarStyles = makeStyles((theme) => ({
 export const CustomProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarKey: string | number;
     message: string;
   }
 >((props, ref) => {
   const classes = useCustomSnackbarStyles();
   return (
-    <SnackbarContent ref={ref} className={classes.root} key={props.key}>
+    <SnackbarContent ref={ref} className={classes.root} key={props.snackbarKey}>
       <Card className={classes.card} raised>
         <Box m={2} p={2}>
           <Grid

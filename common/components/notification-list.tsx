@@ -23,11 +23,9 @@ import {
  */
 function NotificationItem({
   notification,
-  key,
   deleteNotification,
 }: {
   notification: Notification | null;
-  key: number;
   deleteNotification: (notification: Notification) => Promise<void>;
 }): JSX.Element | null {
   if (!notification) {
@@ -40,10 +38,10 @@ function NotificationItem({
       onClick={(event: React.MouseEvent<HTMLElement>) =>
         notification.onClick(event)
       }
-      key={key}
       raised
     >
-      <CardActionArea>
+      {/* TODO if this doesnt work then consider removing the CardActionArea component only? */}
+      <CardActionArea component={"div"}>
         <CardContent>
           <Grid
             container

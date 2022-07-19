@@ -72,7 +72,7 @@ export const PrivacyTokenRemover = forwardRef<
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.snackbarId}
+      snackbarKey={props.snackbarId}
       message={"Removing privacy token..."}
     />
   );

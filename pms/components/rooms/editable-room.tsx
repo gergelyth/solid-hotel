@@ -14,11 +14,9 @@ import { EditRoomPopup } from "./edit-room-popup";
  */
 export function EditableRoomElement({
   room,
-  key,
   updateRoomLocally,
 }: {
   room: RoomDefinition;
-  key: string;
   updateRoomLocally: (
     newRoomDefinition: RoomDefinition,
     isDelete: boolean
@@ -30,7 +28,6 @@ export function EditableRoomElement({
     <Grid
       container
       item
-      key={key}
       spacing={2}
       justifyContent="center"
       alignItems="center"

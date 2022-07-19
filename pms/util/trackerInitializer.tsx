@@ -91,7 +91,7 @@ export async function CacheHotelProfiles(): Promise<void> {
   ShowCustomSnackbar((key) => {
     return (
       <CustomProgressSnackbar
-        key={key}
+        snackbarKey={key}
         message={`Caching ${hotelProfileUrls.length} profiles`}
       />
     );

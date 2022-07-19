@@ -7,7 +7,10 @@ const snackbarTestMessage = "TestMessage";
 
 function Render(): RenderResult {
   return render(
-    <CustomProgressSnackbar key={"TestKey"} message={snackbarTestMessage} />
+    <CustomProgressSnackbar
+      snackbarKey={"TestKey"}
+      message={snackbarTestMessage}
+    />
   );
 }
 

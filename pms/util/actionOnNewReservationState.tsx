@@ -27,7 +27,10 @@ export function DoOnStateChange(
   switch (newState) {
     case ReservationState.CANCELLED:
       ShowCustomSnackbar((key) => (
-        <CancelProgressSnackbar key={key} reservationId={reservationId} />
+        <CancelProgressSnackbar
+          snackbarKey={key}
+          reservationId={reservationId}
+        />
       ));
       break;
 
@@ -87,7 +90,7 @@ async function OnCheckIn(
 
   ShowCustomSnackbar((key) => (
     <CheckinProgressSnackbar
-      key={key}
+      snackbarKey={key}
       reservationId={reservationId}
       guestWebId={guestWebId}
       replyInbox={replyInbox}
@@ -113,7 +116,7 @@ async function OnCheckOut(
 
   ShowCustomSnackbar((key) => (
     <CheckoutProgressSnackbar
-      key={key}
+      snackbarKey={key}
       reservationId={reservationId}
       reservationOwner={reservationOwner}
       replyInbox={replyInbox}

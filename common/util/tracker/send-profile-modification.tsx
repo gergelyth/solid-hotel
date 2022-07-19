@@ -111,7 +111,7 @@ export const SendProfileModificationSnackbar = forwardRef<
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.snackbarId}
+      snackbarKey={props.snackbarId}
       message={"Sending profile updates"}
     />
   );

@@ -12,11 +12,7 @@ const testRoom: RoomDefinition = {
 
 function Render(): RenderResult {
   return render(
-    <EditableRoomElement
-      room={testRoom}
-      key={"TestKey"}
-      updateRoomLocally={() => undefined}
-    />
+    <EditableRoomElement room={testRoom} updateRoomLocally={() => undefined} />
   );
 }
 

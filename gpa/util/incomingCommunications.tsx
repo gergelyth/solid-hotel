@@ -243,7 +243,7 @@ export function ReceiveProfileModification(
           approveButtonFunction={(fieldOptions) =>
             ShowCustomSnackbar((key) => (
               <UpdateLocalProfileSnackbar
-                key={key}
+                snackbarKey={key}
                 profileUrl={webId}
                 fieldOptions={fieldOptions}
               />

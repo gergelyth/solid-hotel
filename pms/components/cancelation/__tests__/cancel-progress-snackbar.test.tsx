@@ -34,7 +34,10 @@ jest.mock("../../../../common/hooks/usePrivacyTokens", () => {
 
 function Render(): RenderResult {
   return render(
-    <CancelProgressSnackbar key={"TestKey"} reservationId={TestReservationId} />
+    <CancelProgressSnackbar
+      snackbarKey={"TestKey"}
+      reservationId={TestReservationId}
+    />
   );
 }
 

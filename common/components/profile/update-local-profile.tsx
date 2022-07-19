@@ -55,7 +55,7 @@ async function ExecuteUpdateLocalProfile(
 export const UpdateLocalProfileSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarKey: string | number;
     profileUrl: string;
     fieldOptions: ProfileUpdate;
   }
@@ -64,13 +64,13 @@ export const UpdateLocalProfileSnackbar = forwardRef<
     Promise.all([
       new Promise((res) => setTimeout(res, 2000)),
       ExecuteUpdateLocalProfile(props.profileUrl, props.fieldOptions),
-    ]).then(() => CloseSnackbar(props.key));
+    ]).then(() => CloseSnackbar(props.snackbarKey));
   }, []);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      snackbarKey={props.snackbarKey}
       message={"Updating local profile"}
     />
   );

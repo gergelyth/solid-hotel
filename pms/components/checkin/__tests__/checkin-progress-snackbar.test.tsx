@@ -101,7 +101,7 @@ function CreateReservationThing(): Thing | null {
 function Render(): RenderResult {
   return render(
     <CheckinProgressSnackbar
-      key={"TestKey"}
+      snackbarKey={"TestKey"}
       reservationId={TestReservationId}
       guestWebId={GuestWebId}
       replyInbox={ReplyInbox}

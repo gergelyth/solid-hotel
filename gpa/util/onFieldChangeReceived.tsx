@@ -181,7 +181,7 @@ export const FieldChangeReceiverSnackbar = forwardRef<
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.snackbarId}
+      snackbarKey={props.snackbarId}
       message={"Creating field change notifications"}
     />
   );

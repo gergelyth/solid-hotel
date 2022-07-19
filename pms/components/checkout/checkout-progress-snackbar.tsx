@@ -91,7 +91,7 @@ async function ExecuteCheckOut(
 export const CheckoutProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
-    key: string | number;
+    snackbarKey: string | number;
     reservationId: string;
     reservationOwner: string;
     replyInbox: string;
@@ -109,7 +109,7 @@ export const CheckoutProgressSnackbar = forwardRef<
   useEffect(() => {
     console.log("effect started");
     if (apiError || guestError || tokenError) {
-      CloseSnackbar(props.key);
+      CloseSnackbar(props.snackbarKey);
       ShowError(
         `Failed to retrieve data protection information from the mock API, privacy tokens, or user information from ${props.reservationOwner}`,
         true
@@ -138,13 +138,13 @@ export const CheckoutProgressSnackbar = forwardRef<
       props.reservationOwner,
       props.replyInbox,
       privacyTokens
-    ).then(() => CloseSnackbar(props.key));
+    ).then(() => CloseSnackbar(props.snackbarKey));
   }, [guestFields, privacyTokens, apiError, guestError, tokenError]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      key={props.key}
+      snackbarKey={props.snackbarKey}
       message={"Checking out guest"}
     />
   );

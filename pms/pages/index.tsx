@@ -44,7 +44,7 @@ export default function Home(): JSX.Element | null {
           console.log(reservationId);
           ShowCustomSnackbar((key) => (
             <CheckinProgressSnackbar
-              key={key}
+              snackbarKey={key}
               reservationId={reservationId}
               guestWebId={"https://gergelyth.inrupt.net/profile/card#me"}
               replyInbox={
@@ -63,7 +63,7 @@ export default function Home(): JSX.Element | null {
           console.log(reservationId);
           ShowCustomSnackbar((key) => (
             <CheckoutProgressSnackbar
-              key={key}
+              snackbarKey={key}
               reservationId={reservationId}
               reservationOwner={
                 "https://solidhotel.inrupt.net/hotelprofiles/16cc26f0-5095-11ec-a883-c7d01e95c64a.ttl#hotelProfile"

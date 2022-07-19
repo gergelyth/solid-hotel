@@ -496,7 +496,7 @@ function ForceCheckout(reservation: ReservationAtHotel): void {
   //TODO this doesn't set the reservationState value I think, because the snackbar doesn't do that
   ShowCustomSnackbar((key) => (
     <CheckoutProgressSnackbar
-      key={key}
+      snackbarKey={key}
       reservationId={reservationId}
       reservationOwner={reservation.owner}
       replyInbox={inbox}

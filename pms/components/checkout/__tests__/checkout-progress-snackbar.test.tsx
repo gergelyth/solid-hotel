@@ -97,7 +97,7 @@ jest.mock("../../../../common/util/solid_wrapper", () => {
 function Render(): RenderResult {
   return render(
     <CheckoutProgressSnackbar
-      key={"TestKey"}
+      snackbarKey={"TestKey"}
       reservationId={TestReservationId}
       reservationOwner={ReservationOwner}
       replyInbox={ReplyInbox}

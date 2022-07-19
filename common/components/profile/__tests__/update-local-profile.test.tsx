@@ -47,7 +47,7 @@ jest.mock("../../../util/tracker/tracker", () => {
 function Render(fieldOptions: ProfileUpdate): RenderResult {
   return render(
     <UpdateLocalProfileSnackbar
-      key={"TestKey"}
+      snackbarKey={"TestKey"}
       profileUrl={TestProfileUrl}
       fieldOptions={fieldOptions}
     />
