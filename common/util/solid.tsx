@@ -87,6 +87,11 @@ export async function GetDataSet(
   return dataSet;
 }
 
+/**
+ * Retrieves the Thing saved in the Solid dataset.
+ * Handles local and persisted things as well.
+ * @returns The Thing retrieved or null if no Thing with the given name is present.
+ */
 export function GetThing(
   dataset: SolidDataset,
   thingName: string
