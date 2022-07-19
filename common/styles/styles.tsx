@@ -21,7 +21,9 @@ const styles = makeStyles(() =>
       alignItems: "center",
     },
     footer: {
-      width: "100%",
+      position: "absolute",
+      bottom: 0,
+      width: "50%",
       borderTop: "5px solid #eaeaea",
       borderBottom: "5px solid #eaeaea",
       display: "flex",

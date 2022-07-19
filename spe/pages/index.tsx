@@ -1,50 +1,42 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
-import Link from "next/link";
-import LoginButtonComponent from "../../common/components/auth/login-component";
-// import { Subscribe } from "../../common/util/tracker/tracker";
+import { Grid, Typography } from "@material-ui/core";
+import { DynamicLoginComponent } from "../../common/components/auth/dynamic-login-component";
+import { ProfileMain } from "../../common/components/profile/profile-main";
+import GetSupportedFields from "../../common/consts/supported-fields";
+import { GetSession } from "../../common/util/solid";
 
-export default function Home() {
+/**
+ * The index page for the SPE application.
+ * Contains the login button and the profile editor for all supported fields.
+ * @returns The PMS index page.
+ */
+export default function Home(): JSX.Element {
+  const allRdfFields = GetSupportedFields().map((field) => field.rdfName);
   return (
-    <Container maxWidth="sm">
-      <main>
-        <Grid
-          container
-          spacing={3}
-          justify="center"
-          alignItems="center"
-          direction="column"
-        >
-          <Grid item>
-            <h1>
-              <Typography>Solid Profile Editor</Typography>
-            </h1>
-          </Grid>
-          <Grid item>
-            <LoginButtonComponent />
-          </Grid>
-
-          <Grid item>
-            <Link href="/profile">
-              <Button variant="contained" color="primary">
-                Profile
-              </Button>
-            </Link>
-          </Grid>
-          <Button
-            variant="contained"
-            color="secondary"
-            // onClick={() =>
-            //   Subscribe("https://gergelyth.inrupt.net/profile/card")
-            // }
-          >
-            Subscribe
-          </Button>
+    <Grid container spacing={8} direction="column">
+      <Grid
+        item
+        container
+        spacing={3}
+        justifyContent="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid item>
+          <Typography variant="h4">Solid Profile Editor</Typography>
         </Grid>
-      </main>
+        <Grid item>
+          <DynamicLoginComponent />
+        </Grid>
+      </Grid>
 
-      <footer>
-        <Typography>MIT License</Typography>
-      </footer>
-    </Container>
+      {GetSession()?.info.isLoggedIn ? (
+        <ProfileMain
+          rdfFields={allRdfFields}
+          editable={true}
+          deletable={true}
+          centerJustify={true}
+        />
+      ) : null}
+    </Grid>
   );
 }

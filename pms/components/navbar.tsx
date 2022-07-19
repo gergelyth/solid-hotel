@@ -94,7 +94,7 @@ function NavigationBar(): JSX.Element {
                 </Link>
               </Grid>
             </Grid>
-            <Grid item xs={1} container justify="flex-end">
+            <Grid item xs={1} container justifyContent="flex-end">
               <DynamicLoginComponent />
             </Grid>
           </Grid>

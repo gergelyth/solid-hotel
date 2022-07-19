@@ -10,6 +10,10 @@ import Document, {
 import { ServerStyleSheets } from "@material-ui/core/styles";
 import theme from "../../common/styles/theme";
 
+/**
+ * The document (core) component of the 'spe' application.
+ * There are no application specific additions here.
+ */
 class MyDocument extends Document {
   static async getInitialProps(
     ctx: DocumentContext
