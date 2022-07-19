@@ -189,10 +189,10 @@ In case something goes wrong during a component render, we replace the component
 
 In the spirit of LinkedData, we make an effort to try and reuse appropriate RDF definitions already created. However, in order to define RDF terms for all data classes and properties, we must create a project specific vocabulary as well to fill in the gaps.
 
-We call this ontology `solidhotel`. The RDFS definition is described in Turtle format in file `solidhotel.ttl`. 
+We call this ontology `solidhotel`. The RDFS definition is described in Turtle format in file `solidhotel.ttl`. For now, the prefix will reference our GitHub file so all sources are grouped together, but in time we may request a [w3id](https://w3id.org/) address to make it more stable.
 
 To use these custom solutions, we also generate a so-called *convenience object* with the help of the vocabulary [artifact generator](https://github.com/inrupt/artifact-generator). We can generate the helper file with the following command:
-```command
+```console
 > npx @inrupt/artifact-generator generate --inputResources ./solidhotel.ttl
 ```
 Unfortunately, the generator doesn't add the enumeration classes to the resulting file, so some manual additions are necessary. We store the result at `common/solidhotel-vocab` and reference it directly from our code. The RDF terms are strictly only initialized in the `common/vocabularies` folder and we use the created mappings throughout our applications.
@@ -200,6 +200,11 @@ Unfortunately, the generator doesn't add the enumeration classes to the resultin
 ### <ins>Other files</ins>
 
 The remaining files not mentioned or referred to above should be fairly self-explanatory, or explained in the documentation comments. These mostly include component definitions (using [Material UI v4](https://mui.com/)) illustrating data or constructing elements for user interactions and utility functions supporting the logic behind the applications (booking, check-in, check-out).
+
+Naming conventions for TypeScript/React sources are unfortunately not clearly defined and they usually vary from project to project. Based on the dependency libraries, we define the following rules for filenames in our applications:
+1. `caterpillar-case` for element definitions
+2. `PascalCase` for type definitions
+3. `camelCase` for everything else
 
 <div align="center"> <h2><ins>Testing</ins></h2> </div>
 
@@ -210,12 +215,12 @@ Element testing is done with the help of [@testing-library](https://testing-libr
 Tests are placed in a `__tests__` folder in each appropriate directory.
 
 To run the tests, use the command:
-```
-npm run test
+```console
+> npm run test
 ```
 Alternatively, during development you may also use the watch functionality of jest by running:
-```
-npm run test-watch
+```console
+> npm run test-watch
 ```
 
 <div align="center"> <h2><ins>Generated documentation</ins></h2> </div>
@@ -223,8 +228,8 @@ npm run test-watch
 The documentation is generated using [TypeDoc](https://typedoc.org/).
 
 We use a small workaround to render the HTML result of the modules found in all projects. To process all modules, navigate to the `common` folder and run the following command:
-```
-npx typedoc
+```console
+> npx typedoc
 ```
 This will produce the `docs` folder in the current directory with the modules and correct cross reference links from all subprojects.
 

@@ -19,7 +19,7 @@ We provide two options to start the applications: manual and Docker.
 ```console
 > mv node_modules ..
 ```
-4. (Set environment variables if required) - **TODO**
+4. (Change environment variables in the `.env` file in the core directory if deviating from default - the changes are synchronized to all subprojects via symbolic linking)
 5. Launch the applications - **TODO** verify `run start` work as expected
 ```console
 > cd common & npm run start

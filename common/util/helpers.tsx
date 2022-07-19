@@ -143,3 +143,10 @@ export function ShowError(message: string, recoverable: boolean): void {
   ShowErrorSnackbar(message);
   console.error(message);
 }
+
+/**
+ * A helper error thrower method to simplify throwing error messages when something is seriously wrong.
+ */
+export function ThrowInlineError(errorMessage: string): never {
+  throw new Error(errorMessage);
+}

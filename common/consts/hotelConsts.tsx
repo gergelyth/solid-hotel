@@ -5,10 +5,10 @@
 export const HotelName = "Paradise Hotel";
 //TODO anything using this should use the hotel WEbid details (getDefaultHotelDetails)
 /**
- * @constant An example name of hotel country which is set in the hotel profile.
+ * @constant An example name of hotel country which is set in the hotel profile - loaded from the ENV config.
  * @default
  */
-export const HotelLocation = "France";
+export const HotelLocation = process.env.NEXT_PUBLIC_HOTEL_LOCATION ?? "France";
 /**
  * @constant An example name of hotel address which is set in the hotel profile.
  * @default

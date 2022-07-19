@@ -4,6 +4,10 @@ import {
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
 import { HotelLocation } from "../consts/hotelConsts";
+import {
+  MockApiDataProtectionUrl,
+  MockApiRequiredFieldsUrl,
+} from "../consts/locations";
 import { DataProtectionInformation } from "../util/apiDataRetrieval";
 import { ShowError } from "../util/helpers";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
@@ -103,13 +107,7 @@ export function useRequiredFields(
   isLoading: boolean;
   isError: boolean;
 } {
-  // return useMockApi<string[]>("/api/requiredFields");
-  //TODO shouldnt be hardcoded!!!
-  return useMockApi<string[]>(
-    "http://localhost:3003/api/requiredFields",
-    nationality,
-    webId
-  );
+  return useMockApi<string[]>(MockApiRequiredFieldsUrl, nationality, webId);
 }
 
 /**
@@ -129,10 +127,8 @@ export function useDataProtectionInformation(
   isLoading: boolean;
   isError: boolean;
 } {
-  // return useMockApi<DataProtectionInformation>("/api/dataprotection");
-  //TODO shouldnt be hardcoded!!!
   return useMockApi<DataProtectionInformation>(
-    "http://localhost:3003/api/dataprotection",
+    MockApiDataProtectionUrl,
     nationality,
     webId
   );
