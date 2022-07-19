@@ -1,9 +1,9 @@
 import {
   getSourceUrl,
   getStringNoLocale,
-  setInteger,
   setStringNoLocale,
   setThing,
+  setUrl,
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
@@ -21,6 +21,7 @@ import {
   SafeCreateContainerInContainer,
   SafeSaveDatasetAt,
 } from "./solid_wrapper";
+import { reservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
 
 /** The relative URL address of the reservation container. */
 const reservationAddress = "reservations/";
@@ -115,10 +116,10 @@ export async function SetReservationStateAndInbox(
 ): Promise<void> {
   const datasetUrl = CreateReservationUrlFromReservationId(reservationId);
   const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
-  let updatedReservation = setInteger(
+  let updatedReservation = setUrl(
     thing,
     reservationFieldToRdfMap.state,
-    newState.valueOf()
+    reservationStateRdfMap[newState]
   );
   updatedReservation = setStringNoLocale(
     updatedReservation,
@@ -170,10 +171,10 @@ export async function SetReservationOwnerAndState(
     reservationFieldToRdfMap.owner,
     ownerWebId
   );
-  updatedReservation = setInteger(
+  updatedReservation = setUrl(
     updatedReservation,
     reservationFieldToRdfMap.state,
-    newState.valueOf()
+    reservationStateRdfMap[newState]
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 

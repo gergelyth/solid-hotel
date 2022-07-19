@@ -1,5 +1,6 @@
 import SOLIDHOTEL from "../../solidhotel-vocab/SOLIDHOTEL.js";
-import { NotificationType } from "../../types/NotificationsType.jsx";
+import { NotificationType } from "../../types/NotificationsType";
+import { ReverseRecord } from "../../util/helpers";
 
 /** A vocabulary map defining the RDF properties used for the notification enum type. */
 export const notificationTypeRdfMap: Record<NotificationType, string> = {
@@ -16,3 +17,8 @@ export const notificationTypeRdfMap: Record<NotificationType, string> = {
   [NotificationType.PrivacyToken]: SOLIDHOTEL.PrivacyToken,
   [NotificationType.PrivacyTokenDeletion]: SOLIDHOTEL.PrivacyTokenDeletion,
 };
+
+/** A vocabulary map defining a reverse mapping so we can look up RDF properties and map them to the notification enum type. */
+export const reverseNotificationTypeRdfMap = ReverseRecord(
+  notificationTypeRdfMap
+);

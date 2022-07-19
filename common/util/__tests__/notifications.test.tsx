@@ -2,6 +2,7 @@ import { createSolidDataset } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
 import { useNotifications } from "../../hooks/useNotifications";
 import { NotificationType } from "../../types/NotificationsType";
+import { notificationTypeRdfMap } from "../../vocabularies/notification_payloads/rdf_notificationTypes";
 import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
 import { AddNotificationThingToDataset } from "../datasetFactory";
 import {
@@ -64,9 +65,12 @@ describe("notifications", () => {
       .spyOn(global, "Date")
       .mockImplementation(() => mockDate as unknown as string);
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> <${
-      notificationToRdfMap.notificationType
-    }> 0;
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> a <${
+      notificationToRdfMap.type
+    }>;
+    <${notificationToRdfMap.notificationType}> <${
+      notificationTypeRdfMap[NotificationType.BookingRequest]
+    }>;
     <${
       notificationToRdfMap.createdAt
     }> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>;

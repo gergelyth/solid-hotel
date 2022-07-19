@@ -6,6 +6,18 @@ import { NotFoundError } from "./errors";
 import { GetDataSet } from "./solid";
 
 /**
+ * Helper function which creates a reverse mapping of a Record.
+ * @returns A Record which has the values as keys and the keys as values.
+ */
+export function ReverseRecord<T extends PropertyKey, U extends PropertyKey>(
+  input: Record<T, U>
+): Record<U, T> {
+  return Object.fromEntries(
+    Object.entries(input).map(([key, value]) => [value, key])
+  ) as Record<U, T>;
+}
+
+/**
  * Filters out all null and undefined items.
  * Also takes care of typing because of generics.
  * @returns A function which returns false for null or undefined items.

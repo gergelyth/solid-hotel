@@ -3,6 +3,7 @@ import {
   addDatetime,
   addInteger,
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   setThing,
@@ -17,6 +18,9 @@ import { PrivacyToken } from "../types/PrivacyToken";
 import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
+import { reservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
+import { notificationTypeRdfMap } from "../vocabularies/notification_payloads/rdf_notificationTypes";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /**
  * Creates the corresponding Solid dataset for the reservation passed as an argument.
@@ -29,6 +33,11 @@ export function CreateReservationDataset(
   let reservationDataset = createSolidDataset();
 
   let newReservation = createThing({ name: "reservation" });
+  newReservation = addUrl(
+    newReservation,
+    utilRdfMap.type,
+    reservationFieldToRdfMap.type
+  );
   newReservation = addStringNoLocale(
     newReservation,
     reservationFieldToRdfMap.room,
@@ -51,10 +60,10 @@ export function CreateReservationDataset(
     reservationFieldToRdfMap.owner,
     reservation.owner
   );
-  newReservation = addInteger(
+  newReservation = addUrl(
     newReservation,
     reservationFieldToRdfMap.state,
-    reservation.state.valueOf()
+    reservationStateRdfMap[reservation.state]
   );
   newReservation = addDatetime(
     newReservation,
@@ -81,15 +90,20 @@ export function AddNotificationThingToDataset(
   notificationType: NotificationType
 ): SolidDataset {
   let notification = createThing({ name: "notification" });
+  notification = addUrl(
+    notification,
+    utilRdfMap.type,
+    notificationToRdfMap.type
+  );
   notification = addBoolean(
     notification,
     notificationToRdfMap.isProcessed,
     false
   );
-  notification = addInteger(
+  notification = addUrl(
     notification,
     notificationToRdfMap.notificationType,
-    notificationType.valueOf()
+    notificationTypeRdfMap[notificationType]
   );
   notification = addDatetime(
     notification,
@@ -171,6 +185,11 @@ export function CreateGuestPrivacyTokenDataset(
  */
 function CreateCorePrivacyTokenDataset(privacyToken: PrivacyToken): Thing {
   let newPrivacyToken = createThing({ name: "privacy" });
+  newPrivacyToken = addUrl(
+    newPrivacyToken,
+    utilRdfMap.type,
+    privacyTokenToRdfMap.type
+  );
   privacyToken.fieldList.forEach((field) => {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,

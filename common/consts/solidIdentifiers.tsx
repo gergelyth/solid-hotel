@@ -1,11 +1,4 @@
 /**
- * @constant The property NamedNode of the local Thing in a Solid dataset.
- * @default
- */
-export const LocalNodeSkolemPrefix =
-  "https://inrupt.com/.well-known/sdk-local-node/";
-
-/**
  * @constant The Solid Pod of the hotel associated with the prototype applications.
  * @default
  */

@@ -62,7 +62,8 @@ describe("solidHotelSpecific", () => {
     expect(SafeCreateContainerAt).not.toBeCalled();
     expect(SetReadAccessToEveryone).not.toBeCalled();
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> <${roomFieldToRdfMap.name}> "Room 1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> a <${roomFieldToRdfMap.type}>;
+    <${roomFieldToRdfMap.name}> "Room 1";
     <${roomFieldToRdfMap.description}> "Description 1".
 `;
 
@@ -91,7 +92,8 @@ describe("solidHotelSpecific", () => {
       "https://testpodurl.com/rooms/"
     );
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> <${roomFieldToRdfMap.name}> "Room 1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> a <${roomFieldToRdfMap.type}>;
+    <${roomFieldToRdfMap.name}> "Room 1";
     <${roomFieldToRdfMap.description}> "Description 1".
 `;
 

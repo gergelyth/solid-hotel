@@ -1,5 +1,6 @@
 import {
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getSourceUrl,
@@ -11,6 +12,7 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { privacyDeletionToRdfMap } from "../vocabularies/notification_payloads/rdf_privacyDeletion";
 import { GetThing } from "../util/solid";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /**
  * Parses the notification dataset into a privacy token deletion request.
@@ -54,6 +56,11 @@ export function SerializePrivacyInformationDeletion(
   let deletionDataset = createSolidDataset();
 
   let deletionThing = createThing({ name: "privacyTokenDeletion" });
+  deletionThing = addUrl(
+    deletionThing,
+    utilRdfMap.type,
+    privacyDeletionToRdfMap.type
+  );
   deletionThing = addStringNoLocale(
     deletionThing,
     privacyDeletionToRdfMap.tokenUrl,

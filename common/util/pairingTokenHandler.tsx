@@ -5,6 +5,7 @@
 
 import {
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getStringNoLocale,
@@ -13,6 +14,7 @@ import {
 import { GetDataSet, GetThing } from "./solid";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solid_wrapper";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /** The name of the Solid Thing containing the pairing token. */
 const PairingTokenThing = "pairingToken";
@@ -33,6 +35,7 @@ export async function CreateAndSavePairingToken(
   let tokenDataset = createSolidDataset();
 
   let tokenThing = createThing({ name: PairingTokenThing });
+  tokenThing = addUrl(tokenThing, utilRdfMap.type, pairingTokenToRdfMap.type);
   tokenThing = addStringNoLocale(
     tokenThing,
     pairingTokenToRdfMap.pairingToken,

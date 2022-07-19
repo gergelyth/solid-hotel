@@ -2,6 +2,7 @@ import { createSolidDataset, Thing } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
 import { ReservationState } from "../../types/ReservationState";
 import { reservationFieldToRdfMap } from "../../vocabularies/rdf_reservation";
+import { reservationStateRdfMap } from "../../vocabularies/rdf_reservationStatusTypes";
 import { CreateReservationDataset } from "../datasetFactory";
 import { GetDataSet } from "../solid";
 import { SetSubmitterAccessToEveryone } from "../solid_access";
@@ -118,13 +119,22 @@ describe("solid_reservations", () => {
       "https://testpodurl.com/reservations/11111111/reservation"
     );
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.room}> "RoomUrl1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
+      reservationFieldToRdfMap.type
+    }>;
+    <${reservationFieldToRdfMap.room}> "RoomUrl1";
     <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
     <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
     <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
-    <${reservationFieldToRdfMap.state}> 1;
-    <${reservationFieldToRdfMap.checkinTime}> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.checkoutTime}> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
+    <${reservationFieldToRdfMap.state}> <${
+      reservationStateRdfMap[ReservationState.CONFIRMED]
+    }>;
+    <${
+      reservationFieldToRdfMap.checkinTime
+    }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${
+      reservationFieldToRdfMap.checkoutTime
+    }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
     const serializedResult = await SerializeDataset(savedDataset);
@@ -143,12 +153,21 @@ describe("solid_reservations", () => {
   });
 
   test("SetReservationStateAndInbox modifies the correct fields", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.room}> "RoomUrl1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
+      reservationFieldToRdfMap.type
+    }>;
+    <${reservationFieldToRdfMap.room}> "RoomUrl1";
     <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
     <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
-    <${reservationFieldToRdfMap.checkinTime}> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.checkoutTime}> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.state}> 3;
+    <${
+      reservationFieldToRdfMap.checkinTime
+    }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${
+      reservationFieldToRdfMap.checkoutTime
+    }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${reservationFieldToRdfMap.state}> <${
+      reservationStateRdfMap[ReservationState.PAST]
+    }>;
     <${reservationFieldToRdfMap.inbox}> "NewInboxUrl".
 `;
 
@@ -163,12 +182,21 @@ describe("solid_reservations", () => {
   });
 
   test("SetReservationOwnerToHotelProfile modifies the correct fields", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.room}> "RoomUrl1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
+      reservationFieldToRdfMap.type
+    }>;
+    <${reservationFieldToRdfMap.room}> "RoomUrl1";
     <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
     <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
-    <${reservationFieldToRdfMap.state}> 1;
-    <${reservationFieldToRdfMap.checkinTime}> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.checkoutTime}> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${reservationFieldToRdfMap.state}> <${
+      reservationStateRdfMap[ReservationState.CONFIRMED]
+    }>;
+    <${
+      reservationFieldToRdfMap.checkinTime
+    }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${
+      reservationFieldToRdfMap.checkoutTime
+    }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${reservationFieldToRdfMap.owner}> "NewHotelProfileWebId".
 `;
     const test = async (): Promise<Thing> =>
@@ -181,13 +209,22 @@ describe("solid_reservations", () => {
   });
 
   test("SetReservationOwnerAndState modifies the correct fields", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.room}> "RoomUrl1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
+      reservationFieldToRdfMap.type
+    }>;
+    <${reservationFieldToRdfMap.room}> "RoomUrl1";
     <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
     <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
-    <${reservationFieldToRdfMap.checkinTime}> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.checkoutTime}> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${
+      reservationFieldToRdfMap.checkinTime
+    }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${
+      reservationFieldToRdfMap.checkoutTime
+    }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${reservationFieldToRdfMap.owner}> "NewHotelProfileWebId";
-    <${reservationFieldToRdfMap.state}> 3.
+    <${reservationFieldToRdfMap.state}> <${
+      reservationStateRdfMap[ReservationState.PAST]
+    }>.
 `;
     const test = async (): Promise<void> =>
       await SetReservationOwnerAndState(

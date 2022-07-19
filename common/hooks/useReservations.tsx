@@ -1,8 +1,8 @@
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import {
   getDatetime,
-  getInteger,
   getStringNoLocale,
+  getUrl,
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
@@ -15,6 +15,8 @@ import {
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
 import { GetThing } from "../util/solid";
+import { reverseReservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
+import { ReservationState } from "../types/ReservationState";
 
 const swrKey = "reservations";
 
@@ -26,6 +28,14 @@ export function ParseReservation(
   reservationThing: Thing,
   datasetUrl: string
 ): ReservationAtHotel {
+  let state: ReservationState =
+    reverseReservationStateRdfMap[
+      getUrl(reservationThing, reservationFieldToRdfMap.state) ?? 0
+    ];
+  //Annoying retyping trick so we get a correct ENUM value instead of a string
+  state =
+    ReservationState[ReservationState[state] as keyof typeof ReservationState];
+
   // TODO: modify No Id and No Name
   const reservation = {
     id: GetIdFromDatasetUrl(datasetUrl, 1),
@@ -39,7 +49,7 @@ export function ParseReservation(
     room:
       getStringNoLocale(reservationThing, reservationFieldToRdfMap.room) ??
       "<No room ID>",
-    state: getInteger(reservationThing, reservationFieldToRdfMap.state) ?? 0,
+    state: state,
     dateFrom:
       getDatetime(reservationThing, reservationFieldToRdfMap.checkinTime) ??
       // TODO: change default value here

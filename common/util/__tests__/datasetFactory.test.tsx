@@ -18,6 +18,8 @@ import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { reservationFieldToRdfMap } from "../../vocabularies/rdf_reservation";
 import { privacyTokenToRdfMap } from "../../vocabularies/notification_payloads/rdf_privacy";
 import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
+import { reservationStateRdfMap } from "../../vocabularies/rdf_reservationStatusTypes";
+import { notificationTypeRdfMap } from "../../vocabularies/notification_payloads/rdf_notificationTypes";
 
 describe("datasetFactory", () => {
   test("CreateReservationDataset creates the expected dataset", async () => {
@@ -32,13 +34,22 @@ describe("datasetFactory", () => {
       dateTo: new Date("2021-07-07"),
     };
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.room}> "RoomUrl1";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
+      reservationFieldToRdfMap.type
+    }>;
+    <${reservationFieldToRdfMap.room}> "RoomUrl1";
     <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
     <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
     <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
-    <${reservationFieldToRdfMap.state}> 1;
-    <${reservationFieldToRdfMap.checkinTime}> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.checkoutTime}> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
+    <${reservationFieldToRdfMap.state}> <${
+      reservationStateRdfMap[ReservationState.CONFIRMED]
+    }>;
+    <${
+      reservationFieldToRdfMap.checkinTime
+    }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${
+      reservationFieldToRdfMap.checkoutTime
+    }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
     const dataset = CreateReservationDataset(reservation);
@@ -52,10 +63,13 @@ describe("datasetFactory", () => {
       .spyOn(global, "Date")
       .mockImplementation(() => mockDate as unknown as string);
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> <${
-      notificationToRdfMap.isProcessed
-    }> false;
-    <${notificationToRdfMap.notificationType}> 6;
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> a <${
+      notificationToRdfMap.type
+    }>;
+    <${notificationToRdfMap.isProcessed}> false;
+    <${notificationToRdfMap.notificationType}> <${
+      notificationTypeRdfMap[NotificationType.PrivacyToken]
+    }>;
     <${
       notificationToRdfMap.createdAt
     }> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
@@ -72,7 +86,8 @@ describe("datasetFactory", () => {
   });
 
   test("CreateHotelPrivacyTokenDataset creates the expected dataset", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> a <${privacyTokenToRdfMap.type}>;
+    <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
     <${privacyTokenToRdfMap.reason}> "TestReason1";
     <${privacyTokenToRdfMap.forReservationState}> 1;
     <${privacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
@@ -88,7 +103,8 @@ describe("datasetFactory", () => {
   });
 
   test("CreateGuestPrivacyTokenDataset creates the expected dataset", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> a <${privacyTokenToRdfMap.type}>;
+    <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
     <${privacyTokenToRdfMap.reason}> "TestReason1";
     <${privacyTokenToRdfMap.forReservationState}> 1;
     <${privacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;

@@ -1,5 +1,6 @@
 import {
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getSourceUrl,
@@ -12,6 +13,7 @@ import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
 import { SafeSaveDatasetInContainer } from "./solid_wrapper";
 import { ShowError } from "./helpers";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /** The name of the Solid Thing containing the profile. */
 const HotelProfileThingName = "hotelProfile";
@@ -28,6 +30,11 @@ export async function CreateHotelProfile(
   let hotelProfileDataset = createSolidDataset();
 
   let hotelProfileThing = createThing({ name: HotelProfileThingName });
+  hotelProfileThing = addUrl(
+    hotelProfileThing,
+    utilRdfMap.type,
+    personFieldToRdfMap.type
+  );
   fields.forEach((field) => {
     if (!field.fieldValue) {
       throw new Error(

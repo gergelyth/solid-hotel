@@ -2,7 +2,7 @@ import {
   getBoolean,
   getContainedResourceUrlAll,
   getDatetime,
-  getInteger,
+  getUrl,
   SolidDataset,
   Thing,
   UrlString,
@@ -17,6 +17,7 @@ import { ParserList } from "../types/ParserList";
 import { GetDataSet, GetThing } from "../util/solid";
 import useSWR, { mutate } from "swr";
 import { GlobSolidUrlPaths } from "../util/helpers";
+import { reverseNotificationTypeRdfMap } from "../vocabularies/notification_payloads/rdf_notificationTypes";
 
 const swrKey = "notifications";
 
@@ -90,8 +91,16 @@ function ConvertToNotification(
   }
 
   //TODO default value
-  const notificationType: NotificationType =
-    getInteger(notificationThing, notificationToRdfMap.notificationType) ?? 0;
+  let notificationType: NotificationType =
+    reverseNotificationTypeRdfMap[
+      getUrl(notificationThing, notificationToRdfMap.notificationType) ?? 0
+    ];
+  //Annoying retyping trick so we get a correct ENUM value instead of a string
+  notificationType =
+    NotificationType[
+      NotificationType[notificationType] as keyof typeof NotificationType
+    ];
+
   const parser = parsers[notificationType];
   if (!parser) {
     throw new Error(

@@ -1,5 +1,6 @@
 import {
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   setThing,
@@ -21,6 +22,7 @@ import {
   SafeDeleteDataset,
   SafeSaveDatasetInContainer,
 } from "../../common/util/solid_wrapper";
+import { utilRdfMap } from "../../common/vocabularies/rdf_util";
 
 /**
  * Fetches the profile of the hotel and sets the field value to be the value passed to the function.
@@ -42,6 +44,7 @@ export async function CreateOrUpdateRoom(room: RoomDefinition): Promise<void> {
   let roomDataset = createSolidDataset();
 
   let newRoom = createThing({ name: "room" });
+  newRoom = addUrl(newRoom, utilRdfMap.type, roomFieldToRdfMap.type);
   newRoom = addStringNoLocale(newRoom, roomFieldToRdfMap.name, room.name);
   if (room.description) {
     newRoom = addStringNoLocale(

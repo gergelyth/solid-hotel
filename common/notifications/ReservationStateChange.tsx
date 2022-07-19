@@ -1,6 +1,7 @@
 import {
   addInteger,
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getInteger,
@@ -14,6 +15,7 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 import { GetThing } from "../util/solid";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /**
  * Parses the notification dataset into the reservation state change properties.
@@ -69,6 +71,11 @@ export function SerializeReservationStateChange(
   let requestDataset = createSolidDataset();
 
   let request = createThing({ name: "reservationStateChange" });
+  request = addUrl(
+    request,
+    utilRdfMap.type,
+    reservationStateChangeToRdfMap.type
+  );
   request = addStringNoLocale(
     request,
     reservationStateChangeToRdfMap.replyInbox,

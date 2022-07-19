@@ -1,5 +1,6 @@
 import {
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getStringNoLocale,
@@ -11,6 +12,7 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { profileModificationRdfMap } from "../vocabularies/notification_payloads/rdf_profileModification";
 import { ProfileUpdate } from "../util/tracker/trackerSendChange";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /** The prefix name of the profile changes Thing in the dataset. */
 const thingName = "profileModification";
@@ -63,6 +65,11 @@ export function SerializeProfileModification(
     const details = profileUpdate[rdfField];
 
     let changeThing = createThing({ name: `${thingName}_${counter}` });
+    changeThing = addUrl(
+      changeThing,
+      utilRdfMap.type,
+      profileModificationRdfMap.type
+    );
     changeThing = addStringNoLocale(
       changeThing,
       profileModificationRdfMap.fieldModified,

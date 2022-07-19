@@ -1,6 +1,7 @@
 import {
   addInteger,
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getInteger,
@@ -14,6 +15,7 @@ import { NotificationType } from "../types/NotificationsType";
 import { failureReportRdfMap } from "../vocabularies/notification_payloads/rdf_failureReport";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 import { GetThing } from "../util/solid";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /**
  * Parses the notification dataset into a failure report.
@@ -64,6 +66,11 @@ export function SerializeFailureReport(
   let failureDataset = createSolidDataset();
 
   let failureThing = createThing({ name: "failure" });
+  failureThing = addUrl(
+    failureThing,
+    utilRdfMap.type,
+    failureReportRdfMap.type
+  );
   failureThing = addStringNoLocale(
     failureThing,
     failureReportRdfMap.errorMessage,

@@ -1,5 +1,6 @@
 import SOLIDHOTEL from "../solidhotel-vocab/SOLIDHOTEL.js";
-import { ReservationState } from "../types/ReservationState.jsx";
+import { ReservationState } from "../types/ReservationState";
+import { ReverseRecord } from "../util/helpers";
 
 /** A vocabulary map defining the RDF properties used for the reservation type enum. */
 export const reservationStateRdfMap: Record<ReservationState, string> = {
@@ -9,3 +10,8 @@ export const reservationStateRdfMap: Record<ReservationState, string> = {
   [ReservationState.ACTIVE]: SOLIDHOTEL.ReservationActive,
   [ReservationState.PAST]: SOLIDHOTEL.ReservationPast,
 };
+
+/** A vocabulary map defining a reverse mapping so we can look up RDF properties and map them to the reservation state type. */
+export const reverseReservationStateRdfMap = ReverseRecord(
+  reservationStateRdfMap
+);

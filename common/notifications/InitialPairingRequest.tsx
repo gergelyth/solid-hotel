@@ -1,5 +1,6 @@
 import {
   addStringNoLocale,
+  addUrl,
   createSolidDataset,
   createThing,
   getStringNoLocale,
@@ -11,6 +12,7 @@ import { NotificationType } from "../types/NotificationsType";
 import { initialPairingRequestRdfMap } from "../vocabularies/notification_payloads/rdf_initialPairingRequest";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
 import { GetThing } from "../util/solid";
+import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /**
  * Parses the notification dataset into an initial pairing request submitted by the guest.
@@ -56,6 +58,11 @@ export function SerializeInitialPairingRequest(
   let initialRequestDataset = createSolidDataset();
 
   let requestThing = createThing({ name: "pairingRequest" });
+  requestThing = addUrl(
+    requestThing,
+    utilRdfMap.type,
+    initialPairingRequestRdfMap.type
+  );
   requestThing = addStringNoLocale(
     requestThing,
     initialPairingRequestRdfMap.guestInboxUrl,
