@@ -13,7 +13,7 @@
                         "http://www.w3.org/2006/vcard/ns#email"
                     ],
                     "dataProtectionInformation": {
-                        "dataProtectionYears": 5,
+                        "dataProtectionStorageDuration": {"years": 0, "months": 0, "days": 2 },
                         "dataProtectionFields": [                        
                             "http://xmlns.com/foaf/0.1/firstName",
                             "http://xmlns.com/foaf/0.1/lastName",
@@ -36,7 +36,7 @@
                         "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
-                        "dataProtectionYears": 5,
+                        "dataProtectionStorageDuration": {"years": 0, "months": 0, "days": 2 },
                         "dataProtectionFields": [
                             "http://xmlns.com/foaf/0.1/firstName",
                             "http://xmlns.com/foaf/0.1/lastName",
@@ -60,7 +60,7 @@
                         "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
-                        "dataProtectionYears": 5,
+                        "dataProtectionStorageDuration": {"years": 0, "months": 0, "days": 2 },
                         "dataProtectionFields": [                        
                             "http://xmlns.com/foaf/0.1/firstName",
                             "http://xmlns.com/foaf/0.1/lastName",
@@ -91,7 +91,7 @@
                         "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
-                        "dataProtectionYears": 3,
+                        "dataProtectionStorageDuration": {"years": 0, "months": 0, "days": 1 },
                         "dataProtectionFields": [                        
                             "http://xmlns.com/foaf/0.1/firstName",
                             "http://xmlns.com/foaf/0.1/lastName",
@@ -117,7 +117,7 @@
                         "https://schema.org/phone"
                     ],
                     "dataProtectionInformation": {
-                        "dataProtectionYears": 5,
+                        "dataProtectionStorageDuration": {"years": 0, "months": 0, "days": 2 },
                         "dataProtectionFields": [                        
                             "http://xmlns.com/foaf/0.1/firstName",
                             "http://xmlns.com/foaf/0.1/lastName",

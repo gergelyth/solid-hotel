@@ -3,7 +3,11 @@ import apiData from "../api_data.json";
 
 /** A helper type containing the data protection properties (how long to store what fields) */
 export type DataProtectionInformation = {
-  dataProtectionYears: number;
+  dataProtectionStorageDuration: {
+    years: number;
+    months: number;
+    days: number;
+  };
   dataProtectionFields: string[];
 };
 

@@ -128,7 +128,7 @@ describe("useMockApi", () => {
 
   test("useDataProtectionInformation works as expected", async () => {
     const expectedDataProtectionInformation: DataProtectionInformation = {
-      dataProtectionYears: 5,
+      dataProtectionStorageDuration: { years: 0, months: 0, days: 2 },
       dataProtectionFields: [
         personFieldToRdfMap.idDocumentNumber,
         personFieldToRdfMap.email,
@@ -139,7 +139,7 @@ describe("useMockApi", () => {
       Promise.resolve({
         json: () =>
           Promise.resolve({
-            dataProtectionYears: 5,
+            dataProtectionStorageDuration: { years: 0, months: 0, days: 2 },
             dataProtectionFields: [
               personFieldToRdfMap.idDocumentNumber,
               personFieldToRdfMap.email,

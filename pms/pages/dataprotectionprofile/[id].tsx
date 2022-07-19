@@ -32,7 +32,9 @@ function GetDataRetentionPeriod({
   return (
     <Box display="flex" justifyContent="flex-end" alignItems="center">
       <Typography variant="subtitle2">
-        Data protection length: {data.dataProtectionYears} years
+        Data protection length: {data.dataProtectionStorageDuration.years}{" "}
+        years, {data.dataProtectionStorageDuration.months} months,{" "}
+        {data.dataProtectionStorageDuration.days}
       </Typography>
     </Box>
   );

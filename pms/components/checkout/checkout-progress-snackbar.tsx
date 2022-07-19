@@ -67,9 +67,9 @@ async function ExecuteCheckOut(
     dataProtectionInformation.dataProtectionFields,
     GetStartOfNextDay(
       GetCurrentDatePushedBy(
-        dataProtectionInformation.dataProtectionYears,
-        0,
-        0
+        dataProtectionInformation.dataProtectionStorageDuration.years,
+        dataProtectionInformation.dataProtectionStorageDuration.months,
+        dataProtectionInformation.dataProtectionStorageDuration.days
       )
     )
   );
