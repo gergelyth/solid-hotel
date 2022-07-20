@@ -27,7 +27,9 @@ export const xmlSchemaTypes = {
   dateTime: new SchemaType("http://www.w3.org/2001/XMLSchema#dateTime"),
   integer: new SchemaType("http://www.w3.org/2001/XMLSchema#integer"),
   string: new SchemaType("http://www.w3.org/2001/XMLSchema#string"),
-  idDocumentType: new SchemaType("solidhotel:idDocumentTypeEnum"),
+  idDocumentType: new SchemaType(
+    "https://github.com/gergelyth/solid-hotel/blob/master/solidhotel.ttl#IdType"
+  ),
   country: new SchemaType(
     "http://publications.europa.eu/resource/dataset/country"
   ),

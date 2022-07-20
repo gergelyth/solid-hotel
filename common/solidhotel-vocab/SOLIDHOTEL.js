@@ -5,7 +5,7 @@
  *
  * Vocabulary built from input: [./solidhotel.ttl].
  * The generator detected the following terms in the source vocabulary:
- *  - Classes: [5]
+ *  - Classes: [6]
  *  - Properties: [8]
  *  - Literals: [0]
  *  - Constant IRIs: [0]
@@ -56,6 +56,13 @@ const SOLIDHOTEL = {
   NotificationType: _NS("NotificationType"),
 
   /**
+   * Enumerated ID document type values.
+   *
+   * This term provides descriptions only in English.
+   */
+  IdType: _NS("IdType"),
+
+  /**
    * A resource containing information about the deletion request of a privacy token.
    *
    * This term provides descriptions only in English.
@@ -86,6 +93,20 @@ const SOLIDHOTEL = {
    * This term provides descriptions only in English.
    */
   ReservationPast: _NS("ReservationPast"),
+
+  /**
+   * Passport as an ID document type.
+   *
+   * This term provides descriptions only in English.
+   */
+  PassportIdDocumentType: _NS("PassportIdDocumentType"),
+
+  /**
+   * The ID card as an ID document type.
+   *
+   * This term provides descriptions only in English.
+   */
+  IdCardIdDocumentType: _NS("IdCardIdDocumentType"),
 
   /**
    * The notification submitted to the hotel to create a reservation.

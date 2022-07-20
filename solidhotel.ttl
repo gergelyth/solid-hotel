@@ -43,6 +43,19 @@ solidhotel:ReservationPast a schema:ReservationStatusType ;
     rdfs:label "ReservationPast"@en ;
     rdfs:comment "The status for a reservation in the past where the guest has already checked-out"@en .
 
+solidhotel:IdType a rdfs:Class ;
+    rdfs:label "IdType"@en ;
+    rdfs:comment "Enumerated ID document type values."@en ;
+    rdfs:subClassOf schema:StatusEnumeration .
+
+solidhotel:PassportIdDocumentType a solidhotel:IdType ;
+    rdfs:label "PassportIdDocumentType"@en ;
+    rdfs:comment "Passport as an ID document type."@en .
+
+solidhotel:IdCardIdDocumentType a solidhotel:IdType ;
+    rdfs:label "IdCardIdDocumentType"@en ;
+    rdfs:comment "The ID card as an ID document type."@en .
+
 solidhotel:NotificationType a rdfs:Class ;
     rdfs:label "NotificationType"@en ;
     rdfs:comment "Enumerated type values for a Notification."@en ;

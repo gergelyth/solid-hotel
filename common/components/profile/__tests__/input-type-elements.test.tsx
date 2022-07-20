@@ -6,6 +6,7 @@ import { FieldInputElementBasedOnType } from "../input-type-elements";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
 import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
+import { IdDocumentTypeToRdf } from "../../../vocabularies/rdfIdDocumentType";
 
 function Render(field: Field): RenderResult {
   return render(
@@ -52,7 +53,7 @@ describe("<FieldInputElementBasedOnType />", () => {
     const enumTestField: Field = {
       fieldShortName: "idDocumentType",
       fieldPrettyName: "ID Document Type",
-      fieldValue: "PASSPORT",
+      fieldValue: IdDocumentTypeToRdf.passport,
       rdfName: PersonFieldToRdfMap.idDocumentType,
       datatype: xmlSchemaTypes.idDocumentType,
     };

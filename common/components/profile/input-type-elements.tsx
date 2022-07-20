@@ -9,8 +9,8 @@ import { Field } from "../../types/Field";
 import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { IdDocumentType } from "../../types/IdDocument";
 import { CountryToRdfMap } from "../../vocabularies/rdfCountries";
+import { IdDocumentTypeToRdf } from "../../vocabularies/rdfIdDocumentType";
 
 /**
  * Creates a component for STRING typed fields.
@@ -108,7 +108,7 @@ function GetEnumPickerElement(
 
 /**
  * Decides what type of element of component to return based on the type of the field supplied.
- * Currently supported types are: string, dateTime, idDocumentType.
+ * Currently supported types are: string, dateTime, idDocumentType, country.
  * Adding a new field should consist only of the defining the component above and adding the option to the switch clause here.
  * @returns The component type for the corresponding field type.
  */
@@ -127,11 +127,9 @@ export function FieldInputElementBasedOnType({
     case xmlSchemaTypes.dateTime:
       return GetDatePickerElement(field, currentFieldValue, setFieldValue);
     case xmlSchemaTypes.idDocumentType: {
-      const options = Object.keys(IdDocumentType)
-        .filter((key) => isNaN(+key))
-        .map((key) => {
-          return { value: key, display: key };
-        });
+      const options = Object.keys(IdDocumentTypeToRdf).map((key) => {
+        return { value: IdDocumentTypeToRdf[key], display: key };
+      });
       return GetEnumPickerElement(
         field,
         options,
