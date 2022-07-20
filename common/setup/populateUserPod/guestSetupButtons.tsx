@@ -9,7 +9,7 @@ import {
 } from "../../components/snackbar";
 import { CreatePrivacyFolders } from "../setupUtil";
 import { createContainerAt } from "@inrupt/solid-client";
-import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../util/solidReservations";
 
 /**
  * Removes all application specific items and containers in the guest Pod.

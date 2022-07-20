@@ -22,7 +22,7 @@ import {
   SafeSaveAclFor,
   SafeSaveDatasetAt,
   SafeSaveDatasetInContainer,
-} from "../solid_wrapper";
+} from "../solidWrapper";
 
 jest.mock("@inrupt/solid-client", () => {
   return {
@@ -63,7 +63,7 @@ beforeEach(() => {
 const testUrl = "https://www.testsolidpod.com/resource.ttl";
 const testDataset = createSolidDataset();
 
-describe("solid_wrapper", () => {
+describe("solidWrapper", () => {
   test("SafeGetDataSet calls the appropriate Solid function with the right arguments", async () => {
     await SafeGetDataset(testUrl);
 

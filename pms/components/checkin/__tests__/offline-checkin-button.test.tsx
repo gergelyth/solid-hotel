@@ -37,7 +37,7 @@ jest.mock("../../../../common/components/profile/edit-field-popup", () => {
   };
 });
 
-jest.mock("../../../../common/util/solid_wrapper", () => {
+jest.mock("../../../../common/util/solidWrapper", () => {
   return {
     SafeSaveDatasetInContainer: jest.fn(() => {
       return Promise.resolve({

@@ -3,8 +3,8 @@ import {
   getContainedResourceUrlAll,
 } from "@inrupt/solid-client";
 import { GetSession } from "../util/solid";
-import { SetSubmitterAccessToEveryone } from "../util/solid_access";
-import { SafeDeleteDataset, SafeGetDataset } from "../util/solid_wrapper";
+import { SetSubmitterAccessToEveryone } from "../util/solidAccess";
+import { SafeDeleteDataset, SafeGetDataset } from "../util/solidWrapper";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { ShowErrorSnackbar } from "../components/snackbar";
 import { GetCoreFolderFromWebId } from "../util/urlParser";

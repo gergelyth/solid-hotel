@@ -1,6 +1,6 @@
 import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import { SetReservationOwnerToHotelProfile } from "../../../common/util/solid_reservations";
+import { SetReservationOwnerToHotelProfile } from "../../../common/util/solidReservations";
 import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { useGuest } from "../../../common/hooks/useGuest";
 import { CreateHotelProfile } from "../../../common/util/hotelProfileHandler";

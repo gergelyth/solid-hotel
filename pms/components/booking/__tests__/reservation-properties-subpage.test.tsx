@@ -3,7 +3,7 @@ import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { BookingPage } from "../../../pages/booking";
 import { ReservationPropertiesPage } from "../reservation-properties-subpage";
-import { AddReservation } from "../../../../common/util/solid_reservations";
+import { AddReservation } from "../../../../common/util/solidReservations";
 import { ReservationState } from "../../../../common/types/ReservationState";
 import { ShowSuccessSnackbar } from "../../../../common/components/snackbar";
 import { CreateAndSavePairingToken } from "../../../../common/util/pairingTokenHandler";
@@ -30,7 +30,7 @@ jest.mock("../../../../common/components/snackbar");
 jest.mock("../../../../common/util/pairingTokenHandler");
 jest.mock("../../../../common/hooks/useReservations");
 
-jest.mock("../../../../common/util/solid_reservations", () => {
+jest.mock("../../../../common/util/solidReservations", () => {
   return {
     AddReservation: jest.fn(
       () => "https://testpodurl.com/reservations/11111111/inbox"

@@ -1,8 +1,8 @@
 import { getPropertyAll } from "@inrupt/solid-client";
-import { SerializeFailureReport } from "../../common/notifications/FailureReport";
-import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
-import { SerializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
-import { SerializeGuestPrivacyNotification } from "../../common/notifications/PrivacyNotification";
+import { SerializeFailureReport } from "../../common/notifications/failureReport";
+import { SerializeReservationStateChange } from "../../common/notifications/reservationStateChange";
+import { SerializePairingRequestWithInformation } from "../../common/notifications/pairingRequestWithInformation";
+import { SerializeGuestPrivacyNotification } from "../../common/notifications/privacyNotification";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetHotelProfileThing } from "../../common/util/hotelProfileHandler";
 import {
@@ -18,14 +18,14 @@ import {
   ParseReservation,
   RevalidateReservations,
 } from "../../common/hooks/useReservations";
-import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
+import { SerializeProfileModification } from "../../common/notifications/profileModification";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
-import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import { SerializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
 import { GetStartOfNextDay } from "../../common/util/helpers";
 import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
-import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
+import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
 
 /**
  * Creates the reservation state change notification dataset and submits it into the guest reservation inbox.

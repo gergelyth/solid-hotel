@@ -20,14 +20,14 @@ import {
   SolidLogin,
   SolidLogout,
 } from "../solid";
-import { SafeGetDataset } from "../solid_wrapper";
+import { SafeGetDataset } from "../solidWrapper";
 
 jest.mock("@inrupt/solid-client-authn-browser", () => {
   return {
     getDefaultSession: jest.fn(),
   };
 });
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeGetDataset: jest.fn(),
   };

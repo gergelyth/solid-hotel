@@ -8,7 +8,7 @@ import { useNotifications } from "../hooks/useNotifications";
 import { notificationToRdfMap } from "../vocabularies/rdf_notification";
 import { Notification } from "../types/Notification";
 import { ParserList } from "../types/ParserList";
-import { SafeSaveDatasetAt } from "./solid_wrapper";
+import { SafeSaveDatasetAt } from "./solidWrapper";
 
 /**
  * Calls the {@link useNotifications} hook to retrieve all notifications contained in the inboxes specified.

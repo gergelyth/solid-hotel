@@ -9,7 +9,7 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { utilRdfMap } from "../vocabularies/rdf_util";
 import { NotFoundError } from "./errors";
-import { SafeGetDataset } from "./solid_wrapper";
+import { SafeGetDataset } from "./solidWrapper";
 
 /** The name of the Solid Thing containing the privacy token. */
 const privacyAddress = "privacy/";

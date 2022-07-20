@@ -19,7 +19,7 @@ jest.mock("../../../common/components/custom-progress-snackbar", () => {
   };
 });
 jest.mock("../../../common/components/snackbar");
-jest.mock("../../../common/util/solid_reservations", () => {
+jest.mock("../../../common/util/solidReservations", () => {
   return {
     GetUserReservationsPodUrl: () => "TestReservationContainer",
   };

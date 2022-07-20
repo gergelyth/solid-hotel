@@ -14,14 +14,14 @@ import {
 import {
   GetProfileOf,
   SetFieldInSolidProfile,
-} from "../../common/util/solid_profile";
+} from "../../common/util/solidProfile";
 import { GetDataSet } from "../../common/util/solid";
-import { SetReadAccessToEveryone } from "../../common/util/solid_access";
+import { SetReadAccessToEveryone } from "../../common/util/solidAccess";
 import {
   SafeCreateContainerAt,
   SafeDeleteDataset,
   SafeSaveDatasetInContainer,
-} from "../../common/util/solid_wrapper";
+} from "../../common/util/solidWrapper";
 import { utilRdfMap } from "../../common/vocabularies/rdf_util";
 
 /**

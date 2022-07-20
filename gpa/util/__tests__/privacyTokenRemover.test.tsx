@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { TestGuestPrivacyTokens } from "../../../common/util/__tests__/testUtil";
 import { PrivacyTokenRemover } from "../privacyTokenRemover";
 import { useGuestPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
-import { SafeDeleteDataset } from "../../../common/util/solid_wrapper";
+import { SafeDeleteDataset } from "../../../common/util/solidWrapper";
 import { ShowWarningSnackbar } from "../../../common/components/snackbar";
 
 jest.mock("../../../common/components/custom-progress-snackbar", () => {
@@ -25,7 +25,7 @@ jest.mock("../../../common/util/solid", () => {
     GetUserPrivacyPodUrl: () => "TestGuestPrivacyContainer",
   };
 });
-jest.mock("../../../common/util/solid_wrapper");
+jest.mock("../../../common/util/solidWrapper");
 
 function Render(hotelUrl: string): RenderResult {
   return render(

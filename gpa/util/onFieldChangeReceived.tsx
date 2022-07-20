@@ -11,7 +11,7 @@ import {
 } from "../../common/util/tracker/profile-cache";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
-import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import {
   HotelToRdf,

@@ -60,7 +60,7 @@ jest.mock("../../../common/util/solid", () => {
     GetUserPrivacyPodUrl: () => "TestGuestPrivacyContainer",
   };
 });
-jest.mock("../../../common/util/solid_reservations", () => {
+jest.mock("../../../common/util/solidReservations", () => {
   return {
     GetUserReservationsPodUrl: () => "TestReservationContainer",
   };

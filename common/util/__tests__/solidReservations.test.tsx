@@ -5,7 +5,7 @@ import { reservationFieldToRdfMap } from "../../vocabularies/rdf_reservation";
 import { reservationStateRdfMap } from "../../vocabularies/rdf_reservationStatusTypes";
 import { CreateReservationDataset } from "../datasetFactory";
 import { GetDataSet } from "../solid";
-import { SetSubmitterAccessToEveryone } from "../solid_access";
+import { SetSubmitterAccessToEveryone } from "../solidAccess";
 import {
   AddReservation,
   GetOwnerFromReservation,
@@ -14,15 +14,15 @@ import {
   SetReservationOwnerAndState,
   SetReservationOwnerToHotelProfile,
   SetReservationStateAndInbox,
-} from "../solid_reservations";
+} from "../solidReservations";
 import {
   SafeCreateContainerAt,
   SafeCreateContainerInContainer,
   SafeSaveDatasetAt,
-} from "../solid_wrapper";
+} from "../solidWrapper";
 import { SerializeDataset, TestReservations } from "./testUtil";
 
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeSaveDatasetAt: jest.fn(),
     SafeDeleteDataset: jest.fn(),
@@ -37,7 +37,7 @@ jest.mock("../solid", () => {
     GetPodOfSession: jest.fn(() => "https://testpodurl.com"),
   };
 });
-jest.mock("../solid_access", () => {
+jest.mock("../solidAccess", () => {
   return {
     SetSubmitterAccessToEveryone: jest.fn(),
   };
@@ -76,7 +76,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("solid_reservations", () => {
+describe("solidReservations", () => {
   test("GetUserReservationsPodUrl returns correct URL", async () => {
     const result = GetUserReservationsPodUrl();
     expect(result).toEqual("https://testpodurl.com/reservations/");

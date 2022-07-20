@@ -1,11 +1,11 @@
 import { useHotel } from "../useHotel";
 import { act, renderHook } from "@testing-library/react-hooks";
-import { GetProfileOf, SolidProfile } from "../../util/solid_profile";
+import { GetProfileOf, SolidProfile } from "../../util/solidProfile";
 import { addStringNoLocale, createThing, Thing } from "@inrupt/solid-client";
 import { hotelFieldToRdfMap } from "../../vocabularies/rdf_hotel";
 import { HotelDetails } from "../../types/HotelDetails";
 
-jest.mock("../../util/solid_profile", () => {
+jest.mock("../../util/solidProfile", () => {
   return {
     GetProfileOf: jest.fn(),
   };

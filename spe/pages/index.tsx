@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@material-ui/core";
 import { DynamicLoginComponent } from "../../common/components/auth/dynamic-login-component";
 import { ProfileMain } from "../../common/components/profile/profile-main";
-import GetSupportedFields from "../../common/consts/supported-fields";
+import GetSupportedFields from "../../common/consts/supportedFields";
 import { GetSession } from "../../common/util/solid";
 
 /**

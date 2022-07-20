@@ -2,7 +2,7 @@ import { ReservationState } from "../../common/types/ReservationState";
 import {
   GetOwnerFromReservation,
   SetReservationStateAndInbox,
-} from "../../common/util/solid_reservations";
+} from "../../common/util/solidReservations";
 import {
   ConfirmReservationStateRequest,
   ReportFailureToGuest,

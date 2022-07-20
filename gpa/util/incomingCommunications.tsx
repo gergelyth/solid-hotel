@@ -1,10 +1,10 @@
 import { SolidDataset } from "@inrupt/solid-client";
 import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { NextRouter } from "next/router";
-import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
-import { DeserializeFailureReport } from "../../common/notifications/FailureReport";
-import { DeserializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
-import { DeserializeGuestPrivacyNotification } from "../../common/notifications/PrivacyNotification";
+import { DeserializeReservationStateChange } from "../../common/notifications/reservationStateChange";
+import { DeserializeFailureReport } from "../../common/notifications/failureReport";
+import { DeserializePairingRequestWithInformation } from "../../common/notifications/pairingRequestWithInformation";
+import { DeserializeGuestPrivacyNotification } from "../../common/notifications/privacyNotification";
 import {
   ShowCustomSnackbar,
   ShowErrorSnackbar,
@@ -12,19 +12,19 @@ import {
 import {
   AddReservation,
   SetReservationStateAndInbox,
-} from "../../common/util/solid_reservations";
-import { SaveProfileThingToPod } from "../../common/util/solid_profile";
+} from "../../common/util/solidReservations";
+import { SaveProfileThingToPod } from "../../common/util/solidProfile";
 import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
-import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
+import { DeserializeProfileModification } from "../../common/notifications/profileModification";
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
-import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import { DeserializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
 import { PrivacyTokenRemover } from "./privacyTokenRemover";
 import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { RevalidateGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
-import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
+import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
 
 /**
  * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.

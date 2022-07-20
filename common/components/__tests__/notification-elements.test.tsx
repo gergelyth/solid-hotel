@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import { NotificationType } from "../../types/NotificationsType";
 import { Notification } from "../../types/Notification";
 import { GetNotificationElements } from "../notification-elements";
-import { SafeDeleteDataset } from "../../util/solid_wrapper";
+import { SafeDeleteDataset } from "../../util/solidWrapper";
 import { RetrieveAllNotifications } from "../../util/notifications";
 
 const testNotifications: Notification[] = [
@@ -35,7 +35,7 @@ const notificationRetrieval = {
 
 jest.mock("../../hooks/useNotifications");
 
-jest.mock("../../util/solid_wrapper", () => {
+jest.mock("../../util/solidWrapper", () => {
   return {
     SafeDeleteDataset: jest.fn(),
   };

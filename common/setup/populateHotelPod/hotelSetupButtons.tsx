@@ -23,8 +23,8 @@ import {
 import { GetSession } from "../../util/solid";
 import { CreatePrivacyFolders } from "../setupUtil";
 import { createContainerAt } from "@inrupt/solid-client";
-import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
-import { SetReadAccessToEveryone } from "../../util/solid_access";
+import { GetUserReservationsPodUrl } from "../../util/solidReservations";
+import { SetReadAccessToEveryone } from "../../util/solidAccess";
 
 /**
  * Removes all application specific items and containers except the rooms.

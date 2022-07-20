@@ -7,7 +7,7 @@ import { RetrieveAllNotifications } from "../util/notifications";
 import { ParserList } from "../types/ParserList";
 import { ShowErrorSnackbar } from "./snackbar";
 import { RevalidateNotifications } from "../hooks/useNotifications";
-import { SafeDeleteDataset } from "../util/solid_wrapper";
+import { SafeDeleteDataset } from "../util/solidWrapper";
 import { LoadingIndicator } from "./loading-indicators";
 
 /**

@@ -1,4 +1,4 @@
-import GetSupportedFields from "../consts/supported-fields";
+import GetSupportedFields from "../consts/supportedFields";
 import { Field } from "../types/Field";
 
 /** A helper object to avoid doing the field parsing twice. */

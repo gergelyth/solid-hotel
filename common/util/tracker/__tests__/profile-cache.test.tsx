@@ -9,7 +9,7 @@ import "@testing-library/jest-dom";
 import { Field } from "../../../types/Field";
 import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
-import { SolidProfile } from "../../solid_profile";
+import { SolidProfile } from "../../solidProfile";
 import { TestGuestFields } from "../../__tests__/testUtil";
 import {
   CacheProfile,
@@ -41,7 +41,7 @@ function MockSolidProfile(): SolidProfile {
   };
 }
 
-jest.mock("../../solid_profile", () => {
+jest.mock("../../solidProfile", () => {
   return {
     GetProfileOf: jest.fn(() => MockSolidProfile()),
   };

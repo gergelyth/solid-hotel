@@ -5,11 +5,11 @@ import "@testing-library/jest-dom";
 import { Field } from "../../../types/Field";
 import { ProfileField } from "../profile-field";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
-import { RemoveField, SetField } from "../../../util/solid_profile";
+import { RemoveField, SetField } from "../../../util/solidProfile";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
-jest.mock("../../../util/solid_profile", () => {
+jest.mock("../../../util/solidProfile", () => {
   return {
     RemoveField: jest.fn(),
     SetField: jest.fn(),

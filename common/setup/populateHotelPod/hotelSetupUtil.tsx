@@ -1,6 +1,6 @@
 import { createContainerAt } from "@inrupt/solid-client";
 import { GetSession } from "../../util/solid";
-import { SetSubmitterAccessToEveryone } from "../../util/solid_access";
+import { SetSubmitterAccessToEveryone } from "../../util/solidAccess";
 import {
   BookingInboxUrl,
   DataProtectionProfilesUrl,

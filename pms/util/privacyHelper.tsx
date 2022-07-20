@@ -22,12 +22,12 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { CreateHotelPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetStartOfNextDay, ShowError } from "../../common/util/helpers";
 import { GetDataSet, GetSession, GetThing } from "../../common/util/solid";
-import { GetParsedReservationFromUrl } from "../../common/util/solid_reservations";
+import { GetParsedReservationFromUrl } from "../../common/util/solidReservations";
 import {
   SafeDeleteDataset,
   SafeSaveDatasetAt,
   SafeSaveDatasetInContainer,
-} from "../../common/util/solid_wrapper";
+} from "../../common/util/solidWrapper";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";

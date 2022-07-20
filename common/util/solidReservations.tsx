@@ -7,20 +7,20 @@ import {
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
-import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import { ReservationState } from "../../common/types/ReservationState";
+import { ReservationAtHotel } from "../types/ReservationAtHotel";
+import { ReservationState } from "../types/ReservationState";
 import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
 import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetThing } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
-import { SetSubmitterAccessToEveryone } from "./solid_access";
+import { SetSubmitterAccessToEveryone } from "./solidAccess";
 import { CreateReservationUrlFromReservationId } from "./urlParser";
 import { ParseReservation } from "../hooks/useReservations";
 import {
   SafeCreateContainerAt,
   SafeCreateContainerInContainer,
   SafeSaveDatasetAt,
-} from "./solid_wrapper";
+} from "./solidWrapper";
 import { reservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
 
 /** The relative URL address of the reservation container. */

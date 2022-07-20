@@ -1,6 +1,6 @@
 import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import { SetReservationOwnerToHotelProfile } from "../../../common/util/solid_reservations";
+import { SetReservationOwnerToHotelProfile } from "../../../common/util/solidReservations";
 import { useDataProtectionInformation } from "../../../common/hooks/useMockApi";
 import { CreateDataProtectionProfile } from "../../../common/util/hotelProfileHandler";
 import {
@@ -27,7 +27,7 @@ import {
 } from "../../../common/hooks/usePrivacyTokens";
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
-import { SafeDeleteDataset } from "../../../common/util/solid_wrapper";
+import { SafeDeleteDataset } from "../../../common/util/solidWrapper";
 
 /**
  * Creates the data protection profile of the guest according to the conditions retrieved from the mock API.

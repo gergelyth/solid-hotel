@@ -3,7 +3,7 @@ import {
   GetProfile,
   GetProfileOf,
   SolidProfile,
-} from "../../util/solid_profile";
+} from "../../util/solidProfile";
 import {
   addStringNoLocale,
   addUrl,
@@ -17,7 +17,7 @@ import { RevalidateGuest, TriggerRefetchGuest, useGuest } from "../useGuest";
 import { TestGuestFields } from "../../util/__tests__/testUtil";
 import { countryToRdfMap } from "../../vocabularies/rdf_countries";
 
-jest.mock("../../util/solid_profile", () => {
+jest.mock("../../util/solidProfile", () => {
   return {
     GetProfile: jest.fn(),
     GetProfileOf: jest.fn(),

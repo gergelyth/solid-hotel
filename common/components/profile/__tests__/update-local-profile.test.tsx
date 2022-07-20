@@ -20,7 +20,7 @@ jest.mock("../../snackbar", () => {
   };
 });
 let mockSetMultipleFieldsInProfile = jest.fn();
-jest.mock("../../../util/solid_profile", () => {
+jest.mock("../../../util/solidProfile", () => {
   return {
     SetMultipleFieldsInProfile: (
       profileUrl: string,

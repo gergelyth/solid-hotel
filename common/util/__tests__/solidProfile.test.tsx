@@ -18,11 +18,11 @@ import {
   SetField,
   SetFieldInSolidProfile,
   SetMultipleFieldsInProfile,
-} from "../solid_profile";
-import { SafeSaveDatasetAt } from "../solid_wrapper";
+} from "../solidProfile";
+import { SafeSaveDatasetAt } from "../solidWrapper";
 import { SerializeDataset } from "./testUtil";
 
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeSaveDatasetAt: jest.fn(),
   };
@@ -62,7 +62,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("solid_profile", () => {
+describe("solidProfile", () => {
   test("GetProfile calls GetProfileOf with session ID", async () => {
     const result = await GetProfile();
 

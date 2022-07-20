@@ -7,7 +7,7 @@ import {
   RoomDefinitionsUrl,
 } from "../../../common/consts/solidIdentifiers";
 import { SubmitBookingRequest } from "../../util/outgoingCommunications";
-import { AddReservation } from "../../../common/util/solid_reservations";
+import { AddReservation } from "../../../common/util/solidReservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { BookingProperties } from "../../../common/components/booking/reservation-properties";
 

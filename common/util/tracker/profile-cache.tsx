@@ -1,6 +1,6 @@
 import { Field } from "../../types/Field";
 import { GetGuestFieldValues } from "../../hooks/useGuest";
-import { GetProfileOf } from "../solid_profile";
+import { GetProfileOf } from "../solidProfile";
 import { ProfileUpdate } from "./trackerSendChange";
 
 /** A WebId to fields cache map, which is used to determine old values after new values are already in the user's Solid Pod. */

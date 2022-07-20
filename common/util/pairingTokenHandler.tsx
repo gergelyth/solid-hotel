@@ -13,7 +13,7 @@ import {
 } from "@inrupt/solid-client";
 import { GetDataSet, GetThing } from "./solid";
 import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
-import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solid_wrapper";
+import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solidWrapper";
 import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /** The name of the Solid Thing containing the pairing token. */

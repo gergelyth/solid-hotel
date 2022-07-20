@@ -2,11 +2,11 @@ import { act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { DoOnStateChange } from "../actionOnNewReservationState";
 import { ReservationState } from "../../../common/types/ReservationState";
-import { SetReservationStateAndInbox } from "../../../common/util/solid_reservations";
+import { SetReservationStateAndInbox } from "../../../common/util/solidReservations";
 import { ConfirmReservationStateRequest } from "../outgoingCommunications";
 import { ShowCustomSnackbar } from "../../../common/components/snackbar";
 
-jest.mock("../../../common/util/solid_reservations", () => {
+jest.mock("../../../common/util/solidReservations", () => {
   return {
     GetOwnerFromReservation: jest.fn(() => "TestOwner"),
     SetReservationStateAndInbox: jest.fn(),

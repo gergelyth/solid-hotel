@@ -1,6 +1,6 @@
 import { RecursiveDelete } from "../setupUtil";
 import { GetPodOfSession } from "../../util/solid";
-import { GetUserReservationsPodUrl } from "../../util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../util/solidReservations";
 import { ShowErrorSnackbar } from "../../components/snackbar";
 
 /**

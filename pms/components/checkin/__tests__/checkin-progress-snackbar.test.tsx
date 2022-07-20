@@ -15,7 +15,7 @@ import {
 import { CheckinProgressSnackbar } from "../checkin-progress-snackbar";
 import { useGuest } from "../../../../common/hooks/useGuest";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
-import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solid_reservations";
+import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solidReservations";
 import { CreateReservationDataset } from "../../../../common/util/datasetFactory";
 import { Thing } from "@inrupt/solid-client";
 import { CacheProfileFields } from "../../../../common/util/tracker/profile-cache";
@@ -33,7 +33,7 @@ jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   };
 });
 
-jest.mock("../../../../common/util/solid_reservations", () => {
+jest.mock("../../../../common/util/solidReservations", () => {
   return {
     SetReservationOwnerToHotelProfile: jest.fn(),
     GetUserReservationsPodUrl: jest.fn(
@@ -57,7 +57,7 @@ jest.mock("../../../../common/hooks/useGuest", () => {
   };
 });
 
-jest.mock("../../../../common/util/solid_wrapper", () => {
+jest.mock("../../../../common/util/solidWrapper", () => {
   return {
     SafeSaveDatasetInContainer: jest.fn(() => {
       return {

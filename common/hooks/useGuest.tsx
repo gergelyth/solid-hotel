@@ -6,7 +6,7 @@ import {
 } from "../components/loading-indicators";
 import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
-import { GetProfile, GetProfileOf, SolidProfile } from "../util/solid_profile";
+import { GetProfile, GetProfileOf, SolidProfile } from "../util/solidProfile";
 
 /**
  * Creates the SWR key distinguishing between possible cases to make sure one case's cache is not used for another case's retrieval.

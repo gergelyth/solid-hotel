@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { BookingPage } from "../../../pages/booking";
 import { MockSession } from "../../../../common/util/__tests__/testUtil";
 import { ReservationPropertiesPage } from "../reservation-properties-subpage";
-import { AddReservation } from "../../../../common/util/solid_reservations";
+import { AddReservation } from "../../../../common/util/solidReservations";
 import { ReservationState } from "../../../../common/types/ReservationState";
 import { SubmitBookingRequest } from "../../../util/outgoingCommunications";
 
@@ -23,7 +23,7 @@ jest.mock(
   }
 );
 jest.mock("../../../util/outgoingCommunications");
-jest.mock("../../../../common/util/solid_reservations", () => {
+jest.mock("../../../../common/util/solidReservations", () => {
   return {
     AddReservation: jest.fn(() => "TestInboxUrl"),
   };

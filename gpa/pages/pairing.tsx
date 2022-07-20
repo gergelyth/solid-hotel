@@ -6,7 +6,7 @@ import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
 import { GetSession } from "../../common/util/solid";
-import { AddReservation } from "../../common/util/solid_reservations";
+import { AddReservation } from "../../common/util/solidReservations";
 import { SubmitInitialPairingRequest } from "../util/outgoingCommunications";
 
 /**

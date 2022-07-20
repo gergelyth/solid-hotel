@@ -5,7 +5,7 @@ import {
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
 import { HotelDetails } from "../types/HotelDetails";
-import { GetProfileOf } from "../util/solid_profile";
+import { GetProfileOf } from "../util/solidProfile";
 import { hotelFieldToRdfMap } from "../vocabularies/rdf_hotel";
 
 /**

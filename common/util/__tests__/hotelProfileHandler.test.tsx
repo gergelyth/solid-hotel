@@ -8,14 +8,14 @@ import {
   GetHotelProfileThing,
 } from "../hotelProfileHandler";
 import { GetDataSet } from "../solid";
-import { SafeSaveDatasetInContainer } from "../solid_wrapper";
+import { SafeSaveDatasetInContainer } from "../solidWrapper";
 import {
   DeserializeDataset,
   SerializeDataset,
   TestGuestFields,
 } from "./testUtil";
 
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeSaveDatasetInContainer: jest.fn(),
   };

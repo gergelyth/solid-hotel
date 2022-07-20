@@ -13,7 +13,7 @@ import {
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { NotFoundError } from "./errors";
 import { GetDataSet, GetSession } from "./solid";
-import { SafeSaveDatasetAt } from "./solid_wrapper";
+import { SafeSaveDatasetAt } from "./solidWrapper";
 
 /** A helper type which contains the profile WebId, the Solid Thing and the dataset. */
 export type SolidProfile = {

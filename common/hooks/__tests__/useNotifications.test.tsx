@@ -6,9 +6,9 @@ import { NotificationParser } from "../../types//NotificationParser";
 import { GetDataSet } from "../../util/solid";
 import { MockContainer } from "../../util/__tests__/testUtil";
 import { mockSolidDatasetFrom, SolidDataset } from "@inrupt/solid-client";
-import { SerializeReservationStateChange } from "../../notifications/ReservationStateChange";
+import { SerializeReservationStateChange } from "../../notifications/reservationStateChange";
 import { ReservationState } from "../../types/ReservationState";
-import { SerializePrivacyInformationDeletion } from "../../notifications/PrivacyInformationDeletion";
+import { SerializePrivacyInformationDeletion } from "../../notifications/privacyInformationDeletion";
 
 const testPodUrl = "https://testpodurl.com";
 

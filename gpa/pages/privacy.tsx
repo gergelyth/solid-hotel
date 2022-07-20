@@ -7,7 +7,7 @@ import { PrivacyToken } from "../../common/types/PrivacyToken";
 import { ReservationState } from "../../common/types/ReservationState";
 import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { GetUserPrivacyPodUrl } from "../../common/util/solid";
-import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
+import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
 import { GetInboxUrlFromReservationUrl } from "../../common/util/urlParser";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 import { SubmitPrivacyTokenDeletionRequest } from "../util/outgoingCommunications";

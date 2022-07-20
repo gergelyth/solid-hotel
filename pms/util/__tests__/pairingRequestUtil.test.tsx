@@ -8,7 +8,7 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { GetDataSet } from "../../../common/util/solid";
-import { SafeSaveDatasetAt } from "../../../common/util/solid_wrapper";
+import { SafeSaveDatasetAt } from "../../../common/util/solidWrapper";
 import {
   GetOwnerAndAnonymizeInMemory,
   SaveInboxAndReturnReservation,
@@ -31,9 +31,9 @@ jest.mock("../../../common/consts/solidIdentifiers", () => {
   };
 });
 
-jest.mock("../../../common/util/solid_profile");
-jest.mock("../../../common/util/solid_access");
-jest.mock("../../../common/util/solid_wrapper");
+jest.mock("../../../common/util/solidProfile");
+jest.mock("../../../common/util/solidAccess");
+jest.mock("../../../common/util/solidWrapper");
 
 beforeEach(() => {
   jest.clearAllMocks();

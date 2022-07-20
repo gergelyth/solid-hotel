@@ -11,7 +11,7 @@ import {
   GetReservationUrlFromInboxUrl,
 } from "../urlParser";
 
-jest.mock("../solid_reservations", () => {
+jest.mock("../solidReservations", () => {
   return {
     GetUserReservationsPodUrl: jest.fn(
       () => "https://testpodurl.com/reservations/"

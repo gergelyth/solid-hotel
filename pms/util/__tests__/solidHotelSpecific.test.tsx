@@ -13,14 +13,14 @@ import {
 import {
   GetProfileOf,
   SetFieldInSolidProfile,
-} from "../../../common/util/solid_profile";
+} from "../../../common/util/solidProfile";
 import {
   SafeCreateContainerAt,
   SafeDeleteDataset,
   SafeSaveDatasetInContainer,
-} from "../../../common/util/solid_wrapper";
+} from "../../../common/util/solidWrapper";
 import { roomFieldToRdfMap } from "../../../common/vocabularies/rdf_room";
-import { SetReadAccessToEveryone } from "../../../common/util/solid_access";
+import { SetReadAccessToEveryone } from "../../../common/util/solidAccess";
 
 jest.mock("../../../common/util/solid", () => {
   return {
@@ -35,9 +35,9 @@ jest.mock("../../../common/consts/solidIdentifiers", () => {
   };
 });
 
-jest.mock("../../../common/util/solid_profile");
-jest.mock("../../../common/util/solid_access");
-jest.mock("../../../common/util/solid_wrapper");
+jest.mock("../../../common/util/solidProfile");
+jest.mock("../../../common/util/solidAccess");
+jest.mock("../../../common/util/solidWrapper");
 
 beforeEach(() => {
   jest.clearAllMocks();

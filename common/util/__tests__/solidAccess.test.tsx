@@ -11,10 +11,10 @@ import {
   SetReadAccessToEveryone,
   SetSubmitterAccessToAgent,
   SetSubmitterAccessToEveryone,
-} from "../solid_access";
-import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "../solid_wrapper";
+} from "../solidAccess";
+import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "../solidWrapper";
 
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeGetDatasetWithAcl: jest.fn(),
     SafeSaveAclFor: jest.fn(),
@@ -69,7 +69,7 @@ async function RunTest(testFunction: () => void): Promise<SolidDataset> {
   return updatedAcl;
 }
 
-describe("solid_access", () => {
+describe("solidAccess", () => {
   test("SetReadAccessToEveryone creates correct ACL definition", async () => {
     const updatedAcl = await RunTest(
       async () =>

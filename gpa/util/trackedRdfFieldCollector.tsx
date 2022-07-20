@@ -4,7 +4,7 @@ import { CustomProgressSnackbar } from "../../common/components/custom-progress-
 import { Dispatch, forwardRef, SetStateAction, useEffect } from "react";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { useReservations } from "../../common/hooks/useReservations";
-import { GetUserReservationsPodUrl } from "../../common/util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { ShowError } from "../../common/util/helpers";

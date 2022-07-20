@@ -6,7 +6,7 @@ import {
 } from "@inrupt/solid-client";
 import { RevalidateGuest } from "../../common/hooks/useGuest";
 import { GetDataSet, GetThing } from "../../common/util/solid";
-import { SafeSaveDatasetAt } from "../../common/util/solid_wrapper";
+import { SafeSaveDatasetAt } from "../../common/util/solidWrapper";
 import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
 
 /**

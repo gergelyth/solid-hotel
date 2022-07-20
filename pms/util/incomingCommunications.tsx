@@ -1,10 +1,10 @@
 import { SolidDataset } from "@inrupt/solid-client";
 import { NextRouter } from "next/router";
-import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
-import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
-import { DeserializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
-import { DeserializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
-import { DeserializeProfileModification } from "../../common/notifications/ProfileModification";
+import { DeserializeReservationStateChange } from "../../common/notifications/reservationStateChange";
+import { DeserializeBookingRequest } from "../../common/notifications/bookingRequest";
+import { DeserializeInitialPairingRequest } from "../../common/notifications/initialPairingRequest";
+import { DeserializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
+import { DeserializeProfileModification } from "../../common/notifications/profileModification";
 import { ReservationState } from "../../common/types/ReservationState";
 import { DoOnStateChange } from "./actionOnNewReservationState";
 import {
@@ -26,7 +26,7 @@ import {
 import {
   AddReservation,
   GetOwnerFromReservation,
-} from "../../common/util/solid_reservations";
+} from "../../common/util/solidReservations";
 import {
   ConvertToHotelPrivacyToken,
   RevalidateHotelPrivacyTokens,

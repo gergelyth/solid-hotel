@@ -7,10 +7,10 @@ import {
   GetPairingToken,
 } from "../pairingTokenHandler";
 import { GetDataSet } from "../solid";
-import { SafeDeleteDataset, SafeSaveDatasetAt } from "../solid_wrapper";
+import { SafeDeleteDataset, SafeSaveDatasetAt } from "../solidWrapper";
 import { DeserializeDataset, SerializeDataset } from "./testUtil";
 
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeSaveDatasetAt: jest.fn(),
     SafeDeleteDataset: jest.fn(),

@@ -11,7 +11,7 @@ import { Field } from "../types/Field";
 import { GetDataSet, GetThing } from "./solid";
 import { personFieldToRdfMap } from "../vocabularies/rdf_person";
 import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
-import { SafeSaveDatasetInContainer } from "./solid_wrapper";
+import { SafeSaveDatasetInContainer } from "./solidWrapper";
 import { ShowError } from "./helpers";
 import { utilRdfMap } from "../vocabularies/rdf_util";
 

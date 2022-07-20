@@ -1,4 +1,4 @@
-import { GetUserReservationsPodUrl } from "./solid_reservations";
+import { GetUserReservationsPodUrl } from "./solidReservations";
 
 /** Derives the reservation ID from the reservation inbox URL provided. */
 export function GetReservationIdFromInboxUrl(url: string): string {

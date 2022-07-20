@@ -10,7 +10,7 @@ import {
   SetIsProcessedForNotification,
 } from "../notifications";
 import { GetThing } from "../solid";
-import { SafeSaveDatasetAt } from "../solid_wrapper";
+import { SafeSaveDatasetAt } from "../solidWrapper";
 import { SerializeDataset, TestNotifications } from "./testUtil";
 
 jest.mock("../../hooks/useNotifications", () => {
@@ -19,7 +19,7 @@ jest.mock("../../hooks/useNotifications", () => {
   };
 });
 
-jest.mock("../solid_wrapper", () => {
+jest.mock("../solidWrapper", () => {
   return {
     SafeSaveDatasetAt: jest.fn(),
   };

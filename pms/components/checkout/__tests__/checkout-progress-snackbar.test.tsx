@@ -14,12 +14,12 @@ import {
 } from "../../../util/privacyHelper";
 import { useGuest } from "../../../../common/hooks/useGuest";
 import { useDataProtectionInformation } from "../../../../common/hooks/useMockApi";
-import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solid_reservations";
+import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solidReservations";
 import { DeleteFromCache } from "../../../../common/util/tracker/profile-cache";
 import { CheckoutProgressSnackbar } from "../checkout-progress-snackbar";
 import { ReservationState } from "../../../../common/types/ReservationState";
 import { UnSubscribe } from "../../../../common/util/tracker/tracker";
-import { SafeDeleteDataset } from "../../../../common/util/solid_wrapper";
+import { SafeDeleteDataset } from "../../../../common/util/solidWrapper";
 import { SendPrivacyToken } from "../../../util/outgoingCommunications";
 import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 
@@ -34,7 +34,7 @@ jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   };
 });
 
-jest.mock("../../../../common/util/solid_reservations", () => {
+jest.mock("../../../../common/util/solidReservations", () => {
   return {
     SetReservationOwnerToHotelProfile: jest.fn(),
     GetUserReservationsPodUrl: jest.fn(
@@ -80,7 +80,7 @@ jest.mock("../../../../common/consts/solidIdentifiers", () => {
   };
 });
 
-jest.mock("../../../../common/util/solid_wrapper", () => {
+jest.mock("../../../../common/util/solidWrapper", () => {
   return {
     SafeSaveDatasetInContainer: jest.fn(() => {
       return {

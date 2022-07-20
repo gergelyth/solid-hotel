@@ -3,7 +3,7 @@ import { CheckoutButton } from "./checkout-button";
 import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 import { CheckoutPage } from "../../pages/checkout";
 import { useReservations } from "../../../common/hooks/useReservations";
-import { GetUserReservationsPodUrl } from "../../../common/util/solid_reservations";
+import { GetUserReservationsPodUrl } from "../../../common/util/solidReservations";
 import { NotEmptyItem } from "../../../common/util/helpers";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { ReservationRadioSelector } from "./radio-reservation-selector";

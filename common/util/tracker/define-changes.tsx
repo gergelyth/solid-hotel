@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { GetGuestFieldValues } from "../../hooks/useGuest";
 import { Field } from "../../types/Field";
 import { FieldValueChange, FindChangedFields } from "./util";
-import { GetProfileOf } from "../solid_profile";
+import { GetProfileOf } from "../solidProfile";
 
 /**
  * A function which determines what changes were performed in the guest's personal information fields.

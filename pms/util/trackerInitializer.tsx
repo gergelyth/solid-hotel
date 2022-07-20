@@ -4,7 +4,7 @@ import {
 } from "../../common/components/snackbar";
 import { Subscribe } from "../../common/util/tracker/tracker";
 import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
-import { GetProfileOf } from "../../common/util/solid_profile";
+import { GetProfileOf } from "../../common/util/solidProfile";
 import {
   getContainedResourceUrlAll,
   getPropertyAll,

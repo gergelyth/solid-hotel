@@ -11,7 +11,7 @@ import {
   SafeDeleteDataset,
   SafeSaveDatasetAt,
   SafeSaveDatasetInContainer,
-} from "../../../common/util/solid_wrapper";
+} from "../../../common/util/solidWrapper";
 import {
   MockSession,
   SerializeDataset,
@@ -49,12 +49,12 @@ jest.mock("../../../common/consts/solidIdentifiers", () => {
 jest.mock("../../../common/hooks/usePrivacyTokens");
 jest.mock("../outgoingCommunications");
 jest.mock("../../components/reservations/reservation-element");
-jest.mock("../../../common/util/solid_reservations", () => {
+jest.mock("../../../common/util/solidReservations", () => {
   return {
     GetParsedReservationFromUrl: jest.fn(),
   };
 });
-jest.mock("../../../common/util/solid_wrapper");
+jest.mock("../../../common/util/solidWrapper");
 
 beforeEach(() => {
   jest.clearAllMocks();

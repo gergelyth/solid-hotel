@@ -10,7 +10,7 @@ import {
   setAgentDefaultAccess,
   setAgentResourceAccess,
 } from "@inrupt/solid-client";
-import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "./solid_wrapper";
+import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "./solidWrapper";
 
 /**
  * Set the access to the permissions passed as an argument.

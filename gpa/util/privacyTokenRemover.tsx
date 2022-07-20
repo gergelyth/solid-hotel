@@ -10,7 +10,7 @@ import {
   useGuestPrivacyTokens,
 } from "../../common/hooks/usePrivacyTokens";
 import { NotEmptyItem, ShowError } from "../../common/util/helpers";
-import { SafeDeleteDataset } from "../../common/util/solid_wrapper";
+import { SafeDeleteDataset } from "../../common/util/solidWrapper";
 
 /**
  * A snackbar notification displayed in the bottom right corner to inform the user that privacy tokens are being deleted.

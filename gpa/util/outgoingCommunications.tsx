@@ -1,15 +1,15 @@
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { BookingInboxUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationState } from "../../common/types/ReservationState";
-import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
-import { SerializeBookingRequest } from "../../common/notifications/BookingRequest";
-import { SerializeInitialPairingRequest } from "../../common/notifications/InitialPairingRequest";
-import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
+import { SerializeReservationStateChange } from "../../common/notifications/reservationStateChange";
+import { SerializeBookingRequest } from "../../common/notifications/bookingRequest";
+import { SerializeInitialPairingRequest } from "../../common/notifications/initialPairingRequest";
+import { SerializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
 import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
-import { SerializeProfileModification } from "../../common/notifications/ProfileModification";
+import { SerializeProfileModification } from "../../common/notifications/profileModification";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
-import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
+import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
 
 /**
  * Creates the booking request dataset and submits it into the hotel's booking requests inbox.
