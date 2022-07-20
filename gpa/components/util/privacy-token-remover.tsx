@@ -29,7 +29,6 @@ export const PrivacyTokenRemover = forwardRef<
     useGuestPrivacyTokens(GetUserPrivacyPodUrl());
 
   useEffect(() => {
-    console.log("Privacy token removal effect started");
     if (privacyTokensError) {
       CloseSnackbar(props.snackbarId);
       ShowError(
@@ -40,7 +39,6 @@ export const PrivacyTokenRemover = forwardRef<
     }
 
     if (!privacyTokens) {
-      console.log("privacy tokens null");
       return;
     }
 

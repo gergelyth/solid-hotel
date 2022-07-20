@@ -20,8 +20,6 @@ async function ExecuteCancel(
   reservationId: string,
   privacyTokens: (HotelPrivacyToken | null)[]
 ): Promise<void> {
-  console.log("execute cancel started");
-
   //Deleting the mention of WebId and deleting the corresponding privacy token
   await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, true);
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
@@ -46,7 +44,6 @@ export const CancelProgressSnackbar = forwardRef<
     useHotelPrivacyTokens(PrivacyTokensUrl);
 
   useEffect(() => {
-    console.log("effect started");
     if (tokenError) {
       CloseSnackbar(props.snackbarKey);
       ShowError("Error using the token hook during cancellation", true);
@@ -54,7 +51,6 @@ export const CancelProgressSnackbar = forwardRef<
     }
 
     if (!privacyTokens) {
-      console.log("privacy tokens undefined");
       return;
     }
 

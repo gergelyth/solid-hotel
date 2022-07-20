@@ -153,13 +153,7 @@ export const FieldChangeReceiverSnackbar = forwardRef<
   const [hotelRdfMap, setHotelRdfMap] = useState<HotelToRdf>();
 
   useEffect(() => {
-    console.log("field change receiver effect started");
-
     if (!hotelRdfMap) {
-      console.log(
-        "Hotel to RDF fields map not yet set - triggering collection"
-      );
-
       const guestFieldCollector = "guestFieldCollector";
       ShowCustomSnackbar(
         () => (

@@ -8,6 +8,7 @@ import {
   SubmitCancellationRequest,
   SubmitCheckinRequest,
 } from "../../util/outgoingCommunications";
+import { ShowError } from "../../../common/util/helpers";
 
 /**
  * Submits the check-in request to the hotel Pod.
@@ -16,8 +17,7 @@ function ExecuteCheckin(
   currentReservation: ReservationAtHotel | undefined
 ): void {
   if (!currentReservation) {
-    // TODO: error handling here
-    console.log("should never happen");
+    ShowError("Reservation is null/undefined in check-in", true);
     return;
   }
 

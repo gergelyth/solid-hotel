@@ -66,7 +66,6 @@ function BuildNotificationBasedOnType(
   const expandedOnReceive = (): void => {
     onReceive();
     notification.isProcessed = true;
-    console.log("processed");
     SetIsProcessedForNotification(url, dataset, notificationThing);
     //TODO do we need revalidate here? like in edit-room-popup
   };

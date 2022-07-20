@@ -42,8 +42,6 @@ async function ExecuteUpdateLocalProfile(
   UpdateProfileInMemory(profileUrl, fieldOptions);
 
   RevalidateGuest(Object.keys(approvedFields), profileUrl);
-
-  console.log("local profile updated");
 }
 
 /**

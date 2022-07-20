@@ -64,7 +64,6 @@ async function TrackResource(
   // Track subscribed resources to resubscribe later if needed
   // Subscribe to updates on the resource
   while (webSocketResource.webSocket.readyState !== WebSocket.OPEN) {
-    console.log("closed");
     await WaitFor(100);
   }
 
@@ -127,8 +126,6 @@ function ProcessMessage(
     return;
   }
 
-  console.log("Message received");
-  console.log(data);
   // Verify the message is an update notification
   const match = /^pub +(.+)/.exec(data);
   if (!match) return;
@@ -139,8 +136,6 @@ function ProcessMessage(
   //   ldflex.clearCache(url);
 
   // Notify the subscribers
-  console.log("Calling method");
-  console.log(data);
   subscribers.forEach((subscriber) => {
     subscriber.onReceive(url);
   });

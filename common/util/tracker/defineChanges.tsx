@@ -32,9 +32,6 @@ export async function CalculateChanges(
     return;
   }
 
-  console.log(oldFields);
-  console.log(newChangeValues);
-
   const previousFields = oldFields ?? guestFields;
   const newValues =
     newChangeValues ??
@@ -51,10 +48,6 @@ export async function CalculateChanges(
       },
       {}
     );
-
-  console.log("define changes");
-  console.log(previousFields);
-  console.log(newValues);
 
   //important that this is before the setChangedFields() because of rendering order
   setOldGuestFields(guestFields);

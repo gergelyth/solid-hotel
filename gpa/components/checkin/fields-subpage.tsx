@@ -58,7 +58,7 @@ export function RequiredFieldsAtCheckin({
 
   async function ProceedButtonClick(rdfFields: string[]): Promise<void> {
     if (!webId) {
-      console.log("Null webId, can't cahe fields");
+      console.log("Null webId, can't cache fields");
       return;
     }
     await CacheProfile(webId, rdfFields);

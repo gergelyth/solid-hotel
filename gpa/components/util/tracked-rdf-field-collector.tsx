@@ -69,7 +69,6 @@ export const TrackedRdfFieldCollector = forwardRef<
   );
 
   useEffect(() => {
-    console.log("tracked RDF field collector effect started");
     if (privacyTokensError || reservationsError) {
       CloseSnackbar(props.snackbarId);
       ShowError(
@@ -80,7 +79,6 @@ export const TrackedRdfFieldCollector = forwardRef<
     }
 
     if (!privacyTokens || !reservations) {
-      console.log("reservations or privacy tokens null");
       return;
     }
 

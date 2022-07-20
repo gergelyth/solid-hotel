@@ -204,11 +204,9 @@ const SendChangeSnackbar = forwardRef<
       return;
     }
 
-    console.log("Logic entered");
     setIsLoading(false);
 
     if (isSendButtonDisabled === undefined) {
-      console.log("setting field options");
       //TODO if no changedFields, display "No changes" and return (e.g. if the guest's profile was modified, it may not have a been a watched field)
 
       const fieldOptionsTemp: ProfileUpdate = {};
@@ -226,7 +224,6 @@ const SendChangeSnackbar = forwardRef<
     }
 
     if (!props.requiresApproval) {
-      console.log("Approval not required, executing action automatically");
       props.approveButtonFunction(fieldOptions);
     }
   }, [changedFields, fieldOptions]);

@@ -39,7 +39,6 @@ async function ExecuteCheckIn(
   replyInbox: string,
   privacyTokens: (HotelPrivacyToken | null)[]
 ): Promise<void> {
-  console.log("execute check-in started");
   const hotelProfileWebId = await CreateHotelProfile(
     guestFields,
     HotelProfilesUrl
@@ -73,7 +72,6 @@ async function ExecuteCheckIn(
   );
 
   await SendPrivacyToken(replyInbox, privacyToken);
-  console.log("privacy token sent");
 }
 
 /**
@@ -104,7 +102,6 @@ export const CheckinProgressSnackbar = forwardRef<
     useHotelPrivacyTokens(PrivacyTokensUrl);
 
   useEffect(() => {
-    console.log("effect started");
     if (apiError || guestError || tokenError) {
       CloseSnackbar(props.snackbarKey);
       ShowError(
@@ -114,13 +111,7 @@ export const CheckinProgressSnackbar = forwardRef<
       return;
     }
 
-    if (!guestFields) {
-      console.log("guest fields null");
-      return;
-    }
-
-    if (!privacyTokens) {
-      console.log("privacy tokens undefined");
+    if (!guestFields || !privacyTokens) {
       return;
     }
 

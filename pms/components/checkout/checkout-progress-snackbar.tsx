@@ -43,8 +43,6 @@ async function ExecuteCheckOut(
   replyInbox: string,
   privacyTokens: (HotelPrivacyToken | null)[]
 ): Promise<void> {
-  console.log("execute check-out started");
-
   const dataProtectionProfileWebId = await CreateDataProtectionProfile(
     guestFields
   );
@@ -75,7 +73,6 @@ async function ExecuteCheckOut(
   );
 
   await SendPrivacyToken(replyInbox, privacyToken);
-  console.log("privacy token sent");
 
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
   RevalidateHotelPrivacyTokens();
@@ -107,7 +104,6 @@ export const CheckoutProgressSnackbar = forwardRef<
     useHotelPrivacyTokens(PrivacyTokensUrl);
 
   useEffect(() => {
-    console.log("effect started");
     if (apiError || guestError || tokenError) {
       CloseSnackbar(props.snackbarKey);
       ShowError(
@@ -118,11 +114,9 @@ export const CheckoutProgressSnackbar = forwardRef<
     }
 
     if (!guestFields) {
-      console.log("Guest field information null");
       return;
     }
     if (!privacyTokens) {
-      console.log("privacy tokens undefined");
       return;
     }
     if (!dataProtection) {

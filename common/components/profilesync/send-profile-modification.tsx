@@ -58,8 +58,6 @@ async function ExecuteSendProfileModification(
       await sendModification(approvedFields, reservation.inbox);
     })
   );
-
-  console.log("profile modifications sent");
 }
 
 /**
