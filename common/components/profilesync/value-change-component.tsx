@@ -7,8 +7,8 @@ import {
   FormControlLabel,
   FormControl,
 } from "@material-ui/core";
-import { ProfileChangeStrings } from "./profile-change-strings";
-import { FieldValueChange } from "./util";
+import { ProfileChangeStrings } from "../../util/tracker/profileChangeStrings";
+import { FieldValueChange } from "../../util/tracker/util";
 
 /**
  * Provides the option to the user to choose between keeping the old value of the field or updating the field with the new value.

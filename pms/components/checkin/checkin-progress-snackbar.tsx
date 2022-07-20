@@ -18,7 +18,7 @@ import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
 import { Field } from "../../../common/types/Field";
 import { SubscribeToProfileChanges } from "../../util/trackerInitializer";
-import { CacheProfileFields } from "../../../common/util/tracker/profile-cache";
+import { CacheProfileFields } from "../../../common/util/tracker/profileCache";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 import {
   RevalidateHotelPrivacyTokens,

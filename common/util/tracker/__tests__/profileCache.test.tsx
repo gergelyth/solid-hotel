@@ -17,8 +17,8 @@ import {
   DeleteFromCache,
   ProfileCache,
   UpdateProfileInMemory,
-} from "../profile-cache";
-import { ProfileUpdate } from "../trackerSendChange";
+} from "../profileCache";
+import { ProfileUpdate } from "../../../components/profilesync/tracker-send-change";
 
 function MockSolidProfile(): SolidProfile {
   const webId = "https://testpodurl.com/profile/card#me";
@@ -53,7 +53,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("profile-cache", () => {
+describe("profileCache", () => {
   test("CacheProfile produces correct profile cache", async () => {
     DeleteFromCache(webId);
 

@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { RequiredFieldsAtCheckin } from "../fields-subpage";
 import { MockSession } from "../../../../common/util/__tests__/testUtil";
 import { CheckinPage } from "../../../pages/reservations/[id]";
-import { CacheProfile } from "../../../../common/util/tracker/profile-cache";
+import { CacheProfile } from "../../../../common/util/tracker/profileCache";
 import userEvent from "@testing-library/user-event";
 import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
@@ -28,7 +28,7 @@ jest.mock(
 );
 jest.mock("../../../../common/components/reservations/hotel-details");
 jest.mock("../../../../common/components/reservations/room-details");
-jest.mock("../../../../common/util/tracker/profile-cache");
+jest.mock("../../../../common/util/tracker/profileCache");
 
 jest.mock("../../../../common/components/profile/profile-main", () => {
   return {

@@ -9,13 +9,13 @@ import { SnackbarContent } from "notistack";
 import { forwardRef, useEffect, useState } from "react";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Field } from "../../types/Field";
-import { CloseSnackbar } from "../../components/snackbar";
+import { CloseSnackbar } from "../snackbar";
 import { SendChangeActionButtons } from "./action-buttons";
-import { useCustomSnackbarStyles } from "../../components/custom-progress-snackbar";
-import { FieldValueChange } from "./util";
+import { useCustomSnackbarStyles } from "../custom-progress-snackbar";
+import { FieldValueChange } from "../../util/tracker/util";
 import { ValueChangeComponent } from "./value-change-component";
-import { ProfileChangeStrings } from "./profile-change-strings";
-import { CalculateChanges } from "./define-changes";
+import { ProfileChangeStrings } from "../../util/tracker/profileChangeStrings";
+import { CalculateChanges } from "../../util/tracker/defineChanges";
 
 /** A helper type mapping the RDF name of the personal information field to its approval status and the new value. */
 export type ProfileUpdate = {

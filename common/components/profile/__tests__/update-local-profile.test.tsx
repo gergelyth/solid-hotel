@@ -1,7 +1,7 @@
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { ProfileUpdate } from "../../../util/tracker/trackerSendChange";
+import { ProfileUpdate } from "../../profilesync/tracker-send-change";
 import { UpdateLocalProfileSnackbar } from "../update-local-profile";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
@@ -31,7 +31,7 @@ jest.mock("../../../util/solidProfile", () => {
   };
 });
 let mockUpdateProfileInMemory = jest.fn();
-jest.mock("../../../util/tracker/profile-cache", () => {
+jest.mock("../../../util/tracker/profileCache", () => {
   return {
     UpdateProfileInMemory: (profileUrl: string, fieldOptions: ProfileUpdate) =>
       mockUpdateProfileInMemory(profileUrl, fieldOptions),

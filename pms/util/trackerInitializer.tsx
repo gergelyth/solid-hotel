@@ -3,23 +3,23 @@ import {
   ShowCustomSnackbar,
 } from "../../common/components/snackbar";
 import { Subscribe } from "../../common/util/tracker/tracker";
-import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
+import SendChangeSnackbar from "../../common/components/profilesync/tracker-send-change";
 import { GetProfileOf } from "../../common/util/solidProfile";
 import {
   getContainedResourceUrlAll,
   getPropertyAll,
 } from "@inrupt/solid-client";
-import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
+import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import { GetDataSet } from "../../common/util/solid";
 import {
   HotelProfilesUrl,
   ReservationsUrl,
 } from "../../common/consts/solidIdentifiers";
-import { SendProfileModificationSnackbar } from "../../common/util/tracker/send-profile-modification";
+import { SendProfileModificationSnackbar } from "../../common/components/profilesync/send-profile-modification";
 import {
   CacheProfile,
   ProfileCache,
-} from "../../common/util/tracker/profile-cache";
+} from "../../common/util/tracker/profileCache";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { SendProfileModification } from "./outgoingCommunications";
 

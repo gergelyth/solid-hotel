@@ -16,8 +16,8 @@ import {
 import { SaveProfileThingToPod } from "../../common/util/solidProfile";
 import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
 import { DeserializeProfileModification } from "../../common/notifications/profileModification";
-import { IncomingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
-import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
+import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import SendChangeSnackbar from "../../common/components/profilesync/tracker-send-change";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
 import { PrivacyTokenRemover } from "./privacyTokenRemover";

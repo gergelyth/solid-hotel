@@ -2,13 +2,13 @@ import {
   CloseSnackbar,
   ShowCustomSnackbar,
 } from "../../common/components/snackbar";
-import SendChangeSnackbar from "../../common/util/tracker/trackerSendChange";
-import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profile-change-strings";
-import { SendProfileModificationSnackbar } from "../../common/util/tracker/send-profile-modification";
+import SendChangeSnackbar from "../../common/components/profilesync/tracker-send-change";
+import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
+import { SendProfileModificationSnackbar } from "../../common/components/profilesync/send-profile-modification";
 import {
   CacheProfile,
   ProfileCache,
-} from "../../common/util/tracker/profile-cache";
+} from "../../common/util/tracker/profileCache";
 import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
 import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";

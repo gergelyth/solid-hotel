@@ -1,9 +1,9 @@
 import { CustomProgressSnackbar } from "../custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import { CloseSnackbar, ShowWarningSnackbar } from "../snackbar";
-import { ProfileUpdate } from "../../util/tracker/trackerSendChange";
+import { ProfileUpdate } from "../profilesync/tracker-send-change";
 import { SetMultipleFieldsInProfile } from "../../util/solidProfile";
-import { UpdateProfileInMemory } from "../../util/tracker/profile-cache";
+import { UpdateProfileInMemory } from "../../util/tracker/profileCache";
 import { IgnoreNextUpdate } from "../../util/tracker/tracker";
 import { RevalidateGuest } from "../../hooks/useGuest";
 

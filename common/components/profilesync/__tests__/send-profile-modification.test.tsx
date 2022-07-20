@@ -1,25 +1,25 @@
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { ProfileUpdate } from "../../../util/tracker/trackerSendChange";
+import { ProfileUpdate } from "../tracker-send-change";
 import { SendProfileModificationSnackbar } from "../send-profile-modification";
 import { ReservationState } from "../../../types/ReservationState";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
-import { TestReservations } from "../../__tests__/testUtil";
+import { TestReservations } from "../../../util/__tests__/testUtil";
 import { useReservations } from "../../../hooks/useReservations";
-import { ShowWarningSnackbar } from "../../../components/snackbar";
+import { ShowWarningSnackbar } from "../../snackbar";
 import { ReservationAtHotel } from "../../../types/ReservationAtHotel";
 import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
 const TestReservationUrl = "TestReservationsUrl";
 
-jest.mock("../../../hooks/useReservations");
-jest.mock("../../../components/custom-progress-snackbar", () => {
+jest.mock("../../hooks/useReservations");
+jest.mock("../../components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
-jest.mock("../../../components/snackbar");
+jest.mock("../../components/snackbar");
 
 function Render(
   fieldOptions: ProfileUpdate,

@@ -19,7 +19,7 @@ import {
   RevalidateReservations,
 } from "../../common/hooks/useReservations";
 import { SerializeProfileModification } from "../../common/notifications/profileModification";
-import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
+import { ProfileUpdate } from "../../common/components/profilesync/tracker-send-change";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";

@@ -15,7 +15,7 @@ import {
 import { useGuest } from "../../../../common/hooks/useGuest";
 import { useDataProtectionInformation } from "../../../../common/hooks/useMockApi";
 import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solidReservations";
-import { DeleteFromCache } from "../../../../common/util/tracker/profile-cache";
+import { DeleteFromCache } from "../../../../common/util/tracker/profileCache";
 import { CheckoutProgressSnackbar } from "../checkout-progress-snackbar";
 import { ReservationState } from "../../../../common/types/ReservationState";
 import { UnSubscribe } from "../../../../common/util/tracker/tracker";
@@ -62,7 +62,7 @@ jest.mock("../../../../common/hooks/useGuest", () => {
   };
 });
 
-jest.mock("../../../../common/util/tracker/profile-cache");
+jest.mock("../../../../common/util/tracker/profileCache");
 jest.mock("../../../../common/util/tracker/tracker");
 
 jest.mock("../../../../common/hooks/usePrivacyTokens", () => {

@@ -18,7 +18,7 @@ import { useRequiredFields } from "../../../../common/hooks/useMockApi";
 import { SetReservationOwnerToHotelProfile } from "../../../../common/util/solidReservations";
 import { CreateReservationDataset } from "../../../../common/util/datasetFactory";
 import { Thing } from "@inrupt/solid-client";
-import { CacheProfileFields } from "../../../../common/util/tracker/profile-cache";
+import { CacheProfileFields } from "../../../../common/util/tracker/profileCache";
 import { SubscribeToProfileChanges } from "../../../util/trackerInitializer";
 import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
 import { GetThing } from "../../../../common/util/solid";
@@ -83,7 +83,7 @@ jest.mock("../../../util/outgoingCommunications");
 jest.mock("../../../../common/components/snackbar");
 
 jest.mock("../../../util/trackerInitializer");
-jest.mock("../../../../common/util/tracker/profile-cache");
+jest.mock("../../../../common/util/tracker/profileCache");
 
 jest.mock("../../../../common/hooks/usePrivacyTokens", () => {
   return {

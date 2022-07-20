@@ -3,8 +3,8 @@ import { screen, render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { ValueChangeComponent } from "../value-change-component";
-import { IncomingProfileChangeStrings } from "../profile-change-strings";
-import { FieldValueChange } from "../util";
+import { IncomingProfileChangeStrings } from "../../../util/tracker/profileChangeStrings";
+import { FieldValueChange } from "../../../util/tracker/util";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 
 function Render(

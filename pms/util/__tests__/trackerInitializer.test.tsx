@@ -2,7 +2,7 @@ import { act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { CacheHotelProfiles } from "../trackerInitializer";
 import { MockContainer } from "../../../common/util/__tests__/testUtil";
-import { CacheProfile } from "../../../common/util/tracker/profile-cache";
+import { CacheProfile } from "../../../common/util/tracker/profileCache";
 import { Subscribe } from "../../../common/util/tracker/tracker";
 import {
   createSolidDataset,
@@ -35,7 +35,7 @@ jest.mock("../../../common/consts/solidIdentifiers", () => {
 
 jest.mock("../../../common/components/snackbar");
 jest.mock("../../../common/util/tracker/tracker");
-jest.mock("../../../common/util/tracker/profile-cache");
+jest.mock("../../../common/util/tracker/profileCache");
 
 const datasetMap: { [url: string]: SolidDataset } = {
   "https://testpodurl.com/hotelprofiles/": MockContainer(

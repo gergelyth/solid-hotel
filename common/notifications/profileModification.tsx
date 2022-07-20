@@ -11,7 +11,7 @@ import {
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { profileModificationRdfMap } from "../vocabularies/notification_payloads/rdf_profileModification";
-import { ProfileUpdate } from "../util/tracker/trackerSendChange";
+import { ProfileUpdate } from "../components/profilesync/tracker-send-change";
 import { utilRdfMap } from "../vocabularies/rdf_util";
 
 /** The prefix name of the profile changes Thing in the dataset. */

@@ -6,7 +6,7 @@ import { SerializeBookingRequest } from "../../common/notifications/bookingReque
 import { SerializeInitialPairingRequest } from "../../common/notifications/initialPairingRequest";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
 import { CreateInboxUrlFromReservationId } from "../../common/util/urlParser";
-import { ProfileUpdate } from "../../common/util/tracker/trackerSendChange";
+import { ProfileUpdate } from "../../common/components/profilesync/tracker-send-change";
 import { SerializeProfileModification } from "../../common/notifications/profileModification";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";

@@ -10,7 +10,7 @@ import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 import { SolidProfile } from "../../solidProfile";
 import { TestGuestFields } from "../../__tests__/testUtil";
-import { CalculateChanges } from "../define-changes";
+import { CalculateChanges } from "../defineChanges";
 
 function MockSolidProfile(): SolidProfile {
   const webId = "https://testpodurl.com/profile/card#me";
@@ -43,7 +43,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("define-changes", () => {
+describe("defineChanges", () => {
   test("CalculateChanges produces correct result when field changes were made directly in the Solid Pod", async () => {
     const mockSetChangedFields = jest.fn();
     const mockSetOldFields = jest.fn();

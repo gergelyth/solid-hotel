@@ -18,7 +18,7 @@ import {
 import { useGuest } from "../../../common/hooks/useGuest";
 import { Field } from "../../../common/types/Field";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
-import { DeleteFromCache } from "../../../common/util/tracker/profile-cache";
+import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
 import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
 import {

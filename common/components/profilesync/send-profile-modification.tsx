@@ -1,10 +1,10 @@
-import { CustomProgressSnackbar } from "../../components/custom-progress-snackbar";
+import { CustomProgressSnackbar } from "../custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
-import { CloseSnackbar, ShowWarningSnackbar } from "../../components/snackbar";
+import { CloseSnackbar, ShowWarningSnackbar } from "../snackbar";
 import { useReservations } from "../../hooks/useReservations";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
-import { NotEmptyItem, ShowError } from "../helpers";
-import { ProfileUpdate } from "./trackerSendChange";
+import { NotEmptyItem, ShowError } from "../../util/helpers";
+import { ProfileUpdate } from "./tracker-send-change";
 
 /**
  * Sends the approved local profile modifications to the counterparty.
