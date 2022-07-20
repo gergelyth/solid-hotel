@@ -1,105 +1,126 @@
-import Link from "next/link";
-import { useReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
-import { GetActiveReservations } from "../components/checkout/reservationselect-subpage";
 import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";
-import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
-import { ErrorComponent } from "../../common/components/error-component";
-import { GetSession } from "../../common/util/solid";
+import { Box, Grid, Typography } from "@material-ui/core";
+import { ReservationStatusList } from "../../common/components/reservations/reservation-status-list";
+import { ReservationState } from "../../common/types/ReservationState";
+import { ShowErrorSnackbar } from "../../common/components/snackbar";
+import { ReservationClickHandler } from "../../common/types/ReservationClickHandler";
+import { ReservationConciseElement } from "../../common/components/reservations/reservation-concise-element";
+import { HotelDetailsOneLiner } from "../../common/components/reservations/hotel-details";
+import { useRouter } from "next/router";
 
 /**
- * The check-out button which takes the user to the checkout page.
- * It's disabled if there are no active reservations for the user.
- * @returns The check-out button or a text notice (in case no active reservations are currently found)>
+ * A GPA wrapper for the {@link ReservationConciseElement} component.
+ * This is the function which instructs what type of component to show in the list reservations page.
+ * @returns The reservation element.
  */
-function CheckoutButton({
-  reservationsResult,
-}: {
-  reservationsResult: {
-    items: (ReservationAtHotel | null)[] | undefined;
-    isLoading: boolean;
-    isError: boolean;
-  };
-}): JSX.Element {
-  if (reservationsResult.isLoading) {
-    return <CircularProgress />;
-  }
-
-  if (reservationsResult.isError || !reservationsResult.items) {
-    return <ErrorComponent />;
-  }
-
-  if (GetActiveReservations(reservationsResult.items).length == 0) {
-    return (
-      <i>
-        <Typography>No active reservations</Typography>
-      </i>
-    );
-  } else {
-    return (
-      <Link href="/checkout">
-        <Button variant="contained" color="primary" size="large">
-          Checkout
-        </Button>
-      </Link>
-    );
-  }
+function CreateReservationElement(
+  item: ReservationAtHotel,
+  onClickAction: ReservationClickHandler
+): JSX.Element {
+  return (
+    <ReservationConciseElement
+      reservation={item}
+      titleElement={<HotelDetailsOneLiner hotelWebId={item.hotel} />}
+      onClickAction={onClickAction}
+    />
+  );
 }
 
 /**
- * The index page for the GPA application.
- * Contains links in form of button to the other pages: booking, reservations, checkout, privacy dashboard, profile editor.
- * The check-out button/link is active only if there's a currently an active reservation for the guest.
- * @returns The GPA index page.
+ * The index page for the GPA application, which is also the page for displaying the list of reservations.
+ * Shows the reservation lists broken down into categories by their current state.
+ * Defines the onReservationClick function to take the user to the reservation detail page in {@link ReservationDetail}
+ * @returns The list reservations page.
  */
 export default function Home(): JSX.Element {
-  const isLoggedIn = GetSession().info.isLoggedIn;
-  const reservationsResult = useReservations(GetUserReservationsPodUrl());
+  const userReservationsUrl = GetUserReservationsPodUrl();
+
+  const router = useRouter();
+
+  function OnReservationClick(
+    event: React.MouseEvent<HTMLElement>,
+    reservation: ReservationAtHotel
+  ): void {
+    if (!reservation.id) {
+      ShowErrorSnackbar("Reservation ID is null");
+      return;
+    }
+    router.push(`/reservations/${encodeURIComponent(reservation.id)}`);
+  }
 
   return (
     <Grid
       container
-      spacing={5}
+      spacing={1}
       justifyContent="center"
-      alignItems="center"
+      alignItems="stretch"
       direction="column"
     >
       <Grid item>
-        <Typography variant="h4">Guest Portal Application</Typography>
+        <Box textAlign="center">
+          <Typography variant="h4">Your reservations</Typography>
+        </Box>
+      </Grid>
+      <Grid item>
+        <Box fontStyle="italic" textAlign="center">
+          <Typography variant="caption">
+            This is a list of all reservations made across various hotels.
+          </Typography>
+          <Typography variant="caption">
+            Actionable reservations are highlighted.
+          </Typography>
+        </Box>
       </Grid>
 
       <Grid item>
-        <Link href="/booking">
-          <Button variant="contained" color="primary" size="large">
-            Book a room
-          </Button>
-        </Link>
+        <ReservationStatusList
+          reservationsUrl={userReservationsUrl}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.ACTIVE
+          }
+          reservationsTitle="Active reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
       </Grid>
       <Grid item>
-        <Link href="/reservations">
-          <Button variant="contained" color="primary" size="large">
-            List reservations
-          </Button>
-        </Link>
-      </Grid>
-      {isLoggedIn ? (
-        <Grid item>
-          <CheckoutButton reservationsResult={reservationsResult} />
-        </Grid>
-      ) : null}
-      <Grid item>
-        <Link href="/privacy">
-          <Button variant="contained" color="primary" size="large">
-            Privacy dashboard
-          </Button>
-        </Link>
+        <ReservationStatusList
+          reservationsUrl={userReservationsUrl}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.REQUESTED
+          }
+          reservationsTitle="Requested reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
       </Grid>
       <Grid item>
-        <Link href="/profile">
-          <Button variant="contained" color="primary" size="large">
-            Profile editor
-          </Button>
-        </Link>
+        <ReservationStatusList
+          reservationsUrl={userReservationsUrl}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.CONFIRMED
+          }
+          reservationsTitle="Confirmed upcoming reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
+      </Grid>
+      <Grid item>
+        <ReservationStatusList
+          reservationsUrl={userReservationsUrl}
+          reservationFilter={(state: ReservationState) =>
+            state === ReservationState.PAST ||
+            state === ReservationState.CANCELLED
+          }
+          reservationsTitle="Past and cancelled reservations"
+          createReservationElement={(reservation: ReservationAtHotel) =>
+            CreateReservationElement(reservation, OnReservationClick)
+          }
+        />
       </Grid>
     </Grid>
   );

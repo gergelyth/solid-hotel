@@ -42,7 +42,7 @@ function HotelSetupSubPage(): JSX.Element {
       container
       spacing={3}
       alignItems="center"
-      justify="center"
+      justifyContent="center"
       direction="column"
     >
       <SetupButtonGroup
@@ -113,7 +113,7 @@ function GuestSetupSubPage(): JSX.Element {
       container
       spacing={3}
       alignItems="center"
-      justify="center"
+      justifyContent="center"
       direction="column"
     >
       <SetupButtonGroup
@@ -162,7 +162,7 @@ export default function Home(): JSX.Element {
       container
       spacing={6}
       alignItems="center"
-      justify="center"
+      justifyContent="center"
       direction="column"
     >
       <Grid item>
