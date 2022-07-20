@@ -1,20 +1,21 @@
-import { LinearProgress, Box, Typography } from "@material-ui/core";
+import { LinearProgress, Box } from "@material-ui/core";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
 /**
  * @returns A component with an indefinite loading indicator and the optional text of the SWR key.
  */
-export function LoadingIndicator({ swrKey }: { swrKey: string }): JSX.Element {
+export function LoadingIndicator(): JSX.Element {
   return (
     <Box display="flex" alignItems="center" mx={1}>
       <Box width="100%" mr={1}>
         <LinearProgress />
       </Box>
-      <Box minWidth={100}>
+      {/* Uncomment this for debugging to see which SWR hook is validating */}
+      {/* <Box minWidth={100}>
         <Typography variant="body2" color="textSecondary">
           {swrKey}
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   );
 }
@@ -29,7 +30,7 @@ export function AddLoadingIndicator(swrKey: string): void {
     return;
   }
 
-  loadingIndicators[swrKey] = <LoadingIndicator key={swrKey} swrKey={swrKey} />;
+  loadingIndicators[swrKey] = <LoadingIndicator key={swrKey} />;
   forceRender(!render);
 }
 
