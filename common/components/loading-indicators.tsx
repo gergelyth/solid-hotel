@@ -54,7 +54,7 @@ let forceRender: Dispatch<SetStateAction<boolean>> = () => undefined;
  * @returns A component containing all the currently added loading indicators.
  */
 export function LoadingIndicators(): JSX.Element {
-  //TODO this is a bit of a hack, but having the loadingIndicators as the state doesn't work, because the object doesn't get changed
+  //This is a bit of a hack, but having the loadingIndicators as the state doesn't work, because the object doesn't get changed
   [render, forceRender] = useState<boolean>(false);
   return <React.Fragment>{Object.values(loadingIndicators)}</React.Fragment>;
 }

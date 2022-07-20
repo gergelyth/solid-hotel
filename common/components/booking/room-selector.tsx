@@ -26,10 +26,9 @@ function EmptyDescription(): JSX.Element {
  */
 function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   if (!room) {
-    //TODO really shouldn't be nulls here
     return (
       <Grid item>
-        <Typography variant="caption">Empty room.</Typography>
+        <Typography variant="caption">Empty room definition</Typography>
       </Grid>
     );
   }

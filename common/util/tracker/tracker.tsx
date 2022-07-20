@@ -24,7 +24,6 @@ export async function Subscribe(
  * Closes the WebSocket assigned to the resource URL in order to no longer receive notifications of changes.
  */
 export function UnSubscribe(url: string): void {
-  //TODO does this work?
   const webSocketResource = webSockets[url];
   if (!webSocketResource) {
     console.log(
@@ -145,6 +144,4 @@ function ProcessMessage(
   subscribers.forEach((subscriber) => {
     subscriber.onReceive(url);
   });
-
-  //TODO create notification
 }

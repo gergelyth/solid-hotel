@@ -48,7 +48,6 @@ export async function GlobSolidUrlPaths(
   ];
 
   let containedResources: string[];
-  //TODO not sure if this is efficient
   if (firstPart in resourceCache) {
     containedResources = resourceCache[firstPart];
   } else {

@@ -70,7 +70,6 @@ function useMockApi<T>(
     };
   }
 
-  //TODO is this immutable? can we use useImmutableSwr?
   const { data, error, isValidating } = useSWR(fetchFunction, fetcher);
 
   const swrKey = fetchFunction();

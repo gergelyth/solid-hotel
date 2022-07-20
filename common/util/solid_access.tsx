@@ -61,7 +61,6 @@ async function SetAccess(
   await SafeSaveAclFor(datasetWithAcl, updatedAcl);
 }
 
-//TODO use the new Solid API if transition from beta before deadline
 /**
  * Give the Public permission to Submit to the container specified.
  */

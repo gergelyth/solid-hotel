@@ -49,7 +49,6 @@ export function ReceiveReservationStateChange(
     router.push(`/reservations/${encodeURIComponent(reservationId)}`);
   };
   const onReceive = (): void => {
-    //TODO we should set the page in VerifyingComponent in different workflows so they don't wait - but how
     SetReservationStateAndInbox(reservationId, newState, replyInbox).then(() =>
       RevalidateReservations()
     );

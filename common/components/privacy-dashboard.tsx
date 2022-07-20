@@ -6,6 +6,7 @@ import {
   Typography,
   Paper,
 } from "@material-ui/core";
+import { isSameDay } from "date-fns";
 import _ from "lodash";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { NotEmptyItem } from "../util/helpers";
@@ -18,16 +19,11 @@ function FindLatestExpiryDate(tokens: PrivacyToken[]): Date {
   return tokens.reduce((x, y) => (x.expiry > y.expiry ? x : y)).expiry;
 }
 
-//TODO we probably can do this with date-fns?
 /**
  * @returns A flag which says if the two dates are on the same day.
  */
 function AreDatesOnTheSameDay(d1: Date, d2: Date): boolean {
-  return (
-    d1.getDate() === d2.getDate() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getFullYear() === d2.getFullYear()
-  );
+  return isSameDay(d1, d2);
 }
 
 /**

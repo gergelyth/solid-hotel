@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-// TODO https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/theme.js
 import theme from "../../common/styles/theme";
 import { Box, Container } from "@material-ui/core";
 import NavigationBar from "../components/navbar";
