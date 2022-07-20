@@ -6,6 +6,7 @@ import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { ProfileMain } from "../profile-main";
 import { useGuest } from "../../../hooks/useGuest";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
 const testGuestFields: Field[] = [
   {
@@ -25,9 +26,9 @@ const testGuestFields: Field[] = [
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: "English",
+    fieldValue: countryToRdfMap.GBR,
     rdfName: personFieldToRdfMap.nationality,
-    datatype: xmlSchemaTypes.string,
+    datatype: xmlSchemaTypes.country,
   },
 ];
 

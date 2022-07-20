@@ -1,4 +1,4 @@
-import { getLiteral } from "@inrupt/solid-client";
+import { getLiteral, getUrl } from "@inrupt/solid-client";
 import useSWR, { mutate } from "swr";
 import {
   AddLoadingIndicator,
@@ -46,8 +46,7 @@ export function GetGuestFieldValues(
       throw new Error(`Field not supported: ${rdfName}`);
     }
     const literal = getLiteral(profile, rdfName);
-
-    field.fieldValue = literal?.value;
+    field.fieldValue = literal?.value ?? getUrl(profile, rdfName) ?? undefined;
 
     fields.push(field);
   });

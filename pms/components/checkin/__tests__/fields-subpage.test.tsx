@@ -7,12 +7,13 @@ import { RequiredFieldsAtOfflineCheckin } from "../fields-subpage";
 import { OfflineCheckinPage } from "../../../pages/checkin";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
 import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
+import { countryToRdfMap } from "../../../../common/vocabularies/rdf_countries";
 
 function MockRouter(): NextRouter {
   const mockRouter = mocked({
     query: {
       id: "reservationId1",
-      nationality: "English",
+      nationality: countryToRdfMap.GBR,
       hotelProfile: "https://testpodurl.com/hotelprofiles/id1",
     },
   } as unknown as NextRouter);
@@ -71,7 +72,7 @@ describe("<RequiredFieldsAtOfflineCheckin />", () => {
     const requiredFieldsComponent = Render();
     expect(requiredFieldsComponent).toBeDefined();
 
-    expect(useRequiredFields).toBeCalledWith("English");
+    expect(useRequiredFields).toBeCalledWith(countryToRdfMap.GBR);
 
     expect(requiredFieldsProps.data).toEqual(requiredFields);
     expect(requiredFieldsProps.hotelProfileWebId).toEqual(

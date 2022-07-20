@@ -12,7 +12,7 @@ const testField: Field = {
   fieldPrettyName: "Nationality",
   fieldValue: undefined,
   rdfName: personFieldToRdfMap.nationality,
-  datatype: xmlSchemaTypes.string,
+  datatype: xmlSchemaTypes.country,
 };
 
 let setFieldValue: Dispatch<SetStateAction<string | undefined>>;

@@ -3,8 +3,10 @@ import {
   createThing,
   setStringNoLocale,
   setThing,
+  setUrl,
 } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 import { SolidProfile } from "../../solid_profile";
 import { TestGuestFields } from "../../__tests__/testUtil";
@@ -15,10 +17,10 @@ function MockSolidProfile(): SolidProfile {
   let thing = createThing({ name: webId });
   thing = setStringNoLocale(thing, personFieldToRdfMap["firstName"], "Sam");
   thing = setStringNoLocale(thing, personFieldToRdfMap["lastName"], "Smith");
-  thing = setStringNoLocale(
+  thing = setUrl(
     thing,
     personFieldToRdfMap["nationality"],
-    "Spanish"
+    countryToRdfMap.ESP
   );
 
   let dataset = createSolidDataset();
@@ -57,7 +59,7 @@ describe("define-changes", () => {
 
     const profileFields = TestGuestFields;
     profileFields[0].fieldValue = "Sam";
-    profileFields[2].fieldValue = "Spanish";
+    profileFields[2].fieldValue = countryToRdfMap.ESP;
     expect(mockSetOldFields).toBeCalledWith(profileFields);
 
     const changedFields = [
@@ -70,8 +72,8 @@ describe("define-changes", () => {
       {
         name: "Nationality",
         rdfName: personFieldToRdfMap["nationality"],
-        oldValue: "English",
-        newValue: "Spanish",
+        oldValue: countryToRdfMap.GBR,
+        newValue: countryToRdfMap.ESP,
       },
     ];
     expect(mockSetChangedFields).toBeCalledWith(changedFields);
@@ -86,7 +88,7 @@ describe("define-changes", () => {
       [rdfName: string]: string;
     } = {};
     newChangeValues[personFieldToRdfMap["firstName"]] = "John";
-    newChangeValues[personFieldToRdfMap["nationality"]] = "English";
+    newChangeValues[personFieldToRdfMap["nationality"]] = countryToRdfMap.GBR;
 
     await CalculateChanges(
       "https://testpodurl.com/profile/card#me",
@@ -99,7 +101,7 @@ describe("define-changes", () => {
 
     const profileFields = TestGuestFields;
     profileFields[0].fieldValue = "Sam";
-    profileFields[2].fieldValue = "Spanish";
+    profileFields[2].fieldValue = countryToRdfMap.ESP;
     expect(mockSetOldFields).toBeCalledWith(profileFields);
 
     const changedFields = [
@@ -112,8 +114,8 @@ describe("define-changes", () => {
       {
         name: "Nationality",
         rdfName: personFieldToRdfMap["nationality"],
-        oldValue: "Spanish",
-        newValue: "English",
+        oldValue: countryToRdfMap.ESP,
+        newValue: countryToRdfMap.GBR,
       },
     ];
     expect(mockSetChangedFields).toBeCalledWith(changedFields);
@@ -128,7 +130,7 @@ describe("define-changes", () => {
       [rdfName: string]: string;
     } = {};
     newChangeValues[personFieldToRdfMap["firstName"]] = "Sam";
-    newChangeValues[personFieldToRdfMap["nationality"]] = "English";
+    newChangeValues[personFieldToRdfMap["nationality"]] = countryToRdfMap.GBR;
 
     await CalculateChanges(
       "https://testpodurl.com/profile/card#me",
@@ -141,15 +143,15 @@ describe("define-changes", () => {
 
     const profileFields = TestGuestFields;
     profileFields[0].fieldValue = "Sam";
-    profileFields[2].fieldValue = "Spanish";
+    profileFields[2].fieldValue = countryToRdfMap.ESP;
     expect(mockSetOldFields).toBeCalledWith(profileFields);
 
     const changedFields = [
       {
         name: "Nationality",
         rdfName: personFieldToRdfMap["nationality"],
-        oldValue: "Spanish",
-        newValue: "English",
+        oldValue: countryToRdfMap.ESP,
+        newValue: countryToRdfMap.GBR,
       },
     ];
     expect(mockSetChangedFields).toBeCalledWith(changedFields);

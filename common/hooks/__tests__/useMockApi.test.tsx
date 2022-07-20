@@ -5,14 +5,16 @@ import { Field } from "../../types/Field";
 import { useDataProtectionInformation, useRequiredFields } from "../useMockApi";
 import { DataProtectionInformation } from "../../util/apiDataRetrieval";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { countryToRdfMap } from "../../vocabularies/rdf_countries";
+import { escape } from "querystring";
 
 const testGuestFields: Field[] = [
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: "Spanish",
+    fieldValue: countryToRdfMap.ESP,
     rdfName: personFieldToRdfMap.nationality,
-    datatype: xmlSchemaTypes.string,
+    datatype: xmlSchemaTypes.country,
   },
 ];
 
@@ -55,7 +57,7 @@ describe("useMockApi", () => {
     ) as jest.Mock;
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useRequiredFields("English", "TestWebId")
+      useRequiredFields(countryToRdfMap.GBR, "TestWebId")
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -77,7 +79,9 @@ describe("useMockApi", () => {
     expect(useGuest).toHaveBeenNthCalledWith(2, undefined, "TestWebId");
 
     expect(global.fetch).toBeCalledWith(
-      "http://localhost:3003/api/requiredFields?hotelLocation=France&guestNationality=English"
+      `http://localhost:3003/api/requiredFields?hotelLocation=${escape(
+        countryToRdfMap.FRA
+      )}&guestNationality=${escape(countryToRdfMap.GBR)}`
     );
   });
 
@@ -122,7 +126,9 @@ describe("useMockApi", () => {
     );
 
     expect(global.fetch).toBeCalledWith(
-      "http://localhost:3003/api/requiredFields?hotelLocation=France&guestNationality=Spanish"
+      `http://localhost:3003/api/requiredFields?hotelLocation=${escape(
+        countryToRdfMap.FRA
+      )}&guestNationality=${escape(countryToRdfMap.ESP)}`
     );
   });
 
@@ -149,7 +155,7 @@ describe("useMockApi", () => {
     ) as jest.Mock;
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useDataProtectionInformation("English", "TestWebId")
+      useDataProtectionInformation(countryToRdfMap.GBR, "TestWebId")
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -168,7 +174,9 @@ describe("useMockApi", () => {
     expect(useGuest).toHaveBeenNthCalledWith(2, undefined, "TestWebId");
 
     expect(global.fetch).toBeCalledWith(
-      "http://localhost:3003/api/dataprotection?hotelLocation=France&guestNationality=English"
+      `http://localhost:3003/api/dataprotection?hotelLocation=${escape(
+        countryToRdfMap.FRA
+      )}&guestNationality=${escape(countryToRdfMap.GBR)}`
     );
   });
 });

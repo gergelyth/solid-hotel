@@ -9,6 +9,7 @@ import { TestReservations } from "../../__tests__/testUtil";
 import { useReservations } from "../../../hooks/useReservations";
 import { ShowWarningSnackbar } from "../../../components/snackbar";
 import { ReservationAtHotel } from "../../../types/ReservationAtHotel";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
 const TestReservationUrl = "TestReservationsUrl";
 
@@ -57,7 +58,7 @@ describe("<SendProfileModificationSnackbar  />", () => {
     };
     profileUpdate[personFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: "Spanish",
+      newValue: countryToRdfMap.ESP,
     };
 
     const mockSendModiciation = jest.fn();
@@ -78,7 +79,7 @@ describe("<SendProfileModificationSnackbar  />", () => {
     const expectedProfileUpdate: ProfileUpdate = {};
     expectedProfileUpdate[personFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: "Spanish",
+      newValue: countryToRdfMap.ESP,
     };
     expect(mockSendModiciation).toBeCalledWith(
       expectedProfileUpdate,
@@ -96,7 +97,7 @@ describe("<SendProfileModificationSnackbar  />", () => {
     };
     profileUpdate[personFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: "Spanish",
+      newValue: countryToRdfMap.ESP,
     };
 
     const mockSendModiciation = jest.fn();
@@ -128,7 +129,7 @@ describe("<SendProfileModificationSnackbar  />", () => {
     };
     profileUpdate[personFieldToRdfMap["nationality"]] = {
       status: false,
-      newValue: "Spanish",
+      newValue: countryToRdfMap.ESP,
     };
 
     const mockSendModiciation = jest.fn();

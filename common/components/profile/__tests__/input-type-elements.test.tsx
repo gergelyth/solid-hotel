@@ -5,6 +5,7 @@ import { Field } from "../../../types/Field";
 import { FieldInputElementBasedOnType } from "../input-type-elements";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
 function Render(field: Field): RenderResult {
   return render(
@@ -21,9 +22,9 @@ describe("<FieldInputElementBasedOnType />", () => {
     const stringTestField: Field = {
       fieldShortName: "nationality",
       fieldPrettyName: "Nationality",
-      fieldValue: "English",
+      fieldValue: countryToRdfMap.GBR,
       rdfName: personFieldToRdfMap.nationality,
-      datatype: xmlSchemaTypes.string,
+      datatype: xmlSchemaTypes.country,
     };
 
     const fieldInputElement = Render(stringTestField);

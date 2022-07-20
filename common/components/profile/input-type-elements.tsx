@@ -10,6 +10,7 @@ import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { IdDocumentType } from "../../types/IdDocument";
+import { countryToRdfMap } from "../../vocabularies/rdf_countries";
 
 /**
  * Creates a component for STRING typed fields.
@@ -68,11 +69,14 @@ function GetDatePickerElement(
  */
 function GetEnumPickerElement(
   field: Field,
-  options: string[],
+  options: { value: string; display: string }[],
   currentFieldValue: string | undefined,
   setFieldValue: Dispatch<SetStateAction<string | undefined>>
 ): JSX.Element {
-  if (currentFieldValue && !options.includes(currentFieldValue)) {
+  if (
+    currentFieldValue &&
+    !options.map((option) => option.value).includes(currentFieldValue)
+  ) {
     currentFieldValue = undefined;
     setFieldValue(undefined);
   }
@@ -92,8 +96,8 @@ function GetEnumPickerElement(
         </option>
         {options.map((option) => {
           return (
-            <option key={option} value={option}>
-              {option}
+            <option key={option.value} value={option.value}>
+              {option.display}
             </option>
           );
         })}
@@ -123,7 +127,22 @@ export function FieldInputElementBasedOnType({
     case xmlSchemaTypes.dateTime:
       return GetDatePickerElement(field, currentFieldValue, setFieldValue);
     case xmlSchemaTypes.idDocumentType: {
-      const options = Object.keys(IdDocumentType).filter((key) => isNaN(+key));
+      const options = Object.keys(IdDocumentType)
+        .filter((key) => isNaN(+key))
+        .map((key) => {
+          return { value: key, display: key };
+        });
+      return GetEnumPickerElement(
+        field,
+        options,
+        currentFieldValue,
+        setFieldValue
+      );
+    }
+    case xmlSchemaTypes.country: {
+      const options = Object.keys(countryToRdfMap).map((key) => {
+        return { value: countryToRdfMap[key], display: key };
+      });
       return GetEnumPickerElement(
         field,
         options,

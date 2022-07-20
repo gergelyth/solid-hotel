@@ -3,11 +3,12 @@ import "@testing-library/jest-dom";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MockApiOperation } from "../apiDataRetrieval";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { countryToRdfMap } from "../../vocabularies/rdf_countries";
 
 function MockRequest(): NextApiRequest {
   const query: { [key: string]: string } = {
-    hotelLocation: "France",
-    guestNationality: "English",
+    hotelLocation: countryToRdfMap.FRA,
+    guestNationality: countryToRdfMap.GBR,
   };
   const mockRequest = mocked({
     query: query,

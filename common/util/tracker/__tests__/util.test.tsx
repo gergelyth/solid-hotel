@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 import { TestGuestFields } from "../../__tests__/testUtil";
 import { FindChangedFields } from "../util";
@@ -9,7 +10,7 @@ describe("tracker-util", () => {
       [rdfName: string]: string;
     } = {};
     newChangeValues[personFieldToRdfMap["firstName"]] = "Sam";
-    newChangeValues[personFieldToRdfMap["nationality"]] = "Spanish";
+    newChangeValues[personFieldToRdfMap["nationality"]] = countryToRdfMap.ESP;
 
     const result = FindChangedFields(TestGuestFields, newChangeValues);
 
@@ -23,8 +24,8 @@ describe("tracker-util", () => {
       {
         name: "Nationality",
         rdfName: personFieldToRdfMap["nationality"],
-        oldValue: "English",
-        newValue: "Spanish",
+        oldValue: countryToRdfMap.GBR,
+        newValue: countryToRdfMap.ESP,
       },
     ];
     expect(result).toEqual(changedFields);
@@ -35,7 +36,7 @@ describe("tracker-util", () => {
       [rdfName: string]: string;
     } = {};
     newChangeValues[personFieldToRdfMap["firstName"]] = "Sam";
-    newChangeValues[personFieldToRdfMap["nationality"]] = "English";
+    newChangeValues[personFieldToRdfMap["nationality"]] = countryToRdfMap.GBR;
 
     const result = FindChangedFields(TestGuestFields, newChangeValues);
 

@@ -7,6 +7,7 @@ import { ProfileField } from "../profile-field";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { RemoveField, SetField } from "../../../util/solid_profile";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
 jest.mock("../../../util/solid_profile", () => {
   return {
@@ -54,9 +55,9 @@ const testGuestFields: Field[] = [
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: "English",
+    fieldValue: countryToRdfMap.GBR,
     rdfName: personFieldToRdfMap.nationality,
-    datatype: xmlSchemaTypes.string,
+    datatype: xmlSchemaTypes.country,
   },
 ];
 

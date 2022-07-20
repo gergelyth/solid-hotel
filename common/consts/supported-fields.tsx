@@ -35,7 +35,7 @@ export default function GetSupportedFields(): Field[] {
       fieldPrettyName: "Nationality",
       fieldValue: undefined,
       rdfName: personFieldToRdfMap["nationality"],
-      datatype: xmlSchemaTypes.string,
+      datatype: xmlSchemaTypes.country,
     },
     {
       fieldShortName: "email",

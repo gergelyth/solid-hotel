@@ -3,9 +3,11 @@ import {
   createThing,
   setStringNoLocale,
   setThing,
+  setUrl,
 } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
 import { Field } from "../../../types/Field";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
 import { SolidProfile } from "../../solid_profile";
 import { TestGuestFields } from "../../__tests__/testUtil";
@@ -23,10 +25,10 @@ function MockSolidProfile(): SolidProfile {
   let thing = createThing({ name: webId });
   thing = setStringNoLocale(thing, personFieldToRdfMap["firstName"], "John");
   thing = setStringNoLocale(thing, personFieldToRdfMap["lastName"], "Smith");
-  thing = setStringNoLocale(
+  thing = setUrl(
     thing,
     personFieldToRdfMap["nationality"],
-    "English"
+    countryToRdfMap.GBR
   );
 
   let dataset = createSolidDataset();
@@ -81,12 +83,12 @@ describe("profile-cache", () => {
     };
     profileUpdate[personFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: "Spanish",
+      newValue: countryToRdfMap.ESP,
     };
 
     UpdateProfileInMemory(webId, profileUpdate);
     expect(ProfileCache[webId][0].fieldValue).toEqual("John");
-    expect(ProfileCache[webId][2].fieldValue).toEqual("Spanish");
+    expect(ProfileCache[webId][2].fieldValue).toEqual(countryToRdfMap.ESP);
   });
 
   test("CacheProfileFields produces correct profile cache", async () => {

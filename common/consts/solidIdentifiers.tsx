@@ -1,12 +1,10 @@
-import { ThrowInlineError } from "../util/helpers";
-
 /**
  * @constant The Solid Pod of the hotel associated with the prototype applications - loaded from the ENV file.
  * @default
  */
 export const HotelPod =
-  process.env.NEXT_PUBLIC_HOTELPOD ??
-  ThrowInlineError("ENV config misconfiguration - missing HotelPod definition");
+  process.env.NEXT_PUBLIC_HOTELPOD ?? "https://testsolidhotel.inrupt.com";
+//TODO change this
 
 /** @constant The folder structure in the Solid Pods. */
 const ReservationAddress = "reservations/";

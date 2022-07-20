@@ -5,6 +5,7 @@ import { Field } from "../../../types/Field";
 import { GuestFullName } from "../guest-full-name";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
 
 function Render(testGuestFields: Field[]): RenderResult {
   return render(<GuestFullName guestFields={testGuestFields} />);
@@ -30,9 +31,9 @@ describe("<GuestFullName />", () => {
       {
         fieldShortName: "nationality",
         fieldPrettyName: "Nationality",
-        fieldValue: "English",
+        fieldValue: countryToRdfMap.GBR,
         rdfName: personFieldToRdfMap.nationality,
-        datatype: xmlSchemaTypes.string,
+        datatype: xmlSchemaTypes.country,
       },
     ];
 

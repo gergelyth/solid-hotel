@@ -22,6 +22,7 @@ import { mocked } from "ts-jest/utils";
 import { HotelPrivacyToken } from "../../types/HotelPrivacyToken";
 import { GuestPrivacyToken } from "../../types/GuestPrivacyToken";
 import { RoomDefinition } from "../../types/RoomDefinition";
+import { countryToRdfMap } from "../../vocabularies/rdf_countries";
 
 const rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const ldpContainer = "http://www.w3.org/ns/ldp#Container";
@@ -106,9 +107,9 @@ export const TestGuestFields: Field[] = [
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: "English",
+    fieldValue: countryToRdfMap.GBR,
     rdfName: personFieldToRdfMap["nationality"],
-    datatype: xmlSchemaTypes.string,
+    datatype: xmlSchemaTypes.country,
   },
 ];
 
@@ -209,3 +210,7 @@ export const TestGuestPrivacyTokens: GuestPrivacyToken[] = [
     reservation: "TestReservationUrl2",
   },
 ];
+
+describe("testUtil", () => {
+  test("Empty test to avoid error", () => undefined);
+});

@@ -4,12 +4,18 @@ import {
   GetProfileOf,
   SolidProfile,
 } from "../../util/solid_profile";
-import { addStringNoLocale, createThing, Thing } from "@inrupt/solid-client";
+import {
+  addStringNoLocale,
+  addUrl,
+  createThing,
+  Thing,
+} from "@inrupt/solid-client";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import { Field } from "../../types/Field";
 import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import { RevalidateGuest, TriggerRefetchGuest, useGuest } from "../useGuest";
 import { TestGuestFields } from "../../util/__tests__/testUtil";
+import { countryToRdfMap } from "../../vocabularies/rdf_countries";
 
 jest.mock("../../util/solid_profile", () => {
   return {
@@ -30,7 +36,7 @@ function CreateMockProfile(): Thing {
   let thing = createThing({ name: guestWebId });
   thing = addStringNoLocale(thing, personFieldToRdfMap.firstName, "John");
   thing = addStringNoLocale(thing, personFieldToRdfMap.lastName, "Smith");
-  thing = addStringNoLocale(thing, personFieldToRdfMap.nationality, "English");
+  thing = addUrl(thing, personFieldToRdfMap.nationality, countryToRdfMap.GBR);
   return thing;
 }
 

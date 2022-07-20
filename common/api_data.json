@@ -1,10 +1,10 @@
 {
     "personalInformationRequirements": [
         {
-            "hotelLocation": "France",
+            "hotelLocation": "https://publications.europa.eu/resource/authority/country/FRA",
             "requirements": [
                 {
-                    "nationality": "English",
+                    "nationality": "https://publications.europa.eu/resource/authority/country/GBR",
                     "fields": [
                         "http://xmlns.com/foaf/0.1/firstName",
                         "http://xmlns.com/foaf/0.1/lastName",
@@ -24,7 +24,7 @@
                     }
                 },
                 {
-                    "nationality": "Spanish",
+                    "nationality": "https://publications.europa.eu/resource/authority/country/ESP",
                     "fields": [
                         "http://xmlns.com/foaf/0.1/firstName",
                         "http://xmlns.com/foaf/0.1/lastName",
@@ -48,7 +48,7 @@
                     }
                 },
                 {
-                    "nationality": "Danish",
+                    "nationality": "https://publications.europa.eu/resource/authority/country/DNK",
                     "fields": [
                         "http://xmlns.com/foaf/0.1/firstName",
                         "http://xmlns.com/foaf/0.1/lastName",
@@ -76,10 +76,10 @@
             ]
         },
         {
-            "hotelLocation": "Australia",
+            "hotelLocation": "https://publications.europa.eu/resource/authority/country/AUS",
             "requirements": [
                 {
-                    "nationality": "English",
+                    "nationality": "https://publications.europa.eu/resource/authority/country/GBR",
                     "fields": [
                         "http://xmlns.com/foaf/0.1/firstName",
                         "http://xmlns.com/foaf/0.1/lastName",
@@ -105,7 +105,7 @@
                     }
                 },
                 {
-                    "nationality": "Spanish",
+                    "nationality": "https://publications.europa.eu/resource/authority/country/ESP",
                     "fields": [
                         "http://xmlns.com/foaf/0.1/firstName",
                         "http://xmlns.com/foaf/0.1/lastName",

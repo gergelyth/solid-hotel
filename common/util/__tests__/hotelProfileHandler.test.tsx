@@ -1,5 +1,6 @@
 import { createSolidDataset } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
+import { countryToRdfMap } from "../../vocabularies/rdf_countries";
 import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
 import {
   CreateDataProtectionProfile,
@@ -64,7 +65,7 @@ describe("hotelProfileHandler", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> a <${personFieldToRdfMap.type}>;
     <${personFieldToRdfMap.firstName}> "John";
     <${personFieldToRdfMap.lastName}> "Smith";
-    <${personFieldToRdfMap.nationality}> "English".
+    <${personFieldToRdfMap.nationality}> "${countryToRdfMap.GBR}".
 `;
     const serializedResult = await SerializeDataset(savedDataset);
     expect(serializedResult).toEqual(expectedRdf);
@@ -98,7 +99,7 @@ describe("hotelProfileHandler", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> a <${personFieldToRdfMap.type}>;
     <${personFieldToRdfMap.firstName}> "John";
     <${personFieldToRdfMap.lastName}> "Smith";
-    <${personFieldToRdfMap.nationality}> "English".
+    <${personFieldToRdfMap.nationality}> "${countryToRdfMap.GBR}".
 `;
     const serializedResult = await SerializeDataset(savedDataset);
     expect(serializedResult).toEqual(expectedRdf);
@@ -112,7 +113,7 @@ describe("hotelProfileHandler", () => {
     const rdf = `<https://inrupt.com/.well-known/sdk-local-node/hotelProfile> a <${personFieldToRdfMap.type}>;
     <${personFieldToRdfMap.firstName}> "John";
     <${personFieldToRdfMap.lastName}> "Smith";
-    <${personFieldToRdfMap.nationality}> "English".
+    <${personFieldToRdfMap.nationality}> "${countryToRdfMap.GBR}".
 `;
     const dataset = {
       ...(await DeserializeDataset(rdf)),
