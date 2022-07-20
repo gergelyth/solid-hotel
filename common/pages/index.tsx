@@ -28,9 +28,8 @@ import {
 
 /** The default hotel test account prepared for these app prototypes. */
 const HotelTestAccount = HotelWebId;
-/* TODO: change this to solidguest! */
 /** The default guest test account prepared for these app prototypes. */
-const GuestTestAccount = "https://gergelyth.inrupt.net/profile/card#me";
+const GuestTestAccount = `${process.env.NEXT_PUBLIC_GUESTPOD}profile/card#me`;
 
 /**
  * Provides the setup functionalities for hotel Pods.

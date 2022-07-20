@@ -59,12 +59,10 @@ The script is standalone as it fetches the source code from the GitHub repositor
 <div align="center"> <h2><ins>Solid Pod setup</h2></ins> </div>
 
 1. Navigate to the index page of the setup project (https://localhost:3003 by default)
-2. Log in to one of the test accounts set up for this project:
-    - Hotel: https://solidhotel.inrupt.net/
-    - Guest: https://solidguest.inrupt.net/
+2. Log in to one of the test accounts set up for this project: (to avoid storing credentials on GitHub, please message me for the login information)
+    - Hotel: https://testsolidhotel.inrupt.net/
+    - Guest: https://testhotelguest.inrupt.net/
     - *In order to be able to manage and test two sessions in parallel, the usage of a multi account container extension is heavily recommended (e.g. [Firefox Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/)) - while this is useful for demonstrating application functionalities, in real life it wouldn't be necessary as an end user would only need access to their own account*
-
-**TODO** should we share passwords here?
 
 3. Set up the appropriate Pod as you wish:
     - Create an empty setup where only containers are created

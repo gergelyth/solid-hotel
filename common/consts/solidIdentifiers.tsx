@@ -3,8 +3,7 @@
  * @default
  */
 export const HotelPod =
-  process.env.NEXT_PUBLIC_HOTELPOD ?? "https://testsolidhotel.inrupt.com";
-//TODO change this
+  process.env.NEXT_PUBLIC_HOTELPOD ?? "https://testsolidhotel.inrupt.net/";
 
 /** @constant The folder structure in the Solid Pods. */
 const ReservationAddress = "reservations/";
