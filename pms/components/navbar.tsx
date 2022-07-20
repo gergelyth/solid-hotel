@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
  * The navigation bar displayed at the top of the PMS page.
  * As this component is ubiqutious, it handles the session restore capability of the Solid login functionality and contains the login/logout button as well.
  * Also contains the notification element, which display how many notifications the user has as well as opens the drawer which enables the user to view them.
- * Contains links in form of buttons to the other pages: rooms, booking, reservations, privacy dashboard.
+ * Contains links in form of buttons to the other pages: index, rooms, booking, privacy dashboard.
  * @returns A component including the notification display and logic as well as the login/logout trigger button.
  */
 function NavigationBar(): JSX.Element {
@@ -66,6 +66,13 @@ function NavigationBar(): JSX.Element {
             </Grid>
             <Grid item xs={7} container spacing={1}>
               <Grid item>
+                <Link href="/">
+                  <Button variant="contained" color="primary">
+                    Reservations
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid item>
                 <Link href="/rooms">
                   <Button variant="contained" color="primary">
                     Room management
@@ -76,13 +83,6 @@ function NavigationBar(): JSX.Element {
                 <Link href="/booking">
                   <Button variant="contained" color="primary">
                     Book room
-                  </Button>
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/reservations">
-                  <Button variant="contained" color="primary">
-                    Reservations
                   </Button>
                 </Link>
               </Grid>

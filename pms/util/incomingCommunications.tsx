@@ -45,7 +45,7 @@ import { RevalidateReservations } from "../../common/hooks/useReservations";
 
 /**
  * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
- * The onClick function takes the user to the reservations page.
+ * The onClick function takes the user to the index/reservations page.
  * The onReceive function sets the new reservation state and performs the state specific operation - this is delegated to the {@link DoOnStateChange} function.
  * @returns The notification properties described above along with the text field, which informs the user of the reservation state change.
  */
@@ -63,8 +63,7 @@ export function ReceiveReservationStateChange(
   //TODO check if onReceive gets no Error, and adjust this text accordingly
   const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservation.`;
   const onClick = (): void => {
-    //TODO this doesn't work - no such page in PMS - fix comment afterwards!
-    router.push(`/reservations/${encodeURIComponent(reservationId)}`);
+    router.push("/");
   };
   const onReceive = (): void => {
     //TODO we'll probably need the full reservation here and we get the dataset in the previous command - so unify that
@@ -93,7 +92,7 @@ export function ReceiveBookingRequest(
 
   const text = `Reservation requested for dates [${reservation.dateFrom.toDateString()}]-[${reservation.dateTo.toDateString()}].\nRequest was automatically confirmed.`;
   const onClick = (): void => {
-    router.push("/reservations");
+    router.push("/");
   };
   const onReceive = async (): Promise<void> => {
     const reservationInbox = reservation.inbox;
