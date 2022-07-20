@@ -10,17 +10,17 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
-import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../vocabularies/rdfReservation";
 import { SolidDataset } from "@inrupt/solid-client";
-import { notificationToRdfMap } from "../vocabularies/rdf_notification";
+import { NotificationToRdfMap } from "../vocabularies/rdfNotification";
 import { NotificationType } from "../types/NotificationsType";
 import { PrivacyToken } from "../types/PrivacyToken";
-import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
+import { PrivacyTokenToRdfMap } from "../vocabularies/notificationpayloads/rdfPrivacy";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
-import { reservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
-import { notificationTypeRdfMap } from "../vocabularies/notification_payloads/rdf_notificationTypes";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { ReservationStateRdfMap } from "../vocabularies/rdfReservationStatusTypes";
+import { NotificationTypeRdfMap } from "../vocabularies/notificationpayloads/rdfNotificationTypes";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /**
  * Creates the corresponding Solid dataset for the reservation passed as an argument.
@@ -35,44 +35,44 @@ export function CreateReservationDataset(
   let newReservation = createThing({ name: "reservation" });
   newReservation = addUrl(
     newReservation,
-    utilRdfMap.type,
-    reservationFieldToRdfMap.type
+    UtilRdfMap.type,
+    ReservationFieldToRdfMap.type
   );
   newReservation = addStringNoLocale(
     newReservation,
-    reservationFieldToRdfMap.room,
+    ReservationFieldToRdfMap.room,
     reservation.room
   );
   newReservation = reservation.inbox
     ? addStringNoLocale(
         newReservation,
-        reservationFieldToRdfMap.inbox,
+        ReservationFieldToRdfMap.inbox,
         reservation.inbox
       )
     : newReservation;
   newReservation = addStringNoLocale(
     newReservation,
-    reservationFieldToRdfMap.hotel,
+    ReservationFieldToRdfMap.hotel,
     reservation.hotel
   );
   newReservation = addStringNoLocale(
     newReservation,
-    reservationFieldToRdfMap.owner,
+    ReservationFieldToRdfMap.owner,
     reservation.owner
   );
   newReservation = addUrl(
     newReservation,
-    reservationFieldToRdfMap.state,
-    reservationStateRdfMap[reservation.state]
+    ReservationFieldToRdfMap.state,
+    ReservationStateRdfMap[reservation.state]
   );
   newReservation = addDatetime(
     newReservation,
-    reservationFieldToRdfMap.checkinTime,
+    ReservationFieldToRdfMap.checkinTime,
     reservation.dateFrom
   );
   newReservation = addDatetime(
     newReservation,
-    reservationFieldToRdfMap.checkoutTime,
+    ReservationFieldToRdfMap.checkoutTime,
     reservation.dateTo
   );
 
@@ -92,22 +92,22 @@ export function AddNotificationThingToDataset(
   let notification = createThing({ name: "notification" });
   notification = addUrl(
     notification,
-    utilRdfMap.type,
-    notificationToRdfMap.type
+    UtilRdfMap.type,
+    NotificationToRdfMap.type
   );
   notification = addBoolean(
     notification,
-    notificationToRdfMap.isProcessed,
+    NotificationToRdfMap.isProcessed,
     false
   );
   notification = addUrl(
     notification,
-    notificationToRdfMap.notificationType,
-    notificationTypeRdfMap[notificationType]
+    NotificationToRdfMap.notificationType,
+    NotificationTypeRdfMap[notificationType]
   );
   notification = addDatetime(
     notification,
-    notificationToRdfMap.createdAt,
+    NotificationToRdfMap.createdAt,
     new Date()
   );
 
@@ -125,19 +125,19 @@ export function CreateHotelPrivacyTokenDataset(
   let newPrivacyToken = CreateCorePrivacyTokenDataset(privacyToken);
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
-    privacyTokenToRdfMap.datasetUrlTarget,
+    PrivacyTokenToRdfMap.datasetUrlTarget,
     privacyToken.datasetUrlTarget
   );
   if (privacyToken.guestInbox) {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,
-      privacyTokenToRdfMap.guestInbox,
+      PrivacyTokenToRdfMap.guestInbox,
       privacyToken.guestInbox
     );
   }
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
-    privacyTokenToRdfMap.reservation,
+    PrivacyTokenToRdfMap.reservation,
     privacyToken.reservation
   );
 
@@ -157,18 +157,18 @@ export function CreateGuestPrivacyTokenDataset(
   let newPrivacyToken = CreateCorePrivacyTokenDataset(privacyToken);
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
-    privacyTokenToRdfMap.hotelInboxForDeletion,
+    PrivacyTokenToRdfMap.hotelInboxForDeletion,
     privacyToken.hotelInboxForDeletion
   );
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
-    privacyTokenToRdfMap.hotel,
+    PrivacyTokenToRdfMap.hotel,
     privacyToken.hotel
   );
   if (privacyToken.reservation) {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,
-      privacyTokenToRdfMap.reservation,
+      PrivacyTokenToRdfMap.reservation,
       privacyToken.reservation
     );
   }
@@ -187,36 +187,36 @@ function CreateCorePrivacyTokenDataset(privacyToken: PrivacyToken): Thing {
   let newPrivacyToken = createThing({ name: "privacy" });
   newPrivacyToken = addUrl(
     newPrivacyToken,
-    utilRdfMap.type,
-    privacyTokenToRdfMap.type
+    UtilRdfMap.type,
+    PrivacyTokenToRdfMap.type
   );
   privacyToken.fieldList.forEach((field) => {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,
-      privacyTokenToRdfMap.fieldList,
+      PrivacyTokenToRdfMap.fieldList,
       field
     );
   });
   newPrivacyToken = addStringNoLocale(
     newPrivacyToken,
-    privacyTokenToRdfMap.reason,
+    PrivacyTokenToRdfMap.reason,
     privacyToken.reason
   );
   newPrivacyToken = addInteger(
     newPrivacyToken,
-    privacyTokenToRdfMap.forReservationState,
+    PrivacyTokenToRdfMap.forReservationState,
     privacyToken.forReservationState.valueOf()
   );
   newPrivacyToken = addDatetime(
     newPrivacyToken,
-    privacyTokenToRdfMap.expiry,
+    PrivacyTokenToRdfMap.expiry,
     privacyToken.expiry
   );
 
   if (privacyToken.urlAtHotel) {
     newPrivacyToken = addStringNoLocale(
       newPrivacyToken,
-      privacyTokenToRdfMap.url,
+      PrivacyTokenToRdfMap.url,
       privacyToken.urlAtHotel
     );
   }

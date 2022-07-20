@@ -4,16 +4,16 @@ import { useGuest } from "../useGuest";
 import { Field } from "../../types/Field";
 import { useDataProtectionInformation, useRequiredFields } from "../useMockApi";
 import { DataProtectionInformation } from "../../util/apiDataRetrieval";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { countryToRdfMap } from "../../vocabularies/rdf_countries";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
+import { CountryToRdfMap } from "../../vocabularies/rdfCountries";
 import { escape } from "querystring";
 
 const testGuestFields: Field[] = [
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: countryToRdfMap.ESP,
-    rdfName: personFieldToRdfMap.nationality,
+    fieldValue: CountryToRdfMap.ESP,
+    rdfName: PersonFieldToRdfMap.nationality,
     datatype: xmlSchemaTypes.country,
   },
 ];
@@ -50,14 +50,14 @@ describe("useMockApi", () => {
       Promise.resolve({
         json: () =>
           Promise.resolve([
-            personFieldToRdfMap.firstName,
-            personFieldToRdfMap.lastName,
+            PersonFieldToRdfMap.firstName,
+            PersonFieldToRdfMap.lastName,
           ]),
       })
     ) as jest.Mock;
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useRequiredFields(countryToRdfMap.GBR, "TestWebId")
+      useRequiredFields(CountryToRdfMap.GBR, "TestWebId")
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -69,8 +69,8 @@ describe("useMockApi", () => {
     expect(returnValue.isError).toBeUndefined();
 
     expect(returnValue.data).toEqual([
-      personFieldToRdfMap.firstName,
-      personFieldToRdfMap.lastName,
+      PersonFieldToRdfMap.firstName,
+      PersonFieldToRdfMap.lastName,
     ]);
 
     expect(useGuest).toBeCalledTimes(2);
@@ -80,8 +80,8 @@ describe("useMockApi", () => {
 
     expect(global.fetch).toBeCalledWith(
       `http://localhost:3003/api/requiredFields?hotelLocation=${escape(
-        countryToRdfMap.FRA
-      )}&guestNationality=${escape(countryToRdfMap.GBR)}`
+        CountryToRdfMap.FRA
+      )}&guestNationality=${escape(CountryToRdfMap.GBR)}`
     );
   });
 
@@ -90,8 +90,8 @@ describe("useMockApi", () => {
       Promise.resolve({
         json: () =>
           Promise.resolve([
-            personFieldToRdfMap.firstName,
-            personFieldToRdfMap.lastName,
+            PersonFieldToRdfMap.firstName,
+            PersonFieldToRdfMap.lastName,
           ]),
       })
     ) as jest.Mock;
@@ -109,26 +109,26 @@ describe("useMockApi", () => {
     expect(returnValue.isError).toBeUndefined();
 
     expect(returnValue.data).toEqual([
-      personFieldToRdfMap.firstName,
-      personFieldToRdfMap.lastName,
+      PersonFieldToRdfMap.firstName,
+      PersonFieldToRdfMap.lastName,
     ]);
 
     expect(useGuest).toBeCalledTimes(2);
     expect(useGuest).toHaveBeenNthCalledWith(
       1,
-      [personFieldToRdfMap.nationality],
+      [PersonFieldToRdfMap.nationality],
       "TestWebId"
     );
     expect(useGuest).toHaveBeenNthCalledWith(
       2,
-      [personFieldToRdfMap.nationality],
+      [PersonFieldToRdfMap.nationality],
       "TestWebId"
     );
 
     expect(global.fetch).toBeCalledWith(
       `http://localhost:3003/api/requiredFields?hotelLocation=${escape(
-        countryToRdfMap.FRA
-      )}&guestNationality=${escape(countryToRdfMap.ESP)}`
+        CountryToRdfMap.FRA
+      )}&guestNationality=${escape(CountryToRdfMap.ESP)}`
     );
   });
 
@@ -136,8 +136,8 @@ describe("useMockApi", () => {
     const expectedDataProtectionInformation: DataProtectionInformation = {
       dataProtectionStorageDuration: { years: 0, months: 0, days: 2 },
       dataProtectionFields: [
-        personFieldToRdfMap.idDocumentNumber,
-        personFieldToRdfMap.email,
+        PersonFieldToRdfMap.idDocumentNumber,
+        PersonFieldToRdfMap.email,
       ],
     };
 
@@ -147,15 +147,15 @@ describe("useMockApi", () => {
           Promise.resolve({
             dataProtectionStorageDuration: { years: 0, months: 0, days: 2 },
             dataProtectionFields: [
-              personFieldToRdfMap.idDocumentNumber,
-              personFieldToRdfMap.email,
+              PersonFieldToRdfMap.idDocumentNumber,
+              PersonFieldToRdfMap.email,
             ],
           }),
       })
     ) as jest.Mock;
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useDataProtectionInformation(countryToRdfMap.GBR, "TestWebId")
+      useDataProtectionInformation(CountryToRdfMap.GBR, "TestWebId")
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -175,8 +175,8 @@ describe("useMockApi", () => {
 
     expect(global.fetch).toBeCalledWith(
       `http://localhost:3003/api/dataprotection?hotelLocation=${escape(
-        countryToRdfMap.FRA
-      )}&guestNationality=${escape(countryToRdfMap.GBR)}`
+        CountryToRdfMap.FRA
+      )}&guestNationality=${escape(CountryToRdfMap.GBR)}`
     );
   });
 });

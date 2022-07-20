@@ -3,7 +3,7 @@ import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ProfileUpdate } from "../../profilesync/tracker-send-change";
 import { UpdateLocalProfileSnackbar } from "../update-local-profile";
-import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
 
 const TestProfileUrl = "TestProfileUrl";
 
@@ -65,11 +65,11 @@ beforeEach(() => {
 describe("<UpdateLocalProfileSnackbar />", () => {
   test("Snackbar doesn't call update methods if there are no approved fields", async () => {
     const fieldOptions: ProfileUpdate = {};
-    fieldOptions[personFieldToRdfMap.firstName] = {
+    fieldOptions[PersonFieldToRdfMap.firstName] = {
       status: false,
       newValue: "John",
     };
-    fieldOptions[personFieldToRdfMap.lastName] = {
+    fieldOptions[PersonFieldToRdfMap.lastName] = {
       status: false,
       newValue: "Smith",
     };
@@ -85,11 +85,11 @@ describe("<UpdateLocalProfileSnackbar />", () => {
 
   test("With at least one approved field there is no warning and appropriate methods are called", async () => {
     const fieldOptions: ProfileUpdate = {};
-    fieldOptions[personFieldToRdfMap.firstName] = {
+    fieldOptions[PersonFieldToRdfMap.firstName] = {
       status: true,
       newValue: "John",
     };
-    fieldOptions[personFieldToRdfMap.lastName] = {
+    fieldOptions[PersonFieldToRdfMap.lastName] = {
       status: false,
       newValue: "Smith",
     };
@@ -109,7 +109,7 @@ describe("<UpdateLocalProfileSnackbar />", () => {
     const expectedArgument: {
       [rdfName: string]: string;
     } = {};
-    expectedArgument[personFieldToRdfMap.firstName] = "John";
+    expectedArgument[PersonFieldToRdfMap.firstName] = "John";
     expect(mockSetMultipleFieldsInProfile).toBeCalledWith(
       TestProfileUrl,
       expectedArgument

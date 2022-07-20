@@ -29,8 +29,8 @@ import {
   SafeSaveDatasetInContainer,
 } from "../../common/util/solidWrapper";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
-import { privacyDeletionToRdfMap } from "../../common/vocabularies/notification_payloads/rdf_privacyDeletion";
-import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import { PrivacyDeletionToRdfMap } from "../../common/vocabularies/notificationpayloads/rdfPrivacyDeletion";
+import { ReservationFieldToRdfMap } from "../../common/vocabularies/rdfReservation";
 import { CheckoutProgressSnackbar } from "../components/checkout/checkout-progress-snackbar";
 import { ConfirmCancellation } from "../components/reservations/reservation-element";
 import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
@@ -104,7 +104,7 @@ export async function CreateReservationPrivacyToken(
 ): Promise<GuestPrivacyToken[]> {
   const webIdToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
-    [reservationFieldToRdfMap.owner],
+    [ReservationFieldToRdfMap.owner],
     GetStartOfNextDay(reservation.dateFrom),
     "Basic information for a confirmed reservation",
     ReservationState.CONFIRMED,
@@ -133,7 +133,7 @@ export async function CreateInboxPrivacyToken(
 ): Promise<GuestPrivacyToken> {
   const inboxToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
-    [reservationFieldToRdfMap.inbox],
+    [ReservationFieldToRdfMap.inbox],
     GetStartOfNextDay(reservation.dateTo),
     "Reservation inbox used for communication with the hotel",
     ReservationState.CONFIRMED,
@@ -271,7 +271,7 @@ export async function FindWebIdTokenAndDeleteIt(
     reservationId,
     ReservationState.CONFIRMED,
     anonymize,
-    reservationFieldToRdfMap.owner
+    ReservationFieldToRdfMap.owner
   );
 }
 
@@ -290,7 +290,7 @@ export async function FindInboxTokenAndDeleteIt(
     reservationId,
     ReservationState.CONFIRMED,
     anonymize,
-    reservationFieldToRdfMap.inbox
+    ReservationFieldToRdfMap.inbox
   );
 }
 
@@ -366,7 +366,7 @@ export async function AnonymizeInboxInNotification(
 
   deletionThing = setStringNoLocale(
     deletionThing,
-    privacyDeletionToRdfMap.guestInboxUrl,
+    PrivacyDeletionToRdfMap.guestInboxUrl,
     "Anonymized"
   );
   const updatedDataSet = setThing(dataset, deletionThing);

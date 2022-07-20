@@ -7,8 +7,8 @@ import {
 } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
 import { Field } from "../../../types/Field";
-import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
-import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
+import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
 import { SolidProfile } from "../../solidProfile";
 import { TestGuestFields } from "../../__tests__/testUtil";
 import {
@@ -23,12 +23,12 @@ import { ProfileUpdate } from "../../../components/profilesync/tracker-send-chan
 function MockSolidProfile(): SolidProfile {
   const webId = "https://testpodurl.com/profile/card#me";
   let thing = createThing({ name: webId });
-  thing = setStringNoLocale(thing, personFieldToRdfMap["firstName"], "John");
-  thing = setStringNoLocale(thing, personFieldToRdfMap["lastName"], "Smith");
+  thing = setStringNoLocale(thing, PersonFieldToRdfMap["firstName"], "John");
+  thing = setStringNoLocale(thing, PersonFieldToRdfMap["lastName"], "Smith");
   thing = setUrl(
     thing,
-    personFieldToRdfMap["nationality"],
-    countryToRdfMap.GBR
+    PersonFieldToRdfMap["nationality"],
+    CountryToRdfMap.GBR
   );
 
   let dataset = createSolidDataset();
@@ -77,18 +77,18 @@ describe("profileCache", () => {
     expect(ProfileCache).toEqual(expectedProfileCache);
 
     const profileUpdate: ProfileUpdate = {};
-    profileUpdate[personFieldToRdfMap["firstName"]] = {
+    profileUpdate[PersonFieldToRdfMap["firstName"]] = {
       status: false,
       newValue: "Sam",
     };
-    profileUpdate[personFieldToRdfMap["nationality"]] = {
+    profileUpdate[PersonFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: countryToRdfMap.ESP,
+      newValue: CountryToRdfMap.ESP,
     };
 
     UpdateProfileInMemory(webId, profileUpdate);
     expect(ProfileCache[webId][0].fieldValue).toEqual("John");
-    expect(ProfileCache[webId][2].fieldValue).toEqual(countryToRdfMap.ESP);
+    expect(ProfileCache[webId][2].fieldValue).toEqual(CountryToRdfMap.ESP);
   });
 
   test("CacheProfileFields produces correct profile cache", async () => {

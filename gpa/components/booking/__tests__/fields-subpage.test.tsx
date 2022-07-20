@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { RequiredFields } from "../fields-subpage";
 import { BookingPage } from "../../../pages/booking";
 import { MockSession } from "../../../../common/util/__tests__/testUtil";
-import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
 
 let confirmButtonProps: {
@@ -37,8 +37,8 @@ jest.mock("../../../../common/util/solid", () => {
 });
 
 const requiredFields = [
-  personFieldToRdfMap.firstName,
-  personFieldToRdfMap.lastName,
+  PersonFieldToRdfMap.firstName,
+  PersonFieldToRdfMap.lastName,
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {

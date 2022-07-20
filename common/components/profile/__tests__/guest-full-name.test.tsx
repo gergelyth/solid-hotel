@@ -4,8 +4,8 @@ import "@testing-library/jest-dom";
 import { Field } from "../../../types/Field";
 import { GuestFullName } from "../guest-full-name";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
-import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
-import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
+import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
+import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
 
 function Render(testGuestFields: Field[]): RenderResult {
   return render(<GuestFullName guestFields={testGuestFields} />);
@@ -18,21 +18,21 @@ describe("<GuestFullName />", () => {
         fieldShortName: "firstName",
         fieldPrettyName: "First name",
         fieldValue: "John",
-        rdfName: personFieldToRdfMap.firstName,
+        rdfName: PersonFieldToRdfMap.firstName,
         datatype: xmlSchemaTypes.string,
       },
       {
         fieldShortName: "lastName",
         fieldPrettyName: "Last name",
         fieldValue: "Smith",
-        rdfName: personFieldToRdfMap.lastName,
+        rdfName: PersonFieldToRdfMap.lastName,
         datatype: xmlSchemaTypes.string,
       },
       {
         fieldShortName: "nationality",
         fieldPrettyName: "Nationality",
-        fieldValue: countryToRdfMap.GBR,
-        rdfName: personFieldToRdfMap.nationality,
+        fieldValue: CountryToRdfMap.GBR,
+        rdfName: PersonFieldToRdfMap.nationality,
         datatype: xmlSchemaTypes.country,
       },
     ];
@@ -50,7 +50,7 @@ describe("<GuestFullName />", () => {
         fieldShortName: "firstName",
         fieldPrettyName: "First name",
         fieldValue: "John",
-        rdfName: personFieldToRdfMap.firstName,
+        rdfName: PersonFieldToRdfMap.firstName,
         datatype: xmlSchemaTypes.string,
       },
     ];

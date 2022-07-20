@@ -1,5 +1,5 @@
 import { Field } from "../types/Field";
-import { personFieldToRdfMap } from "../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 import { xmlSchemaTypes } from "./supportedTypes";
 
 //TODO we should see if there is a "schema:label" or similar for these RDF names and then we could generalize this even more
@@ -20,56 +20,56 @@ export default function GetSupportedFields(): Field[] {
       fieldShortName: "firstName",
       fieldPrettyName: "First name",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["firstName"],
+      rdfName: PersonFieldToRdfMap["firstName"],
       datatype: xmlSchemaTypes.string,
     },
     {
       fieldShortName: "lastName",
       fieldPrettyName: "Last name",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["lastName"],
+      rdfName: PersonFieldToRdfMap["lastName"],
       datatype: xmlSchemaTypes.string,
     },
     {
       fieldShortName: "nationality",
       fieldPrettyName: "Nationality",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["nationality"],
+      rdfName: PersonFieldToRdfMap["nationality"],
       datatype: xmlSchemaTypes.country,
     },
     {
       fieldShortName: "email",
       fieldPrettyName: "Email",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["email"],
+      rdfName: PersonFieldToRdfMap["email"],
       datatype: xmlSchemaTypes.string,
     },
     {
       fieldShortName: "phone",
       fieldPrettyName: "Phone number",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["phone"],
+      rdfName: PersonFieldToRdfMap["phone"],
       datatype: xmlSchemaTypes.string,
     },
     {
       fieldShortName: "idDocumentType",
       fieldPrettyName: "ID Document Type",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["idDocumentType"],
+      rdfName: PersonFieldToRdfMap["idDocumentType"],
       datatype: xmlSchemaTypes.idDocumentType,
     },
     {
       fieldShortName: "idDocumentNumber",
       fieldPrettyName: "ID Document Number",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["idDocumentNumber"],
+      rdfName: PersonFieldToRdfMap["idDocumentNumber"],
       datatype: xmlSchemaTypes.string,
     },
     {
       fieldShortName: "idDocumentExpiry",
       fieldPrettyName: "ID Document Expiry",
       fieldValue: undefined,
-      rdfName: personFieldToRdfMap["idDocumentExpiry"],
+      rdfName: PersonFieldToRdfMap["idDocumentExpiry"],
       datatype: xmlSchemaTypes.dateTime,
     },
   ];

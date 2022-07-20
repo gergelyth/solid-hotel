@@ -10,7 +10,7 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { RoomDefinition } from "../../types/RoomDefinition";
-import { roomFieldToRdfMap } from "../../vocabularies/rdf_room";
+import { RoomFieldToRdfMap } from "../../vocabularies/rdfRoom";
 import {
   Revalidate,
   TriggerRefetch,
@@ -43,11 +43,11 @@ function CreateRoomTestDataset(room: RoomDefinition): SolidDataset {
   const roomDataset = createSolidDataset();
 
   let newRoom = createThing({ name: "room" });
-  newRoom = addStringNoLocale(newRoom, roomFieldToRdfMap.name, room.name);
+  newRoom = addStringNoLocale(newRoom, RoomFieldToRdfMap.name, room.name);
   if (room.description) {
     newRoom = addStringNoLocale(
       newRoom,
-      roomFieldToRdfMap.description,
+      RoomFieldToRdfMap.description,
       room.description
     );
   }

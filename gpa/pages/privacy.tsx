@@ -9,7 +9,7 @@ import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory
 import { GetUserPrivacyPodUrl } from "../../common/util/solid";
 import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
 import { GetInboxUrlFromReservationUrl } from "../../common/util/urlParser";
-import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../../common/vocabularies/rdfReservation";
 import { SubmitPrivacyTokenDeletionRequest } from "../util/outgoingCommunications";
 
 /**
@@ -27,7 +27,7 @@ async function CreateInboxTokenUntilConfirmation(
   }
 
   const newToken = { ...templateToken };
-  newToken.fieldList = [reservationFieldToRdfMap.inbox];
+  newToken.fieldList = [ReservationFieldToRdfMap.inbox];
   newToken.urlAtGuest = undefined;
   newToken.reason =
     "The inbox URL to wait for the data protection profile removal confirmation.\nWill be removed as confirmation is received.";

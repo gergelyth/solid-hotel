@@ -14,7 +14,7 @@ import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import { Field } from "../../types/Field";
 import { NotificationType } from "../../types/NotificationsType";
 import { Notification } from "../../types/Notification";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { ReservationState } from "../../types/ReservationState";
 import { ISessionInfo, Session } from "@inrupt/solid-client-authn-browser";
@@ -22,7 +22,7 @@ import { mocked } from "ts-jest/utils";
 import { HotelPrivacyToken } from "../../types/HotelPrivacyToken";
 import { GuestPrivacyToken } from "../../types/GuestPrivacyToken";
 import { RoomDefinition } from "../../types/RoomDefinition";
-import { countryToRdfMap } from "../../vocabularies/rdf_countries";
+import { CountryToRdfMap } from "../../vocabularies/rdfCountries";
 
 const rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const ldpContainer = "http://www.w3.org/ns/ldp#Container";
@@ -94,21 +94,21 @@ export const TestGuestFields: Field[] = [
     fieldShortName: "firstName",
     fieldPrettyName: "First name",
     fieldValue: "John",
-    rdfName: personFieldToRdfMap["firstName"],
+    rdfName: PersonFieldToRdfMap["firstName"],
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "lastName",
     fieldPrettyName: "Last name",
     fieldValue: "Smith",
-    rdfName: personFieldToRdfMap["lastName"],
+    rdfName: PersonFieldToRdfMap["lastName"],
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: countryToRdfMap.GBR,
-    rdfName: personFieldToRdfMap["nationality"],
+    fieldValue: CountryToRdfMap.GBR,
+    rdfName: PersonFieldToRdfMap["nationality"],
     datatype: xmlSchemaTypes.country,
   },
 ];
@@ -166,7 +166,7 @@ export const TestReservations: ReservationAtHotel[] = [
 export const TestHotelPrivacyTokens: HotelPrivacyToken[] = [
   {
     urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource1.ttl",
-    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    fieldList: [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: new Date("2021-07-11"),
@@ -176,7 +176,7 @@ export const TestHotelPrivacyTokens: HotelPrivacyToken[] = [
   },
   {
     urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource2.ttl",
-    fieldList: [personFieldToRdfMap.firstName],
+    fieldList: [PersonFieldToRdfMap.firstName],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-07-22"),
@@ -189,7 +189,7 @@ export const TestHotelPrivacyTokens: HotelPrivacyToken[] = [
 export const TestGuestPrivacyTokens: GuestPrivacyToken[] = [
   {
     urlAtHotel: "TestUrlAtHotel1",
-    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    fieldList: [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: new Date("2021-07-11"),
@@ -200,7 +200,7 @@ export const TestGuestPrivacyTokens: GuestPrivacyToken[] = [
   },
   {
     urlAtHotel: "TestUrlAtHotel2",
-    fieldList: [personFieldToRdfMap.firstName],
+    fieldList: [PersonFieldToRdfMap.firstName],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-07-22"),

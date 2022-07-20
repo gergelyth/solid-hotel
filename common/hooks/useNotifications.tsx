@@ -7,7 +7,7 @@ import {
   Thing,
   UrlString,
 } from "@inrupt/solid-client";
-import { notificationToRdfMap } from "../vocabularies/rdf_notification";
+import { NotificationToRdfMap } from "../vocabularies/rdfNotification";
 import { Notification } from "../types/Notification";
 import { NextRouter, useRouter } from "next/router";
 import { SetIsProcessedForNotification } from "../util/notifications";
@@ -17,7 +17,7 @@ import { ParserList } from "../types/ParserList";
 import { GetDataSet, GetThing } from "../util/solid";
 import useSWR, { mutate } from "swr";
 import { GlobSolidUrlPaths } from "../util/helpers";
-import { reverseNotificationTypeRdfMap } from "../vocabularies/notification_payloads/rdf_notificationTypes";
+import { ReverseNotificationTypeRdfMap } from "../vocabularies/notificationpayloads/rdfNotificationTypes";
 
 const swrKey = "notifications";
 
@@ -37,7 +37,7 @@ function BuildNotificationBasedOnType(
 ): Notification {
   const isProcessed = getBoolean(
     notificationThing,
-    notificationToRdfMap.isProcessed
+    NotificationToRdfMap.isProcessed
   );
   if (isProcessed == null) {
     throw new Error("IsProcessed field is null in notification");
@@ -45,7 +45,7 @@ function BuildNotificationBasedOnType(
 
   const createdAt = getDatetime(
     notificationThing,
-    notificationToRdfMap.createdAt
+    NotificationToRdfMap.createdAt
   );
   if (createdAt == null) {
     throw new Error("CreatedAt field is null in notification");
@@ -92,8 +92,8 @@ function ConvertToNotification(
 
   //TODO default value
   let notificationType: NotificationType =
-    reverseNotificationTypeRdfMap[
-      getUrl(notificationThing, notificationToRdfMap.notificationType) ?? 0
+    ReverseNotificationTypeRdfMap[
+      getUrl(notificationThing, NotificationToRdfMap.notificationType) ?? 0
     ];
   //Annoying retyping trick so we get a correct ENUM value instead of a string
   notificationType =

@@ -7,7 +7,7 @@ import {
 import { RevalidateGuest } from "../../common/hooks/useGuest";
 import { GetDataSet, GetThing } from "../../common/util/solid";
 import { SafeSaveDatasetAt } from "../../common/util/solidWrapper";
-import { reservationFieldToRdfMap } from "../../common/vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../../common/vocabularies/rdfReservation";
 
 /**
  * Fetches the reservation from the hotel Pod and updates the guest inbox URL in it with the new value passed.
@@ -27,7 +27,7 @@ export async function SaveInboxAndReturnReservation(
 
   reservationThing = setStringNoLocale(
     reservationThing,
-    reservationFieldToRdfMap.inbox,
+    ReservationFieldToRdfMap.inbox,
     guestInboxUrl
   );
 
@@ -48,7 +48,7 @@ export function SetInboxToHotelInboxInMemory(
 ): Thing {
   return setStringNoLocale(
     reservationThing,
-    reservationFieldToRdfMap.inbox,
+    ReservationFieldToRdfMap.inbox,
     hotelInboxUrl
   );
 }
@@ -63,7 +63,7 @@ export function GetOwnerAndAnonymizeInMemory(reservationThing: Thing): {
 } {
   const hotelProfileOwnerUrl = getStringNoLocale(
     reservationThing,
-    reservationFieldToRdfMap.owner
+    ReservationFieldToRdfMap.owner
   );
   if (!hotelProfileOwnerUrl) {
     throw new Error("Owner ID null in reservation");
@@ -71,7 +71,7 @@ export function GetOwnerAndAnonymizeInMemory(reservationThing: Thing): {
 
   reservationThing = setStringNoLocale(
     reservationThing,
-    reservationFieldToRdfMap.owner,
+    ReservationFieldToRdfMap.owner,
     "Anonymized"
   );
   RevalidateGuest(undefined, hotelProfileOwnerUrl);

@@ -9,7 +9,7 @@ import {
 } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ReservationState } from "../types/ReservationState";
-import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../vocabularies/rdfReservation";
 import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetThing } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
@@ -21,7 +21,7 @@ import {
   SafeCreateContainerInContainer,
   SafeSaveDatasetAt,
 } from "./solidWrapper";
-import { reservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
+import { ReservationStateRdfMap } from "../vocabularies/rdfReservationStatusTypes";
 
 /** The relative URL address of the reservation container. */
 const reservationAddress = "reservations/";
@@ -118,12 +118,12 @@ export async function SetReservationStateAndInbox(
   const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
   let updatedReservation = setUrl(
     thing,
-    reservationFieldToRdfMap.state,
-    reservationStateRdfMap[newState]
+    ReservationFieldToRdfMap.state,
+    ReservationStateRdfMap[newState]
   );
   updatedReservation = setStringNoLocale(
     updatedReservation,
-    reservationFieldToRdfMap.inbox,
+    ReservationFieldToRdfMap.inbox,
     inboxUrl
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
@@ -144,7 +144,7 @@ export async function SetReservationOwnerToHotelProfile(
 
   const updatedReservation = setStringNoLocale(
     thing,
-    reservationFieldToRdfMap.owner,
+    ReservationFieldToRdfMap.owner,
     hotelProfileWebId
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
@@ -168,13 +168,13 @@ export async function SetReservationOwnerAndState(
 
   let updatedReservation = setStringNoLocale(
     thing,
-    reservationFieldToRdfMap.owner,
+    ReservationFieldToRdfMap.owner,
     ownerWebId
   );
   updatedReservation = setUrl(
     updatedReservation,
-    reservationFieldToRdfMap.state,
-    reservationStateRdfMap[newState]
+    ReservationFieldToRdfMap.state,
+    ReservationStateRdfMap[newState]
   );
   const updatedDataSet = setThing(dataset, updatedReservation);
 
@@ -194,7 +194,7 @@ export async function GetOwnerFromReservation(
 
   const ownerWebId = getStringNoLocale(
     reservation.thing,
-    reservationFieldToRdfMap.owner
+    ReservationFieldToRdfMap.owner
   );
 
   return ownerWebId;

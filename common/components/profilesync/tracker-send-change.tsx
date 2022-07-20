@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { SnackbarContent } from "notistack";
 import { forwardRef, useEffect, useState } from "react";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { Field } from "../../types/Field";
 import { CloseSnackbar } from "../snackbar";
 import { SendChangeActionButtons } from "./action-buttons";
@@ -43,10 +43,10 @@ function Header({
   //It's possible to not have these, since we try to retrieve the minimal amount of information for the guest.
   //If we don't, we don't display the name.
   const firstName = oldGuestFields?.find(
-    (x) => x.rdfName == personFieldToRdfMap.firstName
+    (x) => x.rdfName == PersonFieldToRdfMap.firstName
   );
   const lastName = oldGuestFields?.find(
-    (x) => x.rdfName == personFieldToRdfMap.lastName
+    (x) => x.rdfName == PersonFieldToRdfMap.lastName
   );
 
   const profileName =

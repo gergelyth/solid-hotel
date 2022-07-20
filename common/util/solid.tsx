@@ -7,7 +7,7 @@ import {
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 import { NotFoundError } from "./errors";
 import { SafeGetDataset } from "./solidWrapper";
 
@@ -96,7 +96,7 @@ export function GetThing(
   dataset: SolidDataset,
   thingName: string
 ): Thing | null {
-  const localThing = getThing(dataset, utilRdfMap.localNodePrefix + thingName);
+  const localThing = getThing(dataset, UtilRdfMap.localNodePrefix + thingName);
   if (localThing) {
     return localThing;
   }

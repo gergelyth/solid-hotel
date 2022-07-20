@@ -20,7 +20,7 @@ import { CreateReservationDataset } from "../../../../common/util/datasetFactory
 import { Thing } from "@inrupt/solid-client";
 import { CacheProfileFields } from "../../../../common/util/tracker/profileCache";
 import { SubscribeToProfileChanges } from "../../../util/trackerInitializer";
-import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
 import { GetThing } from "../../../../common/util/solid";
 
 const TestReservationId = "TestReservationId";
@@ -43,8 +43,8 @@ jest.mock("../../../../common/util/solidReservations", () => {
 });
 
 const requiredFields = [
-  personFieldToRdfMap.firstName,
-  personFieldToRdfMap.lastName,
+  PersonFieldToRdfMap.firstName,
+  PersonFieldToRdfMap.lastName,
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {

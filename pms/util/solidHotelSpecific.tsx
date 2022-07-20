@@ -6,7 +6,7 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { RoomDefinition } from "../../common/types/RoomDefinition";
-import { roomFieldToRdfMap } from "../../common/vocabularies/rdf_room";
+import { RoomFieldToRdfMap } from "../../common/vocabularies/rdfRoom";
 import {
   HotelWebId,
   RoomDefinitionsUrl,
@@ -22,7 +22,7 @@ import {
   SafeDeleteDataset,
   SafeSaveDatasetInContainer,
 } from "../../common/util/solidWrapper";
-import { utilRdfMap } from "../../common/vocabularies/rdf_util";
+import { UtilRdfMap } from "../../common/vocabularies/rdfUtil";
 
 /**
  * Fetches the profile of the hotel and sets the field value to be the value passed to the function.
@@ -44,12 +44,12 @@ export async function CreateOrUpdateRoom(room: RoomDefinition): Promise<void> {
   let roomDataset = createSolidDataset();
 
   let newRoom = createThing({ name: "room" });
-  newRoom = addUrl(newRoom, utilRdfMap.type, roomFieldToRdfMap.type);
-  newRoom = addStringNoLocale(newRoom, roomFieldToRdfMap.name, room.name);
+  newRoom = addUrl(newRoom, UtilRdfMap.type, RoomFieldToRdfMap.type);
+  newRoom = addStringNoLocale(newRoom, RoomFieldToRdfMap.name, room.name);
   if (room.description) {
     newRoom = addStringNoLocale(
       newRoom,
-      roomFieldToRdfMap.description,
+      RoomFieldToRdfMap.description,
       room.description
     );
   }

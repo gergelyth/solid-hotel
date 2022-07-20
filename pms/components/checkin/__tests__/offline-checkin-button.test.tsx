@@ -6,7 +6,7 @@ import { TestReservations } from "../../../../common/util/__tests__/testUtil";
 import { Field } from "../../../../common/types/Field";
 import { mocked } from "ts-jest/utils";
 import { NextRouter } from "next/router";
-import { countryToRdfMap } from "../../../../common/vocabularies/rdf_countries";
+import { CountryToRdfMap } from "../../../../common/vocabularies/rdfCountries";
 
 const routerPush = jest.fn();
 function MockRouter(): NextRouter {
@@ -59,13 +59,13 @@ describe("<OfflineCheckinButton />", () => {
     const offlineCheckinButtonComponent = Render();
     expect(offlineCheckinButtonComponent).toBeDefined();
 
-    await editFieldProps.onConfirmation("nationality", countryToRdfMap.ESP);
+    await editFieldProps.onConfirmation("nationality", CountryToRdfMap.ESP);
 
     expect(routerPush).toBeCalledWith({
       pathname: "/checkin",
       query: {
         id: "reservationId1",
-        nationality: countryToRdfMap.ESP,
+        nationality: CountryToRdfMap.ESP,
         hotelProfile: "https://testpodurl.com/profiles/11111111#hotelProfile",
       },
     });

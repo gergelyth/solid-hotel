@@ -6,7 +6,7 @@ import {
 } from "../components/loading-indicators";
 import { HotelDetails } from "../types/HotelDetails";
 import { GetProfileOf } from "../util/solidProfile";
-import { hotelFieldToRdfMap } from "../vocabularies/rdf_hotel";
+import { HotelFieldToRdfMap } from "../vocabularies/rdfHotel";
 
 /**
  * Creates the hotel SWR key distinguishing between possible cases to make sure one case's cache is not used for another case's retrieval.
@@ -32,13 +32,13 @@ function ConvertToHotelDetails(
   const hotel = {
     webId: hotelWebId,
     name:
-      getStringNoLocale(hotelProfile, hotelFieldToRdfMap.name) ??
+      getStringNoLocale(hotelProfile, HotelFieldToRdfMap.name) ??
       "<No hotel name>",
     location:
-      getStringNoLocale(hotelProfile, hotelFieldToRdfMap.location) ??
+      getStringNoLocale(hotelProfile, HotelFieldToRdfMap.location) ??
       "<No hotel location>",
     address:
-      getStringNoLocale(hotelProfile, hotelFieldToRdfMap.address) ??
+      getStringNoLocale(hotelProfile, HotelFieldToRdfMap.address) ??
       "<No hotel address>",
   };
 

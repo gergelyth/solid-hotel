@@ -2,7 +2,7 @@ import { VOID } from "@inrupt/vocab-common-rdf";
 import SOLIDHOTEL from "../../solidhotel-vocab/SOLIDHOTEL.js";
 
 /** A vocabulary map defining the RDF properties used for privacy tokens. */
-export const privacyTokenToRdfMap: Record<string, string> = {
+export const PrivacyTokenToRdfMap: Record<string, string> = {
   type: SOLIDHOTEL.PrivacyToken,
   hotelInboxForDeletion: "https://schema.org/replyToUrl",
   datasetUrlTarget: SOLIDHOTEL.targetDataset,

@@ -12,9 +12,9 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { GetDataSet, GetThing } from "./solid";
-import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
+import { PairingTokenToRdfMap } from "../vocabularies/rdfPairingToken";
 import { SafeDeleteDataset, SafeSaveDatasetAt } from "./solidWrapper";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /** The name of the Solid Thing containing the pairing token. */
 const PairingTokenThing = "pairingToken";
@@ -35,10 +35,10 @@ export async function CreateAndSavePairingToken(
   let tokenDataset = createSolidDataset();
 
   let tokenThing = createThing({ name: PairingTokenThing });
-  tokenThing = addUrl(tokenThing, utilRdfMap.type, pairingTokenToRdfMap.type);
+  tokenThing = addUrl(tokenThing, UtilRdfMap.type, PairingTokenToRdfMap.type);
   tokenThing = addStringNoLocale(
     tokenThing,
-    pairingTokenToRdfMap.pairingToken,
+    PairingTokenToRdfMap.pairingToken,
     token
   );
 
@@ -69,7 +69,7 @@ export async function GetPairingToken(
 
   const token = getStringNoLocale(
     tokenThing,
-    pairingTokenToRdfMap.pairingToken
+    PairingTokenToRdfMap.pairingToken
   );
   return token;
 }

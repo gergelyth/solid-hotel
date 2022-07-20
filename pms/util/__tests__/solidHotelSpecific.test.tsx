@@ -19,7 +19,7 @@ import {
   SafeDeleteDataset,
   SafeSaveDatasetInContainer,
 } from "../../../common/util/solidWrapper";
-import { roomFieldToRdfMap } from "../../../common/vocabularies/rdf_room";
+import { RoomFieldToRdfMap } from "../../../common/vocabularies/rdfRoom";
 import { SetReadAccessToEveryone } from "../../../common/util/solidAccess";
 
 jest.mock("../../../common/util/solid", () => {
@@ -62,9 +62,9 @@ describe("solidHotelSpecific", () => {
     expect(SafeCreateContainerAt).not.toBeCalled();
     expect(SetReadAccessToEveryone).not.toBeCalled();
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> a <${roomFieldToRdfMap.type}>;
-    <${roomFieldToRdfMap.name}> "Room 1";
-    <${roomFieldToRdfMap.description}> "Description 1".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> a <${RoomFieldToRdfMap.type}>;
+    <${RoomFieldToRdfMap.name}> "Room 1";
+    <${RoomFieldToRdfMap.description}> "Description 1".
 `;
 
     expect(GetDataSet).toBeCalledWith("https://testpodurl.com/rooms/");
@@ -92,9 +92,9 @@ describe("solidHotelSpecific", () => {
       "https://testpodurl.com/rooms/"
     );
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> a <${roomFieldToRdfMap.type}>;
-    <${roomFieldToRdfMap.name}> "Room 1";
-    <${roomFieldToRdfMap.description}> "Description 1".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/room> a <${RoomFieldToRdfMap.type}>;
+    <${RoomFieldToRdfMap.name}> "Room 1";
+    <${RoomFieldToRdfMap.description}> "Description 1".
 `;
 
     expect(GetDataSet).toBeCalledWith("https://testpodurl.com/rooms/");

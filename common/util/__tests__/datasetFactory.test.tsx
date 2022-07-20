@@ -14,12 +14,12 @@ import {
   TestGuestPrivacyTokens,
   TestHotelPrivacyTokens,
 } from "./testUtil";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { reservationFieldToRdfMap } from "../../vocabularies/rdf_reservation";
-import { privacyTokenToRdfMap } from "../../vocabularies/notification_payloads/rdf_privacy";
-import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
-import { reservationStateRdfMap } from "../../vocabularies/rdf_reservationStatusTypes";
-import { notificationTypeRdfMap } from "../../vocabularies/notification_payloads/rdf_notificationTypes";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
+import { ReservationFieldToRdfMap } from "../../vocabularies/rdfReservation";
+import { PrivacyTokenToRdfMap } from "../../vocabularies/notificationpayloads/rdfPrivacy";
+import { NotificationToRdfMap } from "../../vocabularies/rdfNotification";
+import { ReservationStateRdfMap } from "../../vocabularies/rdfReservationStatusTypes";
+import { NotificationTypeRdfMap } from "../../vocabularies/notificationpayloads/rdfNotificationTypes";
 
 describe("datasetFactory", () => {
   test("CreateReservationDataset creates the expected dataset", async () => {
@@ -35,20 +35,20 @@ describe("datasetFactory", () => {
     };
 
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
-      reservationFieldToRdfMap.type
+      ReservationFieldToRdfMap.type
     }>;
-    <${reservationFieldToRdfMap.room}> "RoomUrl1";
-    <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
-    <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
-    <${reservationFieldToRdfMap.state}> <${
-      reservationStateRdfMap[ReservationState.CONFIRMED]
+    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
+    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${ReservationFieldToRdfMap.owner}> "OwnerWebId1";
+    <${ReservationFieldToRdfMap.state}> <${
+      ReservationStateRdfMap[ReservationState.CONFIRMED]
     }>;
     <${
-      reservationFieldToRdfMap.checkinTime
+      ReservationFieldToRdfMap.checkinTime
     }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${
-      reservationFieldToRdfMap.checkoutTime
+      ReservationFieldToRdfMap.checkoutTime
     }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
@@ -64,14 +64,14 @@ describe("datasetFactory", () => {
       .mockImplementation(() => mockDate as unknown as string);
 
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> a <${
-      notificationToRdfMap.type
+      NotificationToRdfMap.type
     }>;
-    <${notificationToRdfMap.isProcessed}> false;
-    <${notificationToRdfMap.notificationType}> <${
-      notificationTypeRdfMap[NotificationType.PrivacyToken]
+    <${NotificationToRdfMap.isProcessed}> false;
+    <${NotificationToRdfMap.notificationType}> <${
+      NotificationTypeRdfMap[NotificationType.PrivacyToken]
     }>;
     <${
-      notificationToRdfMap.createdAt
+      NotificationToRdfMap.createdAt
     }> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
@@ -86,15 +86,15 @@ describe("datasetFactory", () => {
   });
 
   test("CreateHotelPrivacyTokenDataset creates the expected dataset", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> a <${privacyTokenToRdfMap.type}>;
-    <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
-    <${privacyTokenToRdfMap.reason}> "TestReason1";
-    <${privacyTokenToRdfMap.forReservationState}> 1;
-    <${privacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${privacyTokenToRdfMap.url}> "https://testpodurl.com/hotelprivacy/testResource1.ttl";
-    <${privacyTokenToRdfMap.datasetUrlTarget}> "TestDatasetUrlTarget1";
-    <${privacyTokenToRdfMap.guestInbox}> "TestGuestInbox1";
-    <${privacyTokenToRdfMap.reservation}> "TestReservationUrl1".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> a <${PrivacyTokenToRdfMap.type}>;
+    <${PrivacyTokenToRdfMap.fieldList}> "${PersonFieldToRdfMap.firstName}", "${PersonFieldToRdfMap.lastName}";
+    <${PrivacyTokenToRdfMap.reason}> "TestReason1";
+    <${PrivacyTokenToRdfMap.forReservationState}> 1;
+    <${PrivacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${PrivacyTokenToRdfMap.url}> "https://testpodurl.com/hotelprivacy/testResource1.ttl";
+    <${PrivacyTokenToRdfMap.datasetUrlTarget}> "TestDatasetUrlTarget1";
+    <${PrivacyTokenToRdfMap.guestInbox}> "TestGuestInbox1";
+    <${PrivacyTokenToRdfMap.reservation}> "TestReservationUrl1".
 `;
 
     const dataset = CreateHotelPrivacyTokenDataset(TestHotelPrivacyTokens[0]);
@@ -103,15 +103,15 @@ describe("datasetFactory", () => {
   });
 
   test("CreateGuestPrivacyTokenDataset creates the expected dataset", async () => {
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> a <${privacyTokenToRdfMap.type}>;
-    <${privacyTokenToRdfMap.fieldList}> "${personFieldToRdfMap.firstName}", "${personFieldToRdfMap.lastName}";
-    <${privacyTokenToRdfMap.reason}> "TestReason1";
-    <${privacyTokenToRdfMap.forReservationState}> 1;
-    <${privacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${privacyTokenToRdfMap.url}> "TestUrlAtHotel1";
-    <${privacyTokenToRdfMap.hotelInboxForDeletion}> "TestHotelInbox1";
-    <${privacyTokenToRdfMap.hotel}> "TestHotelWebId1";
-    <${privacyTokenToRdfMap.reservation}> "TestReservationUrl1".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/privacy> a <${PrivacyTokenToRdfMap.type}>;
+    <${PrivacyTokenToRdfMap.fieldList}> "${PersonFieldToRdfMap.firstName}", "${PersonFieldToRdfMap.lastName}";
+    <${PrivacyTokenToRdfMap.reason}> "TestReason1";
+    <${PrivacyTokenToRdfMap.forReservationState}> 1;
+    <${PrivacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+    <${PrivacyTokenToRdfMap.url}> "TestUrlAtHotel1";
+    <${PrivacyTokenToRdfMap.hotelInboxForDeletion}> "TestHotelInbox1";
+    <${PrivacyTokenToRdfMap.hotel}> "TestHotelWebId1";
+    <${PrivacyTokenToRdfMap.reservation}> "TestReservationUrl1".
 `;
 
     const dataset = CreateGuestPrivacyTokenDataset(TestGuestPrivacyTokens[0]);

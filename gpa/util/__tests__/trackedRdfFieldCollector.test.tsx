@@ -9,14 +9,14 @@ import { useGuestPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
 import { TestReservations } from "../../../common/util/__tests__/testUtil";
 import { useReservations } from "../../../common/hooks/useReservations";
 import { GuestPrivacyToken } from "../../../common/types/GuestPrivacyToken";
-import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
 import { ReservationState } from "../../../common/types/ReservationState";
 import { GetTomorrow } from "../../../common/util/helpers";
 
 const testTokens: GuestPrivacyToken[] = [
   {
     urlAtHotel: "TestUrlAtHotel1",
-    fieldList: [personFieldToRdfMap.phone, personFieldToRdfMap.lastName],
+    fieldList: [PersonFieldToRdfMap.phone, PersonFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: GetTomorrow(),
@@ -27,7 +27,7 @@ const testTokens: GuestPrivacyToken[] = [
   },
   {
     urlAtHotel: "TestUrlAtHotel2",
-    fieldList: [personFieldToRdfMap.firstName],
+    fieldList: [PersonFieldToRdfMap.firstName],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: GetTomorrow(),
@@ -38,7 +38,7 @@ const testTokens: GuestPrivacyToken[] = [
   },
   {
     urlAtHotel: "TestUrlAtHotel3",
-    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.email],
+    fieldList: [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.email],
     reason: "TestReason3",
     forReservationState: ReservationState.ACTIVE,
     expiry: GetTomorrow(),
@@ -109,8 +109,8 @@ describe("<TrackedRdfFieldCollector />", () => {
 
     const expectedHotelToRdf: HotelToRdf = {};
     expectedHotelToRdf["HotelWebId2"] = new Set<string>([
-      personFieldToRdfMap.firstName,
-      personFieldToRdfMap.email,
+      PersonFieldToRdfMap.firstName,
+      PersonFieldToRdfMap.email,
     ]);
 
     expect(setHotelToRdfMap).toBeCalledWith(expectedHotelToRdf);

@@ -10,7 +10,7 @@ import {
   RoomDefinitionsUrl,
 } from "../../consts/solidIdentifiers";
 import { RecursiveDelete } from "../setupUtil";
-import { hotelFieldToRdfMap } from "../../vocabularies/rdf_hotel";
+import { HotelFieldToRdfMap } from "../../vocabularies/rdfHotel";
 import { SetHotelProfileField } from "../../../pms/util/solidHotelSpecific";
 import {
   HotelAddress,
@@ -112,10 +112,10 @@ export async function CreateBookingInbox(): Promise<void> {
  */
 export async function SetupHotelProfile(): Promise<void> {
   await Promise.all([
-    SetHotelProfileField(hotelFieldToRdfMap.name, HotelName),
+    SetHotelProfileField(HotelFieldToRdfMap.name, HotelName),
     //TODO this should be an RDF name (potentially namednode)
-    SetHotelProfileField(hotelFieldToRdfMap.location, HotelLocation),
-    SetHotelProfileField(hotelFieldToRdfMap.address, HotelAddress),
+    SetHotelProfileField(HotelFieldToRdfMap.location, HotelLocation),
+    SetHotelProfileField(HotelFieldToRdfMap.address, HotelAddress),
   ]);
 }
 

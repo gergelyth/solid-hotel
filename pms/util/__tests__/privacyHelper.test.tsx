@@ -18,8 +18,8 @@ import {
   TestHotelPrivacyTokens,
   TestReservations,
 } from "../../../common/util/__tests__/testUtil";
-import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
-import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reservation";
+import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
+import { ReservationFieldToRdfMap } from "../../../common/vocabularies/rdfReservation";
 import { SendPrivacyTokenDeletionNotice } from "../outgoingCommunications";
 import {
   AnonymizeFieldsAndDeleteToken,
@@ -64,9 +64,9 @@ describe("privacyHelper", () => {
   test("AnonymizeFieldsAndDeleteToken anonymizes fields correctly", async () => {
     let dataset = createSolidDataset();
     let thing = createThing({ name: "testThing" });
-    thing = setStringNoLocale(thing, personFieldToRdfMap.firstName, "John");
-    thing = setStringNoLocale(thing, personFieldToRdfMap.lastName, "Smith");
-    thing = setStringNoLocale(thing, personFieldToRdfMap.email, "TestEmail");
+    thing = setStringNoLocale(thing, PersonFieldToRdfMap.firstName, "John");
+    thing = setStringNoLocale(thing, PersonFieldToRdfMap.lastName, "Smith");
+    thing = setStringNoLocale(thing, PersonFieldToRdfMap.email, "TestEmail");
     dataset = setThing(dataset, thing);
 
     (GetDataSet as jest.Mock).mockReturnValue(dataset);
@@ -75,9 +75,9 @@ describe("privacyHelper", () => {
       "SuppliedGuestInboxUrl"
     );
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/testThing> <${personFieldToRdfMap.email}> "TestEmail";
-    <${personFieldToRdfMap.firstName}> "Anonymized";
-    <${personFieldToRdfMap.lastName}> "Anonymized".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/testThing> <${PersonFieldToRdfMap.email}> "TestEmail";
+    <${PersonFieldToRdfMap.firstName}> "Anonymized";
+    <${PersonFieldToRdfMap.lastName}> "Anonymized".
 `;
 
     expect(SafeSaveDatasetAt).toBeCalledWith(
@@ -115,7 +115,7 @@ describe("privacyHelper", () => {
 
     const expectedGuestPrivacyToken = {
       urlAtHotel: "TestSourceIri",
-      fieldList: [reservationFieldToRdfMap.inbox],
+      fieldList: [ReservationFieldToRdfMap.inbox],
       reason: "Reservation inbox used for communication with the hotel",
       forReservationState: 1,
       expiry: new Date("2021-07-08"),
@@ -129,7 +129,7 @@ describe("privacyHelper", () => {
 
     const expectedHotelPrivacyToken = {
       urlAtHotel: null,
-      fieldList: [reservationFieldToRdfMap.inbox],
+      fieldList: [ReservationFieldToRdfMap.inbox],
       reason: "Reservation inbox used for communication with the hotel",
       forReservationState: 1,
       expiry: new Date("2021-07-08"),

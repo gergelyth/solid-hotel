@@ -1,8 +1,8 @@
 import { createSolidDataset, Thing } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
 import { ReservationState } from "../../types/ReservationState";
-import { reservationFieldToRdfMap } from "../../vocabularies/rdf_reservation";
-import { reservationStateRdfMap } from "../../vocabularies/rdf_reservationStatusTypes";
+import { ReservationFieldToRdfMap } from "../../vocabularies/rdfReservation";
+import { ReservationStateRdfMap } from "../../vocabularies/rdfReservationStatusTypes";
 import { CreateReservationDataset } from "../datasetFactory";
 import { GetDataSet } from "../solid";
 import { SetSubmitterAccessToEveryone } from "../solidAccess";
@@ -120,20 +120,20 @@ describe("solidReservations", () => {
     );
 
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
-      reservationFieldToRdfMap.type
+      ReservationFieldToRdfMap.type
     }>;
-    <${reservationFieldToRdfMap.room}> "RoomUrl1";
-    <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
-    <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
-    <${reservationFieldToRdfMap.state}> <${
-      reservationStateRdfMap[ReservationState.CONFIRMED]
+    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
+    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${ReservationFieldToRdfMap.owner}> "OwnerWebId1";
+    <${ReservationFieldToRdfMap.state}> <${
+      ReservationStateRdfMap[ReservationState.CONFIRMED]
     }>;
     <${
-      reservationFieldToRdfMap.checkinTime
+      ReservationFieldToRdfMap.checkinTime
     }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${
-      reservationFieldToRdfMap.checkoutTime
+      ReservationFieldToRdfMap.checkoutTime
     }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
 `;
 
@@ -154,21 +154,21 @@ describe("solidReservations", () => {
 
   test("SetReservationStateAndInbox modifies the correct fields", async () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
-      reservationFieldToRdfMap.type
+      ReservationFieldToRdfMap.type
     }>;
-    <${reservationFieldToRdfMap.room}> "RoomUrl1";
-    <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
-    <${reservationFieldToRdfMap.owner}> "OwnerWebId1";
+    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${ReservationFieldToRdfMap.owner}> "OwnerWebId1";
     <${
-      reservationFieldToRdfMap.checkinTime
+      ReservationFieldToRdfMap.checkinTime
     }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${
-      reservationFieldToRdfMap.checkoutTime
+      ReservationFieldToRdfMap.checkoutTime
     }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.state}> <${
-      reservationStateRdfMap[ReservationState.PAST]
+    <${ReservationFieldToRdfMap.state}> <${
+      ReservationStateRdfMap[ReservationState.PAST]
     }>;
-    <${reservationFieldToRdfMap.inbox}> "NewInboxUrl".
+    <${ReservationFieldToRdfMap.inbox}> "NewInboxUrl".
 `;
 
     const test = async (): Promise<void> =>
@@ -183,21 +183,21 @@ describe("solidReservations", () => {
 
   test("SetReservationOwnerToHotelProfile modifies the correct fields", async () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
-      reservationFieldToRdfMap.type
+      ReservationFieldToRdfMap.type
     }>;
-    <${reservationFieldToRdfMap.room}> "RoomUrl1";
-    <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
-    <${reservationFieldToRdfMap.state}> <${
-      reservationStateRdfMap[ReservationState.CONFIRMED]
+    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
+    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${ReservationFieldToRdfMap.state}> <${
+      ReservationStateRdfMap[ReservationState.CONFIRMED]
     }>;
     <${
-      reservationFieldToRdfMap.checkinTime
+      ReservationFieldToRdfMap.checkinTime
     }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${
-      reservationFieldToRdfMap.checkoutTime
+      ReservationFieldToRdfMap.checkoutTime
     }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.owner}> "NewHotelProfileWebId".
+    <${ReservationFieldToRdfMap.owner}> "NewHotelProfileWebId".
 `;
     const test = async (): Promise<Thing> =>
       await SetReservationOwnerToHotelProfile(
@@ -210,20 +210,20 @@ describe("solidReservations", () => {
 
   test("SetReservationOwnerAndState modifies the correct fields", async () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
-      reservationFieldToRdfMap.type
+      ReservationFieldToRdfMap.type
     }>;
-    <${reservationFieldToRdfMap.room}> "RoomUrl1";
-    <${reservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${reservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
+    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
     <${
-      reservationFieldToRdfMap.checkinTime
+      ReservationFieldToRdfMap.checkinTime
     }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${
-      reservationFieldToRdfMap.checkoutTime
+      ReservationFieldToRdfMap.checkoutTime
     }> "2021-07-07T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${reservationFieldToRdfMap.owner}> "NewHotelProfileWebId";
-    <${reservationFieldToRdfMap.state}> <${
-      reservationStateRdfMap[ReservationState.PAST]
+    <${ReservationFieldToRdfMap.owner}> "NewHotelProfileWebId";
+    <${ReservationFieldToRdfMap.state}> <${
+      ReservationStateRdfMap[ReservationState.PAST]
     }>.
 `;
     const test = async (): Promise<void> =>

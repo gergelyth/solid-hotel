@@ -1,7 +1,7 @@
 import { getStringNoLocale, SolidDataset } from "@inrupt/solid-client";
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { RoomDefinition } from "../types/RoomDefinition";
-import { roomFieldToRdfMap } from "../vocabularies/rdf_room";
+import { RoomFieldToRdfMap } from "../vocabularies/rdfRoom";
 import useSWR, { mutate } from "swr";
 import { GetDataSet, GetThing } from "../util/solid";
 import { GetIdFromDatasetUrl } from "../util/urlParser";
@@ -27,9 +27,9 @@ function ConvertToRoomDefinition(
   const room = {
     id: GetIdFromDatasetUrl(url, 0),
     name:
-      getStringNoLocale(roomThing, roomFieldToRdfMap.name) ?? "<No room name>",
+      getStringNoLocale(roomThing, RoomFieldToRdfMap.name) ?? "<No room name>",
     description:
-      getStringNoLocale(roomThing, roomFieldToRdfMap.description) ?? undefined,
+      getStringNoLocale(roomThing, RoomFieldToRdfMap.description) ?? undefined,
   };
   return room;
 }

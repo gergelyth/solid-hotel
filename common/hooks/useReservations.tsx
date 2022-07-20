@@ -6,7 +6,7 @@ import {
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
-import { reservationFieldToRdfMap } from "../vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../vocabularies/rdfReservation";
 import { FetchItems } from "./util/listThenItemsFetcher";
 import { GetIdFromDatasetUrl } from "../util/urlParser";
 import { mutate } from "swr";
@@ -15,7 +15,7 @@ import {
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
 import { GetThing } from "../util/solid";
-import { reverseReservationStateRdfMap } from "../vocabularies/rdf_reservationStatusTypes";
+import { ReverseReservationStateRdfMap } from "../vocabularies/rdfReservationStatusTypes";
 import { ReservationState } from "../types/ReservationState";
 
 const swrKey = "reservations";
@@ -29,8 +29,8 @@ export function ParseReservation(
   datasetUrl: string
 ): ReservationAtHotel {
   let state: ReservationState =
-    reverseReservationStateRdfMap[
-      getUrl(reservationThing, reservationFieldToRdfMap.state) ?? 0
+    ReverseReservationStateRdfMap[
+      getUrl(reservationThing, ReservationFieldToRdfMap.state) ?? 0
     ];
   //Annoying retyping trick so we get a correct ENUM value instead of a string
   state =
@@ -39,23 +39,23 @@ export function ParseReservation(
   // TODO: modify No Id and No Name
   const reservation = {
     id: GetIdFromDatasetUrl(datasetUrl, 1),
-    inbox: getStringNoLocale(reservationThing, reservationFieldToRdfMap.inbox),
+    inbox: getStringNoLocale(reservationThing, ReservationFieldToRdfMap.inbox),
     owner:
-      getStringNoLocale(reservationThing, reservationFieldToRdfMap.owner) ??
+      getStringNoLocale(reservationThing, ReservationFieldToRdfMap.owner) ??
       "<No owner ID>",
     hotel:
-      getStringNoLocale(reservationThing, reservationFieldToRdfMap.hotel) ??
+      getStringNoLocale(reservationThing, ReservationFieldToRdfMap.hotel) ??
       "<No hotel WebId>",
     room:
-      getStringNoLocale(reservationThing, reservationFieldToRdfMap.room) ??
+      getStringNoLocale(reservationThing, ReservationFieldToRdfMap.room) ??
       "<No room ID>",
     state: state,
     dateFrom:
-      getDatetime(reservationThing, reservationFieldToRdfMap.checkinTime) ??
+      getDatetime(reservationThing, ReservationFieldToRdfMap.checkinTime) ??
       // TODO: change default value here
       new Date(),
     dateTo:
-      getDatetime(reservationThing, reservationFieldToRdfMap.checkoutTime) ??
+      getDatetime(reservationThing, ReservationFieldToRdfMap.checkoutTime) ??
       // TODO: change default value here
       new Date(),
   };

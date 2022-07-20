@@ -10,9 +10,9 @@ import {
 } from "@inrupt/solid-client";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
-import { profileModificationRdfMap } from "../vocabularies/notification_payloads/rdf_profileModification";
+import { ProfileModificationRdfMap } from "../vocabularies/notificationpayloads/rdfProfileModification";
 import { ProfileUpdate } from "../components/profilesync/tracker-send-change";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /** The prefix name of the profile changes Thing in the dataset. */
 const thingName = "profileModification";
@@ -30,7 +30,7 @@ export function DeserializeProfileModification(dataset: SolidDataset): {
   things.forEach((thing) => {
     const rdfModified = getStringNoLocale(
       thing,
-      profileModificationRdfMap.fieldModified
+      ProfileModificationRdfMap.fieldModified
     );
     if (!rdfModified) {
       //there will be the notification Thing here
@@ -39,7 +39,7 @@ export function DeserializeProfileModification(dataset: SolidDataset): {
 
     const newFieldValue = getStringNoLocale(
       thing,
-      profileModificationRdfMap.newFieldValue
+      ProfileModificationRdfMap.newFieldValue
     );
     if (!newFieldValue) {
       return;
@@ -67,17 +67,17 @@ export function SerializeProfileModification(
     let changeThing = createThing({ name: `${thingName}_${counter}` });
     changeThing = addUrl(
       changeThing,
-      utilRdfMap.type,
-      profileModificationRdfMap.type
+      UtilRdfMap.type,
+      ProfileModificationRdfMap.type
     );
     changeThing = addStringNoLocale(
       changeThing,
-      profileModificationRdfMap.fieldModified,
+      ProfileModificationRdfMap.fieldModified,
       rdfField
     );
     changeThing = addStringNoLocale(
       changeThing,
-      profileModificationRdfMap.newFieldValue,
+      ProfileModificationRdfMap.newFieldValue,
       details.newValue
     );
     changeDataset = setThing(changeDataset, changeThing);

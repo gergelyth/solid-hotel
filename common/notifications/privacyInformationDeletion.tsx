@@ -10,9 +10,9 @@ import {
 } from "@inrupt/solid-client";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
-import { privacyDeletionToRdfMap } from "../vocabularies/notification_payloads/rdf_privacyDeletion";
+import { PrivacyDeletionToRdfMap } from "../vocabularies/notificationpayloads/rdfPrivacyDeletion";
 import { GetThing } from "../util/solid";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /**
  * Parses the notification dataset into a privacy token deletion request.
@@ -33,9 +33,9 @@ export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
   }
 
   const tokenUrl =
-    getStringNoLocale(deletionThing, privacyDeletionToRdfMap.tokenUrl) ?? null;
+    getStringNoLocale(deletionThing, PrivacyDeletionToRdfMap.tokenUrl) ?? null;
   const guestInboxUrl =
-    getStringNoLocale(deletionThing, privacyDeletionToRdfMap.guestInboxUrl) ??
+    getStringNoLocale(deletionThing, PrivacyDeletionToRdfMap.guestInboxUrl) ??
     undefined;
 
   if (!tokenUrl) {
@@ -58,18 +58,18 @@ export function SerializePrivacyInformationDeletion(
   let deletionThing = createThing({ name: "privacyTokenDeletion" });
   deletionThing = addUrl(
     deletionThing,
-    utilRdfMap.type,
-    privacyDeletionToRdfMap.type
+    UtilRdfMap.type,
+    PrivacyDeletionToRdfMap.type
   );
   deletionThing = addStringNoLocale(
     deletionThing,
-    privacyDeletionToRdfMap.tokenUrl,
+    PrivacyDeletionToRdfMap.tokenUrl,
     tokenUrl
   );
   if (guestInboxUrl) {
     deletionThing = addStringNoLocale(
       deletionThing,
-      privacyDeletionToRdfMap.guestInboxUrl,
+      PrivacyDeletionToRdfMap.guestInboxUrl,
       guestInboxUrl
     );
   }

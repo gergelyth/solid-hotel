@@ -6,14 +6,14 @@ import { mocked } from "ts-jest/utils";
 import { RequiredFieldsAtOfflineCheckin } from "../fields-subpage";
 import { OfflineCheckinPage } from "../../../pages/checkin";
 import { useRequiredFields } from "../../../../common/hooks/useMockApi";
-import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
-import { countryToRdfMap } from "../../../../common/vocabularies/rdf_countries";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
+import { CountryToRdfMap } from "../../../../common/vocabularies/rdfCountries";
 
 function MockRouter(): NextRouter {
   const mockRouter = mocked({
     query: {
       id: "reservationId1",
-      nationality: countryToRdfMap.GBR,
+      nationality: CountryToRdfMap.GBR,
       hotelProfile: "https://testpodurl.com/hotelprofiles/id1",
     },
   } as unknown as NextRouter);
@@ -43,8 +43,8 @@ jest.mock("next/router", () => {
 });
 
 const requiredFields = [
-  personFieldToRdfMap.firstName,
-  personFieldToRdfMap.lastName,
+  PersonFieldToRdfMap.firstName,
+  PersonFieldToRdfMap.lastName,
 ];
 jest.mock("../../../../common/hooks/useMockApi", () => {
   return {
@@ -72,7 +72,7 @@ describe("<RequiredFieldsAtOfflineCheckin />", () => {
     const requiredFieldsComponent = Render();
     expect(requiredFieldsComponent).toBeDefined();
 
-    expect(useRequiredFields).toBeCalledWith(countryToRdfMap.GBR);
+    expect(useRequiredFields).toBeCalledWith(CountryToRdfMap.GBR);
 
     expect(requiredFieldsProps.data).toEqual(requiredFields);
     expect(requiredFieldsProps.hotelProfileWebId).toEqual(

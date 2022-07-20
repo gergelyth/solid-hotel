@@ -13,7 +13,7 @@ import {
   CreateHotelPrivacyTokenDataset,
 } from "../../util/datasetFactory";
 import { HotelPrivacyToken } from "../../types/HotelPrivacyToken";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { ReservationState } from "../../types/ReservationState";
 import { GuestPrivacyToken } from "../../types/GuestPrivacyToken";
 
@@ -30,7 +30,7 @@ jest.mock("../../util/solid", () => {
 const hotelPrivacyTokens: HotelPrivacyToken[] = [
   {
     urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource1.ttl",
-    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    fieldList: [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: new Date("2021-07-11"),
@@ -40,7 +40,7 @@ const hotelPrivacyTokens: HotelPrivacyToken[] = [
   },
   {
     urlAtHotel: "https://testpodurl.com/hotelprivacy/testResource2.ttl",
-    fieldList: [personFieldToRdfMap.firstName],
+    fieldList: [PersonFieldToRdfMap.firstName],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-03-19"),
@@ -64,7 +64,7 @@ const hotelDatasetMap: { [url: string]: SolidDataset } = {
 const guestPrivacyTokens: GuestPrivacyToken[] = [
   {
     urlAtHotel: "TestUrlAtHotel1",
-    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    fieldList: [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: new Date("2021-07-11"),

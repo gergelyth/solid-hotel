@@ -5,7 +5,7 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 import { useNotifications } from "../hooks/useNotifications";
-import { notificationToRdfMap } from "../vocabularies/rdf_notification";
+import { NotificationToRdfMap } from "../vocabularies/rdfNotification";
 import { Notification } from "../types/Notification";
 import { ParserList } from "../types/ParserList";
 import { SafeSaveDatasetAt } from "./solidWrapper";
@@ -62,7 +62,7 @@ export async function SetIsProcessedForNotification(
 ): Promise<void> {
   notification = setBoolean(
     notification,
-    notificationToRdfMap.isProcessed,
+    NotificationToRdfMap.isProcessed,
     true
   );
   const updatedDataSet = setThing(notificationDataset, notification);

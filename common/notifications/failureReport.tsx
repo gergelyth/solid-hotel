@@ -12,10 +12,10 @@ import {
 import { ReservationState } from "../types/ReservationState";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
-import { failureReportRdfMap } from "../vocabularies/notification_payloads/rdf_failureReport";
+import { FailureReportRdfMap } from "../vocabularies/notificationpayloads/rdfFailureReport";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 import { GetThing } from "../util/solid";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /**
  * Parses the notification dataset into a failure report.
@@ -36,7 +36,7 @@ export function DeserializeFailureReport(
 
   const resultStateValue = getInteger(
     failureThing,
-    failureReportRdfMap.resultState
+    FailureReportRdfMap.resultState
   );
   if (!resultStateValue) {
     throw new Error("Result state value is null in failure report");
@@ -45,7 +45,7 @@ export function DeserializeFailureReport(
 
   const errorMessage = getStringNoLocale(
     failureThing,
-    failureReportRdfMap.errorMessage
+    FailureReportRdfMap.errorMessage
   );
   if (!errorMessage) {
     throw new Error("Error message is null in reservation change notification");
@@ -68,17 +68,17 @@ export function SerializeFailureReport(
   let failureThing = createThing({ name: "failure" });
   failureThing = addUrl(
     failureThing,
-    utilRdfMap.type,
-    failureReportRdfMap.type
+    UtilRdfMap.type,
+    FailureReportRdfMap.type
   );
   failureThing = addStringNoLocale(
     failureThing,
-    failureReportRdfMap.errorMessage,
+    FailureReportRdfMap.errorMessage,
     errorMessage
   );
   failureThing = addInteger(
     failureThing,
-    failureReportRdfMap.resultState,
+    FailureReportRdfMap.resultState,
     resultReservationState.valueOf()
   );
 

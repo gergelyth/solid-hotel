@@ -2,13 +2,13 @@ import { mocked } from "ts-jest/utils";
 import "@testing-library/jest-dom";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MockApiOperation } from "../apiDataRetrieval";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
-import { countryToRdfMap } from "../../vocabularies/rdf_countries";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
+import { CountryToRdfMap } from "../../vocabularies/rdfCountries";
 
 function MockRequest(): NextApiRequest {
   const query: { [key: string]: string } = {
-    hotelLocation: countryToRdfMap.FRA,
-    guestNationality: countryToRdfMap.GBR,
+    hotelLocation: CountryToRdfMap.FRA,
+    guestNationality: CountryToRdfMap.GBR,
   };
   const mockRequest = mocked({
     query: query,
@@ -19,11 +19,11 @@ function MockRequest(): NextApiRequest {
 describe("apiDataRetrieval", () => {
   test("MockApiOperation returns correct data", async () => {
     const expectedResult = [
-      personFieldToRdfMap.firstName,
-      personFieldToRdfMap.lastName,
-      personFieldToRdfMap.nationality,
-      personFieldToRdfMap.idDocumentNumber,
-      personFieldToRdfMap.email,
+      PersonFieldToRdfMap.firstName,
+      PersonFieldToRdfMap.lastName,
+      PersonFieldToRdfMap.nationality,
+      PersonFieldToRdfMap.idDocumentNumber,
+      PersonFieldToRdfMap.email,
     ];
 
     let jsonResult;

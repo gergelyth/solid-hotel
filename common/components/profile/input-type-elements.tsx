@@ -10,7 +10,7 @@ import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { IdDocumentType } from "../../types/IdDocument";
-import { countryToRdfMap } from "../../vocabularies/rdf_countries";
+import { CountryToRdfMap } from "../../vocabularies/rdfCountries";
 
 /**
  * Creates a component for STRING typed fields.
@@ -140,8 +140,8 @@ export function FieldInputElementBasedOnType({
       );
     }
     case xmlSchemaTypes.country: {
-      const options = Object.keys(countryToRdfMap).map((key) => {
-        return { value: countryToRdfMap[key], display: key };
+      const options = Object.keys(CountryToRdfMap).map((key) => {
+        return { value: CountryToRdfMap[key], display: key };
       });
       return GetEnumPickerElement(
         field,

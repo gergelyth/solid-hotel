@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { FieldNameToFieldMap, RdfNameToFieldMap } from "../fields";
 
 describe("fields", () => {
@@ -18,14 +18,14 @@ describe("fields", () => {
 
   test("RdfNameToFieldMap contains all supported fields", async () => {
     expect(Object.keys(RdfNameToFieldMap)).toEqual([
-      personFieldToRdfMap.firstName,
-      personFieldToRdfMap.lastName,
-      personFieldToRdfMap.nationality,
-      personFieldToRdfMap.email,
-      personFieldToRdfMap.phone,
-      personFieldToRdfMap.idDocumentType,
-      personFieldToRdfMap.idDocumentNumber,
-      personFieldToRdfMap.idDocumentExpiry,
+      PersonFieldToRdfMap.firstName,
+      PersonFieldToRdfMap.lastName,
+      PersonFieldToRdfMap.nationality,
+      PersonFieldToRdfMap.email,
+      PersonFieldToRdfMap.phone,
+      PersonFieldToRdfMap.idDocumentType,
+      PersonFieldToRdfMap.idDocumentNumber,
+      PersonFieldToRdfMap.idDocumentExpiry,
     ]);
   });
 });

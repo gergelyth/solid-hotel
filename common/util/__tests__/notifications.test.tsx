@@ -2,8 +2,8 @@ import { createSolidDataset } from "@inrupt/solid-client";
 import "@testing-library/jest-dom";
 import { useNotifications } from "../../hooks/useNotifications";
 import { NotificationType } from "../../types/NotificationsType";
-import { notificationTypeRdfMap } from "../../vocabularies/notification_payloads/rdf_notificationTypes";
-import { notificationToRdfMap } from "../../vocabularies/rdf_notification";
+import { NotificationTypeRdfMap } from "../../vocabularies/notificationpayloads/rdfNotificationTypes";
+import { NotificationToRdfMap } from "../../vocabularies/rdfNotification";
 import { AddNotificationThingToDataset } from "../datasetFactory";
 import {
   RetrieveAllNotifications,
@@ -66,15 +66,15 @@ describe("notifications", () => {
       .mockImplementation(() => mockDate as unknown as string);
 
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/notification> a <${
-      notificationToRdfMap.type
+      NotificationToRdfMap.type
     }>;
-    <${notificationToRdfMap.notificationType}> <${
-      notificationTypeRdfMap[NotificationType.BookingRequest]
+    <${NotificationToRdfMap.notificationType}> <${
+      NotificationTypeRdfMap[NotificationType.BookingRequest]
     }>;
     <${
-      notificationToRdfMap.createdAt
+      NotificationToRdfMap.createdAt
     }> "${mockDate.toISOString()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-    <${notificationToRdfMap.isProcessed}> true.
+    <${NotificationToRdfMap.isProcessed}> true.
 `;
 
     let calledUrl;

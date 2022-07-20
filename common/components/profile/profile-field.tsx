@@ -2,7 +2,7 @@ import { useState } from "react";
 import { EditFieldPopup } from "./edit-field-popup";
 import { DeleteFieldPopup } from "./delete-field-popup";
 import { RemoveField, SetField } from "../../util/solidProfile";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { Grid, Button, Box, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Field } from "../../types/Field";
@@ -25,7 +25,7 @@ function OnEditConfirmation(
     }
   });
   TriggerRefetchGuest(rdfFields, fields, webId);
-  SetField(personFieldToRdfMap[fieldName], newValue, webId);
+  SetField(PersonFieldToRdfMap[fieldName], newValue, webId);
   RevalidateGuest(rdfFields, webId);
 }
 
@@ -43,7 +43,7 @@ function OnDeleteConfirmation(
     if (field?.fieldShortName === fieldName) fields.splice(index, 1);
   });
   TriggerRefetchGuest(rdfFields, fields, webId);
-  RemoveField(personFieldToRdfMap[fieldName], webId);
+  RemoveField(PersonFieldToRdfMap[fieldName], webId);
   RevalidateGuest(rdfFields, webId);
 }
 

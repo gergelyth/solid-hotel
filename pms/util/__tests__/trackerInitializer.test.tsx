@@ -12,7 +12,7 @@ import {
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
-import { personFieldToRdfMap } from "../../../common/vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
 import { GetDataSet } from "../../../common/util/solid";
 
 jest.mock("../../../common/components/custom-progress-snackbar", () => {
@@ -62,8 +62,8 @@ function MockGetDataSet(url: string): Promise<SolidDataset> {
 function MockHotelProfile1(thingUrl: string): SolidDataset {
   let dataset = createSolidDataset();
   let thing = createThing({ url: thingUrl });
-  thing = setStringNoLocale(thing, personFieldToRdfMap.firstName, "John");
-  thing = setStringNoLocale(thing, personFieldToRdfMap.lastName, "Smith");
+  thing = setStringNoLocale(thing, PersonFieldToRdfMap.firstName, "John");
+  thing = setStringNoLocale(thing, PersonFieldToRdfMap.lastName, "Smith");
 
   dataset = setThing(dataset, thing);
   return dataset;
@@ -72,7 +72,7 @@ function MockHotelProfile1(thingUrl: string): SolidDataset {
 function MockHotelProfile2(thingUrl: string): SolidDataset {
   let dataset = createSolidDataset();
   let thing = createThing({ url: thingUrl });
-  thing = setStringNoLocale(thing, personFieldToRdfMap.email, "TestEmail");
+  thing = setStringNoLocale(thing, PersonFieldToRdfMap.email, "TestEmail");
 
   dataset = setThing(dataset, thing);
   return dataset;
@@ -94,11 +94,11 @@ describe("trackerInitializer", () => {
 
     expect(CacheProfile).toBeCalledWith(
       "https://testpodurl.com/hotelprofiles/testResource1.ttl#hotelProfile",
-      [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName]
+      [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName]
     );
     expect(CacheProfile).toBeCalledWith(
       "https://testpodurl.com/hotelprofiles/testResource2.ttl#hotelProfile",
-      [personFieldToRdfMap.email]
+      [PersonFieldToRdfMap.email]
     );
     expect(Subscribe).toBeCalledWith(
       "https://testpodurl.com/hotelprofiles/testResource1.ttl#hotelProfile",

@@ -14,7 +14,7 @@ import {
   SaveInboxAndReturnReservation,
   SetInboxToHotelInboxInMemory,
 } from "../pairingRequestUtil";
-import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../../../common/vocabularies/rdfReservation";
 
 jest.mock("../../../common/util/solid", () => {
   return {
@@ -64,7 +64,7 @@ describe("pairingRequestUtil", () => {
       "https://testpodurl.com/reservations/reservation1"
     );
 
-    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${reservationFieldToRdfMap.inbox}> "TestGuestInboxUrl".
+    const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> <${ReservationFieldToRdfMap.inbox}> "TestGuestInboxUrl".
 `;
     expect(await SerializeDataset(savedDataset)).toEqual(expectedRdf);
   });
@@ -73,13 +73,13 @@ describe("pairingRequestUtil", () => {
     let thing = createThing({ name: "reservation" });
     thing = setStringNoLocale(
       thing,
-      reservationFieldToRdfMap.inbox,
+      ReservationFieldToRdfMap.inbox,
       "oldValue"
     );
 
     const result = SetInboxToHotelInboxInMemory(thing, "TestHotelInboxUrl");
 
-    expect(getStringNoLocale(result, reservationFieldToRdfMap.inbox)).toEqual(
+    expect(getStringNoLocale(result, ReservationFieldToRdfMap.inbox)).toEqual(
       "TestHotelInboxUrl"
     );
   });
@@ -88,7 +88,7 @@ describe("pairingRequestUtil", () => {
     let thing = createThing({ name: "reservation" });
     thing = setStringNoLocale(
       thing,
-      reservationFieldToRdfMap.owner,
+      ReservationFieldToRdfMap.owner,
       "TestOwner"
     );
 
@@ -99,7 +99,7 @@ describe("pairingRequestUtil", () => {
     expect(
       getStringNoLocale(
         anonymizedReservationThing,
-        reservationFieldToRdfMap.owner
+        ReservationFieldToRdfMap.owner
       )
     ).toEqual("Anonymized");
   });

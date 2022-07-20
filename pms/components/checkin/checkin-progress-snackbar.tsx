@@ -9,7 +9,7 @@ import {
   PrivacyTokensUrl,
 } from "../../../common/consts/solidIdentifiers";
 import { getDatetime } from "@inrupt/solid-client";
-import { reservationFieldToRdfMap } from "../../../common/vocabularies/rdf_reservation";
+import { ReservationFieldToRdfMap } from "../../../common/vocabularies/rdfReservation";
 import {
   CreateActiveProfilePrivacyToken,
   FindWebIdTokenAndDeleteIt,
@@ -58,7 +58,7 @@ async function ExecuteCheckIn(
 
   const checkoutDate = getDatetime(
     reservationThing,
-    reservationFieldToRdfMap.checkoutTime
+    ReservationFieldToRdfMap.checkoutTime
   );
   if (!checkoutDate) {
     throw new Error("Checkout date is null in reservation");

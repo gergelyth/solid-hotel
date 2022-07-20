@@ -6,8 +6,8 @@ import { Field } from "../../../types/Field";
 import { ProfileField } from "../profile-field";
 import { xmlSchemaTypes } from "../../../consts/supportedTypes";
 import { RemoveField, SetField } from "../../../util/solidProfile";
-import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
-import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
+import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
+import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
 
 jest.mock("../../../util/solidProfile", () => {
   return {
@@ -42,21 +42,21 @@ const testGuestFields: Field[] = [
     fieldShortName: "firstName",
     fieldPrettyName: "First name",
     fieldValue: "John",
-    rdfName: personFieldToRdfMap.firstName,
+    rdfName: PersonFieldToRdfMap.firstName,
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "lastName",
     fieldPrettyName: "Last name",
     fieldValue: "Smith",
-    rdfName: personFieldToRdfMap.lastName,
+    rdfName: PersonFieldToRdfMap.lastName,
     datatype: xmlSchemaTypes.string,
   },
   {
     fieldShortName: "nationality",
     fieldPrettyName: "Nationality",
-    fieldValue: countryToRdfMap.GBR,
-    rdfName: personFieldToRdfMap.nationality,
+    fieldValue: CountryToRdfMap.GBR,
+    rdfName: PersonFieldToRdfMap.nationality,
     datatype: xmlSchemaTypes.country,
   },
 ];
@@ -136,7 +136,7 @@ describe("<ProfileField />", () => {
     await userEvent.click(editFieldPopupButton);
 
     expect(mockSetField).toBeCalledWith(
-      personFieldToRdfMap.firstName,
+      PersonFieldToRdfMap.firstName,
       newFieldValue
     );
   });
@@ -162,6 +162,6 @@ describe("<ProfileField />", () => {
     ) as Element;
     await userEvent.click(deleteFieldPopupButton);
 
-    expect(mockRemoveField).toBeCalledWith(personFieldToRdfMap.firstName);
+    expect(mockRemoveField).toBeCalledWith(PersonFieldToRdfMap.firstName);
   });
 });

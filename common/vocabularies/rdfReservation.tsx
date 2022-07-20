@@ -1,5 +1,5 @@
 /** A vocabulary map defining the RDF properties used for reservations. */
-export const reservationFieldToRdfMap: Record<string, string> = {
+export const ReservationFieldToRdfMap: Record<string, string> = {
   type: "https://schema.org/LodgingReservation",
   id: "https://schema.org/reservationId",
   inbox: "https://schema.org/replyToUrl",

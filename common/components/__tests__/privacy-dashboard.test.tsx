@@ -4,26 +4,26 @@ import "@testing-library/jest-dom";
 import { PrivacyToken } from "../../types/PrivacyToken";
 import { PrivacyDashboard } from "../privacy-dashboard";
 import { ReservationState } from "../../types/ReservationState";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 
 const testPrivacyTokens: PrivacyToken[] = [
   {
     urlAtHotel: "TestUrl1",
-    fieldList: [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+    fieldList: [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName],
     reason: "TestReason1",
     forReservationState: ReservationState.CONFIRMED,
     expiry: new Date("2021-11-23"),
   },
   {
     urlAtHotel: "TestUrl2",
-    fieldList: [personFieldToRdfMap.email],
+    fieldList: [PersonFieldToRdfMap.email],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-11-25"),
   },
   {
     urlAtHotel: "TestUrl3",
-    fieldList: [personFieldToRdfMap.phone],
+    fieldList: [PersonFieldToRdfMap.phone],
     reason: "TestReason2",
     forReservationState: ReservationState.ACTIVE,
     expiry: new Date("2021-11-29"),
@@ -74,23 +74,23 @@ describe("<PrivacyDashboard />", () => {
     const reason1 = counterpartyBoxes[0];
     expect(reason1.innerHTML.includes("TestReason1")).toBeTruthy();
     expect(
-      reason1.innerHTML.includes(personFieldToRdfMap.firstName)
+      reason1.innerHTML.includes(PersonFieldToRdfMap.firstName)
     ).toBeTruthy();
     expect(
-      reason1.innerHTML.includes(personFieldToRdfMap.lastName)
+      reason1.innerHTML.includes(PersonFieldToRdfMap.lastName)
     ).toBeTruthy();
 
-    expect(reason1.innerHTML.includes(personFieldToRdfMap.email)).toBeFalsy();
+    expect(reason1.innerHTML.includes(PersonFieldToRdfMap.email)).toBeFalsy();
 
     const reason2 = counterpartyBoxes[1];
     expect(reason2.innerHTML.includes("TestReason2")).toBeTruthy();
-    expect(reason2.innerHTML.includes(personFieldToRdfMap.email)).toBeTruthy();
+    expect(reason2.innerHTML.includes(PersonFieldToRdfMap.email)).toBeTruthy();
 
     expect(
-      reason2.innerHTML.includes(personFieldToRdfMap.firstName)
+      reason2.innerHTML.includes(PersonFieldToRdfMap.firstName)
     ).toBeFalsy();
     expect(
-      reason2.innerHTML.includes(personFieldToRdfMap.lastName)
+      reason2.innerHTML.includes(PersonFieldToRdfMap.lastName)
     ).toBeFalsy();
   });
 

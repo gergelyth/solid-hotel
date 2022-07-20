@@ -3,7 +3,7 @@ import { render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { OfflineCheckinPage } from "../../../pages/checkin";
 import { RequiredFields } from "../required-fields";
-import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
 
 let confirmButtonProps: {
   onClickFunction: () => void;
@@ -41,8 +41,8 @@ jest.mock("../../../../common/components/profile/profile-main", () => {
 });
 
 const requiredFields = [
-  personFieldToRdfMap.firstName,
-  personFieldToRdfMap.lastName,
+  PersonFieldToRdfMap.firstName,
+  PersonFieldToRdfMap.lastName,
 ];
 function Render(
   setCurrentPage: () => void,

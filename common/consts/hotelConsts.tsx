@@ -1,4 +1,4 @@
-import { countryToRdfMap } from "../vocabularies/rdf_countries";
+import { CountryToRdfMap } from "../vocabularies/rdfCountries";
 
 /**
  * @constant An example name of hotel name which is set in the hotel profile.
@@ -11,7 +11,7 @@ export const HotelName = "Paradise Hotel";
  * @default
  */
 export const HotelLocation =
-  process.env.NEXT_PUBLIC_HOTEL_LOCATION ?? countryToRdfMap.FRA;
+  process.env.NEXT_PUBLIC_HOTEL_LOCATION ?? CountryToRdfMap.FRA;
 /**
  * @constant An example name of hotel address which is set in the hotel profile.
  * @default

@@ -9,11 +9,11 @@ import {
 } from "@inrupt/solid-client";
 import { Field } from "../types/Field";
 import { GetDataSet, GetThing } from "./solid";
-import { personFieldToRdfMap } from "../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 import { DataProtectionProfilesUrl } from "../consts/solidIdentifiers";
 import { SafeSaveDatasetInContainer } from "./solidWrapper";
 import { ShowError } from "./helpers";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /** The name of the Solid Thing containing the profile. */
 const HotelProfileThingName = "hotelProfile";
@@ -32,8 +32,8 @@ export async function CreateHotelProfile(
   let hotelProfileThing = createThing({ name: HotelProfileThingName });
   hotelProfileThing = addUrl(
     hotelProfileThing,
-    utilRdfMap.type,
-    personFieldToRdfMap.type
+    UtilRdfMap.type,
+    PersonFieldToRdfMap.type
   );
   fields.forEach((field) => {
     if (!field.fieldValue) {
@@ -43,7 +43,7 @@ export async function CreateHotelProfile(
     }
     hotelProfileThing = addStringNoLocale(
       hotelProfileThing,
-      personFieldToRdfMap[field.fieldShortName],
+      PersonFieldToRdfMap[field.fieldShortName],
       field.fieldValue
     );
   });

@@ -10,12 +10,12 @@ import {
   createThing,
   Thing,
 } from "@inrupt/solid-client";
-import { personFieldToRdfMap } from "../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { Field } from "../../types/Field";
 import { xmlSchemaTypes } from "../../consts/supportedTypes";
 import { RevalidateGuest, TriggerRefetchGuest, useGuest } from "../useGuest";
 import { TestGuestFields } from "../../util/__tests__/testUtil";
-import { countryToRdfMap } from "../../vocabularies/rdf_countries";
+import { CountryToRdfMap } from "../../vocabularies/rdfCountries";
 
 jest.mock("../../util/solidProfile", () => {
   return {
@@ -34,9 +34,9 @@ const guestWebId = "TestGuestWebId";
 
 function CreateMockProfile(): Thing {
   let thing = createThing({ name: guestWebId });
-  thing = addStringNoLocale(thing, personFieldToRdfMap.firstName, "John");
-  thing = addStringNoLocale(thing, personFieldToRdfMap.lastName, "Smith");
-  thing = addUrl(thing, personFieldToRdfMap.nationality, countryToRdfMap.GBR);
+  thing = addStringNoLocale(thing, PersonFieldToRdfMap.firstName, "John");
+  thing = addStringNoLocale(thing, PersonFieldToRdfMap.lastName, "Smith");
+  thing = addUrl(thing, PersonFieldToRdfMap.nationality, CountryToRdfMap.GBR);
   return thing;
 }
 
@@ -82,7 +82,7 @@ describe("useGuest", () => {
 
   test("Only returns queried RDF fields", async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
-      useGuest([personFieldToRdfMap.firstName], guestWebId)
+      useGuest([PersonFieldToRdfMap.firstName], guestWebId)
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -105,7 +105,7 @@ describe("useGuest", () => {
       };
     });
     const { result, waitForNextUpdate } = renderHook(() =>
-      useGuest([personFieldToRdfMap.firstName], guestWebId)
+      useGuest([PersonFieldToRdfMap.firstName], guestWebId)
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -124,13 +124,13 @@ describe("useGuest", () => {
         fieldShortName: "firstName",
         fieldPrettyName: "First name",
         fieldValue: "Sam",
-        rdfName: personFieldToRdfMap["firstName"],
+        rdfName: PersonFieldToRdfMap["firstName"],
         datatype: xmlSchemaTypes.string,
       },
     ];
 
     let thing = createThing({ name: guestWebId });
-    thing = addStringNoLocale(thing, personFieldToRdfMap.firstName, "Sam");
+    thing = addStringNoLocale(thing, PersonFieldToRdfMap.firstName, "Sam");
     (GetProfile as jest.Mock).mockImplementation(async () => {
       return {
         profileAddress: guestWebId,
@@ -140,7 +140,7 @@ describe("useGuest", () => {
     });
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useGuest([personFieldToRdfMap.firstName])
+      useGuest([PersonFieldToRdfMap.firstName])
     );
     await act(async () => {
       await waitForNextUpdate();
@@ -159,13 +159,13 @@ describe("useGuest", () => {
     const mockMutate = jest.spyOn(swr, "mutate");
 
     RevalidateGuest(
-      [personFieldToRdfMap.firstName, personFieldToRdfMap.lastName],
+      [PersonFieldToRdfMap.firstName, PersonFieldToRdfMap.lastName],
       "TestWebId"
     );
 
     expect(mockMutate).toBeCalledWith([
       "guest",
-      `${personFieldToRdfMap.firstName},${personFieldToRdfMap.lastName}`,
+      `${PersonFieldToRdfMap.firstName},${PersonFieldToRdfMap.lastName}`,
       "TestWebId",
     ]);
   });
@@ -179,14 +179,14 @@ describe("useGuest", () => {
         fieldShortName: "firstName",
         fieldPrettyName: "First name",
         fieldValue: "John",
-        rdfName: personFieldToRdfMap["firstName"],
+        rdfName: PersonFieldToRdfMap["firstName"],
         datatype: xmlSchemaTypes.string,
       },
       {
         fieldShortName: "lastName",
         fieldPrettyName: "Last name",
         fieldValue: "Smith",
-        rdfName: personFieldToRdfMap["lastName"],
+        rdfName: PersonFieldToRdfMap["lastName"],
         datatype: xmlSchemaTypes.string,
       },
     ];
@@ -196,7 +196,7 @@ describe("useGuest", () => {
 
     expect(mockMutate).toBeCalledWith([
       "guest",
-      `${personFieldToRdfMap.firstName},${personFieldToRdfMap.lastName}`,
+      `${PersonFieldToRdfMap.firstName},${PersonFieldToRdfMap.lastName}`,
       "TestWebId",
     ]);
   });

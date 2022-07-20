@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { ValueChangeComponent } from "../value-change-component";
 import { IncomingProfileChangeStrings } from "../../../util/tracker/profileChangeStrings";
 import { FieldValueChange } from "../../../util/tracker/util";
-import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
 
 function Render(
   fieldValueChange: FieldValueChange,
@@ -28,7 +28,7 @@ describe("<ValueChangeComponent />", () => {
   test("Renders correctly with requiring approval", async () => {
     const fieldValueChange = {
       name: "First name",
-      rdfName: personFieldToRdfMap["firstName"],
+      rdfName: PersonFieldToRdfMap["firstName"],
       oldValue: "John",
       newValue: "Sam",
     };
@@ -49,14 +49,14 @@ describe("<ValueChangeComponent />", () => {
     await userEvent.click(screen.getByDisplayValue("false"));
 
     expect(mockSetOptionValue).toBeCalledWith(
-      personFieldToRdfMap["firstName"],
+      PersonFieldToRdfMap["firstName"],
       false
     );
 
     await userEvent.click(screen.getByDisplayValue("true"));
 
     expect(mockSetOptionValue).toBeCalledWith(
-      personFieldToRdfMap["firstName"],
+      PersonFieldToRdfMap["firstName"],
       true
     );
   });
@@ -64,7 +64,7 @@ describe("<ValueChangeComponent />", () => {
   test("Renders correctly without requiring approval - radio is disabled", async () => {
     const fieldValueChange = {
       name: "First name",
-      rdfName: personFieldToRdfMap["firstName"],
+      rdfName: PersonFieldToRdfMap["firstName"],
       oldValue: "John",
       newValue: "Sam",
     };

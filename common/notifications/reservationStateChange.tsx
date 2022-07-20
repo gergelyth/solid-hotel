@@ -10,12 +10,12 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 import { ReservationState } from "../types/ReservationState";
-import { reservationStateChangeToRdfMap } from "../vocabularies/notification_payloads/rdf_reservationStateChange";
+import { ReservationStateChangeToRdfMap } from "../vocabularies/notificationpayloads/rdfReservationStateChange";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 import { GetThing } from "../util/solid";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /**
  * Parses the notification dataset into the reservation state change properties.
@@ -36,7 +36,7 @@ export function DeserializeReservationStateChange(
 
   const newStateValue = getInteger(
     stateChangeThing,
-    reservationStateChangeToRdfMap.newState
+    ReservationStateChangeToRdfMap.newState
   );
   if (!newStateValue) {
     throw new Error(
@@ -47,7 +47,7 @@ export function DeserializeReservationStateChange(
 
   const replyInbox = getStringNoLocale(
     stateChangeThing,
-    reservationStateChangeToRdfMap.replyInbox
+    ReservationStateChangeToRdfMap.replyInbox
   );
   if (!replyInbox) {
     throw new Error(
@@ -72,17 +72,17 @@ export function SerializeReservationStateChange(
   let request = createThing({ name: "reservationStateChange" });
   request = addUrl(
     request,
-    utilRdfMap.type,
-    reservationStateChangeToRdfMap.type
+    UtilRdfMap.type,
+    ReservationStateChangeToRdfMap.type
   );
   request = addStringNoLocale(
     request,
-    reservationStateChangeToRdfMap.replyInbox,
+    ReservationStateChangeToRdfMap.replyInbox,
     replyInbox
   );
   request = addInteger(
     request,
-    reservationStateChangeToRdfMap.newState,
+    ReservationStateChangeToRdfMap.newState,
     newState.valueOf()
   );
 

@@ -3,7 +3,7 @@ import SOLIDHOTEL from "../solidhotel-vocab/SOLIDHOTEL.js";
 
 // TODO: fields have to be the same as in ../../apiData.json
 /** A vocabulary map defining the RDF properties used for the personal information fields of the guest. */
-export const personFieldToRdfMap: Record<string, string> = {
+export const PersonFieldToRdfMap: Record<string, string> = {
   type: FOAF.Person.value,
   firstName: FOAF.firstName.value,
   lastName: FOAF.lastName.value,

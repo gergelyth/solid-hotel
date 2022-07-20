@@ -10,7 +10,7 @@ import {
 } from "../consts/locations";
 import { DataProtectionInformation } from "../util/apiDataRetrieval";
 import { ShowError } from "../util/helpers";
-import { personFieldToRdfMap } from "../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 import { useGuest } from "./useGuest";
 
 /**
@@ -50,7 +50,7 @@ function useMockApi<T>(
 
   //we call this conditionally - if we have the nationality, we won't call the SWR
   const guest = useGuest(
-    nationality ? undefined : [personFieldToRdfMap.nationality],
+    nationality ? undefined : [PersonFieldToRdfMap.nationality],
     webId
   );
 

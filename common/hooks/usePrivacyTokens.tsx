@@ -15,7 +15,7 @@ import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { PrivacyToken } from "../types/PrivacyToken";
 import { GetThing } from "../util/solid";
-import { privacyTokenToRdfMap } from "../vocabularies/notification_payloads/rdf_privacy";
+import { PrivacyTokenToRdfMap } from "../vocabularies/notificationpayloads/rdfPrivacy";
 import { FetchItems } from "./util/listThenItemsFetcher";
 
 const hotelSwrKey = "hotelPrivacy";
@@ -30,14 +30,14 @@ function ConvertToPrivacyToken(privacyThing: Thing): PrivacyToken {
   const token = {
     fieldList: getStringNoLocaleAll(
       privacyThing,
-      privacyTokenToRdfMap.fieldList
+      PrivacyTokenToRdfMap.fieldList
     ),
-    reason: getStringNoLocale(privacyThing, privacyTokenToRdfMap.reason) ?? "",
+    reason: getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reason) ?? "",
     forReservationState:
-      getInteger(privacyThing, privacyTokenToRdfMap.forReservationState) ?? 0,
+      getInteger(privacyThing, PrivacyTokenToRdfMap.forReservationState) ?? 0,
     expiry:
-      getDatetime(privacyThing, privacyTokenToRdfMap.expiry) ?? new Date(),
-    urlAtHotel: getStringNoLocale(privacyThing, privacyTokenToRdfMap.url),
+      getDatetime(privacyThing, PrivacyTokenToRdfMap.expiry) ?? new Date(),
+    urlAtHotel: getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.url),
   };
 
   return token;
@@ -62,13 +62,13 @@ export function ConvertToHotelPrivacyToken(
   const hotelPrivacytoken = {
     ...privacyToken,
     datasetUrlTarget:
-      getStringNoLocale(privacyThing, privacyTokenToRdfMap.datasetUrlTarget) ??
+      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.datasetUrlTarget) ??
       "",
     guestInbox:
-      getStringNoLocale(privacyThing, privacyTokenToRdfMap.guestInbox) ??
+      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.guestInbox) ??
       undefined,
     reservation:
-      getStringNoLocale(privacyThing, privacyTokenToRdfMap.reservation) ?? "",
+      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reservation) ?? "",
   };
 
   return hotelPrivacytoken;
@@ -96,12 +96,12 @@ export function ConvertToGuestPrivacyToken(
     hotelInboxForDeletion:
       getStringNoLocale(
         privacyThing,
-        privacyTokenToRdfMap.hotelInboxForDeletion
+        PrivacyTokenToRdfMap.hotelInboxForDeletion
       ) ?? "",
-    hotel: getStringNoLocale(privacyThing, privacyTokenToRdfMap.hotel) ?? "",
+    hotel: getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.hotel) ?? "",
     urlAtGuest: url,
     reservation:
-      getStringNoLocale(privacyThing, privacyTokenToRdfMap.reservation) ??
+      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reservation) ??
       undefined,
   };
 

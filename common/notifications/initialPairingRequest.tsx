@@ -9,10 +9,10 @@ import {
 } from "@inrupt/solid-client";
 import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
-import { initialPairingRequestRdfMap } from "../vocabularies/notification_payloads/rdf_initialPairingRequest";
-import { pairingTokenToRdfMap } from "../vocabularies/rdf_pairingToken";
+import { InitialPairingRequestRdfMap } from "../vocabularies/notificationpayloads/rdfInitialPairingRequest";
+import { PairingTokenToRdfMap } from "../vocabularies/rdfPairingToken";
 import { GetThing } from "../util/solid";
-import { utilRdfMap } from "../vocabularies/rdf_util";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /**
  * Parses the notification dataset into an initial pairing request submitted by the guest.
@@ -29,7 +29,7 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
 
   const guestInboxUrl = getStringNoLocale(
     requestThing,
-    initialPairingRequestRdfMap.guestInboxUrl
+    InitialPairingRequestRdfMap.guestInboxUrl
   );
   if (!guestInboxUrl) {
     throw new Error("Guest inbox URL is null in initial pairing request");
@@ -37,7 +37,7 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
 
   const token = getStringNoLocale(
     requestThing,
-    pairingTokenToRdfMap.pairingToken
+    PairingTokenToRdfMap.pairingToken
   );
   if (!token) {
     throw new Error("Pairing token is null in initial pairing request");
@@ -60,18 +60,18 @@ export function SerializeInitialPairingRequest(
   let requestThing = createThing({ name: "pairingRequest" });
   requestThing = addUrl(
     requestThing,
-    utilRdfMap.type,
-    initialPairingRequestRdfMap.type
+    UtilRdfMap.type,
+    InitialPairingRequestRdfMap.type
   );
   requestThing = addStringNoLocale(
     requestThing,
-    initialPairingRequestRdfMap.guestInboxUrl,
+    InitialPairingRequestRdfMap.guestInboxUrl,
     guestInboxUrl
   );
 
   requestThing = addStringNoLocale(
     requestThing,
-    pairingTokenToRdfMap.pairingToken,
+    PairingTokenToRdfMap.pairingToken,
     token
   );
 

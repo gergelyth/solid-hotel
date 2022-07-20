@@ -2,7 +2,7 @@ import { useHotel } from "../useHotel";
 import { act, renderHook } from "@testing-library/react-hooks";
 import { GetProfileOf, SolidProfile } from "../../util/solidProfile";
 import { addStringNoLocale, createThing, Thing } from "@inrupt/solid-client";
-import { hotelFieldToRdfMap } from "../../vocabularies/rdf_hotel";
+import { HotelFieldToRdfMap } from "../../vocabularies/rdfHotel";
 import { HotelDetails } from "../../types/HotelDetails";
 
 jest.mock("../../util/solidProfile", () => {
@@ -21,13 +21,13 @@ const hotelWebId = "TestHotelWebId";
 
 function CreateMockProfile(): Thing {
   let thing = createThing({ name: hotelWebId });
-  thing = addStringNoLocale(thing, hotelFieldToRdfMap.name, "HotelName");
+  thing = addStringNoLocale(thing, HotelFieldToRdfMap.name, "HotelName");
   thing = addStringNoLocale(
     thing,
-    hotelFieldToRdfMap.location,
+    HotelFieldToRdfMap.location,
     "HotelLocation"
   );
-  thing = addStringNoLocale(thing, hotelFieldToRdfMap.address, "HotelAddress");
+  thing = addStringNoLocale(thing, HotelFieldToRdfMap.address, "HotelAddress");
   return thing;
 }
 

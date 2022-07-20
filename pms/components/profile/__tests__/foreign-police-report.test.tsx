@@ -4,8 +4,8 @@ import "@testing-library/jest-dom";
 import { TestGuestFields } from "../../../../common/util/__tests__/testUtil";
 import { ForeignPoliceReport } from "../foreign-police-report";
 import { useGuest } from "../../../../common/hooks/useGuest";
-import { personFieldToRdfMap } from "../../../../common/vocabularies/rdf_person";
-import { countryToRdfMap } from "../../../../common/vocabularies/rdf_countries";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
+import { CountryToRdfMap } from "../../../../common/vocabularies/rdfCountries";
 
 jest.mock("../../../../common/hooks/useGuest", () => {
   return {
@@ -38,7 +38,7 @@ describe("<ForeignPoliceReport  />", () => {
 
     const linkValue = linkElement?.href;
     expect(linkValue).toContain(
-      `"Field name","RDF property","Value""First name","${personFieldToRdfMap.firstName}","John""Last name","${personFieldToRdfMap.lastName}","Smith""Nationality","${personFieldToRdfMap.nationality}","${countryToRdfMap.GBR}"`
+      `"Field name","RDF property","Value""First name","${PersonFieldToRdfMap.firstName}","John""Last name","${PersonFieldToRdfMap.lastName}","Smith""Nationality","${PersonFieldToRdfMap.nationality}","${CountryToRdfMap.GBR}"`
     );
   });
 });

@@ -4,12 +4,12 @@ import "@testing-library/jest-dom";
 import { ProfileUpdate } from "../tracker-send-change";
 import { SendProfileModificationSnackbar } from "../send-profile-modification";
 import { ReservationState } from "../../../types/ReservationState";
-import { personFieldToRdfMap } from "../../../vocabularies/rdf_person";
+import { PersonFieldToRdfMap } from "../../../vocabularies/rdfPerson";
 import { TestReservations } from "../../../util/__tests__/testUtil";
 import { useReservations } from "../../../hooks/useReservations";
 import { ShowWarningSnackbar } from "../../snackbar";
 import { ReservationAtHotel } from "../../../types/ReservationAtHotel";
-import { countryToRdfMap } from "../../../vocabularies/rdf_countries";
+import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
 
 const TestReservationUrl = "TestReservationsUrl";
 
@@ -52,13 +52,13 @@ beforeEach(() => {
 describe("<SendProfileModificationSnackbar  />", () => {
   test("Snackbar correctly filters field updates and sends them to the appropriate inbox", async () => {
     const profileUpdate: ProfileUpdate = {};
-    profileUpdate[personFieldToRdfMap["firstName"]] = {
+    profileUpdate[PersonFieldToRdfMap["firstName"]] = {
       status: false,
       newValue: "Sam",
     };
-    profileUpdate[personFieldToRdfMap["nationality"]] = {
+    profileUpdate[PersonFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: countryToRdfMap.ESP,
+      newValue: CountryToRdfMap.ESP,
     };
 
     const mockSendModiciation = jest.fn();
@@ -77,9 +77,9 @@ describe("<SendProfileModificationSnackbar  />", () => {
     ).toBeInTheDocument();
 
     const expectedProfileUpdate: ProfileUpdate = {};
-    expectedProfileUpdate[personFieldToRdfMap["nationality"]] = {
+    expectedProfileUpdate[PersonFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: countryToRdfMap.ESP,
+      newValue: CountryToRdfMap.ESP,
     };
     expect(mockSendModiciation).toBeCalledWith(
       expectedProfileUpdate,
@@ -91,13 +91,13 @@ describe("<SendProfileModificationSnackbar  />", () => {
 
   test("Snackbar with no matching reservations doesn't call send method", async () => {
     const profileUpdate: ProfileUpdate = {};
-    profileUpdate[personFieldToRdfMap["firstName"]] = {
+    profileUpdate[PersonFieldToRdfMap["firstName"]] = {
       status: false,
       newValue: "Sam",
     };
-    profileUpdate[personFieldToRdfMap["nationality"]] = {
+    profileUpdate[PersonFieldToRdfMap["nationality"]] = {
       status: true,
-      newValue: countryToRdfMap.ESP,
+      newValue: CountryToRdfMap.ESP,
     };
 
     const mockSendModiciation = jest.fn();
@@ -123,13 +123,13 @@ describe("<SendProfileModificationSnackbar  />", () => {
 
   test("Snackbar with no approved fields doesn't call send method", async () => {
     const profileUpdate: ProfileUpdate = {};
-    profileUpdate[personFieldToRdfMap["firstName"]] = {
+    profileUpdate[PersonFieldToRdfMap["firstName"]] = {
       status: false,
       newValue: "Sam",
     };
-    profileUpdate[personFieldToRdfMap["nationality"]] = {
+    profileUpdate[PersonFieldToRdfMap["nationality"]] = {
       status: false,
-      newValue: countryToRdfMap.ESP,
+      newValue: CountryToRdfMap.ESP,
     };
 
     const mockSendModiciation = jest.fn();
