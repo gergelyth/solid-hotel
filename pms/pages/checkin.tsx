@@ -6,6 +6,8 @@ import { RequiredFieldsAtOfflineCheckin } from "../components/checkin/fields-sub
 import { SetReservationOwnerAndState } from "../../common/util/solid_reservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import { QrComponent } from "../components/checkin/qr-subpage";
+import { AppProps } from "next/app";
+import { GetServerSidePropsResult } from "next";
 
 /** An enum which helps to keep track of which subpage the offline check-in page is currently showing. */
 export enum OfflineCheckinPage {
@@ -35,6 +37,29 @@ function FinishPage({
 }
 
 /**
+ * Parses the reservationId from the query parameters.
+ * @returns The reservationId as a prop or the notFound flag if the id is missing (which redirects to /404 then).
+ */
+export function getServerSideProps(
+  appProps: AppProps
+): GetServerSidePropsResult<{
+  reservationId: string;
+}> {
+  const query = appProps.router.query;
+  if (!query.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const reservationId = Array.isArray(query.id) ? query.id[0] : query.id;
+
+  return {
+    props: { reservationId },
+  };
+}
+
+/**
  * The page guiding the user through the offline check-in operation.
  * The reservation ID is passed as a query parameter.
  * Contains three subpages:
@@ -43,20 +68,22 @@ function FinishPage({
  * 3. a success notice informing the user that the offline check-in operation was successfully finished
  * @returns The offline check-in page.
  */
-function OfflineCheckin(): JSX.Element | null {
+function OfflineCheckin(
+  appProps: AppProps<{
+    reservationId: string;
+  }>
+): JSX.Element | null {
   const [currentPage, setCurrentPage] = useState(
     OfflineCheckinPage.RequiredFields
   );
 
-  const router = useRouter();
+  const reservationId: string = appProps.pageProps.reservationId;
 
-  const queryId = router.query.id;
-  if (!queryId) {
+  const router = useRouter();
+  if (!reservationId) {
     router.push("/404");
     return null;
   }
-
-  const reservationId = Array.isArray(queryId) ? queryId[0] : queryId;
 
   return (
     <Box width={1}>

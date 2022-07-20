@@ -5,9 +5,7 @@ import {
   Box,
   Typography,
 } from "@material-ui/core";
-import { useRouter } from "next/router";
 import { GetSession } from "../../common/util/solid";
-import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import { useRequiredFields } from "../../common/hooks/useMockApi";
 import { ErrorComponent } from "../../common/components/error-component";
 
@@ -17,23 +15,11 @@ import { ErrorComponent } from "../../common/components/error-component";
  * @returns A component wrapping the {@link ProfileMain} component with GPA specific actions.
  */
 function Profile(): JSX.Element | null {
-  const router = useRouter();
-
   const webId = GetSession().info.webId;
   const requiredFields = useRequiredFields(undefined, webId);
 
-  if (!webId) {
-    ShowWarningSnackbar("User not logged in. Redirecting...");
-    router.push("/login");
-    return null;
-  }
-
   if (requiredFields.isLoading) {
     return <CircularProgress />;
-  }
-
-  if (!requiredFields.data || requiredFields.isError) {
-    return <ErrorComponent />;
   }
 
   return (
@@ -41,13 +27,17 @@ function Profile(): JSX.Element | null {
       <Box textAlign="center" sx={{ mb: 4 }}>
         <Typography variant="h4">Your profile</Typography>
       </Box>
-      <ProfileMain
-        rdfFields={requiredFields.data}
-        webId={webId}
-        editable={true}
-        deletable={true}
-        centerJustify={true}
-      />
+      {!requiredFields.data || requiredFields.isError ? (
+        <ErrorComponent />
+      ) : (
+        <ProfileMain
+          rdfFields={requiredFields.data}
+          webId={webId}
+          editable={true}
+          deletable={true}
+          centerJustify={true}
+        />
+      )}
     </Container>
   );
 }
