@@ -16,7 +16,7 @@ import {
 } from "../../common/components/snackbar";
 import { GetSession } from "../../common/util/solid";
 import { ProfileCache } from "../../common/util/tracker/profileCache";
-import { UserTrackerInitializerSnackbar } from "../util/trackerInitializer";
+import { UserTrackerInitializerSnackbar } from "../components/util/tracker-initializer";
 import GlobalSwrConfig from "../../common/components/global-swr-config";
 import { LoadingIndicators } from "../../common/components/loading-indicators";
 

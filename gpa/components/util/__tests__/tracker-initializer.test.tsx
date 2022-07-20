@@ -1,30 +1,30 @@
 import React from "react";
 import { act, render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { ShowCustomSnackbar } from "../../../common/components/snackbar";
-import { HotelToRdf } from "../trackedRdfFieldCollector";
-import { UserTrackerInitializerSnackbar } from "../trackerInitializer";
-import { MockSession } from "../../../common/util/__tests__/testUtil";
-import { CacheProfile } from "../../../common/util/tracker/profileCache";
-import { Subscribe } from "../../../common/util/tracker/tracker";
+import { ShowCustomSnackbar } from "../../../../common/components/snackbar";
+import { HotelToRdf } from "../tracked-rdf-field-collector";
+import { UserTrackerInitializerSnackbar } from "../tracker-initializer";
+import { MockSession } from "../../../../common/util/__tests__/testUtil";
+import { CacheProfile } from "../../../../common/util/tracker/profileCache";
+import { Subscribe } from "../../../../common/util/tracker/tracker";
 
 const TestWebId = "TestWebId";
 
-jest.mock("../trackedRdfFieldCollector", () => {
+jest.mock("../tracked-rdf-field-collector", () => {
   return {
     TrackedRdfFieldCollector: jest.fn(),
   };
 });
 
-jest.mock("../../../common/components/custom-progress-snackbar", () => {
+jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
-jest.mock("../../../common/components/snackbar");
-jest.mock("../../../common/util/tracker/tracker");
-jest.mock("../../../common/util/tracker/profileCache");
-jest.mock("../../../common/util/solid", () => {
+jest.mock("../../../../common/components/snackbar");
+jest.mock("../../../../common/util/tracker/tracker");
+jest.mock("../../../../common/util/tracker/profileCache");
+jest.mock("../../../../common/util/solid", () => {
   return {
     GetSession: jest.fn(() => MockSession(true, TestWebId)),
   };

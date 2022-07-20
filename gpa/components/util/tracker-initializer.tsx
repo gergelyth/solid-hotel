@@ -1,17 +1,17 @@
 import {
   CloseSnackbar,
   ShowCustomSnackbar,
-} from "../../common/components/snackbar";
-import { Subscribe } from "../../common/util/tracker/tracker";
-import { GetSession } from "../../common/util/solid";
-import { CacheProfile } from "../../common/util/tracker/profileCache";
-import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
+} from "../../../common/components/snackbar";
+import { Subscribe } from "../../../common/util/tracker/tracker";
+import { GetSession } from "../../../common/util/solid";
+import { CacheProfile } from "../../../common/util/tracker/profileCache";
+import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
 import {
   HotelToRdf,
   TrackedRdfFieldCollector,
-} from "./trackedRdfFieldCollector";
-import { FieldChangeReceiverSnackbar } from "./onFieldChangeReceived";
+} from "./tracked-rdf-field-collector";
+import { FieldChangeReceiverSnackbar } from "./on-field-change-received";
 
 /**
  * Subscribe to profile changes in the guest's profile.

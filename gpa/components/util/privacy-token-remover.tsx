@@ -1,16 +1,16 @@
 import {
   CloseSnackbar,
   ShowWarningSnackbar,
-} from "../../common/components/snackbar";
-import { GetUserPrivacyPodUrl } from "../../common/util/solid";
-import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
+} from "../../../common/components/snackbar";
+import { GetUserPrivacyPodUrl } from "../../../common/util/solid";
+import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect } from "react";
 import {
   RevalidateGuestPrivacyTokens,
   useGuestPrivacyTokens,
-} from "../../common/hooks/usePrivacyTokens";
-import { NotEmptyItem, ShowError } from "../../common/util/helpers";
-import { SafeDeleteDataset } from "../../common/util/solidWrapper";
+} from "../../../common/hooks/usePrivacyTokens";
+import { NotEmptyItem, ShowError } from "../../../common/util/helpers";
+import { SafeDeleteDataset } from "../../../common/util/solidWrapper";
 
 /**
  * A snackbar notification displayed in the bottom right corner to inform the user that privacy tokens are being deleted.

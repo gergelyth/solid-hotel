@@ -4,14 +4,14 @@ import "@testing-library/jest-dom";
 import {
   HotelToRdf,
   TrackedRdfFieldCollector,
-} from "../trackedRdfFieldCollector";
-import { useGuestPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
-import { TestReservations } from "../../../common/util/__tests__/testUtil";
-import { useReservations } from "../../../common/hooks/useReservations";
-import { GuestPrivacyToken } from "../../../common/types/GuestPrivacyToken";
-import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
-import { ReservationState } from "../../../common/types/ReservationState";
-import { GetTomorrow } from "../../../common/util/helpers";
+} from "../tracked-rdf-field-collector";
+import { useGuestPrivacyTokens } from "../../../../common/hooks/usePrivacyTokens";
+import { TestReservations } from "../../../../common/util/__tests__/testUtil";
+import { useReservations } from "../../../../common/hooks/useReservations";
+import { GuestPrivacyToken } from "../../../../common/types/GuestPrivacyToken";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
+import { ReservationState } from "../../../../common/types/ReservationState";
+import { GetTomorrow } from "../../../../common/util/helpers";
 
 const testTokens: GuestPrivacyToken[] = [
   {
@@ -49,29 +49,29 @@ const testTokens: GuestPrivacyToken[] = [
   },
 ];
 
-jest.mock("../../../common/components/custom-progress-snackbar", () => {
+jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
-jest.mock("../../../common/components/snackbar");
-jest.mock("../../../common/util/solid", () => {
+jest.mock("../../../../common/components/snackbar");
+jest.mock("../../../../common/util/solid", () => {
   return {
     GetUserPrivacyPodUrl: () => "TestGuestPrivacyContainer",
   };
 });
-jest.mock("../../../common/util/solidReservations", () => {
+jest.mock("../../../../common/util/solidReservations", () => {
   return {
     GetUserReservationsPodUrl: () => "TestReservationContainer",
   };
 });
 
-jest.mock("../../../common/hooks/useReservations", () => {
+jest.mock("../../../../common/hooks/useReservations", () => {
   return {
     useReservations: jest.fn(),
   };
 });
-jest.mock("../../../common/hooks/usePrivacyTokens", () => {
+jest.mock("../../../../common/hooks/usePrivacyTokens", () => {
   return {
     useGuestPrivacyTokens: jest.fn(),
   };

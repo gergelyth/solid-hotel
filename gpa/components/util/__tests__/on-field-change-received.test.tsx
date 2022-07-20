@@ -1,25 +1,25 @@
 import React from "react";
 import { act, render, RenderResult } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { FieldChangeReceiverSnackbar } from "../onFieldChangeReceived";
-import { ShowCustomSnackbar } from "../../../common/components/snackbar";
-import { HotelToRdf } from "../trackedRdfFieldCollector";
+import { FieldChangeReceiverSnackbar } from "../on-field-change-received";
+import { ShowCustomSnackbar } from "../../../../common/components/snackbar";
+import { HotelToRdf } from "../tracked-rdf-field-collector";
 
 const TestWebId = "TestWebId";
 
-jest.mock("../trackedRdfFieldCollector", () => {
+jest.mock("../tracked-rdf-field-collector", () => {
   return {
     TrackedRdfFieldCollector: jest.fn(),
   };
 });
 
-jest.mock("../../../common/components/custom-progress-snackbar", () => {
+jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
-jest.mock("../../../common/components/snackbar");
-jest.mock("../../../common/util/solidReservations", () => {
+jest.mock("../../../../common/components/snackbar");
+jest.mock("../../../../common/util/solidReservations", () => {
   return {
     GetUserReservationsPodUrl: () => "TestReservationContainer",
   };

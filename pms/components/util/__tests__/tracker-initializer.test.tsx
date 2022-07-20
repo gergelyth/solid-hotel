@@ -1,9 +1,9 @@
 import { act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { CacheHotelProfiles } from "../trackerInitializer";
-import { MockContainer } from "../../../common/util/__tests__/testUtil";
-import { CacheProfile } from "../../../common/util/tracker/profileCache";
-import { Subscribe } from "../../../common/util/tracker/tracker";
+import { CacheHotelProfiles } from "../tracker-initializer";
+import { MockContainer } from "../../../../common/util/__tests__/testUtil";
+import { CacheProfile } from "../../../../common/util/tracker/profileCache";
+import { Subscribe } from "../../../../common/util/tracker/tracker";
 import {
   createSolidDataset,
   createThing,
@@ -12,30 +12,30 @@ import {
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
-import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
-import { GetDataSet } from "../../../common/util/solid";
+import { PersonFieldToRdfMap } from "../../../../common/vocabularies/rdfPerson";
+import { GetDataSet } from "../../../../common/util/solid";
 
-jest.mock("../../../common/components/custom-progress-snackbar", () => {
+jest.mock("../../../../common/components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
 
-jest.mock("../../../common/util/solid", () => {
+jest.mock("../../../../common/util/solid", () => {
   return {
     GetDataSet: jest.fn(),
   };
 });
 
-jest.mock("../../../common/consts/solidIdentifiers", () => {
+jest.mock("../../../../common/consts/solidIdentifiers", () => {
   return {
     HotelProfilesUrl: "https://testpodurl.com/hotelprofiles/",
   };
 });
 
-jest.mock("../../../common/components/snackbar");
-jest.mock("../../../common/util/tracker/tracker");
-jest.mock("../../../common/util/tracker/profileCache");
+jest.mock("../../../../common/components/snackbar");
+jest.mock("../../../../common/util/tracker/tracker");
+jest.mock("../../../../common/util/tracker/profileCache");
 
 const datasetMap: { [url: string]: SolidDataset } = {
   "https://testpodurl.com/hotelprofiles/": MockContainer(
@@ -83,7 +83,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("trackerInitializer", () => {
+describe("tracker-initializer", () => {
   test("Initialization caches profiles and subscribes to changes correctly", async () => {
     await CacheHotelProfiles();
 

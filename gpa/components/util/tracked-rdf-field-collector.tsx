@@ -1,13 +1,13 @@
-import { CloseSnackbar } from "../../common/components/snackbar";
-import { GetUserPrivacyPodUrl } from "../../common/util/solid";
-import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
+import { CloseSnackbar } from "../../../common/components/snackbar";
+import { GetUserPrivacyPodUrl } from "../../../common/util/solid";
+import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { Dispatch, forwardRef, SetStateAction, useEffect } from "react";
-import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
-import { useReservations } from "../../common/hooks/useReservations";
-import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";
-import { ReservationState } from "../../common/types/ReservationState";
-import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
-import { ShowError } from "../../common/util/helpers";
+import { GuestPrivacyToken } from "../../../common/types/GuestPrivacyToken";
+import { useReservations } from "../../../common/hooks/useReservations";
+import { GetUserReservationsPodUrl } from "../../../common/util/solidReservations";
+import { ReservationState } from "../../../common/types/ReservationState";
+import { useGuestPrivacyTokens } from "../../../common/hooks/usePrivacyTokens";
+import { ShowError } from "../../../common/util/helpers";
 
 /** A helper type describing a mapping from hotel WebId to the set of RDF fields. */
 export type HotelToRdf = {

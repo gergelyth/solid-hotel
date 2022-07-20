@@ -20,7 +20,7 @@ import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileC
 import SendChangeSnackbar from "../../common/components/profilesync/tracker-send-change";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { DeserializePrivacyInformationDeletion } from "../../common/notifications/privacyInformationDeletion";
-import { PrivacyTokenRemover } from "./privacyTokenRemover";
+import { PrivacyTokenRemover } from "../components/util/privacy-token-remover";
 import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { RevalidateGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
@@ -191,7 +191,7 @@ export function ReceivePrivacyTokenDeletionNotice(
   const text = `Privacy token at [${tokenDeletion.tokenUrl}] was deleted at the hotel.\nDeleting the corresponding token.`;
   const onClick = (): void => undefined;
   const onReceive = async (): Promise<void> => {
-    const snackbarId = "privacyTokenRemover";
+    const snackbarId = "privacy-token-remover";
     ShowCustomSnackbar(
       () => (
         <PrivacyTokenRemover

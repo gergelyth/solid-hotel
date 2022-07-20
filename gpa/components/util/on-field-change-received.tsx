@@ -1,24 +1,24 @@
 import {
   CloseSnackbar,
   ShowCustomSnackbar,
-} from "../../common/components/snackbar";
-import SendChangeSnackbar from "../../common/components/profilesync/tracker-send-change";
-import { OutgoingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
-import { SendProfileModificationSnackbar } from "../../common/components/profilesync/send-profile-modification";
+} from "../../../common/components/snackbar";
+import SendChangeSnackbar from "../../../common/components/profilesync/tracker-send-change";
+import { OutgoingProfileChangeStrings } from "../../../common/util/tracker/profileChangeStrings";
+import { SendProfileModificationSnackbar } from "../../../common/components/profilesync/send-profile-modification";
 import {
   CacheProfile,
   ProfileCache,
-} from "../../common/util/tracker/profileCache";
-import { CustomProgressSnackbar } from "../../common/components/custom-progress-snackbar";
+} from "../../../common/util/tracker/profileCache";
+import { CustomProgressSnackbar } from "../../../common/components/custom-progress-snackbar";
 import { forwardRef, useEffect, useState } from "react";
-import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";
-import { ReservationState } from "../../common/types/ReservationState";
+import { GetUserReservationsPodUrl } from "../../../common/util/solidReservations";
+import { ReservationState } from "../../../common/types/ReservationState";
 import {
   HotelToRdf,
   TrackedRdfFieldCollector,
-} from "./trackedRdfFieldCollector";
-import { SendProfileModification } from "./outgoingCommunications";
-import { RevalidateGuest } from "../../common/hooks/useGuest";
+} from "./tracked-rdf-field-collector";
+import { SendProfileModification } from "../../util/outgoingCommunications";
+import { RevalidateGuest } from "../../../common/hooks/useGuest";
 
 /**
  * Creates the approval dialog popup for a given hotel in the bottom right corner.
