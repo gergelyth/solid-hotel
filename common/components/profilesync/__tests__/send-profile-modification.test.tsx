@@ -13,13 +13,13 @@ import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
 
 const TestReservationUrl = "TestReservationsUrl";
 
-jest.mock("../../hooks/useReservations");
-jest.mock("../../components/custom-progress-snackbar", () => {
+jest.mock("../../../hooks/useReservations");
+jest.mock("../../../components/custom-progress-snackbar", () => {
   return {
     CustomProgressSnackbar: () => null,
   };
 });
-jest.mock("../../components/snackbar");
+jest.mock("../../../components/snackbar");
 
 function Render(
   fieldOptions: ProfileUpdate,
