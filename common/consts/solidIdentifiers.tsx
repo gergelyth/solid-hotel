@@ -20,7 +20,7 @@ const PrivacyTokensInbox = "privacy/inbox/";
  */
 export const HotelWebId = HotelPod + "profile/card#me";
 
-/** @constant The folder structure in the Solid Pods. */
+/** @constant The folder structure in the Solid Pods. This is used once by the GPA during booking, as that's the only operation tied to the specific hotel. */
 export const ReservationsUrl = HotelPod + ReservationAddress;
 export const RoomDefinitionsUrl = HotelPod + RoomDefinitionAddress;
 export const BookingInboxUrl = HotelPod + BookingInbox;
