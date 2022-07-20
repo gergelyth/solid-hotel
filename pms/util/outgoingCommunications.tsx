@@ -1,14 +1,9 @@
-import {
-  getPropertyAll,
-  saveSolidDatasetInContainer,
-} from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import { getPropertyAll } from "@inrupt/solid-client";
 import { SerializeFailureReport } from "../../common/notifications/FailureReport";
 import { SerializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { SerializePairingRequestWithInformation } from "../../common/notifications/PairingRequestWithInformation";
 import { SerializeGuestPrivacyNotification } from "../../common/notifications/PrivacyNotification";
 import { ReservationState } from "../../common/types/ReservationState";
-import { GetSession } from "../../common/util/solid";
 import { GetHotelProfileThing } from "../../common/util/hotelProfileHandler";
 import {
   GetOwnerAndAnonymizeInMemory,
@@ -30,6 +25,7 @@ import { HotelPrivacyToken } from "../../common/types/HotelPrivacyToken";
 import { SerializePrivacyInformationDeletion } from "../../common/notifications/PrivacyInformationDeletion";
 import { GetStartOfNextDay } from "../../common/util/helpers";
 import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
+import { SafeSaveDatasetInContainer } from "../../common/util/solid_wrapper";
 
 /**
  * Creates the reservation state change notification dataset and submits it into the guest reservation inbox.
@@ -37,8 +33,7 @@ import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyToken
 export async function ConfirmReservationStateRequest(
   newState: ReservationState,
   guestInboxUrl: string | null,
-  hotelInboxUrl: string,
-  session: Session = GetSession()
+  hotelInboxUrl: string
 ): Promise<void> {
   if (!guestInboxUrl) {
     throw new Error("Guest inbox URL null");
@@ -49,9 +44,7 @@ export async function ConfirmReservationStateRequest(
     newState
   );
 
-  await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(guestInboxUrl, notificationDataset);
   RevalidateReservations();
 }
 
@@ -61,8 +54,7 @@ export async function ConfirmReservationStateRequest(
 export async function ReportFailureToGuest(
   errorMessage: string,
   resultState: ReservationState,
-  guestInboxUrl: string | null,
-  session: Session = GetSession()
+  guestInboxUrl: string | null
 ): Promise<void> {
   if (!guestInboxUrl) {
     throw new Error("Guest inbox URL null");
@@ -70,9 +62,7 @@ export async function ReportFailureToGuest(
 
   const notificationDataset = SerializeFailureReport(errorMessage, resultState);
 
-  await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(guestInboxUrl, notificationDataset);
 }
 
 /**
@@ -82,8 +72,7 @@ export async function ReportFailureToGuest(
 export async function SendPairingRequestWithInformation(
   reservationUrl: string,
   hotelInboxUrl: string,
-  guestInboxUrl: string,
-  session: Session = GetSession()
+  guestInboxUrl: string
 ): Promise<void> {
   const reservationThing = await SaveInboxAndReturnReservation(
     reservationUrl,
@@ -104,9 +93,7 @@ export async function SendPairingRequestWithInformation(
     hotelProfileThing
   );
 
-  await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(guestInboxUrl, notificationDataset);
 
   const parsedReservation = ParseReservation(
     finalReservationThing,
@@ -136,14 +123,11 @@ export async function SendPairingRequestWithInformation(
  */
 export async function SendPrivacyToken(
   guestInboxUrl: string,
-  privacyToken: GuestPrivacyToken,
-  session: Session = GetSession()
+  privacyToken: GuestPrivacyToken
 ): Promise<void> {
   const notificationDataset = SerializeGuestPrivacyNotification(privacyToken);
 
-  await saveSolidDatasetInContainer(guestInboxUrl, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(guestInboxUrl, notificationDataset);
 }
 
 /**
@@ -151,8 +135,7 @@ export async function SendPrivacyToken(
  */
 export async function SendPrivacyTokenDeletionNotice(
   privacyToken: HotelPrivacyToken,
-  guestInboxUrl?: string,
-  session: Session = GetSession()
+  guestInboxUrl?: string
 ): Promise<void> {
   if (!privacyToken.urlAtHotel) {
     throw new Error(
@@ -170,9 +153,7 @@ export async function SendPrivacyTokenDeletionNotice(
     privacyToken.urlAtHotel
   );
 
-  await saveSolidDatasetInContainer(guestInbox, notificationDataset, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(guestInbox, notificationDataset);
 }
 
 /**
@@ -180,12 +161,9 @@ export async function SendPrivacyTokenDeletionNotice(
  */
 export async function SendProfileModification(
   approvedFields: ProfileUpdate,
-  guestInboxUrl: string,
-  session: Session = GetSession()
+  guestInboxUrl: string
 ): Promise<void> {
   const profileModification = SerializeProfileModification(approvedFields);
 
-  await saveSolidDatasetInContainer(guestInboxUrl, profileModification, {
-    fetch: session.fetch,
-  });
+  await SafeSaveDatasetInContainer(guestInboxUrl, profileModification);
 }

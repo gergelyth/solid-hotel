@@ -1,4 +1,4 @@
-import { getSolidDataset, SolidDataset } from "@inrupt/solid-client";
+import { SolidDataset } from "@inrupt/solid-client";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/ReservationStateChange";
 import { DeserializeBookingRequest } from "../../common/notifications/BookingRequest";
@@ -31,7 +31,7 @@ import {
   ConvertToHotelPrivacyToken,
   RevalidateHotelPrivacyTokens,
 } from "../../common/hooks/usePrivacyTokens";
-import { GetSession } from "../../common/util/solid";
+import { GetDataSet } from "../../common/util/solid";
 import {
   AnonymizeFieldsAndDeleteToken,
   AnonymizeInboxInNotification,
@@ -257,12 +257,7 @@ export function ReceivePrivacyTokenDeletionRequest(
   const text = `Privacy token at [${tokenUrl}] was requested to be deleted.`;
   const onClick = (): void => undefined;
   const onReceive = async (): Promise<void> => {
-    const session = GetSession();
-
-    //TODO this especially needs to be a safe Solid call in case we get a bad URL
-    const tokenDataset = await getSolidDataset(tokenUrl, {
-      fetch: session.fetch,
-    });
+    const tokenDataset = await GetDataSet(tokenUrl);
 
     const privacyToken = ConvertToHotelPrivacyToken(tokenDataset);
     if (!privacyToken) {
