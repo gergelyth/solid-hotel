@@ -40,6 +40,7 @@ jest.mock("../solid", () => {
 jest.mock("../solidAccess", () => {
   return {
     SetSubmitterAccessToEveryone: jest.fn(),
+    SetSubmitterAccessToAgent: jest.fn(),
   };
 });
 

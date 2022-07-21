@@ -104,7 +104,7 @@ export function ReceiveBookingRequest(
     }
 
     reservation.state = ReservationState.CONFIRMED;
-    const hotelInboxUrl = await AddReservation(reservation);
+    const hotelInboxUrl = await AddReservation(reservation, reservation.owner);
 
     const email = await GetEmailFromProfile(reservation.owner);
     if (email !== "") {

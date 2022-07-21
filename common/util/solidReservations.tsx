@@ -13,7 +13,10 @@ import { ReservationFieldToRdfMap } from "../vocabularies/rdfReservation";
 import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetThing } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
-import { SetSubmitterAccessToEveryone } from "./solidAccess";
+import {
+  SetSubmitterAccessToAgent,
+  SetSubmitterAccessToEveryone,
+} from "./solidAccess";
 import {
   CreateReservationUrlFromReservationId,
   GetReservationUrlFromInboxUrl,
@@ -42,11 +45,12 @@ export function GetUserReservationsPodUrl(): string | null {
 
 /**
  * Creates the reservation dataset from the reservation object supplied as argument and saves it in the reservation container.
- * Also creates the inbox for the reservation.
+ * Also creates the inbox for the reservation and adds submitter access for the WebId specified - if no WebId is specified, it sets the access to Public.
  * @returns The URL of the reservation inbox.
  */
 export async function AddReservation(
-  reservation: ReservationAtHotel
+  reservation: ReservationAtHotel,
+  counterPartyWebIdForInboxAccess?: string
 ): Promise<string> {
   const reservationDataset = CreateReservationDataset(reservation);
 
@@ -70,21 +74,29 @@ export async function AddReservation(
     reservationDataset
   );
 
-  const inboxUrl = CreateInboxForReservationUrl(reservationContainerUrl);
+  const inboxUrl = CreateInboxForReservationUrl(
+    reservationContainerUrl,
+    counterPartyWebIdForInboxAccess
+  );
   return inboxUrl;
 }
 
 /**
  * Creates the reservation inbox for the corresponding reservation passed as URL.
- * Sets the Public's access to Submitter.
+ * Adds submitter access for the WebId specified - if no WebId is specified, it sets the access to Public.
  * @returns The URL of the reservation inbox.
  */
 async function CreateInboxForReservationUrl(
-  reservationContainerUrl: string
+  reservationContainerUrl: string,
+  counterPartyWebIdForInboxAccess?: string
 ): Promise<string> {
   const inboxUrl = reservationContainerUrl + "inbox";
   await SafeCreateContainerAt(inboxUrl);
-  await SetSubmitterAccessToEveryone(inboxUrl);
+  if (counterPartyWebIdForInboxAccess) {
+    await SetSubmitterAccessToAgent(inboxUrl, counterPartyWebIdForInboxAccess);
+  } else {
+    await SetSubmitterAccessToEveryone(inboxUrl);
+  }
   return inboxUrl;
 }
 

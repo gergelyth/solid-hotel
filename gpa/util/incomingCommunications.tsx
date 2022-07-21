@@ -126,7 +126,9 @@ export function ReceivePairingRequestWithInformation(
     }
     reservation.owner = webId;
     //TODO remove the dummy reservation?
-    AddReservation(reservation).then(() => RevalidateReservations());
+    AddReservation(reservation, reservation.hotel).then(() =>
+      RevalidateReservations()
+    );
   };
 
   return { text, onClick, onReceive };

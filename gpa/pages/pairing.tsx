@@ -2,6 +2,7 @@ import { Box, CircularProgress, Typography } from "@material-ui/core";
 import { GetServerSidePropsResult } from "next";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
+import { HotelWebId } from "../../common/consts/solidIdentifiers";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { ReservationState } from "../../common/types/ReservationState";
@@ -77,7 +78,7 @@ function PairingPage(
     router.push("/login");
   }
 
-  const guestInboxUrl = AddReservation(CreateDummyReservation());
+  const guestInboxUrl = AddReservation(CreateDummyReservation(), HotelWebId);
   RevalidateReservations();
   SubmitInitialPairingRequest(guestInboxUrl, pairingToken, hotelInboxUrl);
 

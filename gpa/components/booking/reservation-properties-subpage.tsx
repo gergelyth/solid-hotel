@@ -44,7 +44,7 @@ async function BookRoom(
     dateTo: checkoutDate,
   };
 
-  const inboxUrl = await AddReservation(reservation);
+  const inboxUrl = await AddReservation(reservation, reservation.hotel);
 
   await SubmitBookingRequest({
     ...reservation,
