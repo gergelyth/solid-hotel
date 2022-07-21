@@ -30,17 +30,17 @@ export function EditableRoomElement({
     <Grid
       container
       item
-      spacing={2}
+      spacing={3}
       justifyContent="center"
       alignItems="center"
     >
-      <Grid item xs={1}>
-        <Box fontSize={40}>
+      <Grid item xs={2}>
+        <Box fontSize={60}>
           <HotelIcon fontSize="inherit" />
         </Box>
       </Grid>
-      <Grid item xs={7}>
-        <Grid container direction="row" spacing={1}>
+      <Grid container item xs={6}>
+        <Grid container item direction="row" spacing={3}>
           <Grid item>
             <Box fontWeight="fontWeightBold">
               <Typography variant="body2">Room:</Typography>
@@ -50,14 +50,18 @@ export function EditableRoomElement({
             <Typography variant="body2">{room.name}</Typography>
           </Grid>
         </Grid>
-        <Box fontWeight="fontWeightBold">
-          <Typography variant="body2">Description:</Typography>
-        </Box>
-        <Typography variant="body2">
-          {room.description ?? "<Empty description>"}
-        </Typography>
+        <Grid item>
+          <Box fontWeight="fontWeightBold">
+            <Typography variant="body2">Description:</Typography>
+          </Box>
+        </Grid>
+        <Grid item>
+          <Typography variant="body2">
+            {room.description ?? "<Empty description>"}
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={1}>
+      <Grid item xs={2}>
         <Button
           data-testid="edit-button"
           variant="contained"
@@ -67,7 +71,7 @@ export function EditableRoomElement({
           Edit
         </Button>
       </Grid>
-      <Grid item xs={1}>
+      <Grid item xs={2}>
         <Button
           data-testid="delete-button"
           variant="contained"

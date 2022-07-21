@@ -120,7 +120,6 @@ export function RoomList(): JSX.Element {
         </Button>
       </Grid>
 
-      {/* TODO  create room gets created with UNDEFINED id*/}
       <EditRoomPopup
         room={{} as RoomDefinition}
         updateRoomLocally={UpdateList}
