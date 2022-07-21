@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import { ReservationsUrl } from "../../common/consts/solidIdentifiers";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
 import { CreateReservationElement } from "../components/reservations/reservation-element";
 import { Grid, Typography, Box } from "@material-ui/core";
 import { ReservationState } from "../../common/types/ReservationState";
 import { ReservationStatusList } from "../../common/components/reservations/reservation-status-list";
+import { GetUserReservationsPodUrl } from "../../common/util/solidReservations";
 
 /**
  * The index page for the PMS application, which is essentially the PMS page displaying the list of reservations.
@@ -58,7 +58,7 @@ export default function Home(): JSX.Element | null {
 
       <Grid item>
         <ReservationStatusList
-          reservationsUrl={ReservationsUrl}
+          reservationsUrl={GetUserReservationsPodUrl()}
           reservationFilter={(state: ReservationState) =>
             state === ReservationState.ACTIVE
           }
@@ -70,7 +70,7 @@ export default function Home(): JSX.Element | null {
       </Grid>
       <Grid item>
         <ReservationStatusList
-          reservationsUrl={ReservationsUrl}
+          reservationsUrl={GetUserReservationsPodUrl()}
           reservationFilter={(state: ReservationState) =>
             state === ReservationState.CONFIRMED
           }
@@ -82,7 +82,7 @@ export default function Home(): JSX.Element | null {
       </Grid>
       <Grid item>
         <ReservationStatusList
-          reservationsUrl={ReservationsUrl}
+          reservationsUrl={GetUserReservationsPodUrl()}
           reservationFilter={(state: ReservationState) =>
             state === ReservationState.PAST ||
             state === ReservationState.CANCELLED
