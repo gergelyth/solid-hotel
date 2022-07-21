@@ -10,6 +10,7 @@ import {
 } from "../../../../common/util/__tests__/testUtil";
 import {
   CreateActiveProfilePrivacyToken,
+  FindEmailTokenAndDeleteIt,
   FindWebIdTokenAndDeleteIt,
 } from "../../../util/privacyHelper";
 import { CheckinProgressSnackbar } from "../checkin-progress-snackbar";
@@ -170,6 +171,10 @@ describe("<CheckinProgressSnackbar >", () => {
       TestHotelPrivacyTokens,
       TestReservationId,
       false
+    );
+    expect(FindEmailTokenAndDeleteIt).toBeCalledWith(
+      TestHotelPrivacyTokens,
+      TestReservationId
     );
     expect(CreateActiveProfilePrivacyToken).toBeCalledWith(
       expectedWebId,

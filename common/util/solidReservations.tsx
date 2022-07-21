@@ -135,7 +135,7 @@ export async function SetEmailAddressOfGuest(
 export async function SetReservationStateAndInbox(
   reservationId: string,
   newState: ReservationState,
-  inboxUrl: string
+  inboxUrl?: string
 ): Promise<void> {
   const datasetUrl = CreateReservationUrlFromReservationId(reservationId);
   const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
@@ -144,11 +144,13 @@ export async function SetReservationStateAndInbox(
     ReservationFieldToRdfMap.state,
     ReservationStateRdfMap[newState]
   );
-  updatedReservation = setStringNoLocale(
-    updatedReservation,
-    ReservationFieldToRdfMap.inbox,
-    inboxUrl
-  );
+  if (inboxUrl) {
+    updatedReservation = setStringNoLocale(
+      updatedReservation,
+      ReservationFieldToRdfMap.inbox,
+      inboxUrl
+    );
+  }
   const updatedDataSet = setThing(dataset, updatedReservation);
 
   await SafeSaveDatasetAt(datasetUrl, updatedDataSet);

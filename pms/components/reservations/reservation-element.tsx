@@ -9,7 +9,6 @@ import { DoOnStateChange } from "../../util/actionOnNewReservationState";
 import { Dispatch, SetStateAction, useState } from "react";
 import { QrElementWithHeadings } from "../checkin/qr-subpage";
 
-//TODO this is not correct that the cancel button calls this - we need to call the cancel snackbar stuff to remove privacy tokens as well
 /**
  * The function which executes the state change of the cancellation.
  */
@@ -18,15 +17,7 @@ export function ConfirmCancellation(reservation: ReservationAtHotel): void {
     throw new Error("Reservation ID is null");
   }
 
-  if (!reservation.inbox) {
-    throw new Error("Guest inbox for reservation is null");
-  }
-
-  DoOnStateChange(
-    reservation.id,
-    ReservationState.CANCELLED,
-    reservation.inbox
-  );
+  DoOnStateChange(reservation.id, ReservationState.CANCELLED);
 }
 
 /**

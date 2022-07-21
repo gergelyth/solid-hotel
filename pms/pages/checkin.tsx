@@ -8,6 +8,7 @@ import { ReservationState } from "../../common/types/ReservationState";
 import { QrComponent } from "../components/checkin/qr-subpage";
 import { AppProps } from "next/app";
 import { GetServerSidePropsResult } from "next";
+import { RevalidateReservations } from "../../common/hooks/useReservations";
 
 /** An enum which helps to keep track of which subpage the offline check-in page is currently showing. */
 export enum OfflineCheckinPage {
@@ -96,6 +97,7 @@ function OfflineCheckin(
             hotelProfileWebId,
             ReservationState.ACTIVE
           );
+          RevalidateReservations();
         }}
       />
 

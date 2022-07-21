@@ -5,6 +5,7 @@ import { CancelProgressSnackbar } from "../cancel-progress-snackbar";
 import { useHotelPrivacyTokens } from "../../../../common/hooks/usePrivacyTokens";
 import { TestHotelPrivacyTokens } from "../../../../common/util/__tests__/testUtil";
 import {
+  FindEmailTokenAndDeleteIt,
   FindInboxTokenAndDeleteIt,
   FindWebIdTokenAndDeleteIt,
 } from "../../../util/privacyHelper";
@@ -68,6 +69,10 @@ describe("<CancelProgressSnackbar  />", () => {
       TestHotelPrivacyTokens,
       TestReservationId,
       true
+    );
+    expect(FindEmailTokenAndDeleteIt).toBeCalledWith(
+      TestHotelPrivacyTokens,
+      TestReservationId
     );
     expect(FindInboxTokenAndDeleteIt).toBeCalledWith(
       TestHotelPrivacyTokens,

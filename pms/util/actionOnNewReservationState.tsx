@@ -18,11 +18,12 @@ import { RevalidateReservations } from "../../common/hooks/useReservations";
  * Performs the state specific action when the state of the reservation gets changed.
  * Updates the reservation state and reply inbox address in the Solid Pod.
  * Sends a notification to the guest that the reservation state was successfully updated.
+ * The guest inbox URL may be undefined if we're e.g. cancelling an unpaired reservation - in this case we don't send any responses to this URL.
  */
 export function DoOnStateChange(
   reservationId: string,
   newState: ReservationState,
-  guestInboxUrl: string
+  guestInboxUrl?: string
 ): void {
   switch (newState) {
     case ReservationState.CANCELLED:
@@ -38,11 +39,13 @@ export function DoOnStateChange(
       try {
         OnCheckIn(reservationId, guestInboxUrl);
       } catch (error: unknown) {
-        ReportFailureToGuest(
-          `${error}`,
-          ReservationState.CONFIRMED,
-          guestInboxUrl
-        );
+        if (guestInboxUrl) {
+          ReportFailureToGuest(
+            `${error}`,
+            ReservationState.CONFIRMED,
+            guestInboxUrl
+          );
+        }
         return;
       }
 
@@ -52,11 +55,13 @@ export function DoOnStateChange(
       try {
         OnCheckOut(reservationId, guestInboxUrl);
       } catch (error: unknown) {
-        ReportFailureToGuest(
-          `${error}`,
-          ReservationState.ACTIVE,
-          guestInboxUrl
-        );
+        if (guestInboxUrl) {
+          ReportFailureToGuest(
+            `${error}`,
+            ReservationState.ACTIVE,
+            guestInboxUrl
+          );
+        }
         return;
       }
       break;
@@ -70,8 +75,10 @@ export function DoOnStateChange(
   SetReservationStateAndInbox(reservationId, newState, guestInboxUrl);
   RevalidateReservations();
 
-  const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
-  ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);
+  if (guestInboxUrl) {
+    const hotelInboxUrl = CreateInboxUrlFromReservationId(reservationId);
+    ConfirmReservationStateRequest(newState, guestInboxUrl, hotelInboxUrl);
+  }
 }
 
 /**
@@ -80,12 +87,13 @@ export function DoOnStateChange(
  */
 async function OnCheckIn(
   reservationId: string,
-  replyInbox: string
+  replyInbox?: string
 ): Promise<void> {
   const guestWebId = await GetOwnerFromReservation(reservationId);
-  if (!guestWebId) {
-    //TODO solve for offline checkin
-    throw new Error(`Guest webID null in reservation ${reservationId}`);
+  if (!guestWebId || !replyInbox) {
+    throw new Error(
+      "Required information is null/undefined when preparing for check-in. This method can't be used for offline check-in."
+    );
   }
 
   ShowCustomSnackbar((key) => (
@@ -104,13 +112,13 @@ async function OnCheckIn(
  */
 async function OnCheckOut(
   reservationId: string,
-  replyInbox: string
+  replyInbox?: string
 ): Promise<void> {
   const reservationOwner = await GetOwnerFromReservation(reservationId);
-  if (!reservationOwner) {
-    //TODO solve for offline checkin
+  //TODO we don't have an offline check-out
+  if (!reservationOwner || !replyInbox) {
     throw new Error(
-      `Reservation owner is null in reservation ${reservationId}`
+      "Required information is null/undefined when preparing for check-out. This method can't be used for offline check-in."
     );
   }
 

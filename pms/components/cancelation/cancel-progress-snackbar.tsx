@@ -2,6 +2,7 @@ import { CustomProgressSnackbar } from "../../../common/components/custom-progre
 import { forwardRef, useEffect } from "react";
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import {
+  FindEmailTokenAndDeleteIt,
   FindInboxTokenAndDeleteIt,
   FindWebIdTokenAndDeleteIt,
 } from "../../util/privacyHelper";
@@ -22,6 +23,7 @@ async function ExecuteCancel(
 ): Promise<void> {
   //Deleting the mention of WebId and deleting the corresponding privacy token
   await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, true);
+  await FindEmailTokenAndDeleteIt(privacyTokens, reservationId);
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
 
   RevalidateHotelPrivacyTokens();
