@@ -20,9 +20,6 @@ import { FieldChangeReceiverSnackbar } from "./on-field-change-received";
  */
 async function SubscribeToProfileChanges(profileUrl: string): Promise<void> {
   await Subscribe(profileUrl, {
-    onClick: () => {
-      undefined;
-    },
     onReceive: (url) => {
       const snackbarId = "approvalNotificationCreator";
       ShowCustomSnackbar(

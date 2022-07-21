@@ -36,9 +36,6 @@ export async function SubscribeToProfileChanges(
   const infoPanelId = "infoPanel";
 
   return Subscribe(profileUrl, {
-    onClick: () => {
-      undefined;
-    },
     onReceive: (url) => {
       ShowCustomSnackbar(
         () => (

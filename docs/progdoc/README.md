@@ -106,8 +106,7 @@ Now that we have both the old and new values of the fields, we can compare what 
 
 Notifications are the messaging protocol with the help of which the hotel and the guest communicate. 
 
-Let's note first that in order simplify the requirements, the GPA project was meant to be tied to a specific hotel. Apart from an itinerary overview, which would provide a read only representation of all reservations, the application would be restricted to carry out operations with that entity only. However, given the async nature of our communication protocol, we made an effort to make the GPA as independent as possible and as a result the only operation that's tied to the hotel is booking, where the GPA requires address of the booking inbox of the hotel.
-The PMS can naturally handle many guests implicitly.
+Let us note first that in order simplify the requirements, the GPA project was meant to be tied to a specific hotel. Apart from an itinerary overview, which would provide a read only representation of all reservations, the application would be restricted to carry out operations with that entity only. The hotel-restricted operations in the GPA are room definition retrieval and booking.
 
 They are displayed in a drawer element (`NotificationList` component), which is triggered by the notification icon (`common/components/notification-elements`) contained in the navigation bars. As a QOL improvement, we provide small indicators (so called chips) for each notification displaying its type category and the datetime of when it was created (`common/components/notification-chips`).
 
@@ -138,6 +137,8 @@ As per our requirements, we define a mock API service which will provide the lis
 - api/dataprotection (?hotelLocation=...&guestNationality=...)
 
 During processing, the methods parse the two query parameters submitted and look up the required data in the static `common/api_data.json` file. The result is then returned in JSON format.
+
+In order to ease presentation and testing, the data protection period was set to one or two days instead of the more common five years we would encounter in real life setting.
 
 ### <ins>Setup functionality</ins>
 
