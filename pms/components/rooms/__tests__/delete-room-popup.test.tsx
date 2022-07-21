@@ -27,6 +27,7 @@ function Render(
     <DeleteRoomPopup
       room={testRoom}
       updateRoomLocally={updateRoomLocally}
+      reservations={undefined}
       isPopupShowing={isPopupShowing}
       setPopupVisibility={setPopupVisibility}
     />

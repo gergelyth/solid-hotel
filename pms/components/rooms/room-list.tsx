@@ -1,11 +1,16 @@
 import { TriggerRefetch, useRooms } from "../../../common/hooks/useRooms";
-import { RoomDefinitionsUrl } from "../../../common/consts/solidIdentifiers";
+import {
+  ReservationsUrl,
+  RoomDefinitionsUrl,
+} from "../../../common/consts/solidIdentifiers";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { EditableRoomElement } from "./editable-room";
 import { useState } from "react";
 import { EditRoomPopup } from "./edit-room-popup";
 import { Button, CircularProgress, Grid, Typography } from "@material-ui/core";
 import { ErrorComponent } from "../../../common/components/error-component";
+import { useReservations } from "../../../common/hooks/useReservations";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 
 /**
  * Defines the function how to create an {@link EditableRoomElement} for a specific room definition.
@@ -13,7 +18,8 @@ import { ErrorComponent } from "../../../common/components/error-component";
  */
 function CreateRoomElement(
   room: RoomDefinition | null,
-  updateList: (newRoom: RoomDefinition, isDelete: boolean) => void
+  updateList: (newRoom: RoomDefinition, isDelete: boolean) => void,
+  reservations: (ReservationAtHotel | null)[] | undefined
 ): JSX.Element {
   if (!room?.id) {
     return <Typography>Room element empty</Typography>;
@@ -23,6 +29,7 @@ function CreateRoomElement(
       room={room}
       key={room.id}
       updateRoomLocally={updateList}
+      reservations={reservations}
     />
   );
 }
@@ -38,6 +45,7 @@ export function RoomList(): JSX.Element {
   const [isCreatePopupShowing, setCreatePopupVisibility] = useState(false);
 
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
+  const { items: reservations } = useReservations(ReservationsUrl);
 
   function UpsertRoom(newRoom: RoomDefinition): void {
     const existingRoom = items?.find((room) => room?.id === newRoom.id);
@@ -92,7 +100,9 @@ export function RoomList(): JSX.Element {
             alignItems="center"
             direction="column"
           >
-            {items.map((item) => CreateRoomElement(item, UpdateList))}
+            {items.map((item) =>
+              CreateRoomElement(item, UpdateList, reservations)
+            )}
           </Grid>
         ) : (
           <Typography>No rooms found.</Typography>

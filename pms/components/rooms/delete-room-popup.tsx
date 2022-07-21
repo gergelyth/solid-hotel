@@ -15,6 +15,18 @@ import { Revalidate } from "../../../common/hooks/useRooms";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { RoomDefinition } from "../../../common/types/RoomDefinition";
 import { DeleteRoom } from "../../util/solidHotelSpecific";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { GetRoomUrlFromRoomId } from "../../../common/util/urlParser";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
+import { ReservationState } from "../../../common/types/ReservationState";
+import { ConfirmCancellation } from "../reservations/reservation-element";
+import { NotEmptyItem } from "../../../common/util/helpers";
+
+function CancelReservations(reservationsToCancel: ReservationAtHotel[]): void {
+  for (const reservationToCancel of reservationsToCancel) {
+    ConfirmCancellation(reservationToCancel);
+  }
+}
 
 /**
  * Returns a dialog which enables the user to confirm their decision to delete the selected room definition.
@@ -25,6 +37,7 @@ import { DeleteRoom } from "../../util/solidHotelSpecific";
 export function DeleteRoomPopup({
   room,
   updateRoomLocally,
+  reservations,
   isPopupShowing,
   setPopupVisibility,
 }: {
@@ -33,6 +46,7 @@ export function DeleteRoomPopup({
     newRoomDefinition: RoomDefinition,
     isDelete: boolean
   ) => void;
+  reservations: (ReservationAtHotel | null)[] | undefined;
   isPopupShowing: boolean;
   setPopupVisibility: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element | null {
@@ -42,7 +56,21 @@ export function DeleteRoomPopup({
     return null;
   }
 
-  //TODO the same logic as delete field popup just with different text
+  let roomConfirmedReservations: ReservationAtHotel[] = [];
+  if (!room.id) {
+    ShowErrorSnackbar(
+      "Room ID is null/undefined for delete room popup. The cancellation of reservations can't be executed"
+    );
+  } else if (reservations) {
+    const roomUrl = GetRoomUrlFromRoomId(room.id);
+    roomConfirmedReservations = reservations
+      .filter(NotEmptyItem)
+      .filter(
+        (res) =>
+          res.state === ReservationState.CONFIRMED && res.room === roomUrl
+      );
+  }
+
   return (
     <Dialog onClose={() => setPopupVisibility(false)} open={isPopupShowing}>
       <DialogTitle id="popup-title">Delete room</DialogTitle>
@@ -82,11 +110,9 @@ export function DeleteRoomPopup({
             </Box>
           </Grid>
           <Grid item>
-            {
-              //TODO get reservation count
-            }
             <Typography>
-              There are currently {} reservations made for this room.
+              There are currently {roomConfirmedReservations.length}{" "}
+              reservations made for this room.
             </Typography>
           </Grid>
           <Grid item>
@@ -124,8 +150,7 @@ export function DeleteRoomPopup({
                 disabled={!isChecked}
                 startIcon={<DeleteIcon />}
                 onClick={() => {
-                  // TODO: deleted room doesnt disappear immediately locally!
-                  //TODO cancel all reservations
+                  CancelReservations(roomConfirmedReservations);
                   updateRoomLocally(room, true);
                   DeleteRoom(room);
                   Revalidate();

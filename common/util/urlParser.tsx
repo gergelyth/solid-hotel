@@ -1,3 +1,4 @@
+import { RoomDefinitionsUrl } from "../consts/solidIdentifiers";
 import { GetUserReservationsPodUrl } from "./solidReservations";
 
 /** Derives the reservation ID from the reservation inbox URL provided. */
@@ -61,6 +62,11 @@ export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
   //userpod.inrupt.net/reservations/49938104/reservation
   //userpod.inrupt.net/reservations/49938104/inbox
   return inboxUrl.replace(new RegExp("inbox$"), "reservation");
+}
+
+/** Constructs the room URL from the room ID provided. */
+export function GetRoomUrlFromRoomId(roomId: string): string {
+  return RoomDefinitionsUrl + roomId;
 }
 
 /** Derives the ID part of the URL from the URL provided based on the index argument. */

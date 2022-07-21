@@ -5,8 +5,8 @@ import HotelIcon from "@material-ui/icons/Hotel";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { DeleteRoomPopup } from "./delete-room-popup";
 import { EditRoomPopup } from "./edit-room-popup";
+import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 
-//TODO same logic as EditableField
 /**
  * Displays an element for a specific room containing the room definition information as well an Edit and Delete button.
  * The buttons trigger a popup enabling the corresponding actions.
@@ -15,12 +15,14 @@ import { EditRoomPopup } from "./edit-room-popup";
 export function EditableRoomElement({
   room,
   updateRoomLocally,
+  reservations,
 }: {
   room: RoomDefinition;
   updateRoomLocally: (
     newRoomDefinition: RoomDefinition,
     isDelete: boolean
   ) => void;
+  reservations: (ReservationAtHotel | null)[] | undefined;
 }): JSX.Element {
   const [isEditPopupShowing, setEditPopupVisibility] = useState(false);
   const [isDeletePopupShowing, setDeletePopupVisibility] = useState(false);
@@ -85,6 +87,7 @@ export function EditableRoomElement({
       <DeleteRoomPopup
         room={room}
         updateRoomLocally={updateRoomLocally}
+        reservations={reservations}
         isPopupShowing={isDeletePopupShowing}
         setPopupVisibility={setDeletePopupVisibility}
       />
