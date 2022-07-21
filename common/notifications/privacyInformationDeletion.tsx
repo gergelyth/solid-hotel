@@ -5,6 +5,7 @@ import {
   createThing,
   getSourceUrl,
   getStringNoLocale,
+  setStringNoLocale,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -13,12 +14,16 @@ import { NotificationType } from "../types/NotificationsType";
 import { PrivacyDeletionToRdfMap } from "../vocabularies/notificationpayloads/rdfPrivacyDeletion";
 import { GetThing } from "../util/solid";
 import { UtilRdfMap } from "../vocabularies/rdfUtil";
+import { SafeSaveDatasetAt } from "../util/solidWrapper";
 
 /**
- * Parses the notification dataset into a privacy token deletion request.
+ * Parses the notification dataset into a privacy token deletion request and deletes the sensitive information if required.
  * @returns The token URL of the privacy token to be deleted and an optional guest inbox where the hotel can report the successful operation.
  */
-export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
+export function DeserializePrivacyInformationDeletion(
+  dataset: SolidDataset,
+  deleteSensitiveThing: boolean
+): {
   tokenUrl: string;
   guestInboxUrl: string | undefined;
 } {
@@ -40,6 +45,16 @@ export function DeserializePrivacyInformationDeletion(dataset: SolidDataset): {
 
   if (!tokenUrl) {
     throw new Error("Privacy token URL link cannot be null");
+  }
+
+  if (deleteSensitiveThing && guestInboxUrl) {
+    const updatedThing = setStringNoLocale(
+      deletionThing,
+      PrivacyDeletionToRdfMap.guestInboxUrl,
+      "Anonymized"
+    );
+    const updatedDataSet = setThing(dataset, updatedThing);
+    SafeSaveDatasetAt(datasetUrl, updatedDataSet);
   }
 
   return { tokenUrl, guestInboxUrl };

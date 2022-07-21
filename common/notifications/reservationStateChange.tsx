@@ -6,6 +6,7 @@ import {
   createThing,
   getInteger,
   getStringNoLocale,
+  setStringNoLocale,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -16,14 +17,16 @@ import { NotificationType } from "../types/NotificationsType";
 import { GetReservationIdFromInboxUrl } from "../util/urlParser";
 import { GetThing } from "../util/solid";
 import { UtilRdfMap } from "../vocabularies/rdfUtil";
+import { SafeSaveDatasetAt } from "../util/solidWrapper";
 
 /**
- * Parses the notification dataset into the reservation state change properties.
+ * Parses the notification dataset into the reservation state change properties and deletes the sensitive information if required.
  * @returns The reservation state change properties: the reservation ID, the new state of the reservation and the reply inbox which receives any follow-up messages.
  */
 export function DeserializeReservationStateChange(
   url: string,
-  dataset: SolidDataset
+  dataset: SolidDataset,
+  deleteSensitiveThing: boolean
 ): {
   reservationId: string;
   newState: ReservationState;
@@ -56,6 +59,17 @@ export function DeserializeReservationStateChange(
   }
 
   const reservationId = GetReservationIdFromInboxUrl(url);
+
+  if (deleteSensitiveThing) {
+    const updatedThing = setStringNoLocale(
+      stateChangeThing,
+      ReservationStateChangeToRdfMap.replyInbox,
+      "Anonymized"
+    );
+    const updatedDataSet = setThing(dataset, updatedThing);
+    SafeSaveDatasetAt(url, updatedDataSet);
+  }
+
   return { reservationId, newState, replyInbox };
 }
 

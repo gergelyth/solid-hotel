@@ -3,7 +3,9 @@ import {
   addUrl,
   createSolidDataset,
   createThing,
+  getSourceUrl,
   getStringNoLocale,
+  setStringNoLocale,
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
@@ -13,12 +15,16 @@ import { InitialPairingRequestRdfMap } from "../vocabularies/notificationpayload
 import { PairingTokenToRdfMap } from "../vocabularies/rdfPairingToken";
 import { GetThing } from "../util/solid";
 import { UtilRdfMap } from "../vocabularies/rdfUtil";
+import { SafeSaveDatasetAt } from "../util/solidWrapper";
 
 /**
- * Parses the notification dataset into an initial pairing request submitted by the guest.
+ * Parses the notification dataset into an initial pairing request submitted by the guest and delete sensitive information if required.
  * @returns The token of the pairing operation and the inbox URL where the hotel can reply.
  */
-export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
+export function DeserializeInitialPairingRequest(
+  dataset: SolidDataset,
+  deleteSensitiveThing: boolean
+): {
   guestInboxUrl: string;
   token: string;
 } {
@@ -41,6 +47,19 @@ export function DeserializeInitialPairingRequest(dataset: SolidDataset): {
   );
   if (!token) {
     throw new Error("Pairing token is null in initial pairing request");
+  }
+
+  if (deleteSensitiveThing) {
+    const updatedThing = setStringNoLocale(
+      requestThing,
+      InitialPairingRequestRdfMap.guestInboxUrl,
+      "Anonymized"
+    );
+    const updatedDataSet = setThing(dataset, updatedThing);
+    const url = getSourceUrl(dataset);
+    if (url) {
+      SafeSaveDatasetAt(url, updatedDataSet);
+    }
   }
 
   return { guestInboxUrl: guestInboxUrl, token: token };

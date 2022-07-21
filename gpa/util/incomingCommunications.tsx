@@ -42,7 +42,7 @@ export function ReceiveReservationStateChange(
   onReceive: () => void;
 } {
   const { reservationId, newState, replyInbox } =
-    DeserializeReservationStateChange(url, dataset);
+    DeserializeReservationStateChange(url, dataset, false);
   const text = `The state ${newState.toString()} was set for reservation ${reservationId}.
         Click to view reservation.`;
   const onClick = (): void => {
@@ -188,7 +188,7 @@ export function ReceivePrivacyTokenDeletionNotice(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const tokenDeletion = DeserializePrivacyInformationDeletion(dataset);
+  const tokenDeletion = DeserializePrivacyInformationDeletion(dataset, false);
 
   const text = `Privacy token at [${tokenDeletion.tokenUrl}] was deleted at the hotel.\nDeleting the corresponding token.`;
   const onClick = (): void => undefined;

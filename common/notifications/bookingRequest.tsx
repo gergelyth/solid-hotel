@@ -1,4 +1,4 @@
-import { getSourceUrl, SolidDataset } from "@inrupt/solid-client";
+import { getSourceUrl, removeThing, SolidDataset } from "@inrupt/solid-client";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
 import { ParseReservation } from "../hooks/useReservations";
 import { NotificationType } from "../types/NotificationsType";
@@ -7,13 +7,15 @@ import {
   CreateReservationDataset,
 } from "../util/datasetFactory";
 import { GetThing } from "../util/solid";
+import { SafeSaveDatasetAt } from "../util/solidWrapper";
 
 /**
- * Parses the notification dataset into a booking request.
+ * Parses the notification dataset into a booking request and deletes the sensitive information if required.
  * @returns The reservation properties submitted by the guest.
  */
 export function DeserializeBookingRequest(
-  dataset: SolidDataset
+  dataset: SolidDataset,
+  deleteSensitiveThing: boolean
 ): ReservationAtHotel {
   const datasetUrl = getSourceUrl(dataset);
   if (!datasetUrl) {
@@ -26,6 +28,12 @@ export function DeserializeBookingRequest(
   }
 
   const reservation = ParseReservation(reservationThing, datasetUrl);
+
+  if (deleteSensitiveThing) {
+    const updatedDataset = removeThing(dataset, reservationThing);
+    SafeSaveDatasetAt(datasetUrl, updatedDataset);
+  }
+
   return reservation;
 }
 

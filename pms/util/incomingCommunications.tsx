@@ -61,14 +61,12 @@ export function ReceiveReservationStateChange(
   onReceive: () => void;
 } {
   const { reservationId, newState, replyInbox } =
-    DeserializeReservationStateChange(notificationUrl, dataset);
-  //TODO check if onReceive gets no Error, and adjust this text accordingly
-  const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservation.`;
+    DeserializeReservationStateChange(notificationUrl, dataset, true);
+  const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservations.`;
   const onClick = (): void => {
     router.push("/");
   };
   const onReceive = (): void => {
-    //TODO we'll probably need the full reservation here and we get the dataset in the previous command - so unify that
     DoOnStateChange(reservationId, newState, replyInbox);
   };
 
@@ -90,7 +88,7 @@ export function ReceiveBookingRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const reservation = DeserializeBookingRequest(dataset);
+  const reservation = DeserializeBookingRequest(dataset, true);
 
   const text = `Reservation requested for dates [${reservation.dateFrom.toDateString()}]-[${reservation.dateTo.toDateString()}].\nRequest was automatically confirmed.`;
   const onClick = (): void => {
@@ -204,9 +202,8 @@ export function ReceiveInitialPairingRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  //TODO what happens if something goes wrong at the user's side and we delete the parsing token - we won't ever be able to repeat
   const { guestInboxUrl, token: receivedToken } =
-    DeserializeInitialPairingRequest(dataset);
+    DeserializeInitialPairingRequest(dataset, true);
   const coreReservationFolder =
     GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
 
@@ -258,8 +255,10 @@ export function ReceivePrivacyTokenDeletionRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const { tokenUrl, guestInboxUrl } =
-    DeserializePrivacyInformationDeletion(dataset);
+  const { tokenUrl, guestInboxUrl } = DeserializePrivacyInformationDeletion(
+    dataset,
+    true
+  );
 
   const text = `Privacy token at [${tokenUrl}] was requested to be deleted.`;
   const onClick = (): void => undefined;
