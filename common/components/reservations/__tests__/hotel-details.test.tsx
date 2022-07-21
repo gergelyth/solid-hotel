@@ -7,12 +7,12 @@ import {
   HotelDetailsOneLiner,
   HotelDetailsTwoLiner,
 } from "../hotel-details";
+import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
 
 const testHotelDetails: HotelDetails = {
   webId: "HotelWebId",
   name: "Paradise Hotel",
-  //TODO a NamedNode of the country?
-  location: "France",
+  location: CountryToRdfMap.FRA,
   address: "FranceAddress",
 };
 
@@ -36,7 +36,7 @@ describe("<HotelDetailsTwoLiner />, <HotelDetailsOneLiner />, GetHotelInformatio
     expect(hotelDetailsComponent).toBeDefined();
     expect(
       hotelDetailsComponent.baseElement.innerHTML.includes(
-        "Paradise Hotel, France"
+        `Paradise Hotel, FRA`
       )
     ).toBeTruthy();
     expect(
@@ -51,13 +51,13 @@ describe("<HotelDetailsTwoLiner />, <HotelDetailsOneLiner />, GetHotelInformatio
     expect(hotelDetailsComponent).toBeDefined();
     expect(
       hotelDetailsComponent.baseElement.innerHTML.includes(
-        "Paradise Hotel, France"
+        "Paradise Hotel, FRA"
       )
     ).toBeTruthy();
   });
 
   test("GetHotelInformation() returns hotel information", async () => {
     const hotelInformation = GetHotelInformation(testHotelDetails.webId);
-    expect(hotelInformation).toEqual("Paradise Hotel, France");
+    expect(hotelInformation).toEqual("Paradise Hotel, FRA");
   });
 });

@@ -5,15 +5,7 @@ import {
 } from "../../../common/util/__tests__/testUtil";
 import { createSolidDataset } from "@inrupt/solid-client";
 import { GetDataSet } from "../../../common/util/solid";
-import {
-  CreateOrUpdateRoom,
-  DeleteRoom,
-  SetHotelProfileField,
-} from "../solidHotelSpecific";
-import {
-  GetProfileOf,
-  SetFieldInSolidProfile,
-} from "../../../common/util/solidProfile";
+import { CreateOrUpdateRoom, DeleteRoom } from "../solidHotelSpecific";
 import {
   SafeCreateContainerAt,
   SafeDeleteDataset,
@@ -44,17 +36,6 @@ beforeEach(() => {
 });
 
 describe("solidHotelSpecific", () => {
-  test("SetHotelProfileField()", async () => {
-    (GetProfileOf as jest.Mock).mockReturnValue(jest.fn());
-    await SetHotelProfileField("test:property", "newValue");
-
-    expect(SetFieldInSolidProfile).toBeCalledWith(
-      expect.anything(),
-      "test:property",
-      "newValue"
-    );
-  });
-
   test("CreateOrUpdateRoom() doesn't create room container if it can successfully retrieve it", async () => {
     (GetDataSet as jest.Mock).mockReturnValue(createSolidDataset());
     await CreateOrUpdateRoom(TestRoomDefinitions[0]);

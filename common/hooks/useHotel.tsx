@@ -1,4 +1,4 @@
-import { getStringNoLocale, Thing } from "@inrupt/solid-client";
+import { getStringNoLocale, getUrl, Thing } from "@inrupt/solid-client";
 import useSWR from "swr";
 import {
   AddLoadingIndicator,
@@ -35,7 +35,7 @@ function ConvertToHotelDetails(
       getStringNoLocale(hotelProfile, HotelFieldToRdfMap.name) ??
       "<No hotel name>",
     location:
-      getStringNoLocale(hotelProfile, HotelFieldToRdfMap.location) ??
+      getUrl(hotelProfile, HotelFieldToRdfMap.location) ??
       "<No hotel location>",
     address:
       getStringNoLocale(hotelProfile, HotelFieldToRdfMap.address) ??

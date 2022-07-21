@@ -7,14 +7,7 @@ import {
 } from "@inrupt/solid-client";
 import { RoomDefinition } from "../../common/types/RoomDefinition";
 import { RoomFieldToRdfMap } from "../../common/vocabularies/rdfRoom";
-import {
-  HotelWebId,
-  RoomDefinitionsUrl,
-} from "../../common/consts/solidIdentifiers";
-import {
-  GetProfileOf,
-  SetFieldInSolidProfile,
-} from "../../common/util/solidProfile";
+import { RoomDefinitionsUrl } from "../../common/consts/solidIdentifiers";
 import { GetDataSet } from "../../common/util/solid";
 import { SetReadAccessToEveryone } from "../../common/util/solidAccess";
 import {
@@ -23,18 +16,6 @@ import {
   SafeSaveDatasetInContainer,
 } from "../../common/util/solidWrapper";
 import { UtilRdfMap } from "../../common/vocabularies/rdfUtil";
-
-/**
- * Fetches the profile of the hotel and sets the field value to be the value passed to the function.
- * Saves the profile to the Pod.
- */
-export async function SetHotelProfileField(
-  field: string,
-  value: string
-): Promise<void> {
-  const hotelProfile = await GetProfileOf(HotelWebId);
-  SetFieldInSolidProfile(hotelProfile, field, value);
-}
 
 /**
  * Creates the Solid dataset from the room definition object passed to the function.

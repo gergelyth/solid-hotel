@@ -1,5 +1,14 @@
 import { useHotel } from "../../hooks/useHotel";
 import { Box, Typography } from "@material-ui/core";
+import { ReverseCountryToRdfMap } from "../../vocabularies/rdfCountries";
+
+/**
+ * In order to display a more pleasant representation of the country, we look up the country code assigned to the RDF name.
+ * @returns The 3 letter country code assigned to the RDF or the RDF if the country is not supported.
+ */
+function GetCountryDisplayName(countryRdf: string): string {
+  return ReverseCountryToRdfMap[countryRdf] ?? countryRdf;
+}
 
 /**
  * Retrieves the hotel details from the hotel profile tied to the webId supplied.
@@ -15,7 +24,9 @@ export function GetHotelInformation(hotelWebId: string): string {
     return "Error loading hotel information";
   }
 
-  return `${hotelDetails.name}, ${hotelDetails.location}`;
+  return `${hotelDetails.name}, ${GetCountryDisplayName(
+    hotelDetails.location
+  )}`;
 }
 
 /**

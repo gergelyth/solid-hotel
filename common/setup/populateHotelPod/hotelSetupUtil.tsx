@@ -1,17 +1,22 @@
-import { createContainerAt } from "@inrupt/solid-client";
+import {
+  createContainerAt,
+  setStringNoLocale,
+  setThing,
+  setUrl,
+} from "@inrupt/solid-client";
 import { GetSession } from "../../util/solid";
 import { SetSubmitterAccessToEveryone } from "../../util/solidAccess";
 import {
   BookingInboxUrl,
   DataProtectionProfilesUrl,
   HotelProfilesUrl,
+  HotelWebId,
   PrivacyTokensUrl,
   ReservationsUrl,
   RoomDefinitionsUrl,
 } from "../../consts/solidIdentifiers";
 import { RecursiveDelete } from "../setupUtil";
 import { HotelFieldToRdfMap } from "../../vocabularies/rdfHotel";
-import { SetHotelProfileField } from "../../../pms/util/solidHotelSpecific";
 import {
   HotelAddress,
   HotelLocation,
@@ -19,6 +24,9 @@ import {
 } from "../../consts/hotelConsts";
 import { RoomDefinition } from "../../types/RoomDefinition";
 import { CreateOrUpdateRoom } from "../../../pms/util/solidHotelSpecific";
+import { GetProfileOf } from "../../util/solidProfile";
+import { ShowError } from "../../util/helpers";
+import { SafeSaveDatasetAt } from "../../util/solidWrapper";
 
 /**
  * Creates some example room definitions meant as test data with which to populate the hotel Pod.
@@ -111,12 +119,31 @@ export async function CreateBookingInbox(): Promise<void> {
  * Helper function - required by hotel Solid Pod setup.
  */
 export async function SetupHotelProfile(): Promise<void> {
-  await Promise.all([
-    SetHotelProfileField(HotelFieldToRdfMap.name, HotelName),
-    //TODO this should be an RDF name (potentially namednode)
-    SetHotelProfileField(HotelFieldToRdfMap.location, HotelLocation),
-    SetHotelProfileField(HotelFieldToRdfMap.address, HotelAddress),
-  ]);
+  const hotelProfile = await GetProfileOf(HotelWebId);
+  if (!hotelProfile || !hotelProfile.profile || !hotelProfile.dataSet) {
+    ShowError("Hotel profile not found", true);
+    return;
+  }
+
+  let updatedProfile = hotelProfile.profile;
+  updatedProfile = setStringNoLocale(
+    updatedProfile,
+    HotelFieldToRdfMap.name,
+    HotelName
+  );
+  updatedProfile = setUrl(
+    updatedProfile,
+    HotelFieldToRdfMap.location,
+    HotelLocation
+  );
+  updatedProfile = setStringNoLocale(
+    updatedProfile,
+    HotelFieldToRdfMap.address,
+    HotelAddress
+  );
+  const updatedDataSet = setThing(hotelProfile.dataSet, updatedProfile);
+
+  await SafeSaveDatasetAt(hotelProfile.profileAddress, updatedDataSet);
 }
 
 /**
