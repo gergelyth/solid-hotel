@@ -11,6 +11,7 @@ import {
   CreateDataProtectionProfilePrivacyToken,
   FindHotelProfileTokenAndDeleteIt,
   FindInboxTokenAndDeleteIt,
+  FindWebIdTokenAndDeleteIt,
 } from "../../../util/privacyHelper";
 import { useGuest } from "../../../../common/hooks/useGuest";
 import { useDataProtectionInformation } from "../../../../common/hooks/useMockApi";
@@ -190,6 +191,11 @@ describe("<CheckoutProgressSnackbar >", () => {
     );
 
     expect(SendPrivacyToken).toBeCalledWith(ReplyInbox, expectedPrivacyToken);
+    expect(FindWebIdTokenAndDeleteIt).toBeCalledWith(
+      TestHotelPrivacyTokens,
+      TestReservationId,
+      false
+    );
     expect(FindInboxTokenAndDeleteIt).toBeCalledWith(
       TestHotelPrivacyTokens,
       TestReservationId,

@@ -11,7 +11,6 @@ import {
 import {
   CreateActiveProfilePrivacyToken,
   FindEmailTokenAndDeleteIt,
-  FindWebIdTokenAndDeleteIt,
 } from "../../../util/privacyHelper";
 import { CheckinProgressSnackbar } from "../checkin-progress-snackbar";
 import { useGuest } from "../../../../common/hooks/useGuest";
@@ -166,11 +165,6 @@ describe("<CheckinProgressSnackbar >", () => {
     expect(SetReservationOwnerToHotelProfile).toBeCalledWith(
       TestReservationId,
       expectedWebId
-    );
-    expect(FindWebIdTokenAndDeleteIt).toBeCalledWith(
-      TestHotelPrivacyTokens,
-      TestReservationId,
-      false
     );
     expect(FindEmailTokenAndDeleteIt).toBeCalledWith(
       TestHotelPrivacyTokens,

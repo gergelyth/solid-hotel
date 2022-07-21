@@ -13,7 +13,6 @@ import { ReservationFieldToRdfMap } from "../../../common/vocabularies/rdfReserv
 import {
   CreateActiveProfilePrivacyToken,
   FindEmailTokenAndDeleteIt,
-  FindWebIdTokenAndDeleteIt,
 } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
@@ -53,7 +52,6 @@ async function ExecuteCheckIn(
     reservationId,
     hotelProfileWebId
   );
-  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, false);
   await FindEmailTokenAndDeleteIt(privacyTokens, reservationId);
   RevalidateHotelPrivacyTokens();
 

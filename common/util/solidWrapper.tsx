@@ -1,6 +1,7 @@
 import {
   createContainerAt,
   createContainerInContainer,
+  deleteAclFor,
   deleteSolidDataset,
   getSolidDataset,
   getSolidDatasetWithAcl,
@@ -62,6 +63,22 @@ export async function SafeGetDatasetWithAcl(
       fetch: session.fetch,
     });
     return dataSet;
+  } catch (e: unknown) {
+    ParseAndShowSolidError(e);
+  }
+}
+
+/**
+ * Deletes the ACL for a Solid dataset with error catching.
+ */
+export async function SafeDeleteAclFor(
+  datasetWithAcl: WithResourceInfo & WithAccessibleAcl
+): Promise<void | undefined> {
+  const session = GetSession();
+  try {
+    await deleteAclFor(datasetWithAcl, {
+      fetch: session.fetch,
+    });
   } catch (e: unknown) {
     ParseAndShowSolidError(e);
   }

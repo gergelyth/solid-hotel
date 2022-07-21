@@ -105,7 +105,7 @@ export async function CreateReservationPrivacyToken(
   const webIdToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
     [ReservationFieldToRdfMap.owner],
-    GetStartOfNextDay(reservation.dateFrom),
+    GetStartOfNextDay(reservation.dateTo),
     "Basic information for a confirmed reservation",
     ReservationState.CONFIRMED,
     guestInbox,
@@ -116,7 +116,7 @@ export async function CreateReservationPrivacyToken(
     reservationUrl,
     [ReservationFieldToRdfMap.email],
     GetStartOfNextDay(reservation.dateFrom),
-    "Information to be to chase down guest if they disappear",
+    "Required information to chase down the guest if they disappear",
     ReservationState.CONFIRMED,
     guestInbox,
     reservationUrl

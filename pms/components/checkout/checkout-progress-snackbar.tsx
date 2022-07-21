@@ -7,6 +7,7 @@ import {
   CreateDataProtectionProfilePrivacyToken,
   FindHotelProfileTokenAndDeleteIt,
   FindInboxTokenAndDeleteIt,
+  FindWebIdTokenAndDeleteIt,
 } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
 import { CloseSnackbar } from "../../../common/components/snackbar";
@@ -20,7 +21,10 @@ import { Field } from "../../../common/types/Field";
 import { DataProtectionInformation } from "../../../common/util/apiDataRetrieval";
 import { DeleteFromCache } from "../../../common/util/tracker/profileCache";
 import { UnSubscribe } from "../../../common/util/tracker/tracker";
-import { CreateReservationUrlFromReservationId } from "../../../common/util/urlParser";
+import {
+  CreateInboxUrlFromReservationId,
+  CreateReservationUrlFromReservationId,
+} from "../../../common/util/urlParser";
 import {
   RevalidateHotelPrivacyTokens,
   useHotelPrivacyTokens,
@@ -28,6 +32,7 @@ import {
 import { PrivacyTokensUrl } from "../../../common/consts/solidIdentifiers";
 import { HotelPrivacyToken } from "../../../common/types/HotelPrivacyToken";
 import { SafeDeleteDataset } from "../../../common/util/solidWrapper";
+import { DeleteAccessForResource } from "../../../common/util/solidAccess";
 
 /**
  * Creates the data protection profile of the guest according to the conditions retrieved from the mock API.
@@ -74,8 +79,12 @@ async function ExecuteCheckOut(
 
   await SendPrivacyToken(replyInbox, privacyToken);
 
+  await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, false);
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
   RevalidateHotelPrivacyTokens();
+
+  const inboxUrl = CreateInboxUrlFromReservationId(reservationId);
+  await DeleteAccessForResource(inboxUrl);
 }
 
 /**

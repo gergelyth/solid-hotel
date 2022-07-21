@@ -10,7 +10,11 @@ import {
   setAgentDefaultAccess,
   setAgentResourceAccess,
 } from "@inrupt/solid-client";
-import { SafeGetDatasetWithAcl, SafeSaveAclFor } from "./solidWrapper";
+import {
+  SafeGetDatasetWithAcl,
+  SafeSaveAclFor,
+  SafeDeleteAclFor,
+} from "./solidWrapper";
 
 /**
  * Set the access to the permissions passed as an argument.
@@ -135,4 +139,20 @@ export async function SetReadAccessToAgent(
     true,
     webId
   );
+}
+
+/**
+ * Deletes the access permissions for a resource (mainly used for inboxes to get rid of any mention of the guest WebId).
+ */
+export async function DeleteAccessForResource(
+  resourceUrl: string
+): Promise<void> {
+  const datasetWithAcl = await SafeGetDatasetWithAcl(resourceUrl);
+  if (!datasetWithAcl) {
+    return;
+  }
+
+  if (hasResourceAcl(datasetWithAcl)) {
+    await SafeDeleteAclFor(datasetWithAcl);
+  }
 }
