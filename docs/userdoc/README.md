@@ -30,7 +30,9 @@ Clicking on the `Book a room` button on the index page begins the process of mak
 
 The first stop is to select the room for which the reservation will be made. The user can only select one room at a time. Below these options are the date picker elements, which let the user select their check-in and check-out dates. Note that the earliest date that can be chosen for the check-in date is the current day, while the earliest for check-out is the day after the check-in date. If the components report an error, please select dates which these specifications. When the user is satisfied with their choices, they click the `Proceed` button.
 
-![gpa_booking](./screenshots/gpa_booking.png)
+<p align="center">
+  <img src="https://github.com/gergelyth/solid-hotel/blob/master/docs/userdoc/screenshots/gpa_booking.png" alt="GPA booking"/>
+</p>
 
 The second subpage is one which checks if all the personal information fields required for future check-in are present in the guest's profile saved in the Pod (we specify here and for future reference that this profile is saved under `{USER_POD}/profile/card#me`). If some field is missing, the application provides a way to fill it in. The `Proceed` button gets enabled when all fields have corresponding values.
 
@@ -182,7 +184,9 @@ After selecting a provider, the GPA redirects to the provider's page to authenti
 
 The notification component displays the number of notifications the application currently recognizes. Clicking on the icon brings up the list of such items on the left side of the screen. These notification items are clickable and they may perform actions based on the type of the notification. This action is indicated by the notification message. The type, as well as the time the item the item was constructed, is displayed for each item. They are also deletable by clicking on the `Clear` button of the respective notification. Clicking anywhere else on the screen closes the displayed list.
 
-![notifications](./screenshots/notifications.png)
+<p align="center">
+  <img src="https://github.com/gergelyth/solid-hotel/blob/master/docs/userdoc/screenshots/notifications.png" alt="Notifications"/>
+</p>
 
 ### <ins>Profile synchronization</ins>
 
