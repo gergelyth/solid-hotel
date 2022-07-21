@@ -11,7 +11,9 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 import { NotFoundError } from "./errors";
+import { ShowError } from "./helpers";
 import { GetDataSet, GetSession } from "./solid";
 import { SafeSaveDatasetAt } from "./solidWrapper";
 
@@ -74,6 +76,36 @@ export async function GetField(field: string): Promise<string> {
   }
 
   return value;
+}
+
+/**
+ * Retrieves the email address of the person represented by the WebId.
+ * @returns The email address of the guest.
+ */
+export async function GetEmailFromProfile(webId: string): Promise<string> {
+  const solidProfile = await GetProfileOf(webId);
+
+  if (!solidProfile || !solidProfile.profile) {
+    ShowError(
+      "We don't have access to the guest's Pod. Can't retrieve email - returning empty string",
+      true
+    );
+    return "";
+  }
+
+  const email = getStringNoLocale(
+    solidProfile.profile,
+    PersonFieldToRdfMap.email
+  );
+  if (!email) {
+    ShowError(
+      "It seems the guest deleted their email address from their Pod since their booking. Returning empty string.",
+      true
+    );
+    return "";
+  }
+
+  return email;
 }
 
 /**

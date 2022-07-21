@@ -26,6 +26,7 @@ import {
 import {
   AddReservation,
   GetOwnerFromReservation,
+  SetEmailAddressOfGuest,
 } from "../../common/util/solidReservations";
 import {
   ConvertToHotelPrivacyToken,
@@ -42,6 +43,7 @@ import SendChangeSnackbar from "../../common/components/profilesync/tracker-send
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
+import { GetEmailFromProfile } from "../../common/util/solidProfile";
 
 /**
  * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
@@ -103,6 +105,12 @@ export function ReceiveBookingRequest(
 
     reservation.state = ReservationState.CONFIRMED;
     const hotelInboxUrl = await AddReservation(reservation);
+
+    const email = await GetEmailFromProfile(reservation.owner);
+    if (email !== "") {
+      SetEmailAddressOfGuest(hotelInboxUrl, email);
+    }
+
     RevalidateReservations();
     ConfirmReservationStateRequest(
       ReservationState.CONFIRMED,

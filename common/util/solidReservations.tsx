@@ -14,7 +14,10 @@ import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetThing } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
 import { SetSubmitterAccessToEveryone } from "./solidAccess";
-import { CreateReservationUrlFromReservationId } from "./urlParser";
+import {
+  CreateReservationUrlFromReservationId,
+  GetReservationUrlFromInboxUrl,
+} from "./urlParser";
 import { ParseReservation } from "../hooks/useReservations";
 import {
   SafeCreateContainerAt,
@@ -103,6 +106,26 @@ async function GetReservationDatasetAndThing(
   }
 
   return { dataset: dataset, thing: reservationThing };
+}
+
+/**
+ * Constructs the absolute URL of the reservation based on the hotel inbox URL.
+ * Saves the email of the guest to the reservation.
+ */
+export async function SetEmailAddressOfGuest(
+  hotelInboxUrl: string,
+  email: string
+): Promise<void> {
+  const datasetUrl = GetReservationUrlFromInboxUrl(hotelInboxUrl);
+  const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
+  const updatedReservation = setStringNoLocale(
+    thing,
+    ReservationFieldToRdfMap.email,
+    email
+  );
+  const updatedDataSet = setThing(dataset, updatedReservation);
+
+  await SafeSaveDatasetAt(datasetUrl, updatedDataSet);
 }
 
 /**

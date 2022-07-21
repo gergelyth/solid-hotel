@@ -112,13 +112,23 @@ export async function CreateReservationPrivacyToken(
     reservationUrl
   );
 
+  const emailToken = SaveHotelAndCreateGuestPrivacyToken(
+    reservationUrl,
+    [ReservationFieldToRdfMap.email],
+    GetStartOfNextDay(reservation.dateFrom),
+    "Information to be to chase down guest if they disappear",
+    ReservationState.CONFIRMED,
+    guestInbox,
+    reservationUrl
+  );
+
   const inboxToken = CreateInboxPrivacyToken(
     reservationUrl,
     guestInbox,
     reservation
   );
 
-  return Promise.all([webIdToken, inboxToken]);
+  return Promise.all([webIdToken, inboxToken, emailToken]);
 }
 
 /**
@@ -272,6 +282,24 @@ export async function FindWebIdTokenAndDeleteIt(
     ReservationState.CONFIRMED,
     anonymize,
     ReservationFieldToRdfMap.owner
+  );
+}
+
+/**
+ * Looks for the email privacy token created for the reservation represented by the ID passed.
+ * Deletes the privacy token if found and informs the guest about it.
+ * Anonymizes the email in the reservation.
+ */
+export async function FindEmailTokenAndDeleteIt(
+  privacyTokens: (HotelPrivacyToken | null)[],
+  reservationId: string
+): Promise<void> {
+  return FindTokenAndDeleteIt(
+    privacyTokens,
+    reservationId,
+    ReservationState.CONFIRMED,
+    true,
+    ReservationFieldToRdfMap.email
   );
 }
 

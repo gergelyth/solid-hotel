@@ -12,6 +12,7 @@ import { getDatetime } from "@inrupt/solid-client";
 import { ReservationFieldToRdfMap } from "../../../common/vocabularies/rdfReservation";
 import {
   CreateActiveProfilePrivacyToken,
+  FindEmailTokenAndDeleteIt,
   FindWebIdTokenAndDeleteIt,
 } from "../../util/privacyHelper";
 import { SendPrivacyToken } from "../../util/outgoingCommunications";
@@ -53,6 +54,7 @@ async function ExecuteCheckIn(
     hotelProfileWebId
   );
   await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, false);
+  await FindEmailTokenAndDeleteIt(privacyTokens, reservationId);
   RevalidateHotelPrivacyTokens();
 
   const checkoutDate = getDatetime(

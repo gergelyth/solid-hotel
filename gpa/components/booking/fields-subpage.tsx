@@ -7,6 +7,7 @@ import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/
 import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { ErrorComponent } from "../../../common/components/error-component";
+import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
 
 /**
  * Has the responsibility to collect the values for all RDF fields required for booking.
@@ -48,6 +49,11 @@ export function RequiredFields({
   function ProceedButtonClick(): void {
     confirmReservation();
     setCurrentPage(currentPage + 1);
+  }
+
+  //We always request the email because of our requirements to help track down a user if they disappear
+  if (!data.includes(PersonFieldToRdfMap.email)) {
+    data.push(PersonFieldToRdfMap.email);
   }
 
   return (
