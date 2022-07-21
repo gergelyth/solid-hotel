@@ -16,7 +16,7 @@ import { NotificationType } from "../types/NotificationsType";
 import { ParserList } from "../types/ParserList";
 import { GetDataSet, GetThing } from "../util/solid";
 import useSWR, { mutate } from "swr";
-import { GlobSolidUrlPaths } from "../util/helpers";
+import { GlobSolidUrlPaths, ReportParsingFailure } from "../util/helpers";
 import { ReverseNotificationTypeRdfMap } from "../vocabularies/notificationpayloads/rdfNotificationTypes";
 
 const swrKey = "notifications";
@@ -88,10 +88,10 @@ function ConvertToNotification(
     return null;
   }
 
-  //TODO default value
   let notificationType: NotificationType =
     ReverseNotificationTypeRdfMap[
-      getUrl(notificationThing, NotificationToRdfMap.notificationType) ?? 0
+      getUrl(notificationThing, NotificationToRdfMap.notificationType) ??
+        ReportParsingFailure("notification", "type", 0)
     ];
   //Annoying retyping trick so we get a correct ENUM value instead of a string
   notificationType =

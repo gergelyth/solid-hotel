@@ -1,4 +1,5 @@
 import {
+  createSolidDataset,
   getSourceUrl,
   getThing,
   SolidDataset,
@@ -8,7 +9,7 @@ import {
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import { UtilRdfMap } from "../vocabularies/rdfUtil";
-import { NotFoundError } from "./errors";
+import { ShowError } from "./helpers";
 import { SafeGetDataset } from "./solidWrapper";
 
 /** The name of the Solid Thing containing the privacy token. */
@@ -81,7 +82,17 @@ export async function GetDataSet(
   const dataSet = await SafeGetDataset(url);
 
   if (!dataSet) {
-    throw new NotFoundError(`Dataset at ${url} not found.`);
+    ShowError(
+      "Dataset not found. Did you set up the Pod structure correctly? If so, then manual data manipulation detected",
+      false
+    );
+    return {
+      ...createSolidDataset(),
+      internal_resourceInfo: {
+        sourceIri: "/404",
+        isRawData: true,
+      },
+    };
   }
 
   return dataSet;

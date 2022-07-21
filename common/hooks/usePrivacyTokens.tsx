@@ -15,6 +15,7 @@ import {
 import { GuestPrivacyToken } from "../types/GuestPrivacyToken";
 import { HotelPrivacyToken } from "../types/HotelPrivacyToken";
 import { PrivacyToken } from "../types/PrivacyToken";
+import { ReportParsingFailure } from "../util/helpers";
 import { GetThing } from "../util/solid";
 import { PrivacyTokenToRdfMap } from "../vocabularies/notificationpayloads/rdfPrivacy";
 import { FetchItems } from "./util/listThenItemsFetcher";
@@ -27,17 +28,20 @@ const guestSwrKey = "guestPrivacy";
  * @returns The common properties of privacy tokens.
  */
 function ConvertToPrivacyToken(privacyThing: Thing): PrivacyToken {
-  //TODO handle null values
   const token = {
     fieldList: getStringNoLocaleAll(
       privacyThing,
       PrivacyTokenToRdfMap.fieldList
     ),
-    reason: getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reason) ?? "",
+    reason:
+      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reason) ??
+      ReportParsingFailure("privacyToken", "reason", ""),
     forReservationState:
-      getInteger(privacyThing, PrivacyTokenToRdfMap.forReservationState) ?? 0,
+      getInteger(privacyThing, PrivacyTokenToRdfMap.forReservationState) ??
+      ReportParsingFailure("privacyToken", "forReservationState", 0),
     expiry:
-      getDatetime(privacyThing, PrivacyTokenToRdfMap.expiry) ?? new Date(),
+      getDatetime(privacyThing, PrivacyTokenToRdfMap.expiry) ??
+      ReportParsingFailure("privacyToken", "expiry", new Date()),
     urlAtHotel: getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.url),
   };
 
@@ -59,16 +63,17 @@ export function ConvertToHotelPrivacyToken(
 
   const privacyToken = ConvertToPrivacyToken(privacyThing);
 
-  //TODO handle null values
   const hotelPrivacytoken = {
     ...privacyToken,
     datasetUrlTarget:
-      getUrl(privacyThing, PrivacyTokenToRdfMap.datasetUrlTarget) ?? "",
+      getUrl(privacyThing, PrivacyTokenToRdfMap.datasetUrlTarget) ??
+      ReportParsingFailure("hotelPrivacyToken", "datasetTarget", ""),
     guestInbox:
       getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.guestInbox) ??
       undefined,
     reservation:
-      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reservation) ?? "",
+      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reservation) ??
+      ReportParsingFailure("hotelPrivacyToken", "reservationUrl", ""),
   };
 
   return hotelPrivacytoken;
@@ -90,15 +95,16 @@ export function ConvertToGuestPrivacyToken(
 
   const privacyToken = ConvertToPrivacyToken(privacyThing);
 
-  //TODO handle null values
   const guestPrivacytoken = {
     ...privacyToken,
     hotelInboxForDeletion:
       getStringNoLocale(
         privacyThing,
         PrivacyTokenToRdfMap.hotelInboxForDeletion
-      ) ?? "",
-    hotel: getUrl(privacyThing, PrivacyTokenToRdfMap.hotel) ?? "",
+      ) ?? ReportParsingFailure("guestPrivacyToken", "hotelInbox", ""),
+    hotel:
+      getUrl(privacyThing, PrivacyTokenToRdfMap.hotel) ??
+      ReportParsingFailure("guestPrivacyToken", "hotel", ""),
     urlAtGuest: url,
     reservation:
       getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reservation) ??

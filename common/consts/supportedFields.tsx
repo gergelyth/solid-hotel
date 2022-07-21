@@ -2,17 +2,18 @@ import { Field } from "../types/Field";
 import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 import { xmlSchemaTypes } from "./supportedTypes";
 
-//TODO we should see if there is a "schema:label" or similar for these RDF names and then we could generalize this even more
-//by just mapping the datatype of the Literal to the Typescript type
-//TODO the reason this is required is so that we know the types of these fields and also to return alll supported types in case we don't want
-//to show the only the requireds (in SPE if used independently, we can use all fields) - we could make a field in the JSON which lists all required fields
-//for some default key and we could also specify types in that json - that would make this file irrelevant (if also the pretty names can be sourced from some
-//description field)
 /**
- * The definitions of the support profile fields.
+ * The definitions of the support profile fields - specified by the thesis requirements.
  * This is the single entry point of adding a new supported field, however:
  * - if the datatype differs from those already present, one must also implement an input component in {@link FieldInputElementBasedOnType}.
- * - add the new RDF fields definition in {@link personFieldToRdfMap}.
+ * - add the new RDF fields definition in {@link PersonFieldToRdfMap}.
+ * The reason this is required is to be able to return all supported fields in case we don't want to show only the required ones (e.g. independent SPE).
+ * Also to avoid Solid difficulties when we need to retrieve something with a specific type.
+ * However, we're making this as an pre-release version since with the further development of Solid we should be able to:
+ * - use RDF names instead of the programmatical names
+ * - retrieve the RDF label as "pretty" name for each field during initialization
+ * - determine the datatype based on the RDF (in case we have well characterized RDF definitions everywhere) - in the worst case, default to string
+ * @version 0.1
  */
 export default function GetSupportedFields(): Field[] {
   return [

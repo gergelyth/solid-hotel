@@ -5,6 +5,7 @@ import {
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
 import { HotelDetails } from "../types/HotelDetails";
+import { ReportParsingFailure } from "../util/helpers";
 import { GetProfileOf } from "../util/solidProfile";
 import { HotelFieldToRdfMap } from "../vocabularies/rdfHotel";
 
@@ -33,13 +34,13 @@ function ConvertToHotelDetails(
     webId: hotelWebId,
     name:
       getStringNoLocale(hotelProfile, HotelFieldToRdfMap.name) ??
-      "<No hotel name>",
+      ReportParsingFailure("hotel", "name", "<No hotel name>"),
     location:
       getUrl(hotelProfile, HotelFieldToRdfMap.location) ??
-      "<No hotel location>",
+      ReportParsingFailure("hotel", "location", "<No hotel location>"),
     address:
       getStringNoLocale(hotelProfile, HotelFieldToRdfMap.address) ??
-      "<No hotel address>",
+      ReportParsingFailure("hotel", "address", "<No hotel address>"),
   };
 
   return hotel;

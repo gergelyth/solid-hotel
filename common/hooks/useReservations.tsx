@@ -17,6 +17,7 @@ import {
 import { GetThing } from "../util/solid";
 import { ReverseReservationStateRdfMap } from "../vocabularies/rdfReservationStatusTypes";
 import { ReservationState } from "../types/ReservationState";
+import { ReportParsingFailure } from "../util/helpers";
 
 const swrKey = "reservations";
 
@@ -30,33 +31,32 @@ export function ParseReservation(
 ): ReservationAtHotel {
   let state: ReservationState =
     ReverseReservationStateRdfMap[
-      getUrl(reservationThing, ReservationFieldToRdfMap.state) ?? 0
+      getUrl(reservationThing, ReservationFieldToRdfMap.state) ??
+        ReportParsingFailure("reservation", "state", 0)
     ];
   //Annoying retyping trick so we get a correct ENUM value instead of a string
   state =
     ReservationState[ReservationState[state] as keyof typeof ReservationState];
 
-  // TODO: modify No Id and No Name
   const reservation = {
     id: GetIdFromDatasetUrl(datasetUrl, 1),
     inbox: getStringNoLocale(reservationThing, ReservationFieldToRdfMap.inbox),
     owner:
       getStringNoLocale(reservationThing, ReservationFieldToRdfMap.owner) ??
-      "<No owner ID>",
+      ReportParsingFailure("reservation", "owner", "<No owner ID>"),
     hotel:
       getUrl(reservationThing, ReservationFieldToRdfMap.hotel) ??
-      "<No hotel WebId>",
+      ReportParsingFailure("reservation", "hotel", "<No hotel WebId>"),
     room:
-      getUrl(reservationThing, ReservationFieldToRdfMap.room) ?? "<No room ID>",
+      getUrl(reservationThing, ReservationFieldToRdfMap.room) ??
+      ReportParsingFailure("reservation", "room", "<No room ID>"),
     state: state,
     dateFrom:
       getDatetime(reservationThing, ReservationFieldToRdfMap.checkinTime) ??
-      // TODO: change default value here
-      new Date(),
+      ReportParsingFailure("reservation", "checkinDate", new Date()),
     dateTo:
       getDatetime(reservationThing, ReservationFieldToRdfMap.checkoutTime) ??
-      // TODO: change default value here
-      new Date(),
+      ReportParsingFailure("reservation", "checkoutDate", new Date()),
   };
 
   return reservation;

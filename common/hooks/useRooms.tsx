@@ -9,6 +9,7 @@ import {
   AddLoadingIndicator,
   RemoveLoadingIndicator,
 } from "../components/loading-indicators";
+import { ReportParsingFailure } from "../util/helpers";
 
 const swrKey = "rooms";
 
@@ -27,7 +28,8 @@ function ConvertToRoomDefinition(
   const room = {
     id: GetIdFromDatasetUrl(url, 0),
     name:
-      getStringNoLocale(roomThing, RoomFieldToRdfMap.name) ?? "<No room name>",
+      getStringNoLocale(roomThing, RoomFieldToRdfMap.name) ??
+      ReportParsingFailure("room", "name", "<No room name>"),
     description:
       getStringNoLocale(roomThing, RoomFieldToRdfMap.description) ?? undefined,
   };

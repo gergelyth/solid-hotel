@@ -149,3 +149,18 @@ export function ShowError(message: string, recoverable: boolean): void {
 export function ThrowInlineError(errorMessage: string): never {
   throw new Error(errorMessage);
 }
+
+/**
+ * A helper error called when the parsing of a dataset is unsuccessful and a required field is not present.
+ */
+export function ReportParsingFailure<T>(
+  itemType: string,
+  missingField: string,
+  defaultValue: T
+): T {
+  ShowError(
+    `Manual data intervention detected? Required field [${missingField}] of a parsed data item [${itemType}] is missing`,
+    false
+  );
+  return defaultValue;
+}

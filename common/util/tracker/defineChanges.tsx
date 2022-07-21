@@ -42,8 +42,7 @@ export async function CalculateChanges(
         },
         guestField
       ) => {
-        //TODO default value
-        newChanges[guestField.rdfName] = guestField.fieldValue ?? "";
+        newChanges[guestField.rdfName] = guestField.fieldValue ?? "<Removed>";
         return newChanges;
       },
       {}

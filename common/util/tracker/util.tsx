@@ -29,9 +29,8 @@ export function FindChangedFields(
         changedFields.push({
           name: oldField.fieldPrettyName,
           rdfName: oldField.rdfName,
-          //TODO change default value
-          oldValue: oldField.fieldValue ?? "",
-          newValue: newValues[newValueRdf] ?? "",
+          oldValue: oldField.fieldValue ?? "<Removed>",
+          newValue: newValues[newValueRdf] ?? "<Removed>",
         });
       }
 
