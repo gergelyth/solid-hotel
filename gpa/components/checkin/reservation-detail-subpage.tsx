@@ -9,6 +9,7 @@ import {
   SubmitCheckinRequest,
 } from "../../util/outgoingCommunications";
 import { ShowError } from "../../../common/util/helpers";
+import { ReservationState } from "../../../common/types/ReservationState";
 
 /**
  * Submits the check-in request to the hotel Pod.
@@ -88,7 +89,10 @@ export function ReservationDetailsPage({
           data-testid="checkin-button"
           variant="contained"
           color="primary"
-          disabled={!currentReservation}
+          disabled={
+            !currentReservation ||
+            currentReservation.state !== ReservationState.CONFIRMED
+          }
           onClick={() => {
             setExecuteCheckin(() => () => {
               ExecuteCheckin(currentReservation);

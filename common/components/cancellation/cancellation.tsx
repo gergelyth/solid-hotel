@@ -3,6 +3,7 @@ import { ReservationAtHotel } from "../../types/ReservationAtHotel";
 import { CancelReservationPopup } from "./popup";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
+import { ReservationState } from "../../types/ReservationState";
 
 /**
  * Contains a button and a confirmation popup for cancelling a reservation. The button displays the popup.
@@ -17,7 +18,7 @@ export function CancelReservationButton({
 }): JSX.Element | null {
   const [isPopupShowing, setPopupVisibility] = useState(false);
 
-  if (!reservation) {
+  if (!reservation || reservation.state !== ReservationState.CONFIRMED) {
     return null;
   }
 
