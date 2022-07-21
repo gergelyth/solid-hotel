@@ -1,7 +1,5 @@
 <div align="center"> <h1>User documentation</h1> </div>
 
-**TODO** add the screenshots after finalizing outlook
-
 This document serves as a general instruction manual for the user. Let's take a look at the major hotel operations executed in our applications from their point of view to see the apps work.
 
 <div align="center"> <h2><ins>Guest Portal Application</ins></h2> </div>
@@ -16,7 +14,7 @@ We find the notification icon on the left of the navigation bar - as this compon
 
 The authentication button is placed on the right side of the navigation bar. The button performs the login or logout operation based on the current status of the user's authentication status. More on this functionality in [the Login section](#login).
 
-> screenshot of GPA index
+![gpa_index](./screenshots/gpa_index.png)
 
 The body of the page contains the buttons allowing the user to operate with the hotel reservations and their profile. We'll take a look at each of these operations later in this section.
 
@@ -32,7 +30,7 @@ Clicking on the `Book a room` button on the index page begins the process of mak
 
 The first stop is to select the room for which the reservation will be made. The user can only select one room at a time. Below these options are the date picker elements, which let the user select their check-in and check-out dates. Note that the earliest date that can be chosen for the check-in date is the current day, while the earliest for check-out is the day after the check-in date. If the components report an error, please select dates which these specifications. When the user is satisfied with their choices, they click the `Proceed` button.
 
-> screenshot of the room selection screen in booking
+![gpa_booking](./screenshots/gpa_booking.png)
 
 The second subpage is one which checks if all the personal information fields required for future check-in are present in the guest's profile saved in the Pod (we specify here and for future reference that this profile is saved under `{USER_POD}/profile/card#me`). If some field is missing, the application provides a way to fill it in. The `Proceed` button gets enabled when all fields have corresponding values.
 
@@ -42,7 +40,7 @@ The third subpage is the one informing the user about the successful operation. 
 
 Clicking `List reservations` on the index page takes the user to the reservations page, displaying all items retrieved from their Pod. Reservations are categorized by their state. Each item is clickable and clicking on them takes the guest to the corresponding reservation details page.
 
-> screen of reservation details
+![gpa_detail](./screenshots/gpa_roomdetail.png)
 
 The page presents a bit more detailed information about the stay and, more importantly, features buttons enabling further actions for the given reservation. 
 
@@ -66,8 +64,6 @@ With this operation, the profile synchronization gets disabled, as the hotel rem
 
 The privacy dashboard provides an overview of the personal information fields used by various hotels at the time. It can be reached from the index page by clicking the `Privacy dashboard` button.
 
-> screen of privacy dashboard
-
 The user can see here what fields are currently used, the reason for such usage and the expiry date when these values will be no longer needed. These are grouped by the hotel the user made reservations at. Apart from this information, each item also contains a `Delete` button, which becomes enabled when the application deems the privacy token as no longer required. 
 
 Note that for most cases, the tokens get removed by the hotel's initiative automatically, when the reservation moves from one state to another. Exception to this is the occassion when the reservation does not follow the usual lifecycle or when the data protection profile has expired. There is no automatical deletion scheduled for such cases, because of which the user may request their deletion manually by clicking on the corresponding `Delete` button. The request is then sent to the hotel and is deleted on that side as well as the side of the guest after positive reply.
@@ -82,8 +78,6 @@ The pairing page of the GPA is hidden from the user, as this operation is trigge
 
 After the guest scanned in the QR code presented by the hotel employee, they get taken to this hidden page in GPA. Here, they are instructed to [log-in to their Solid Pod](#login) or create one if they don't have one set up yet. If the log-in was successful, a notice is sent to the hotel. After the hotel's reply, the guest is informed that the pairing was performed and the reservation gets updated in their Solid Pod. Optionally, the guest may click on the function to populate their Solid profile with the personal information yielded during the offline check-in.
 
-> screen about the notification?
-
 <div align="center"> <h2><ins>Property Management System</ins></h2> </div>
 
 Now, let us take a look at the application used by the hotel.
@@ -96,9 +90,7 @@ We find the notification icon on the left of the navigation bar - as this compon
 
 The authentication button is placed on the right side of the navigation bar. The button performs the login or logout operation based on the current status of the user's authentication status. More on this functionality in [the Login section](#login).
 
-> screenshot of PMS index
-
-**TODO** where will the buttons be?
+![pms_index](./screenshots/pms_index.png)
 
 The buttom of the page consists of the application footer, which displays some basic information about the project. This component is not interactive.
 
@@ -109,8 +101,6 @@ Detailed in [the shared functionalities reference section](#login).
 ### <ins>Room management</ins>
 
 Clicking the corresponding button brings the hotel employee to the room overview page. Users can see existing items while also having the possibility to create, edit and delete room definitions.
-
-> screen of this page
 
 Creating and editing a room is a straightforward operation, which can be achieved by clicking `Create room` at the bottom of the page or `Edit` for the corresponding item. In both cases a popup dialog appears allowing the user to modify the text values of the name and the description of the room. The description may be empty if the user so wishes. Changes are saved by clicking the `Save` button.
 
@@ -125,8 +115,6 @@ The goal of this booking is to be the precursor of [offline check-in](#offline-c
 ### <ins>Reservations</ins>
 
 This page displays all reservations currently present in the hotel Pod. Besides a few lines of information common for all items, their outlook depends on their current state.
-
-> screen containing every state
 
 `CONFIRMED` items have an attached cancellation and offline check-in button, but link to no further pages. Clicking on an `ACTIVE` reservation takes the hotel employee to the hotel profile page. In addition, unpaired `ACTIVE` items also have a QR button displayed, which displays the QR code meant for the pairing of the reservation. Clicking on `PAST` reservations takes the user to the data protection page if still avaiable.
 
@@ -144,15 +132,11 @@ The user is then taken to the required fields page, which the hotel employee fil
 
 The next subpage displays the QR code, which can be used to pair the reservation to a not yet known Solid Pod of the guest. Scanning the QR code takes the user to the [pairing page in the GPA](#reservation-pairing). The hotel employee is free to continue anytime as the pairing will happen in the background.
 
-> screen of the QR page?
-
 The last subpage is a success notice indicating that everything went well with the offline check-in.
 
 ### <ins>Hotel profile page</ins>
 
 Features the guest profile where the field values are editable, but not deletable. Any changes made to the profile are [automatically propagated to the guest](#profile-synchronization).
-
-> screen of this page
 
 Besides the profile, this page also contains the following two buttons.
 
@@ -174,6 +158,8 @@ A simple page displaying the data protection profile of a guest in a read-only f
 
 The privacy dashboard is similar in structure to the [page described in the GPA](#privacy-dashboard). The difference here is that the tokens are grouped by reservation, i.e. the fields a specific reservation currently uses. The PMS version of this page also doesn't contain a `Delete` button, as hotel employees do not have a reason to request deletion manually.
 
+![privacy](./screenshots/privacy.png)
+
 <div align="center"> <h2><ins>Solid Profile Editor</ins></h2> </div>
 
 The Solid Profile Editor is a small, simple application consisting of two pages: [the login page](#login) common for all our applications and the profile page, which displays the personal information fields of the guest fetched from their profile. The fields are both editable and deletable.
@@ -188,13 +174,15 @@ As the first operation, the user must log in to their Solid Pod, as only a very 
 
 This takes the user to the login page, where they have the option to input a custom Solid provider, or choose from the built-in ones. These Solid providers are the places the user's Pod is located. The input field for custom providers verifies the text entered, so make sure to input a valid URL link.
 
-> screenshot of login page
+![login](./screenshots/login.png)
 
 After selecting a provider, the GPA redirects to the provider's page to authenticate the user. Please input your login details here. If the operation is successful, the user is returned to either the login or the index page.
 
 ### <ins>Notifications</ins>
 
 The notification component displays the number of notifications the application currently recognizes. Clicking on the icon brings up the list of such items on the left side of the screen. These notification items are clickable and they may perform actions based on the type of the notification. This action is indicated by the notification message. The type, as well as the time the item the item was constructed, is displayed for each item. They are also deletable by clicking on the `Clear` button of the respective notification. Clicking anywhere else on the screen closes the displayed list.
+
+![notifications](./screenshots/notifications.png)
 
 ### <ins>Profile synchronization</ins>
 
@@ -206,15 +194,11 @@ The synchronization is a two-way operation:
 
 The user receives a notification that the couterparty applied some value changes in their profile on side of the counterparty. Clicking on the notification brings up a panel in the bottom right corner detailing what these changes entail and asking for the user's confirmation whether they want to propagate these changes to their copy of the profile.
 
-> screen of incoming approval dialog
-
 The changes can be approved on a per item basis.
 
 #### <ins>Outgoing request</ins>
 
 While there is at least one `ACTIVE` reservation in effect for the user, we have a functionality put in place to monitor the guest's profile in case any changes are performed on it. Note that these changes do not have to be necessarily made through our application.
-
-> screen of outgoing approval dialog for GPA
 
 When such an event occurs, the applications prepare an approval dialog in the bottom right corner. Here we differentiate slightly different behaviour for the GPA and the PMS:
 1. **GPA** - The guest is presented with a series of approval dialogs for each hotel currently in `ACTIVE` relation with the user. The user may choose which field changes to propagate to which hotels. They can do so by selecting the appropriate choice in the dialog and clicking the `Send` button.
