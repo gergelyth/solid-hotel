@@ -104,6 +104,8 @@ Now that we have both the old and new values of the fields, we can compare what 
 
 ### <ins>Notifications (communication protocol)</ins>
 
+**NOTE!** - because of a solid-client bug, we currently cannnot set access for only one specific agent. A [new API](https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/manage-access-policies/) was introduced, but unfortunately too late for this thesis. As a workaround, we currently set the Submitter access to Public. The implementation of this finer-grained access is left for future enhancement.
+
 Notifications are the messaging protocol with the help of which the hotel and the guest communicate. 
 
 Let us note first that in order simplify the requirements, the GPA project was meant to be tied to a specific hotel. Apart from an itinerary overview, which would provide a read only representation of all reservations, the application would be restricted to carry out operations with that entity only. The hotel-restricted operations in the GPA are room definition retrieval and booking.
