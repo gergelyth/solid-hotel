@@ -6,7 +6,6 @@ import { RequiredFieldsAtOfflineCheckin } from "../components/checkin/fields-sub
 import { SetReservationOwnerAndState } from "../../common/util/solidReservations";
 import { ReservationState } from "../../common/types/ReservationState";
 import { QrComponent } from "../components/checkin/qr-subpage";
-import { AppProps } from "next/app";
 import { GetServerSidePropsResult } from "next";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 
@@ -37,26 +36,9 @@ function FinishPage({
   return <SuccessPage successText={successText} router={router} />;
 }
 
-/**
- * Parses the reservationId from the query parameters.
- * @returns The reservationId as a prop or the notFound flag if the id is missing (which redirects to /404 then).
- */
-export function getServerSideProps(
-  appProps: AppProps
-): GetServerSidePropsResult<{
-  reservationId: string;
-}> {
-  const query = appProps.router.query;
-  if (!query.id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const reservationId = Array.isArray(query.id) ? query.id[0] : query.id;
-
+export function getServerSideProps(): GetServerSidePropsResult<unknown> {
   return {
-    props: { reservationId },
+    props: {},
   };
 }
 
@@ -69,22 +51,20 @@ export function getServerSideProps(
  * 3. a success notice informing the user that the offline check-in operation was successfully finished
  * @returns The offline check-in page.
  */
-function OfflineCheckin(
-  appProps: AppProps<{
-    reservationId: string;
-  }>
-): JSX.Element | null {
+function OfflineCheckin(): JSX.Element | null {
   const [currentPage, setCurrentPage] = useState(
     OfflineCheckinPage.RequiredFields
   );
 
-  const reservationId: string = appProps.pageProps.reservationId;
-
   const router = useRouter();
-  if (!reservationId) {
+
+  const queryId = router.query.id;
+  if (!queryId) {
     router.push("/404");
     return null;
   }
+
+  const reservationId = Array.isArray(queryId) ? queryId[0] : queryId;
 
   return (
     <Box width={1}>

@@ -84,12 +84,13 @@ async function ExecuteCheckIn(
 export const CheckinProgressSnackbar = forwardRef<
   HTMLDivElement,
   {
-    snackbarKey: string | number;
+    key: string | number;
     reservationId: string;
     guestWebId: string;
     replyInbox: string;
   }
 >((props, ref) => {
+  console.log("usereq");
   const { data: requiredFields, isError: apiError } = useRequiredFields(
     undefined,
     props.guestWebId
@@ -103,7 +104,7 @@ export const CheckinProgressSnackbar = forwardRef<
 
   useEffect(() => {
     if (apiError || guestError || tokenError) {
-      CloseSnackbar(props.snackbarKey);
+      CloseSnackbar(props.key);
       ShowError(
         "Error using the hooks during check-in (potentially failed to retrieve fields from user's Pod)",
         true
@@ -127,13 +128,13 @@ export const CheckinProgressSnackbar = forwardRef<
       requiredFields,
       props.replyInbox,
       privacyTokens
-    ).then(() => CloseSnackbar(props.snackbarKey));
-  }, [guestFields, privacyTokens, apiError, guestError, tokenError]);
+    ).then(() => CloseSnackbar(props.key));
+  }, [guestFields, privacyTokens]);
 
   return (
     <CustomProgressSnackbar
       ref={ref}
-      snackbarKey={props.snackbarKey}
+      snackbarKey={props.key}
       message={"Checking in guest"}
     />
   );

@@ -5,29 +5,11 @@ import { useRequiredFields } from "../../../common/hooks/useMockApi";
 import { RegistrationCard } from "../../components/profile/registration-card";
 import { useState } from "react";
 import { ForeignPoliceReport } from "../../components/profile/foreign-police-report";
-import { AppProps } from "next/app";
 import { GetServerSidePropsResult } from "next";
 
-/**
- * Parses the active profile WebId from the query parameters.
- * @returns The active profile WebId as a prop or the notFound flag if the id is missing (which redirects to /404 then).
- */
-export function getServerSideProps(
-  appProps: AppProps
-): GetServerSidePropsResult<{
-  guestWebId: string;
-}> {
-  const query = appProps.router.query;
-  if (!query.id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const guestWebId = Array.isArray(query.id) ? query.id[0] : query.id;
-
+export function getServerSideProps(): GetServerSidePropsResult<unknown> {
   return {
-    props: { guestWebId },
+    props: {},
   };
 }
 
@@ -38,17 +20,17 @@ export function getServerSideProps(
  * In addition it contains the option to print out the registration card and export the CSV file for the authorities report.
  * @returns The hotel profile page for a specific guest.
  */
-function ActiveHotelProfileDetail(
-  appProps: AppProps<{
-    guestWebId: string;
-  }>
-): JSX.Element | null {
+function ActiveHotelProfileDetail(): JSX.Element | null {
   const [isRegPopupShowing, setRegPopupVisibility] = useState(false);
+  const router = useRouter();
 
-  const guestWebId: string = appProps.pageProps.guestWebId;
+  let guestWebId = router.query.id;
+  if (Array.isArray(guestWebId)) {
+    guestWebId = guestWebId[0];
+  }
+
   const requiredFields = useRequiredFields(undefined, guestWebId);
 
-  const router = useRouter();
   if (!guestWebId) {
     router.push("/404");
     return null;

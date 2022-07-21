@@ -262,6 +262,12 @@ async function SaveHotelAndCreateGuestPrivacyToken(
   }
 
   guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
+
+  hotelPrivacyToken.urlAtHotel = guestPrivacyToken.urlAtHotel;
+  const newHotelPrivacyToken =
+    CreateHotelPrivacyTokenDataset(hotelPrivacyToken);
+  await SafeSaveDatasetAt(hotelPrivacyToken.urlAtHotel, newHotelPrivacyToken);
+
   RevalidateHotelPrivacyTokens();
 
   return guestPrivacyToken;

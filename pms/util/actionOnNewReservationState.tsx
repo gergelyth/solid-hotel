@@ -98,7 +98,7 @@ async function OnCheckIn(
 
   ShowCustomSnackbar((key) => (
     <CheckinProgressSnackbar
-      snackbarKey={key}
+      key={key}
       reservationId={reservationId}
       guestWebId={guestWebId}
       replyInbox={replyInbox}

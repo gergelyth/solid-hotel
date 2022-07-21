@@ -9,7 +9,6 @@ import {
   MockApiRequiredFieldsUrl,
 } from "../consts/locations";
 import { DataProtectionInformation } from "../util/apiDataRetrieval";
-import { ShowError } from "../util/helpers";
 import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 import { useGuest } from "./useGuest";
 
@@ -58,11 +57,8 @@ function useMockApi<T>(
   if (nationality) {
     fetchFunction = () => [baseApiUrl, nationality];
   } else {
-    fetchFunction = function fetchFunction():
-      | (string | null | undefined)[]
-      | null {
+    fetchFunction = (): (string | null | undefined)[] | null => {
       if (!guest || !guest.guestFields) {
-        ShowError("Error retrieving guest nationality", true);
         return null;
       }
 
