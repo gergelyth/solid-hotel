@@ -5,13 +5,14 @@ import { CountryToRdfMap } from "../vocabularies/rdfCountries";
  * @default
  */
 export const HotelName = "Paradise Hotel";
-//TODO anything using this should use the hotel WEbid details (getDefaultHotelDetails)
+
 /**
  * @constant An example name of hotel country which is set in the hotel profile - loaded from the ENV config.
  * @default
  */
 export const HotelLocation =
   process.env.NEXT_PUBLIC_HOTEL_LOCATION ?? CountryToRdfMap.FRA;
+
 /**
  * @constant An example name of hotel address which is set in the hotel profile.
  * @default

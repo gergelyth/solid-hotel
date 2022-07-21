@@ -23,6 +23,5 @@ export async function DeleteAllUserReservations(): Promise<void> {
  * Helper function - required by guest Solid Pod setup.
  */
 export async function DeleteUserPrivacyFolders(): Promise<void> {
-  //TODO extract this into variable
   await RecursiveDelete(GetPodOfSession() + "/privacy");
 }

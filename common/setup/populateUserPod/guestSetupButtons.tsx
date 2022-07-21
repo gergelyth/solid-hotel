@@ -52,7 +52,7 @@ export function GetGuestEmptySetupFunction(): () => void {
     });
     ShowSuccessSnackbar("Folders created", closeInfoSnackbar);
     closeInfoSnackbar = ShowInfoSnackbar("Creating privacy folders...", true);
-    //TODO make this a variable
+
     await CreatePrivacyFolders(GetPodOfSession() + "/privacy");
     ShowSuccessSnackbar("Privacy folders created", closeInfoSnackbar);
     ShowSuccessSnackbar("Empty setup function finished!");

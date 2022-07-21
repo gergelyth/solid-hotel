@@ -1,8 +1,10 @@
 import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
 import SOLIDHOTEL from "../solidhotel-vocab/SOLIDHOTEL.js";
 
-// TODO: fields have to be the same as in ../../apiData.json
-/** A vocabulary map defining the RDF properties used for the personal information fields of the guest. */
+/**
+ * A vocabulary map defining the RDF properties used for the personal information fields of the guest.
+ * The RDF values must be the same as in ../../apiData.json!
+ * */
 export const PersonFieldToRdfMap: Record<string, string> = {
   type: FOAF.Person.value,
   firstName: FOAF.firstName.value,

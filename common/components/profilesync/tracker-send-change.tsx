@@ -196,7 +196,6 @@ const SendChangeSnackbar = forwardRef<
         props.rdfFields,
         setChangedFields,
         setOldGuestFields,
-        //TODO isn't this just null coalesce ??
         props.oldFields ? props.oldFields() : undefined,
         props.newValues
       );
@@ -207,8 +206,6 @@ const SendChangeSnackbar = forwardRef<
     setIsLoading(false);
 
     if (isSendButtonDisabled === undefined) {
-      //TODO if no changedFields, display "No changes" and return (e.g. if the guest's profile was modified, it may not have a been a watched field)
-
       const fieldOptionsTemp: ProfileUpdate = {};
       changedFields.forEach(
         (changedField) =>

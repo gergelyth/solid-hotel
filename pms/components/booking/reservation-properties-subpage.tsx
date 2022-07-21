@@ -35,7 +35,6 @@ async function BookRoom(
   const reservation: ReservationAtHotel = {
     id: null,
     inbox: null,
-    //TODO perhaps this should be null?
     owner: HotelWebId,
     hotel: HotelWebId,
     room: room,
@@ -64,7 +63,6 @@ export function ReservationPropertiesPage({
   currentPage: BookingPage;
   setCurrentPage: Dispatch<SetStateAction<BookingPage>>;
 }): JSX.Element | null {
-  //TODO if there is an error in log then call useRooms() always here, but add a parameter condition in it to return null if false
   if (currentPage !== BookingPage.ReservationProperties) {
     return null;
   }

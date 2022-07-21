@@ -82,8 +82,6 @@ function PairingPage(
   RevalidateReservations();
   SubmitInitialPairingRequest(guestInboxUrl, pairingToken, hotelInboxUrl);
 
-  //TODO wait for specific incoming request - potentially implement this in VerifyingPage as well
-
   return (
     <Box>
       <Typography variant="h4">Pairing request sent</Typography>

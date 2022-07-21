@@ -1,8 +1,6 @@
 /** A type encompassing the reaction functions in various circumstances of a WebSocket update. */
 export type Subscriber = {
   onReceive: (url: string) => void;
-  //TODO is onClick ever used?
-  onClick: (data: string) => void;
 };
 
 /** A grouping type containing the WebSocket instance and its subscribers. */

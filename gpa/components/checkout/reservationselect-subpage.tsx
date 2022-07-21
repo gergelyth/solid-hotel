@@ -10,7 +10,6 @@ import { ReservationRadioSelector } from "./radio-reservation-selector";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { ErrorComponent } from "../../../common/components/error-component";
 
-//TODO this is duplicated in reservation-list almost
 /**
  * Filters out empty reservations and those whose state is not ACTIVE.
  * @returns An array of non-empty ACTIVE reservations.

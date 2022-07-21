@@ -1,8 +1,3 @@
-//TODO the token will be in userpod.com/reservations/394839/pairingToken
-
-//TODO this is very much PMS specific - it's only in common because of the hotel Pod population
-// is there a better structure for this?
-
 import {
   addStringNoLocale,
   addUrl,

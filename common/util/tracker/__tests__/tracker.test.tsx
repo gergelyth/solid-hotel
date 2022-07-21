@@ -45,7 +45,6 @@ describe("tracker", () => {
     const mock = jest.spyOn(global, "WebSocket");
     mock.mockImplementation(() => webSocket);
     const mockSubscriber: Subscriber = {
-      onClick: jest.fn(),
       onReceive: jest.fn(),
     };
     await Subscribe("TestResourceUrl", mockSubscriber);
@@ -74,7 +73,6 @@ describe("tracker", () => {
     const mock = jest.spyOn(global, "WebSocket");
     mock.mockImplementation(() => webSocket);
     const mockSubscriber: Subscriber = {
-      onClick: jest.fn(),
       onReceive: jest.fn(),
     };
     await Subscribe("TestResourceUrl", mockSubscriber);

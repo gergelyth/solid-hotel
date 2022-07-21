@@ -28,7 +28,6 @@ function GetBadgeContent(
   }
 
   if (notificationRetrieval.isLoading) {
-    //TODO for some reason this doesn't show, even though code gets here
     return <Typography>..</Typography>;
   }
 
@@ -80,9 +79,7 @@ export function GetNotificationElements(
       open={isNotificationsOpen}
       onClose={() => setNotificationsOpen(false)}
     >
-      {notificationRetrieval.isValidating ? (
-        <LoadingIndicator swrKey={"notifications"} />
-      ) : null}
+      {notificationRetrieval.isValidating ? <LoadingIndicator /> : null}
       <NotificationList
         notificationRetrieval={notificationRetrieval}
         deleteNotification={(notification: Notification) =>

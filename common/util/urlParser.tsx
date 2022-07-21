@@ -48,7 +48,6 @@ export function GetCoreReservationFolderFromReservationUrl(
 
 /** Constructs the reservation inbox URL from the reservation URL provided. */
 export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
-  //TODO this is not very robust
   //structure:
   //userpod.inrupt.net/reservations/49938104/reservation
   //userpod.inrupt.net/reservations/49938104/inbox
@@ -57,7 +56,6 @@ export function GetInboxUrlFromReservationUrl(reservationUrl: string): string {
 
 /** Constructs the reservation URL from the reservation inbox URL provided. */
 export function GetReservationUrlFromInboxUrl(inboxUrl: string): string {
-  //TODO this is not very robust
   //structure:
   //userpod.inrupt.net/reservations/49938104/reservation
   //userpod.inrupt.net/reservations/49938104/inbox

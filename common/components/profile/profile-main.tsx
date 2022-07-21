@@ -45,30 +45,6 @@ function CreateFieldElements(
   );
 }
 
-//TODO if we want to tackle the disappearing fields issue
-// function ProfileRenderableComponent({
-//   guestFields,
-//   rdfFields,
-//   editable,
-//   deletable,
-//   centerJustify,
-//   forceRender,
-//   webId,
-// }: {
-//   guestFields: Field[];
-//   rdfFields: string[] | undefined;
-//   editable: boolean;
-//   deletable: boolean;
-//   centerJustify: boolean;
-//   forceRender?: () => void;
-//   webId?: string;
-// }): JSX.Element {
-//   const [guestFieldsState, setGuestFieldsState] = useState(guestFields);
-//   const render = (newGuestFields: Field[]): void => {
-//     setGuestFieldsState(newGuestFields);
-//   };
-// }
-
 /**
  * Handles the display, edit and deletion of the profile fields of the guest.
  * The field can be editable and deletable and either combination will work.

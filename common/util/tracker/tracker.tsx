@@ -129,9 +129,6 @@ function ProcessMessage(
   if (!match) return;
 
   const url = match[1];
-  // Invalidate the cache for the resource
-  //   const url = match[1];
-  //   ldflex.clearCache(url);
 
   // Notify the subscribers
   subscribers.forEach((subscriber) => {

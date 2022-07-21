@@ -27,9 +27,7 @@ function ParseAndShowSolidError(e: unknown): void {
     message = e.message;
   }
 
-  const helpMessage = "";
-  //TODO parse based on the error code
-  ShowError(`${helpMessage} [${message}]`, false);
+  ShowError(`[${message}]`, false);
 }
 
 /**

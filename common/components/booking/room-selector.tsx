@@ -47,7 +47,6 @@ function CreateRoomElement(room: RoomDefinition | null): JSX.Element {
   );
 }
 
-//TODO this is the same logic as reservation-list in common
 /**
  * The list of rooms where selection is driven by radio logic.
  */
@@ -58,7 +57,6 @@ function RoomElements({
   selectedRoomId: string;
   setSelectedRoomId: Dispatch<SetStateAction<string>>;
 }): JSX.Element {
-  //TODO hardcoded room defition url here - is that an issue?
   const { items, isLoading, isError } = useRooms(RoomDefinitionsUrl);
 
   if (isLoading) {

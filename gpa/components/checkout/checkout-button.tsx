@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
+import { ShowError } from "../../../common/util/helpers";
 import { SubmitCheckoutRequest } from "../../util/outgoingCommunications";
 
 /**
@@ -15,7 +16,7 @@ function Checkout(
 
   const reservation = reservations.find((x) => x.id === reservationId);
   if (!reservation) {
-    //TODO error handling
+    ShowError(`Reservation not found based on ID ${reservationId}`, true);
     return;
   }
 

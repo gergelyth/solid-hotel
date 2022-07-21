@@ -33,12 +33,10 @@ export function RequiredFieldsAtCheckin({
   setCurrentPage: Dispatch<SetStateAction<CheckinPage>>;
   executeCheckin: () => () => void;
 }): JSX.Element | null {
-  //TODO this bothers the user even during the room selection
   const { data, isLoading, isError } = useRequiredFields();
 
   const [isTermsPopupShowing, setTermsPopupVisibility] = useState(false);
 
-  //TODO if there is an error in log then call hooks always here, but add a parameter condition in it to return null if false
   if (currentPage !== CheckinPage.RequiredFields) {
     return null;
   }

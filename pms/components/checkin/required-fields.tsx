@@ -24,8 +24,6 @@ export function RequiredFields({
   setCurrentPage: Dispatch<SetStateAction<OfflineCheckinPage>>;
   executeCheckin: (hotelProfileWebId: string) => void;
 }): JSX.Element {
-  //TODO maybe instead of this, we can experiment with re-rendering this whole thing with calling RevalidateGuest in ProfileMain
-
   //this is a workaround to re-render the child component without re-rendering this one
   let value: boolean;
   let setValue: Dispatch<SetStateAction<boolean>>;

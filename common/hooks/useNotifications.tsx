@@ -67,7 +67,6 @@ function BuildNotificationBasedOnType(
     onReceive();
     notification.isProcessed = true;
     SetIsProcessedForNotification(url, dataset, notificationThing);
-    //TODO do we need revalidate here? like in edit-room-popup
   };
   notification.onReceive = expandedOnReceive;
 
@@ -130,8 +129,6 @@ function ProcessItem<T>(
   });
 }
 
-//TODO put this logic in static render so it's not calculated everytime, just on startup - we can't do this because reservations can get created on the fly
-//probably getserversideProps we can - just put this into a constant a generate if it's undefined
 /**
  * Resolves the inbox paths by concatenating them with the pod URL and expanding wildcard inbox paths.
  * @returns A list of absolute inbox URL paths to retrieve notifications from.
@@ -177,7 +174,6 @@ function GetNotificationsForSpecificUrl<T>(
   });
 }
 
-//TODO this a quickfix for hook order calling
 /**
  * Fetches the notifications contained in the inboxes specified.
  * The inbox list is passed as an array of relative URL paths with a potential `*` wildcard contained in them - this is expanded to mean all resources.

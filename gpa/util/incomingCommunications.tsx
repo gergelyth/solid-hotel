@@ -111,7 +111,6 @@ export function ReceivePairingRequestWithInformation(
   const text = `Pairing request successful. Reservation saved to the Pod. Click here to populate your profile with the personal information present at the hotel.`;
   const onClick = (): void => {
     SaveProfileThingToPod(profileThing);
-    //TODO delete notification
     router.push("/");
   };
 

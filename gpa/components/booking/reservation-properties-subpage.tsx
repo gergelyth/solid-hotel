@@ -67,7 +67,6 @@ export function ReservationPropertiesPage({
   setCurrentPage: Dispatch<SetStateAction<BookingPage>>;
   setConfirmReservation: Dispatch<SetStateAction<() => () => void>>;
 }): JSX.Element | null {
-  //TODO if there is an error in log then call useRooms() always here, but add a parameter condition in it to return null if false
   if (currentPage !== BookingPage.ReservationProperties) {
     return null;
   }

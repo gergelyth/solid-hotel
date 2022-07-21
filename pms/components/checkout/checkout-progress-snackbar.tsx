@@ -57,7 +57,6 @@ async function ExecuteCheckOut(
     dataProtectionProfileWebId
   );
 
-  //TODO should we unsubscribe? that would mean we don't notify the guest if there's a change here
   UnSubscribe(reservationOwner);
   DeleteFromCache(reservationOwner);
 

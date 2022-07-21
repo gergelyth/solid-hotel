@@ -21,7 +21,6 @@ import { SafeSaveDatasetAt } from "./solidWrapper";
 export type SolidProfile = {
   profileAddress: string;
   profile: Thing | null;
-  //TODO we probably don't need these
   dataSet: SolidDataset | null;
 };
 
