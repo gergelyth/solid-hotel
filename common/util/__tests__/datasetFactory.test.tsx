@@ -27,8 +27,8 @@ describe("datasetFactory", () => {
       id: "reservationId1",
       inbox: "CounterpartyInboxUrl1",
       owner: "OwnerWebId1",
-      hotel: "HotelWebId1",
-      room: "RoomUrl1",
+      hotel: "https://testpodurl.com/profile/card#me",
+      room: "https://testpodurl.com/rooms/roomid1",
       state: ReservationState.CONFIRMED,
       dateFrom: new Date("2021-07-03"),
       dateTo: new Date("2021-07-07"),
@@ -37,9 +37,11 @@ describe("datasetFactory", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
       ReservationFieldToRdfMap.type
     }>;
-    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.room}> <https://testpodurl.com/rooms/roomid1>;
     <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${
+      ReservationFieldToRdfMap.hotel
+    }> <https://testpodurl.com/profile/card#me>;
     <${ReservationFieldToRdfMap.owner}> "OwnerWebId1";
     <${ReservationFieldToRdfMap.state}> <${
       ReservationStateRdfMap[ReservationState.CONFIRMED]
@@ -92,7 +94,7 @@ describe("datasetFactory", () => {
     <${PrivacyTokenToRdfMap.forReservationState}> 1;
     <${PrivacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${PrivacyTokenToRdfMap.url}> "https://testpodurl.com/hotelprivacy/testResource1.ttl";
-    <${PrivacyTokenToRdfMap.datasetUrlTarget}> "TestDatasetUrlTarget1";
+    <${PrivacyTokenToRdfMap.datasetUrlTarget}> <https://testpodurl.com/reservations/reservation1>;
     <${PrivacyTokenToRdfMap.guestInbox}> "TestGuestInbox1";
     <${PrivacyTokenToRdfMap.reservation}> "TestReservationUrl1".
 `;
@@ -110,7 +112,7 @@ describe("datasetFactory", () => {
     <${PrivacyTokenToRdfMap.expiry}> "2021-07-11T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
     <${PrivacyTokenToRdfMap.url}> "TestUrlAtHotel1";
     <${PrivacyTokenToRdfMap.hotelInboxForDeletion}> "TestHotelInbox1";
-    <${PrivacyTokenToRdfMap.hotel}> "TestHotelWebId1";
+    <${PrivacyTokenToRdfMap.hotel}> <https://testpodurl.com/profile/card#me>;
     <${PrivacyTokenToRdfMap.reservation}> "TestReservationUrl1".
 `;
 

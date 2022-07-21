@@ -59,10 +59,13 @@ describe("<ReservationDetails />", () => {
     expect(setCurrentReservation).toBeCalledWith(TestReservations[1]);
 
     expect(HotelDetailsTwoLiner).toBeCalledWith(
-      { hotelWebId: "HotelWebId2" },
+      { hotelWebId: "https://testpodurl.com/profile/card#me" },
       {}
     );
-    expect(RoomDetails).toBeCalledWith({ roomUrl: "RoomUrl2" }, {});
+    expect(RoomDetails).toBeCalledWith(
+      { roomUrl: "https://testpodurl.com/rooms/roomid2" },
+      {}
+    );
 
     expect(
       reservationDetails.baseElement.innerHTML.includes("1 nights")

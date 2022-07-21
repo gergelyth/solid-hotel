@@ -85,16 +85,19 @@ describe("<ReservationPropertiesPage />", () => {
 
     await confirmReservation()();
 
-    expect(AddReservation).toBeCalledWith({
-      id: null,
-      inbox: null,
-      owner: "TestWebId",
-      hotel: "HotelWebId",
-      room: "https://testpodurl.com/rooms/TestRoomId",
-      state: ReservationState.REQUESTED,
-      dateFrom: checkinDate,
-      dateTo: checkoutDate,
-    });
+    expect(AddReservation).toBeCalledWith(
+      {
+        id: null,
+        inbox: null,
+        owner: "TestWebId",
+        hotel: "HotelWebId",
+        room: "https://testpodurl.com/rooms/TestRoomId",
+        state: ReservationState.REQUESTED,
+        dateFrom: checkinDate,
+        dateTo: checkoutDate,
+      },
+      "HotelWebId"
+    );
 
     expect(SubmitBookingRequest).toBeCalledWith({
       id: null,

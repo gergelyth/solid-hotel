@@ -81,7 +81,7 @@ describe("privacyHelper", () => {
 `;
 
     expect(SafeSaveDatasetAt).toBeCalledWith(
-      "TestDatasetUrlTarget1",
+      "https://testpodurl.com/reservations/reservation1",
       expect.anything()
     );
 
@@ -108,7 +108,7 @@ describe("privacyHelper", () => {
       },
     });
     const guestToken = await CreateInboxPrivacyToken(
-      "TestReservationUrl",
+      "https://testpodurl.com/reservations/reservation1",
       "TestGuestInbox",
       TestReservations[0]
     );
@@ -133,9 +133,9 @@ describe("privacyHelper", () => {
       reason: "Reservation inbox used for communication with the hotel",
       forReservationState: 1,
       expiry: new Date("2021-07-08"),
-      datasetUrlTarget: "TestReservationUrl",
+      datasetUrlTarget: "https://testpodurl.com/reservations/reservation1",
       guestInbox: "TestGuestInbox",
-      reservation: "TestReservationUrl",
+      reservation: "https://testpodurl.com/reservations/reservation1",
     };
 
     expect(SafeSaveDatasetInContainer).toBeCalledWith(

@@ -21,7 +21,7 @@ const testTokens: GuestPrivacyToken[] = [
     forReservationState: ReservationState.CONFIRMED,
     expiry: GetTomorrow(),
     hotelInboxForDeletion: "TestHotelInbox1",
-    hotel: "HotelWebId2",
+    hotel: "https://testpodurl.com/profile/card#me",
     urlAtGuest: "https://testpodurl.com/guestprivacy/testResource3.ttl",
     reservation: "TestReservationUrl1",
   },
@@ -32,7 +32,7 @@ const testTokens: GuestPrivacyToken[] = [
     forReservationState: ReservationState.ACTIVE,
     expiry: GetTomorrow(),
     hotelInboxForDeletion: "TestHotelInbox2",
-    hotel: "HotelWebId2",
+    hotel: "https://testpodurl.com/profile/card#me",
     urlAtGuest: "https://testpodurl.com/guestprivacy/testResource4.ttl",
     reservation: "TestReservationUrl2",
   },
@@ -43,7 +43,7 @@ const testTokens: GuestPrivacyToken[] = [
     forReservationState: ReservationState.ACTIVE,
     expiry: GetTomorrow(),
     hotelInboxForDeletion: "TestHotelInbox2",
-    hotel: "HotelWebId2",
+    hotel: "https://testpodurl.com/profile/card#me",
     urlAtGuest: "https://testpodurl.com/guestprivacy/testResource5.ttl",
     reservation: "TestReservationUrl3",
   },
@@ -108,10 +108,11 @@ describe("<TrackedRdfFieldCollector />", () => {
     expect(trackedRdfCollectionSnackbar).toBeDefined();
 
     const expectedHotelToRdf: HotelToRdf = {};
-    expectedHotelToRdf["HotelWebId2"] = new Set<string>([
-      PersonFieldToRdfMap.firstName,
-      PersonFieldToRdfMap.email,
-    ]);
+    expectedHotelToRdf["https://testpodurl.com/profile/card#me"] =
+      new Set<string>([
+        PersonFieldToRdfMap.firstName,
+        PersonFieldToRdfMap.email,
+      ]);
 
     expect(setHotelToRdfMap).toBeCalledWith(expectedHotelToRdf);
   });

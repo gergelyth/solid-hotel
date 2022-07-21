@@ -3,6 +3,7 @@ import {
   getInteger,
   getStringNoLocale,
   getStringNoLocaleAll,
+  getUrl,
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
@@ -62,8 +63,7 @@ export function ConvertToHotelPrivacyToken(
   const hotelPrivacytoken = {
     ...privacyToken,
     datasetUrlTarget:
-      getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.datasetUrlTarget) ??
-      "",
+      getUrl(privacyThing, PrivacyTokenToRdfMap.datasetUrlTarget) ?? "",
     guestInbox:
       getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.guestInbox) ??
       undefined,
@@ -98,7 +98,7 @@ export function ConvertToGuestPrivacyToken(
         privacyThing,
         PrivacyTokenToRdfMap.hotelInboxForDeletion
       ) ?? "",
-    hotel: getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.hotel) ?? "",
+    hotel: getUrl(privacyThing, PrivacyTokenToRdfMap.hotel) ?? "",
     urlAtGuest: url,
     reservation:
       getStringNoLocale(privacyThing, PrivacyTokenToRdfMap.reservation) ??

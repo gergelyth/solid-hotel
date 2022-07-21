@@ -8,6 +8,7 @@ import {
   HotelDetailsTwoLiner,
 } from "../hotel-details";
 import { CountryToRdfMap } from "../../../vocabularies/rdfCountries";
+import { useHotel } from "../../../hooks/useHotel";
 
 const testHotelDetails: HotelDetails = {
   webId: "HotelWebId",
@@ -18,14 +19,17 @@ const testHotelDetails: HotelDetails = {
 
 jest.mock("../../../hooks/useHotel", () => {
   return {
-    useHotel: () => {
-      return {
-        hotelDetails: testHotelDetails,
-        isLoading: false,
-        isError: false,
-      };
-    },
+    useHotel: jest.fn(),
   };
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  (useHotel as jest.Mock).mockReturnValue({
+    hotelDetails: testHotelDetails,
+    isLoading: false,
+    isError: false,
+  });
 });
 
 describe("<HotelDetailsTwoLiner />, <HotelDetailsOneLiner />, GetHotelInformation()", () => {

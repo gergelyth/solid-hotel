@@ -34,8 +34,6 @@ export function UnSubscribe(url: string): void {
 
   webSocketResource.webSocket.close();
   delete webSockets[url];
-
-  console.log(`Unsubscribed from ${url}`);
 }
 
 /**

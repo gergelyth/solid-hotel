@@ -44,11 +44,10 @@ export function ParseReservation(
       getStringNoLocale(reservationThing, ReservationFieldToRdfMap.owner) ??
       "<No owner ID>",
     hotel:
-      getStringNoLocale(reservationThing, ReservationFieldToRdfMap.hotel) ??
+      getUrl(reservationThing, ReservationFieldToRdfMap.hotel) ??
       "<No hotel WebId>",
     room:
-      getStringNoLocale(reservationThing, ReservationFieldToRdfMap.room) ??
-      "<No room ID>",
+      getUrl(reservationThing, ReservationFieldToRdfMap.room) ?? "<No room ID>",
     state: state,
     dateFrom:
       getDatetime(reservationThing, ReservationFieldToRdfMap.checkinTime) ??

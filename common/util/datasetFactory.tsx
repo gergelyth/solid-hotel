@@ -38,7 +38,7 @@ export function CreateReservationDataset(
     UtilRdfMap.type,
     ReservationFieldToRdfMap.type
   );
-  newReservation = addStringNoLocale(
+  newReservation = addUrl(
     newReservation,
     ReservationFieldToRdfMap.room,
     reservation.room
@@ -50,7 +50,7 @@ export function CreateReservationDataset(
         reservation.inbox
       )
     : newReservation;
-  newReservation = addStringNoLocale(
+  newReservation = addUrl(
     newReservation,
     ReservationFieldToRdfMap.hotel,
     reservation.hotel
@@ -123,7 +123,7 @@ export function CreateHotelPrivacyTokenDataset(
   privacyToken: HotelPrivacyToken
 ): SolidDataset {
   let newPrivacyToken = CreateCorePrivacyTokenDataset(privacyToken);
-  newPrivacyToken = addStringNoLocale(
+  newPrivacyToken = addUrl(
     newPrivacyToken,
     PrivacyTokenToRdfMap.datasetUrlTarget,
     privacyToken.datasetUrlTarget
@@ -160,7 +160,7 @@ export function CreateGuestPrivacyTokenDataset(
     PrivacyTokenToRdfMap.hotelInboxForDeletion,
     privacyToken.hotelInboxForDeletion
   );
-  newPrivacyToken = addStringNoLocale(
+  newPrivacyToken = addUrl(
     newPrivacyToken,
     PrivacyTokenToRdfMap.hotel,
     privacyToken.hotel

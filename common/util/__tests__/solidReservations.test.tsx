@@ -123,9 +123,11 @@ describe("solidReservations", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
       ReservationFieldToRdfMap.type
     }>;
-    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.room}> <https://testpodurl.com/rooms/roomid1>;
     <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${
+      ReservationFieldToRdfMap.hotel
+    }> <https://testpodurl.com/profile/card#me>;
     <${ReservationFieldToRdfMap.owner}> "OwnerWebId1";
     <${ReservationFieldToRdfMap.state}> <${
       ReservationStateRdfMap[ReservationState.CONFIRMED]
@@ -157,8 +159,10 @@ describe("solidReservations", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
       ReservationFieldToRdfMap.type
     }>;
-    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
-    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${ReservationFieldToRdfMap.room}> <https://testpodurl.com/rooms/roomid1>;
+    <${
+      ReservationFieldToRdfMap.hotel
+    }> <https://testpodurl.com/profile/card#me>;
     <${ReservationFieldToRdfMap.owner}> "OwnerWebId1";
     <${
       ReservationFieldToRdfMap.checkinTime
@@ -186,9 +190,11 @@ describe("solidReservations", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
       ReservationFieldToRdfMap.type
     }>;
-    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.room}> <https://testpodurl.com/rooms/roomid1>;
     <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${
+      ReservationFieldToRdfMap.hotel
+    }> <https://testpodurl.com/profile/card#me>;
     <${ReservationFieldToRdfMap.state}> <${
       ReservationStateRdfMap[ReservationState.CONFIRMED]
     }>;
@@ -213,9 +219,11 @@ describe("solidReservations", () => {
     const expectedRdf = `<https://inrupt.com/.well-known/sdk-local-node/reservation> a <${
       ReservationFieldToRdfMap.type
     }>;
-    <${ReservationFieldToRdfMap.room}> "RoomUrl1";
+    <${ReservationFieldToRdfMap.room}> <https://testpodurl.com/rooms/roomid1>;
     <${ReservationFieldToRdfMap.inbox}> "CounterpartyInboxUrl1";
-    <${ReservationFieldToRdfMap.hotel}> "HotelWebId1";
+    <${
+      ReservationFieldToRdfMap.hotel
+    }> <https://testpodurl.com/profile/card#me>;
     <${
       ReservationFieldToRdfMap.checkinTime
     }> "2021-07-03T00:00:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
