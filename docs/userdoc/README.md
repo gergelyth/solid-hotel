@@ -2,6 +2,14 @@
 
 This document serves as a general instruction manual for the user. Let's take a look at the major hotel operations executed in our applications from their point of view to see the apps work.
 
+<div align="center"> <h2><ins>Setup screen</ins></h2> </div>
+
+<p align="center">
+  <img src="https://github.com/gergelyth/solid-hotel/blob/master/docs/userdoc/screenshots/setup_hotel.png" alt="Setup hotel"/>
+</p>
+
+The setup screen of the `common` project, allowing the user to load the test data and set up the Solid Pod structure.
+
 <div align="center"> <h2><ins>Guest Portal Application</ins></h2> </div>
 
 First, we will take a look at the application aimed at the guests.
