@@ -48,6 +48,9 @@ async function CacheUserProfile(hotelRdfMap: HotelToRdf): Promise<void> {
       rdfFields.add(rdf);
     });
   });
+  if (rdfFields.size === 0) {
+    return;
+  }
 
   await CacheProfile(webId, Array.from(rdfFields));
   await SubscribeToProfileChanges(webId);

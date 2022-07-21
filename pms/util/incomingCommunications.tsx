@@ -44,6 +44,7 @@ import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileC
 import { UpdateLocalProfileSnackbar } from "../../common/components/profile/update-local-profile";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { GetEmailFromProfile } from "../../common/util/solidProfile";
+import { ReservationStateRdfMap } from "../../common/vocabularies/rdfReservationStatusTypes";
 
 /**
  * Included in the {@link PMSParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
@@ -62,7 +63,7 @@ export function ReceiveReservationStateChange(
 } {
   const { reservationId, newState, replyInbox } =
     DeserializeReservationStateChange(notificationUrl, dataset, true);
-  const text = `The state [${newState.toString()}] was set for reservation [${reservationId}].\nClick to view reservations.`;
+  const text = `The state [${ReservationStateRdfMap[newState]}] was set for reservation [${reservationId}].\nClick to view reservations.`;
   const onClick = (): void => {
     router.push("/");
   };
@@ -88,13 +89,12 @@ export function ReceiveBookingRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const reservation = DeserializeBookingRequest(dataset, true);
-
-  const text = `Reservation requested for dates [${reservation.dateFrom.toDateString()}]-[${reservation.dateTo.toDateString()}].\nRequest was automatically confirmed.`;
+  const text = `A new reservation was requested.\nSensitive information censored.\nThe booking was automatically confirmed.`;
   const onClick = (): void => {
     router.push("/");
   };
   const onReceive = async (): Promise<void> => {
+    const reservation = DeserializeBookingRequest(dataset, true);
     const reservationInbox = reservation.inbox;
     if (!reservationInbox) {
       ShowErrorSnackbar("Inbox is null in received reservation request");
@@ -181,6 +181,7 @@ export function ReceiveProfileModification(
       ),
       approveSnackbarId
     );
+    //TODO delete notification?
   };
   const onReceive = (): void => undefined;
 

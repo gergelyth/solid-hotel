@@ -30,6 +30,7 @@ import {
 } from "../../common/util/solidWrapper";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
 import { PrivacyDeletionToRdfMap } from "../../common/vocabularies/notificationpayloads/rdfPrivacyDeletion";
+import { PersonFieldToRdfMap } from "../../common/vocabularies/rdfPerson";
 import { ReservationFieldToRdfMap } from "../../common/vocabularies/rdfReservation";
 import { CheckoutProgressSnackbar } from "../components/checkout/checkout-progress-snackbar";
 import { ConfirmCancellation } from "../components/reservations/reservation-element";
@@ -114,7 +115,7 @@ export async function CreateReservationPrivacyToken(
 
   const emailToken = SaveHotelAndCreateGuestPrivacyToken(
     reservationUrl,
-    [ReservationFieldToRdfMap.email],
+    [PersonFieldToRdfMap.email],
     GetStartOfNextDay(reservation.dateFrom),
     "Required information to chase down the guest if they disappear",
     ReservationState.CONFIRMED,
@@ -299,7 +300,7 @@ export async function FindEmailTokenAndDeleteIt(
     reservationId,
     ReservationState.CONFIRMED,
     true,
-    ReservationFieldToRdfMap.email
+    PersonFieldToRdfMap.email
   );
 }
 

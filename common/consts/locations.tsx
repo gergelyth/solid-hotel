@@ -14,7 +14,7 @@ export const GPAPairUrl = `${
  */
 export const MockApiRequiredFieldsUrl = `${
   process.env.NEXT_PUBLIC_MOCK_API_LOCATION ?? "http://localhost:3003/"
-}api/requiredFields`;
+}api/requiredfields`;
 
 /**
  * @constant The url of the data protection endpoint in the mock API - the mock API location is loaded from the ENV config.

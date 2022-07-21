@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { RevalidateGuest, useGuest } from "../../hooks/useGuest";
+import { useGuest } from "../../hooks/useGuest";
 
 /**
  * Handles the check whether every field (list given by supplied RDF field list) has a value.
@@ -23,7 +23,6 @@ export function ConfirmRequiredFieldsButton({
     onMount([value, setValue]);
   }, [onMount, value]);
 
-  RevalidateGuest(rdfFields, webId);
   const fieldsFetch = useGuest(rdfFields, webId);
 
   return (

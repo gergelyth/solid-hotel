@@ -13,10 +13,7 @@ import { ReservationFieldToRdfMap } from "../vocabularies/rdfReservation";
 import { NotFoundError } from "./errors";
 import { GetDataSet, GetPodOfSession, GetThing } from "./solid";
 import { CreateReservationDataset } from "./datasetFactory";
-import {
-  SetSubmitterAccessToAgent,
-  SetSubmitterAccessToEveryone,
-} from "./solidAccess";
+import { SetSubmitterAccessToEveryone } from "./solidAccess";
 import {
   CreateReservationUrlFromReservationId,
   GetReservationUrlFromInboxUrl,
@@ -28,6 +25,7 @@ import {
   SafeSaveDatasetAt,
 } from "./solidWrapper";
 import { ReservationStateRdfMap } from "../vocabularies/rdfReservationStatusTypes";
+import { PersonFieldToRdfMap } from "../vocabularies/rdfPerson";
 
 /** The relative URL address of the reservation container. */
 const reservationAddress = "reservations/";
@@ -92,11 +90,16 @@ async function CreateInboxForReservationUrl(
 ): Promise<string> {
   const inboxUrl = reservationContainerUrl + "inbox";
   await SafeCreateContainerAt(inboxUrl);
-  if (counterPartyWebIdForInboxAccess) {
-    await SetSubmitterAccessToAgent(inboxUrl, counterPartyWebIdForInboxAccess);
-  } else {
-    await SetSubmitterAccessToEveryone(inboxUrl);
-  }
+
+  //Unfortunately Solid can't handle handle the authorization of a single agent.
+  //We'll need to wait for development, see programming documentation for more information.
+
+  // if (counterPartyWebIdForInboxAccess) {
+  //   await SetSubmitterAccessToAgent(inboxUrl, counterPartyWebIdForInboxAccess);
+  // } else {
+  //   await SetSubmitterAccessToEveryone(inboxUrl);
+  // }
+  await SetSubmitterAccessToEveryone(inboxUrl);
   return inboxUrl;
 }
 
@@ -132,7 +135,7 @@ export async function SetEmailAddressOfGuest(
   const { dataset, thing } = await GetReservationDatasetAndThing(datasetUrl);
   const updatedReservation = setStringNoLocale(
     thing,
-    ReservationFieldToRdfMap.email,
+    PersonFieldToRdfMap.email,
     email
   );
   const updatedDataSet = setThing(dataset, updatedReservation);

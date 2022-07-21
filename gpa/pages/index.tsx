@@ -67,9 +67,6 @@ export default function Home(): JSX.Element {
           <Typography variant="caption">
             This is a list of all reservations made across various hotels.
           </Typography>
-          <Typography variant="caption">
-            Actionable reservations are highlighted.
-          </Typography>
         </Box>
       </Grid>
 

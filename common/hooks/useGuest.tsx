@@ -7,6 +7,7 @@ import {
 import { Field } from "../types/Field";
 import { RdfNameToFieldMap } from "../util/fields";
 import { GetProfile, GetProfileOf, SolidProfile } from "../util/solidProfile";
+import { UtilRdfMap } from "../vocabularies/rdfUtil";
 
 /**
  * Creates the SWR key distinguishing between possible cases to make sure one case's cache is not used for another case's retrieval.
@@ -41,6 +42,10 @@ export function GetGuestFieldValues(
   const fields: Field[] = [];
 
   rdfNames.forEach((rdfName: string) => {
+    if (rdfName === UtilRdfMap.type) {
+      return;
+    }
+
     const field = RdfNameToFieldMap[rdfName];
     if (!field) {
       throw new Error(`Field not supported: ${rdfName}`);
