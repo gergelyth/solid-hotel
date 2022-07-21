@@ -106,7 +106,7 @@ export async function CreateReservationPrivacyToken(
     reservationUrl,
     [ReservationFieldToRdfMap.owner],
     GetStartOfNextDay(reservation.dateTo),
-    "Basic information for a confirmed reservation",
+    "Required WebId to identify user and allow access to the reservation inbox",
     ReservationState.CONFIRMED,
     guestInbox,
     reservationUrl
@@ -170,7 +170,7 @@ export async function CreateActiveProfilePrivacyToken(
     datasetUrlTarget,
     fields,
     expiryDate,
-    "Local profile copy made for an active reservation.",
+    "Local profile copy made for an active reservation",
     ReservationState.ACTIVE,
     guestInbox,
     reservationUrl
@@ -192,7 +192,7 @@ export async function CreateDataProtectionProfilePrivacyToken(
     datasetUrlTarget,
     fields,
     expiryDate,
-    "Local profile copy made for preserving data protection information.",
+    "Local profile copy made for preserving data protection information",
     ReservationState.PAST,
     //we're not saving the inbox anymore in the privacy token, because we don't need it
     //the hotel will no longer manipulate with this on its own volition
