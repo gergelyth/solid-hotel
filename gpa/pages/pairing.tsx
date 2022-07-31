@@ -1,6 +1,9 @@
 import { Box, CircularProgress, Typography } from "@material-ui/core";
 import { GetServerSidePropsResult } from "next";
 import { useRouter } from "next/router";
+import React from "react";
+import { useEffect, useState } from "react";
+import { ShowErrorSnackbar } from "../../common/components/snackbar";
 import { HotelWebId } from "../../common/consts/solidIdentifiers";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { ReservationAtHotel } from "../../common/types/ReservationAtHotel";
@@ -18,8 +21,8 @@ function CreateDummyReservation(): ReservationAtHotel {
     id: `reservationDummy`,
     inbox: null,
     owner: "",
-    hotel: "",
-    room: "",
+    hotel: "https://dummyhotel.com",
+    room: "https://dummyroom.com",
     state: ReservationState.REQUESTED,
     dateFrom: new Date(),
     dateTo: new Date(),
@@ -44,37 +47,48 @@ export function getServerSideProps(): GetServerSidePropsResult<unknown> {
  */
 function PairingPage(): JSX.Element | null {
   const router = useRouter();
+  const [isLoading, setLoading] = useState(true);
+  const isLoggedIn = GetSession().info.isLoggedIn;
 
-  const hotelInboxUrl = Array.isArray(router.query.hotelInboxUrl)
-    ? router.query.hotelInboxUrl[0]
-    : router.query.hotelInboxUrl;
-  const pairingToken = Array.isArray(router.query.token)
-    ? router.query.token[0]
-    : router.query.token;
+  useEffect(() => {
+    let hotelInboxUrl = Array.isArray(router.query.hotelInboxUrl)
+      ? router.query.hotelInboxUrl[0]
+      : router.query.hotelInboxUrl;
 
-  if (!pairingToken || !hotelInboxUrl) {
-    router.push("/404");
-    return null;
-  }
+    const pairingToken = Array.isArray(router.query.token)
+      ? router.query.token[0]
+      : router.query.token;
 
-  const session = GetSession();
-  if (!session.info.isLoggedIn) {
-    //TODO this wont take us back here
-    //we need logic to come back to this url
-    router.push("/login");
-  }
+    if (!pairingToken || !hotelInboxUrl) {
+      router.push("/404");
+      return;
+    }
 
-  const guestInboxUrl = AddReservation(CreateDummyReservation(), HotelWebId);
-  RevalidateReservations();
-  SubmitInitialPairingRequest(guestInboxUrl, pairingToken, hotelInboxUrl);
+    if (!isLoggedIn) {
+      ShowErrorSnackbar("Please log in to pair your reservation");
+      return;
+    }
+
+    const guestInboxUrl = AddReservation(CreateDummyReservation(), HotelWebId);
+    // RevalidateReservations();
+    hotelInboxUrl = decodeURIComponent(hotelInboxUrl);
+    SubmitInitialPairingRequest(guestInboxUrl, pairingToken, hotelInboxUrl);
+    setLoading(false);
+  }, [isLoggedIn]);
 
   return (
-    <Box>
-      <Typography variant="h4">Pairing request sent</Typography>
+    <Box textAlign={"center"}>
+      {isLoading ? null : (
+        <React.Fragment>
+          <Typography variant="h4">Pairing request sent</Typography>
+          <Typography variant="h6">
+            Waiting for the hotel&apos;s response...
+          </Typography>
+        </React.Fragment>
+      )}
       <Typography variant="h6">
-        Waiting for the hotel&apos;s response...
+        <CircularProgress />
       </Typography>
-      <CircularProgress />
     </Box>
   );
 }

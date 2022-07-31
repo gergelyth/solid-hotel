@@ -62,7 +62,7 @@ export const PrivacyTokenRemover = forwardRef<
       return SafeDeleteDataset(token.urlAtGuest);
     });
     Promise.all(deletionPromises).then(() => {
-      RevalidateGuestPrivacyTokens();
+      // RevalidateGuestPrivacyTokens();
       CloseSnackbar(props.snackbarId);
     });
   }, [privacyTokens, privacyTokensError]);

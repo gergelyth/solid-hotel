@@ -5,10 +5,7 @@ import {
   setThing,
   SolidDataset,
 } from "@inrupt/solid-client";
-import {
-  ShowCustomSnackbar,
-  ShowWarningSnackbar,
-} from "../../common/components/snackbar";
+import { ShowWarningSnackbar } from "../../common/components/snackbar";
 import {
   PrivacyTokensInboxUrl,
   PrivacyTokensUrl,
@@ -29,11 +26,12 @@ import {
   SafeSaveDatasetInContainer,
 } from "../../common/util/solidWrapper";
 import { CreateReservationUrlFromReservationId } from "../../common/util/urlParser";
+import { PrivacyTokenToRdfMap } from "../../common/vocabularies/notificationpayloads/rdfPrivacy";
 import { PrivacyDeletionToRdfMap } from "../../common/vocabularies/notificationpayloads/rdfPrivacyDeletion";
 import { PersonFieldToRdfMap } from "../../common/vocabularies/rdfPerson";
 import { ReservationFieldToRdfMap } from "../../common/vocabularies/rdfReservation";
-import { CheckoutProgressSnackbar } from "../components/checkout/checkout-progress-snackbar";
 import { ConfirmCancellation } from "../components/reservations/reservation-element";
+import { DoOnStateChange } from "./actionOnNewReservationState";
 import { SendPrivacyTokenDeletionNotice } from "./outgoingCommunications";
 
 /**
@@ -90,7 +88,7 @@ async function DeletePrivacyToken(
   }
   await SafeDeleteDataset(privacyToken.urlAtHotel);
   await SendPrivacyTokenDeletionNotice(privacyToken, guestInboxUrl);
-  RevalidateHotelPrivacyTokens();
+  // RevalidateHotelPrivacyTokens();
 }
 
 /**
@@ -103,14 +101,10 @@ export async function CreateReservationPrivacyToken(
   guestInbox: string,
   reservation: ReservationAtHotel
 ): Promise<GuestPrivacyToken[]> {
-  const webIdToken = SaveHotelAndCreateGuestPrivacyToken(
+  const webIdToken = CreateWebIdPrivacyToken(
     reservationUrl,
-    [ReservationFieldToRdfMap.owner],
-    GetStartOfNextDay(reservation.dateTo),
-    "Required WebId to identify user and allow access to the reservation inbox",
-    ReservationState.CONFIRMED,
     guestInbox,
-    reservationUrl
+    reservation
   );
 
   const emailToken = SaveHotelAndCreateGuestPrivacyToken(
@@ -130,6 +124,29 @@ export async function CreateReservationPrivacyToken(
   );
 
   return Promise.all([webIdToken, inboxToken, emailToken]);
+}
+
+/**
+ * Creates the WebId privacy token for a confirmed reservation.
+ * Saves the hotel privacy token to the hotel Pod and returns the guest privacy token meant for the guest.
+ * @returns A guest privacy token about their WebId which is then sent to the guest.
+ */
+export async function CreateWebIdPrivacyToken(
+  reservationUrl: string,
+  guestInbox: string,
+  reservation: ReservationAtHotel
+): Promise<GuestPrivacyToken> {
+  const webIdToken = SaveHotelAndCreateGuestPrivacyToken(
+    reservationUrl,
+    [ReservationFieldToRdfMap.owner],
+    GetStartOfNextDay(reservation.dateTo),
+    "Required WebId to identify user and allow access to the reservation inbox",
+    ReservationState.CONFIRMED,
+    guestInbox,
+    reservationUrl
+  );
+
+  return webIdToken;
 }
 
 /**
@@ -261,16 +278,35 @@ async function SaveHotelAndCreateGuestPrivacyToken(
     return guestPrivacyToken;
   }
 
-  guestPrivacyToken.urlAtHotel = getSourceUrl(savedDataset);
+  const hotelUrl = getSourceUrl(savedDataset);
+  SetUrlAtHotelForHotelPrivacyToken(savedDataset, hotelUrl);
 
-  hotelPrivacyToken.urlAtHotel = guestPrivacyToken.urlAtHotel;
-  const newHotelPrivacyToken =
-    CreateHotelPrivacyTokenDataset(hotelPrivacyToken);
-  await SafeSaveDatasetAt(hotelPrivacyToken.urlAtHotel, newHotelPrivacyToken);
+  // RevalidateHotelPrivacyTokens();
 
-  RevalidateHotelPrivacyTokens();
-
+  guestPrivacyToken.urlAtHotel = hotelUrl;
   return guestPrivacyToken;
+}
+
+/**
+ * Updates the hotel privacy token with the URL link to itself.
+ */
+async function SetUrlAtHotelForHotelPrivacyToken(
+  privacyTokenDataset: SolidDataset,
+  hotelUrl: string
+): Promise<void> {
+  let privacyThing = GetThing(privacyTokenDataset, "privacy");
+  if (!privacyThing) {
+    ShowError(`No privacy thing found in dataset at ${hotelUrl}`, false);
+    return;
+  }
+  privacyThing = setStringNoLocale(
+    privacyThing,
+    PrivacyTokenToRdfMap.url,
+    hotelUrl
+  );
+
+  const newDataset = setThing(privacyTokenDataset, privacyThing);
+  await SafeSaveDatasetAt(hotelUrl, newDataset);
 }
 
 /**
@@ -528,15 +564,7 @@ function ForceCheckout(reservation: ReservationAtHotel): void {
     );
   }
 
-  //TODO this doesn't set the reservationState value I think, because the snackbar doesn't do that
-  ShowCustomSnackbar((key) => (
-    <CheckoutProgressSnackbar
-      snackbarKey={key}
-      reservationId={reservationId}
-      reservationOwner={reservation.owner}
-      replyInbox={inbox}
-    />
-  ));
+  DoOnStateChange(reservationId, ReservationState.PAST, inbox);
 }
 
 /**

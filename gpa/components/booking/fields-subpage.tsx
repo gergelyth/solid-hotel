@@ -66,7 +66,11 @@ export function RequiredFields({
         <Typography variant="h4">Input required fields</Typography>
       </Grid>
       <Grid item>
-        <ProfileMain rdfFields={data} />
+        <ProfileMain
+          rdfFields={data.filter(
+            (fieldRdf: string) => fieldRdf !== PersonFieldToRdfMap.nationality
+          )}
+        />
       </Grid>
       <Grid item>
         <ConfirmRequiredFieldsButton

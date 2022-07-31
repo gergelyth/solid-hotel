@@ -53,7 +53,7 @@ async function ExecuteCheckIn(
     hotelProfileWebId
   );
   await FindEmailTokenAndDeleteIt(privacyTokens, reservationId);
-  RevalidateHotelPrivacyTokens();
+  // RevalidateHotelPrivacyTokens();
 
   const checkoutDate = getDatetime(
     reservationThing,

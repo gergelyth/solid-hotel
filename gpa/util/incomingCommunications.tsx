@@ -1,5 +1,9 @@
 import { SolidDataset } from "@inrupt/solid-client";
-import { GetSession, GetUserPrivacyPodUrl } from "../../common/util/solid";
+import {
+  GetPodOfSession,
+  GetSession,
+  GetUserPrivacyPodUrl,
+} from "../../common/util/solid";
 import { NextRouter } from "next/router";
 import { DeserializeReservationStateChange } from "../../common/notifications/reservationStateChange";
 import { DeserializeFailureReport } from "../../common/notifications/failureReport";
@@ -8,13 +12,15 @@ import { DeserializeGuestPrivacyNotification } from "../../common/notifications/
 import {
   ShowCustomSnackbar,
   ShowErrorSnackbar,
+  ShowInfoSnackbar,
+  ShowSuccessSnackbar,
 } from "../../common/components/snackbar";
-import {
-  AddReservation,
-  SetReservationStateAndInbox,
-} from "../../common/util/solidReservations";
+import { SetReservationStateAndInbox } from "../../common/util/solidReservations";
 import { SaveProfileThingToPod } from "../../common/util/solidProfile";
-import { CreateGuestPrivacyTokenDataset } from "../../common/util/datasetFactory";
+import {
+  CreateGuestPrivacyTokenDataset,
+  CreateReservationDataset,
+} from "../../common/util/datasetFactory";
 import { DeserializeProfileModification } from "../../common/notifications/profileModification";
 import { IncomingProfileChangeStrings } from "../../common/util/tracker/profileChangeStrings";
 import SendChangeSnackbar from "../../common/components/profilesync/tracker-send-change";
@@ -24,7 +30,15 @@ import { PrivacyTokenRemover } from "../components/util/privacy-token-remover";
 import { GetReservationUrlFromInboxUrl } from "../../common/util/urlParser";
 import { RevalidateReservations } from "../../common/hooks/useReservations";
 import { RevalidateGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
-import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
+import {
+  SafeDeleteDataset,
+  SafeSaveDatasetAt,
+  SafeSaveDatasetInContainer,
+} from "../../common/util/solidWrapper";
+import { RevalidateNotifications } from "../../common/hooks/useNotifications";
+import { GPAInboxList } from "../consts/inboxList";
+import { ReservationState } from "../../common/types/ReservationState";
+import { UserTrackerInitializerSnackbar } from "../components/util/tracker-initializer";
 
 /**
  * Included in the {@link GPAParsers} list which defines the text, onClick and onReceive fields for the receipt of a reservation state change notification.
@@ -49,8 +63,19 @@ export function ReceiveReservationStateChange(
     router.push(`/reservations/${encodeURIComponent(reservationId)}`);
   };
   const onReceive = (): void => {
-    SetReservationStateAndInbox(reservationId, newState, replyInbox).then(() =>
-      RevalidateReservations()
+    SetReservationStateAndInbox(reservationId, newState, replyInbox).then(
+      () => {
+        RevalidateReservations();
+        if (newState === ReservationState.ACTIVE) {
+          const initSnackbarId = "initSnackbarId";
+          ShowCustomSnackbar(
+            () => (
+              <UserTrackerInitializerSnackbar snackbarId={initSnackbarId} />
+            ),
+            initSnackbarId
+          );
+        }
+      }
     );
   };
 
@@ -105,16 +130,25 @@ export function ReceivePairingRequestWithInformation(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const { reservation, profileThing } =
-    DeserializePairingRequestWithInformation(dataset);
-
-  const text = `Pairing request successful. Reservation saved to the Pod. Click here to populate your profile with the personal information present at the hotel.`;
+  const text = `Pairing request response received. Reservation saved to the Pod. Click here to populate your profile with the personal information present at the hotel.`;
   const onClick = (): void => {
-    SaveProfileThingToPod(profileThing);
-    router.push("/");
+    const pairingInformation =
+      DeserializePairingRequestWithInformation(dataset);
+    ShowInfoSnackbar("Populating Solid profile...");
+    SaveProfileThingToPod(pairingInformation.profileThing).then(() => {
+      ShowSuccessSnackbar("Solid profile populated!");
+      ShowInfoSnackbar("Deleting notification...");
+      SafeDeleteDataset(url).then(() =>
+        RevalidateNotifications(GetPodOfSession(), GPAInboxList)
+      );
+    });
   };
 
   const onReceive = (): void => {
+    const reservation =
+      DeserializePairingRequestWithInformation(dataset).reservation;
+    const inboxFolder = url.replace(new RegExp("inbox.*$"), "") + "inbox";
+
     const session = GetSession();
     const webId = session?.info.webId;
     if (!webId) {
@@ -124,8 +158,11 @@ export function ReceivePairingRequestWithInformation(
       return;
     }
     reservation.owner = webId;
-    //TODO remove the dummy reservation?
-    AddReservation(reservation, reservation.hotel).then(() =>
+
+    const reservationUrl = GetReservationUrlFromInboxUrl(inboxFolder);
+    const reservationDataset = CreateReservationDataset(reservation);
+
+    SafeSaveDatasetAt(reservationUrl, reservationDataset).then(() =>
       RevalidateReservations()
     );
   };
@@ -160,13 +197,14 @@ export function ReceivePrivacyToken(
       return;
     }
 
-    privacyToken.reservation = GetReservationUrlFromInboxUrl(url);
+    const inboxFolder = url.replace(new RegExp("inbox.*$"), "") + "inbox";
+    privacyToken.reservation = GetReservationUrlFromInboxUrl(inboxFolder);
 
     //we need this workaround, otherwise we would save the Thing with the inbox url (we also delete the notification Thing this way)
     const privacyTokenDataset = CreateGuestPrivacyTokenDataset(privacyToken);
 
     await SafeSaveDatasetInContainer(privacyPodUrl, privacyTokenDataset);
-    RevalidateGuestPrivacyTokens();
+    // RevalidateGuestPrivacyTokens();
   };
 
   return { text, onClick, onReceive };

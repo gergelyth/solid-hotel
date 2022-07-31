@@ -13,6 +13,7 @@ import {
 import {
   CreateActiveProfilePrivacyToken,
   CreateInboxPrivacyToken,
+  CreateWebIdPrivacyToken,
 } from "./privacyHelper";
 import {
   ParseReservation,
@@ -26,6 +27,8 @@ import { SerializePrivacyInformationDeletion } from "../../common/notifications/
 import { GetStartOfNextDay } from "../../common/util/helpers";
 import { RevalidateHotelPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { SafeSaveDatasetInContainer } from "../../common/util/solidWrapper";
+import { CacheHotelProfiles } from "../components/util/tracker-initializer";
+import { UtilRdfMap } from "../../common/vocabularies/rdfUtil";
 
 /**
  * Creates the reservation state change notification dataset and submits it into the guest reservation inbox.
@@ -100,6 +103,13 @@ export async function SendPairingRequestWithInformation(
     reservationUrl
   );
 
+  const webIdPrivacyToken = await CreateWebIdPrivacyToken(
+    reservationUrl,
+    guestInboxUrl,
+    parsedReservation
+  );
+  SendPrivacyToken(guestInboxUrl, webIdPrivacyToken);
+
   const inboxPrivacyToken = await CreateInboxPrivacyToken(
     reservationUrl,
     guestInboxUrl,
@@ -107,15 +117,21 @@ export async function SendPairingRequestWithInformation(
   );
   SendPrivacyToken(guestInboxUrl, inboxPrivacyToken);
 
+  const propertyTargets = getPropertyAll(hotelProfileThing).filter(
+    (property: string) => property !== UtilRdfMap.type
+  );
   const profilePrivacyTokenDataset = await CreateActiveProfilePrivacyToken(
     hotelProfileOwnerUrl,
     guestInboxUrl,
     reservationUrl,
-    getPropertyAll(hotelProfileThing),
+    propertyTargets,
     GetStartOfNextDay(parsedReservation.dateTo)
   );
   SendPrivacyToken(guestInboxUrl, profilePrivacyTokenDataset);
   RevalidateHotelPrivacyTokens();
+
+  //Alternatively we can useGuest with getPropertyAll and cache only the one specific hotel profile
+  await CacheHotelProfiles();
 }
 
 /**

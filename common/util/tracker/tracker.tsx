@@ -52,9 +52,11 @@ async function TrackResource(
   subscriber: Subscriber
 ): Promise<void> {
   // Obtain a WebSocket for the given host
-  if (!(url in webSockets)) {
-    webSockets[url] = await CreateWebSocket(url);
+  if (url in webSockets) {
+    return;
   }
+
+  webSockets[url] = await CreateWebSocket(url);
 
   const webSocketResource = webSockets[url];
   webSocketResource.subscribers.add(subscriber);

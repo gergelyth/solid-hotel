@@ -15,6 +15,7 @@ import { GetSession } from "../../../common/util/solid";
 import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 import { CacheProfile } from "../../../common/util/tracker/profileCache";
 import { ErrorComponent } from "../../../common/components/error-component";
+import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
 
 /**
  * Has the responsibility to collect the values for all RDF fields required for check-in.
@@ -96,7 +97,11 @@ export function RequiredFieldsAtCheckin({
         </Box>
       </Grid>
       <Grid item>
-        <ProfileMain rdfFields={data} />
+        <ProfileMain
+          rdfFields={data.filter(
+            (fieldRdf: string) => fieldRdf !== PersonFieldToRdfMap.nationality
+          )}
+        />
       </Grid>
       <Grid item>
         <ConfirmRequiredFieldsButton

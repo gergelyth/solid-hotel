@@ -76,5 +76,5 @@ export async function DeletePairingToken(
   reservationFolder: string
 ): Promise<void> {
   const tokenUrl = GetTokenDatasetUrl(reservationFolder);
-  SafeDeleteDataset(tokenUrl);
+  await SafeDeleteDataset(tokenUrl);
 }

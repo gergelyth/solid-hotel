@@ -10,6 +10,8 @@ import {
 } from "../../util/outgoingCommunications";
 import { ShowError } from "../../../common/util/helpers";
 import { ReservationState } from "../../../common/types/ReservationState";
+import { IsNationalitySet } from "../../../common/util/solidProfile";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 /**
  * Submits the check-in request to the hotel Pod.
@@ -93,7 +95,14 @@ export function ReservationDetailsPage({
             !currentReservation ||
             currentReservation.state !== ReservationState.CONFIRMED
           }
-          onClick={() => {
+          onClick={async () => {
+            const isNationalitySet = await IsNationalitySet();
+            if (!isNationalitySet) {
+              ShowErrorSnackbar(
+                "Nationality is not defined in the Solid Pod. Please set it through Profile Editor."
+              );
+              return;
+            }
             setExecuteCheckin(() => () => {
               ExecuteCheckin(currentReservation);
             });

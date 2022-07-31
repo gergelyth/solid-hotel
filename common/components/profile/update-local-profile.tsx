@@ -41,7 +41,7 @@ async function ExecuteUpdateLocalProfile(
   await SetMultipleFieldsInProfile(profileUrl, approvedFields);
   UpdateProfileInMemory(profileUrl, fieldOptions);
 
-  RevalidateGuest(Object.keys(approvedFields), profileUrl);
+  // RevalidateGuest(Object.keys(approvedFields), profileUrl);
 }
 
 /**

@@ -57,6 +57,7 @@ function useMockApi<T>(
   if (nationality) {
     fetchFunction = () => [baseApiUrl, nationality];
   } else {
+    // eslint-disable-next-line react/display-name
     fetchFunction = (): (string | null | undefined)[] | null => {
       if (!guest || !guest.guestFields) {
         return null;

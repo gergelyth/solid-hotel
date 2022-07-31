@@ -26,7 +26,7 @@ async function ExecuteCancel(
   await FindEmailTokenAndDeleteIt(privacyTokens, reservationId);
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
 
-  RevalidateHotelPrivacyTokens();
+  // RevalidateHotelPrivacyTokens();
 }
 
 /**

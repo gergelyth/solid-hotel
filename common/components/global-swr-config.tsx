@@ -13,13 +13,11 @@ export default function GlobalSwrConfig({
 }): JSX.Element {
   return (
     <SWRConfig
-      value={
-        {
-          // onError: OnHookErrorFunction,
-          //20 seconds
-          // refreshInterval: 20000,
-        }
-      }
+      value={{
+        onError: OnHookErrorFunction,
+        //20 seconds
+        // refreshInterval: 20000,
+      }}
     >
       {children}
     </SWRConfig>

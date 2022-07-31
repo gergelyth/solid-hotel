@@ -17,7 +17,10 @@ import {
   GetReservationIdFromInboxUrl,
   GetReservationUrlFromInboxUrl,
 } from "../../common/util/urlParser";
-import { GetPairingToken } from "../../common/util/pairingTokenHandler";
+import {
+  DeletePairingToken,
+  GetPairingToken,
+} from "../../common/util/pairingTokenHandler";
 import {
   ShowCustomSnackbar,
   ShowErrorSnackbar,
@@ -205,10 +208,13 @@ export function ReceiveInitialPairingRequest(
 } {
   const { guestInboxUrl, token: receivedToken } =
     DeserializeInitialPairingRequest(dataset, true);
-  const coreReservationFolder =
-    GetCoreReservationFolderFromInboxUrl(hotelInboxUrl);
 
-  const reservationUrl = GetReservationUrlFromInboxUrl(hotelInboxUrl);
+  const inboxFolder =
+    hotelInboxUrl.replace(new RegExp("inbox.*$"), "") + "inbox";
+  const coreReservationFolder =
+    GetCoreReservationFolderFromInboxUrl(inboxFolder);
+
+  const reservationUrl = GetReservationUrlFromInboxUrl(inboxFolder);
 
   const text = `Pairing request received for reservation [${reservationUrl}].`;
   const onClick = (): void => undefined;
@@ -231,11 +237,13 @@ export function ReceiveInitialPairingRequest(
     ShowSuccessSnackbar(
       `Pairing request for [${reservationUrl}] successful. Sending information to guest.`
     );
-    SendPairingRequestWithInformation(
+    await SendPairingRequestWithInformation(
       reservationUrl,
-      hotelInboxUrl,
+      inboxFolder,
       guestInboxUrl
     );
+
+    await DeletePairingToken(coreReservationFolder);
   };
 
   return { text, onClick, onReceive };
@@ -256,14 +264,14 @@ export function ReceivePrivacyTokenDeletionRequest(
   onClick: (event: React.MouseEvent<EventTarget>) => void;
   onReceive: () => void;
 } {
-  const { tokenUrl, guestInboxUrl } = DeserializePrivacyInformationDeletion(
-    dataset,
-    true
-  );
-
-  const text = `Privacy token at [${tokenUrl}] was requested to be deleted.`;
+  const text = `A privacy token was requested to be deleted via [${hotelInboxUrl}].`;
   const onClick = (): void => undefined;
   const onReceive = async (): Promise<void> => {
+    const { tokenUrl, guestInboxUrl } = DeserializePrivacyInformationDeletion(
+      dataset,
+      true
+    );
+
     const tokenDataset = await GetDataSet(tokenUrl);
 
     const privacyToken = ConvertToHotelPrivacyToken(tokenDataset);
@@ -284,16 +292,12 @@ export function ReceivePrivacyTokenDeletionRequest(
       return;
     }
 
-    //fake promise that resolves instantly
-    let previousPromise = Promise.resolve();
     if (guestInboxUrl) {
-      previousPromise = AnonymizeInboxInNotification(dataset);
+      await AnonymizeInboxInNotification(dataset);
     }
 
-    previousPromise.then(() => {
-      AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl);
-      RevalidateHotelPrivacyTokens();
-    });
+    await AnonymizeFieldsAndDeleteToken(privacyToken, guestInboxUrl);
+    // RevalidateHotelPrivacyTokens();
   };
 
   return { text, onClick, onReceive };

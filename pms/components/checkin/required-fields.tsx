@@ -3,6 +3,7 @@ import { Grid } from "@material-ui/core";
 import { ConfirmRequiredFieldsButton } from "../../../common/components/profile/required-fields-button";
 import { Dispatch, SetStateAction } from "react";
 import { OfflineCheckinPage } from "../../pages/checkin";
+import { PersonFieldToRdfMap } from "../../../common/vocabularies/rdfPerson";
 
 /**
  * Has the responsibility to collect the values for all RDF fields required for check-in.
@@ -49,7 +50,9 @@ export function RequiredFields({
     >
       <Grid item xs={6} container justifyContent="center">
         <ProfileMain
-          rdfFields={data}
+          rdfFields={data.filter(
+            (fieldRdf: string) => fieldRdf !== PersonFieldToRdfMap.nationality
+          )}
           webId={hotelProfileWebId}
           deletable={false}
           forceRender={forceRender}

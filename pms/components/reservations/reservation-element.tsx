@@ -17,7 +17,11 @@ export function ConfirmCancellation(reservation: ReservationAtHotel): void {
     throw new Error("Reservation ID is null");
   }
 
-  DoOnStateChange(reservation.id, ReservationState.CANCELLED);
+  DoOnStateChange(
+    reservation.id,
+    ReservationState.CANCELLED,
+    reservation.inbox ?? undefined
+  );
 }
 
 /**
@@ -53,7 +57,7 @@ function PairingQrPopup({
 }
 
 /**
- * Creates an enriched version of the {@link ReservationConciseElement} component adding the offline check-in and the cancel reservation button.
+ * Creates an enriched version of the {@link ReservationConciseElement} component adding the offline check-in (if it's an offline booking) and the cancel reservation button.
  * @returns The reservation element with confirmed reservation functionalities.
  */
 function ConfirmedReservationDetails({
@@ -78,9 +82,11 @@ function ConfirmedReservationDetails({
         />
       </Grid>
       <Grid item xs={4} container justifyContent="flex-end" direction="row">
-        <Grid item>
-          <OfflineCheckinButton reservation={reservation} />
-        </Grid>
+        {reservation.inbox ? null : (
+          <Grid item>
+            <OfflineCheckinButton reservation={reservation} />
+          </Grid>
+        )}
         <Grid item>
           <CancelReservationButton
             reservation={reservation}

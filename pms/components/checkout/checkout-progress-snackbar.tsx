@@ -80,7 +80,7 @@ async function ExecuteCheckOut(
 
   await FindWebIdTokenAndDeleteIt(privacyTokens, reservationId, false);
   await FindInboxTokenAndDeleteIt(privacyTokens, reservationId, true);
-  RevalidateHotelPrivacyTokens();
+  // RevalidateHotelPrivacyTokens();
 
   const inboxUrl = CreateInboxUrlFromReservationId(reservationId);
   await DeleteAccessForResource(inboxUrl);

@@ -1,6 +1,9 @@
 import { Button, Container, Typography, Box } from "@material-ui/core";
 import { PrivacyDashboard } from "../../common/components/privacy-dashboard";
-import { ShowErrorSnackbar } from "../../common/components/snackbar";
+import {
+  ShowErrorSnackbar,
+  ShowSuccessSnackbar,
+} from "../../common/components/snackbar";
 import { useGuestPrivacyTokens } from "../../common/hooks/usePrivacyTokens";
 import { GuestPrivacyToken } from "../../common/types/GuestPrivacyToken";
 import { PrivacyToken } from "../../common/types/PrivacyToken";
@@ -51,7 +54,7 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
       color="secondary"
       size="small"
       disabled={token.expiry >= new Date()}
-      onClick={() => {
+      onClick={async () => {
         const guestPrivacyToken = token as GuestPrivacyToken;
         if (!guestPrivacyToken) {
           throw new Error(
@@ -68,11 +71,15 @@ function CreateDeleteButton(token: PrivacyToken): JSX.Element {
           const guestInboxUrl = GetInboxUrlFromReservationUrl(
             guestPrivacyToken.reservation
           );
-          SubmitPrivacyTokenDeletionRequest(guestPrivacyToken, guestInboxUrl);
-          CreateInboxTokenUntilConfirmation(guestPrivacyToken);
+          await SubmitPrivacyTokenDeletionRequest(
+            guestPrivacyToken,
+            guestInboxUrl
+          );
+          await CreateInboxTokenUntilConfirmation(guestPrivacyToken);
         } else {
-          SubmitPrivacyTokenDeletionRequest(guestPrivacyToken);
+          await SubmitPrivacyTokenDeletionRequest(guestPrivacyToken);
         }
+        ShowSuccessSnackbar("Privacy token deletion request submitted!");
       }}
     >
       Request delete

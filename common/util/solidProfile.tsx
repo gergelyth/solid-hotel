@@ -108,6 +108,28 @@ export async function GetEmailFromProfile(webId: string): Promise<string> {
 }
 
 /**
+ * Checks if nationality is set in the default profile.
+ * @returns True if nationality is set to some value, false otherwise.
+ */
+export async function IsNationalitySet(): Promise<boolean> {
+  const solidProfile = await GetProfile();
+
+  if (!solidProfile || !solidProfile.profile) {
+    ShowError(
+      "We don't have access to the default Pod. Can't retrieve nationality",
+      true
+    );
+    return false;
+  }
+
+  const nationality = getStringNoLocale(
+    solidProfile.profile,
+    PersonFieldToRdfMap.nationality
+  );
+  return nationality ? true : false;
+}
+
+/**
  * Retrieves the profile of the user represented by WebId passed in or the currently logged in user if no WebId was specified.
  * Sets the value of the field to the one supplied.
  */

@@ -6,7 +6,7 @@ import { PersonFieldToRdfMap } from "../../vocabularies/rdfPerson";
 import { Grid, Button, Box, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Field } from "../../types/Field";
-import { RevalidateGuest, TriggerRefetchGuest } from "../../hooks/useGuest";
+import { TriggerRefetchGuest } from "../../hooks/useGuest";
 
 /**
  * Executes the edit operation.
@@ -26,7 +26,7 @@ function OnEditConfirmation(
   });
   TriggerRefetchGuest(rdfFields, fields, webId);
   SetField(PersonFieldToRdfMap[fieldName], newValue, webId);
-  RevalidateGuest(rdfFields, webId);
+  // RevalidateGuest(rdfFields, webId);
 }
 
 /**
@@ -44,7 +44,7 @@ function OnDeleteConfirmation(
   });
   TriggerRefetchGuest(rdfFields, fields, webId);
   RemoveField(PersonFieldToRdfMap[fieldName], webId);
-  RevalidateGuest(rdfFields, webId);
+  // RevalidateGuest(rdfFields, webId);
 }
 
 /**

@@ -30,8 +30,8 @@ export function AddLoadingIndicator(swrKey: string): void {
     return;
   }
 
-  loadingIndicators[swrKey] = <LoadingIndicator key={swrKey} />;
-  forceRender(!render);
+  // loadingIndicators[swrKey] = <LoadingIndicator key={swrKey} />;
+  // forceRender(!render);
 }
 
 /**
@@ -42,8 +42,8 @@ export function RemoveLoadingIndicator(swrKey: string): void {
     return;
   }
 
-  delete loadingIndicators[swrKey];
-  forceRender(!render);
+  // delete loadingIndicators[swrKey];
+  // forceRender(!render);
 }
 
 let render = false;

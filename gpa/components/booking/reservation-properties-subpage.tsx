@@ -10,6 +10,8 @@ import { SubmitBookingRequest } from "../../util/outgoingCommunications";
 import { AddReservation } from "../../../common/util/solidReservations";
 import { ReservationAtHotel } from "../../../common/types/ReservationAtHotel";
 import { BookingProperties } from "../../../common/components/booking/reservation-properties";
+import { IsNationalitySet } from "../../../common/util/solidProfile";
+import { ShowErrorSnackbar } from "../../../common/components/snackbar";
 
 /**
  * The function to execute if the user decides to make the reservation.
@@ -73,7 +75,14 @@ export function ReservationPropertiesPage({
 
   return (
     <BookingProperties
-      onSelectAction={(roomId, checkinDate, checkoutDate) => {
+      onSelectAction={async (roomId, checkinDate, checkoutDate) => {
+        const isNationalitySet = await IsNationalitySet();
+        if (!isNationalitySet) {
+          ShowErrorSnackbar(
+            "Nationality is not defined in the Solid Pod. Please set it through Profile Editor."
+          );
+          return;
+        }
         setConfirmReservation(() => () => {
           BookRoom(roomId, checkinDate, checkoutDate);
         });

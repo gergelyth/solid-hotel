@@ -1,6 +1,7 @@
 import {
   createSolidDataset,
   getSourceUrl,
+  getThingAll,
   setThing,
   SolidDataset,
   Thing,
@@ -9,7 +10,6 @@ import { AddNotificationThingToDataset } from "../util/datasetFactory";
 import { NotificationType } from "../types/NotificationsType";
 import { ParseReservation } from "../hooks/useReservations";
 import { ReservationAtHotel } from "../types/ReservationAtHotel";
-import { GetThing } from "../util/solid";
 
 /**
  * Parses the notification dataset into a pairing request reply object with the information sent by the hotel to the guest's new Solid Pod.
@@ -26,14 +26,16 @@ export function DeserializePairingRequestWithInformation(
     throw new Error("Dataset URL is null");
   }
 
-  const reservationThing = GetThing(dataset, "reservation");
+  const things = getThingAll(dataset);
+
+  const reservationThing = things[0];
   if (!reservationThing) {
     throw new Error("Reservation cannot be null");
   }
 
   const reservation = ParseReservation(reservationThing, datasetUrl);
 
-  const hotelProfileThing = GetThing(dataset, "hotelProfile");
+  const hotelProfileThing = things[1];
   if (!hotelProfileThing) {
     throw new Error("Hotel profile null in pairing request");
   }

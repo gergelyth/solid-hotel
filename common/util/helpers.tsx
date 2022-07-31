@@ -123,11 +123,12 @@ export function OnHookErrorFunction(error: Error, key: string): void {
     return;
   }
 
-  ShowErrorSnackbar(
-    `Error using hook: [${error.message}]. See console for details.`
-  );
-  console.error(`Error using hook for key [${key}]`);
-  console.error(error);
+  //Unfortunately there are many errors popping up while resolving everything, which is confusing to the user
+  // ShowErrorSnackbar(
+  //   `Error using hook: [${error.message}]. See console for details.`
+  // );
+  // console.error(`Error using hook for key [${key}]`);
+  // console.error(error);
 }
 
 /**
